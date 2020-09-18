@@ -1,19 +1,87 @@
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardFilterProductStorage" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    aria-expanded="false" aria-controls="collapseCardFilterProductStorage">
+    <h6 class="m-0 font-weight-bold text-primary">Buscar por...</h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse" id="collapseCardFilterProductStorage">
+    <form action="" #f="ngForm">
+      <div class="card-body container">
+
+        <div class="row p-3">
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <label for="idNameProduct">Nombre:</label>
+              <input type="text" class="form-control" name="nameSeach" [(ngModel)]="nameSeach" id="idNameProduct"
+                placeholder="Buscar por nombre...">
+            </div>
+
+            <div class="form-group">
+              <label for="idSku">SKU:</label>
+              <input type="text" class="form-control" name="skuSearch" [(ngModel)]="skuSearch" id="idSku"
+                placeholder="Buscar por SKU...">
+            </div>
+
+
+          </div>
+          <div class="col-md-6">
+
+            <div class="form-group mb-md-0">
+              <label for="idPriceSearch">Precio:</label>
+              <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
+                [options]="options"></ng5-slider>
+            </div>
+
+            <div class="form-group">
+              <label for="inputState">Categoría:</label>
+              <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputState" class="form-control">
+                <option [value]="typeCategorySearchClear">Todos</option>
+                <option *ngFor="let category of categoriesOptions" [value]="category.name"> {{category.name}} </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <button class="btn btn-outline-primary mr-1
+              "><i class="fas fa-search m-1"></i>Buscar</button>
+
+            <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"><i class="fas fa-broom m-1"></i>
+              Limpiar</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+  </div>
+</div>
+
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
-  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-    <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
-    <div class="dropdown no-arrow">
-      <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
-      </a>
-      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-        <div class="dropdown-header">Pre-punlicar en:</div>
-        <a class="dropdown-item" href="#">Mercado Libre</a>
-        <a class="dropdown-item" href="#">Amazon</a>
-        <a class="dropdown-item" href="#">Alibaba</a>
+  <div class="card-header py-3">
+
+    <div class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle btn btn-primary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-paper-plane"></i>
+          Seleccionar a E-commerce
+          <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+          aria-labelledby="dropdownMenuLink">
+          <div class="dropdown-header">Pre-publicar en:</div>
+          <a class="dropdown-item" href="#">Mercado Libre</a>
+          <a class="dropdown-item" href="#">Amazon</a>
+          <a class="dropdown-item" href="#">Alibaba</a>
+        </div>
       </div>
     </div>
+
   </div>
 
 
@@ -23,114 +91,51 @@
         <thead>
           <tr>
             <th>
-
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" class="custom-control-input" id="customCheck">
+                <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
-
-
             </th>
+            <th>Imagen</th>
             <th>Nombre</th>
+            <th>SKU</th>
             <th>Categoria</th>
             <th>Precio</th>
-            <th>Descripción</th>
-            <th>Cantidad</th>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1"></label>
-              </div>
-            </td>
-            <td>Categoria</td>
-            <td>5000</td>
-            <td>Otro</td>
-            <td>50</td>
-            <td>200</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck2">
-                <label class="custom-control-label" for="customCheck2"></label>
-              </div>
-            </td>
-            <td>Accountant</td>
-            <td>Tokyo</td>
-            <td>63</td>
-            <td>2011/07/25</td>
-            <td>$170,750</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck3">
-                <label class="custom-control-label" for="customCheck3"></label>
-              </div>
-            </td>
-            <td>Junior Technical Author</td>
-            <td>San Francisco</td>
-            <td>66</td>
-            <td>2009/01/12</td>
-            <td>$86,000</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck4">
-                <label class="custom-control-label" for="customCheck4"></label>
-              </div>
-            </td>
-            <td>Senior Javascript Developer</td>
-            <td>Edinburgh</td>
-            <td>22</td>
-            <td>2012/03/29</td>
-            <td>$433,060</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck5">
-                <label class="custom-control-label" for="customCheck5"></label>
-              </div>
-            </td>
-            <td>Accountant</td>
-            <td>Tokyo</td>
-            <td>33</td>
-            <td>2008/11/28</td>
-            <td>$162,700</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck6">
-                <label class="custom-control-label" for="customCheck6"></label>
-              </div>
-            </td>
-            <td>Integration Specialist</td>
-            <td>New York</td>
-            <td>61</td>
-            <td>2012/12/02</td>
-            <td>$372,000</td>
-          </tr>
-          <tr>
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" class="custom-control-input" id="customCheck7">
-                <label class="custom-control-label" for="customCheck7"></label>
-              </div>
-            </td>
-            <td>Sales Assistant</td>
-            <td>San Francisco</td>
-            <td>59</td>
-            <td>2012/08/06</td>
-            <td>$137,500</td>
-          </tr>
 
+        <tbody>
+          <tr *ngFor="let product of productsStorage">
+            <td>
+              <div class="custom-control custom-checkbox small">
+                <input type="checkbox" [ngModel] = "product.selected" (change)="product.selected = !product.selected"  class="custom-control-input" [id]="'check' + product.sku">
+                <label class="custom-control-label" [for]="'check' + product.sku"></label>
+              </div>
+            </td>
+            <td>
+              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.photo" alt="Imagen del producto">
+            </td>
+            <td>{{ product.name}}</td>
+            <td>{{ product.sku}}</td>
+            <td>
+              <div class="dropdown no-arrow">
+                {{product.categories.values().next().value}}
+                <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
+                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                  *ngIf="product.categories.size > 1">
+                  {{ product.categories.size}}  <i class="fas fa-eye"></i>
+                </span>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item dropdown-item" *ngFor="let item of product.categories | keyvalue">
+                       {{ item.value }}</li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+            <td>{{ product.price}}</td>
+          </tr>
         </tbody>
       </table>
 
@@ -138,7 +143,7 @@
 
     <div class="row justify-content-around">
 
-      <nav aria-label="Page navigation example">
+      <nav aria-label="Page navigation">
         <ul class="pagination">
           <li class="page-item"><a class="page-link" href="#">
               <i class="fas fa-backward"></i>
@@ -159,6 +164,26 @@
         <span class="align-middle">Mostrando 1 a 10 de 57 registros</span>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- Logout Modal-->
+<div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Categorias producto: </h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <a class="btn btn-primary" href="login.html">Logout</a>
+      </div>
     </div>
   </div>
 </div>

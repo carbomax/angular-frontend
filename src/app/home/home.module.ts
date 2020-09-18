@@ -7,11 +7,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { HomeComponent } from './pages/home/home.component';
 import { ProductsStoreComponent } from './pages/home/store/products-store/products-store.component';
+import { FilterProductsStoragePipe } from './pipe/filter-products-storage.pipe';
 
 
 
 @NgModule({
-  declarations: [HomeComponent, SidebardComponent, HeaderComponent, BreadcrumbsComponent, ProductsStoreComponent],
+  declarations: [HomeComponent, SidebardComponent, HeaderComponent, BreadcrumbsComponent, ProductsStoreComponent, FilterProductsStoragePipe],
   exports: [HomeComponent, SidebardComponent, HeaderComponent, BreadcrumbsComponent, ProductsStoreComponent],
   imports: [
     SharedModule,
