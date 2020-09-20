@@ -1,1 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
+
+.pointer{
+  cursor: pointer;
+}
+
+.custom-ng5-slider.ng5-slider .ng5-slider-pointer {
+
+  background-color: #4e73df;
+
+}
+
