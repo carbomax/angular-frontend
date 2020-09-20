@@ -38,17 +38,18 @@
             <div class="form-group">
               <label for="inputState">Categoría:</label>
               <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputState" class="form-control">
-                <option [value]="typeCategorySearchClear">Todos</option>
-                <option *ngFor="let category of categoriesOptions" [value]="category.name"> {{category.name}} </option>
+                <option [value]="typeCategorySearchClear">Todas</option>
+                <option *ngFor="let category of productStoreService.categories" [value]="category.id">
+                  {{category.description}} </option>
               </select>
             </div>
           </div>
         </div>
         <div class="row">
           <div class="col d-flex justify-content-center">
-            <button class="btn btn-outline-primary mr-1
-              "><i class="fas fa-search m-1"></i>Buscar</button>
 
+            <button class="btn btn-outline-primary mr-1" (click)="searchProducts()">
+              <i *ngIf="!loadPaginator"  class="fas fa-search m-1"></i>  <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner m-1"></i> Buscar</button>
             <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"><i class="fas fa-broom m-1"></i>
               Limpiar</button>
           </div>
@@ -63,13 +64,14 @@
 <div class="card shadow mb-4">
   <div class="card-header py-3">
 
-    <div class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+    <div
+      class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
       <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
       <div class="dropdown no-arrow">
         <a class="dropdown-toggle btn btn-primary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-paper-plane"></i>
-          Seleccionar a E-commerce
+          Seleccionar a marketplace
           <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
@@ -92,7 +94,8 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input" id="customCheck">
+                <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
+                  id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
             </th>
@@ -101,71 +104,84 @@
             <th>SKU</th>
             <th>Categoria</th>
             <th>Precio</th>
+            <th class="text-right">Cantidad</th>
           </tr>
         </thead>
 
-        <tbody>
-          <tr *ngFor="let product of productsStorage">
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" [ngModel] = "product.selected" (change)="product.selected = !product.selected"  class="custom-control-input" [id]="'check' + product.sku">
-                <label class="custom-control-label" [for]="'check' + product.sku"></label>
-              </div>
-            </td>
-            <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.photo" alt="Imagen del producto">
-            </td>
-            <td>{{ product.name}}</td>
-            <td>{{ product.sku}}</td>
-            <td>
-              <div class="dropdown no-arrow">
-                {{product.categories.values().next().value}}
-                <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
-                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                  *ngIf="product.categories.size > 1">
-                  {{ product.categories.size}}  <i class="fas fa-eye"></i>
-                </span>
-                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                  aria-labelledby="dropdownMenuLink">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item dropdown-item" *ngFor="let item of product.categories | keyvalue">
-                       {{ item.value }}</li>
-                  </ul>
+        <tbody *ngIf="!loading">
+            <tr *ngFor="let product of pageProducts.itemsGrid">
+              <td>
+                <div class="custom-control custom-checkbox small">
+                  <input type="checkbox" [ngModel]="product.selected" (change)="product.selected = !product.selected"
+                    class="custom-control-input" [id]="'check' + product.sku">
+                  <label class="custom-control-label" [for]="'check' + product.sku"></label>
                 </div>
-              </div>
-            </td>
-            <td>{{ product.price}}</td>
-          </tr>
+              </td>
+              <td>
+                <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage"
+                  alt="Imagen del producto">
+              </td>
+              <td>{{ product.name}}</td>
+              <td>{{ product.sku}}</td>
+              <td>
+                <div *ngIf="product.categories.length > 0" class="dropdown no-arrow">
+                  {{product.categories[0].description}}
+                  <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
+                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                    *ngIf="product.categories.length > 1">
+                    {{ product.categories.length}} <i class="fas fa-eye"></i>
+                  </span>
+                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                    aria-labelledby="dropdownMenuLink">
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item dropdown-item" *ngFor="let item of product.categories">
+                        {{ item.description }}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div *ngIf="product.categories.length === 0" class="dropdown no-arrow">
+                  <span>Sin categoría</span>
+                </div>
+              </td>
+              <td>UYU {{ product.priceUYU}} / $ {{product.priceUSD}}</td>
+              <td class="text-right">{{ product.currentStock}} </td>
+            </tr>
+
         </tbody>
       </table>
 
     </div>
 
-    <div class="row justify-content-around">
+    <div  class="d-flex justify-content-center">
+      <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
+    </div>
+
+    <div class="row justify-content-around" *ngIf="pageProducts.itemsGrid">
 
       <nav aria-label="Page navigation">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#">
+        <ul class="pagination" *ngIf="pageProducts?.itemsGrid">
+          <li class="page-item" (click)="previous()"><a class="page-link ">
               <i class="fas fa-backward"></i>
             </a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
-          <li class="page-item"><a class="page-link" href="#">4</a></li>
-          <li class="page-item"><a class="page-link" href="#">5</a></li>
-          <li class="page-item"><a class="page-link" href="#">6</a></li>
-          <li class="page-item"><a class="page-link" href="#">
+          <li *ngFor="let page of ' '.repeat(pageProducts.totalPages).split(''), let i = index " (click)="onSelect(i)"
+            [class.active]="i === selectedPage" class="page-item"><a class="page-link pointer">{{i}}</a></li>
+          <li class="page-item" (click)="next()"><a class="page-link">
               <i class="fas fa-forward"></i>
             </a></li>
         </ul>
       </nav>
 
-      <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-        <span class="align-middle">Mostrando 1 a 10 de 57 registros</span>
+
+      <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
+        aria-live="polite">
+        <span class="align-middle">Mostrando 1 a 10 de 57 registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+
       </div>
 
     </div>
+
   </div>
+
 </div>
 
 <!-- Logout Modal-->

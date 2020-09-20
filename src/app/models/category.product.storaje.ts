@@ -1,6 +1,6 @@
 export class CategoryProductStoraje {
 
-  id: string;
-  name: string;
+  id: number;
+  description: string;
 
 }

@@ -1,9 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
 
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { Ng5SliderModule } from 'ng5-slider';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -11,16 +14,17 @@ import { Ng5SliderModule } from 'ng5-slider';
   declarations: [],
   imports: [
     CommonModule,
+    FormsModule,
     NgxBootstrapSliderModule,
     Ng5SliderModule,
-    FormsModule
+    NgxPaginationModule
   ],
   exports: [
     CommonModule,
+    FormsModule,
     NgxBootstrapSliderModule,
     Ng5SliderModule,
-    FormsModule
-
+    NgxPaginationModule
   ]
 })
 export class SharedModule { }
