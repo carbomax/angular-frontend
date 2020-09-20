@@ -2,11 +2,11 @@
  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
   <!-- Sidebar - Brand -->
-  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+  <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/home">
     <div class="sidebar-brand-icon rotate-n-15">
       <i class="fas fa-laugh-wink"></i>
     </div>
-    <div class="sidebar-brand-text mx-3">Pepe Ganga<sup>1</sup></div>
+    <div class="sidebar-brand-text mx-3">Pepeganga</div>
   </a>
 
   <!-- Divider -->
@@ -14,7 +14,7 @@
 
   <!-- Nav Item - Dashboard -->
   <li class="nav-item active">
-    <a class="nav-link" href="index.html">
+    <a class="nav-link" href="#" routerLinkActive="active">
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span class="ml-2">Tablero de control</span></a>
   </li>
@@ -30,7 +30,7 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item" *ngFor="let item of sidebarService.storeMenu; let i=index">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" [attr.data-target]="'#test'+i" aria-expanded="true" [attr.aria-controls]="'test'+i">
+    <a class="nav-link collapsed" href="#" routerLinkActive="active" data-toggle="collapse" [attr.data-target]="'#test'+i" aria-expanded="true" [attr.aria-controls]="'test'+i">
       <i [class]="item.icon"></i>
       <span class="ml-2">{{ item.title }}</span>
     </a>

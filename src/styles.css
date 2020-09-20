@@ -3,3 +3,10 @@
 .pointer{
   cursor: pointer;
 }
+
+.custom-ng5-slider.ng5-slider .ng5-slider-pointer {
+
+  background-color: #4e73df;
+
+}
+
