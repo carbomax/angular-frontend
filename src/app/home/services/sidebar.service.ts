@@ -21,7 +21,7 @@ export class SidebarService {
       subtitle: 'Mis productos',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Mis productos', url: '#' }
+        { title: 'Mis productos', url: '/home/marketplaces' }
       ]
     },
     {
