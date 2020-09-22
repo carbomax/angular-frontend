@@ -33,7 +33,9 @@ import { PublishMyproductsComponent } from './pages/home/my-products/publish-myp
     SidebardComponent,
     HeaderComponent,
     BreadcrumbsComponent,
-    ProductsStoreComponent],
+    ProductsStoreComponent,
+    ChooseMarketplacesComponent,
+    PublishMyproductsComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,

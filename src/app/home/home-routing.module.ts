@@ -11,8 +11,8 @@ const routes: Routes = [
     path: '', component: HomeComponent,
     children: [
       { path: 'store', component: ProductsStoreComponent },
-      { path: 'marketplaces', component: ChooseMarketplacesComponent },
-      { path: 'publish-myproducts', component: PublishMyproductsComponent },      
+      { path: 'marketplaces', component: ChooseMarketplacesComponent},      
+      { path: 'publish-myproducts', component: PublishMyproductsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

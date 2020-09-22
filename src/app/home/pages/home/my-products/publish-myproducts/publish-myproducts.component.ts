@@ -7,6 +7,8 @@ import { Options, LabelType } from 'ng5-slider';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PaginationInstance } from 'ngx-pagination';
 
+declare function initializePlugin();
+
 @Component({
   selector: 'app-publish-myproducts',
   templateUrl: './publish-myproducts.component.html',
@@ -55,6 +57,7 @@ export class PublishMyproductsComponent implements OnInit {
   
   
   ngOnInit(): void {
+    initializePlugin();
     this.loading = true;
     this.productStoreService.getPageProducts(0, 3, '', '', -1, -1, -1)
       .subscribe(pageItemGrid => {
