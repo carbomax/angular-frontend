@@ -14,6 +14,8 @@ import { NotImagePipe } from './pipe/not-image.pipe';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Ng5SliderModule } from 'ng5-slider';
+import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-marketplaces/choose-marketplaces.component';
+import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { Ng5SliderModule } from 'ng5-slider';
     BreadcrumbsComponent,
     ProductsStoreComponent,
     FilterProductsStoragePipe,
-    NotImagePipe],
+    NotImagePipe,
+    ChooseMarketplacesComponent,
+    PublishMyproductsComponent],
   exports: [HomeComponent,
     SidebardComponent,
     HeaderComponent,

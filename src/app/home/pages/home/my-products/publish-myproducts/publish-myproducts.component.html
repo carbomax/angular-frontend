@@ -1,0 +1,223 @@
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+    <!-- Card Header - Accordion -->
+    <a href="#collapseCardFilterProductStorage" class="d-block card-header py-3" data-toggle="collapse" role="button"
+      aria-expanded="false" aria-controls="collapseCardFilterProductStorage">
+      <h6 class="m-0 font-weight-bold text-primary">Buscar por...</h6>
+    </a>
+    <!-- Card Content - Collapse -->
+    <div class="collapse" id="collapseCardFilterProductStorage">
+      <form action="" #f="ngForm">
+        <div class="card-body container">
+  
+          <div class="row p-3">
+            <div class="col-md-6">
+  
+              <div class="form-group">
+                <label for="idNameProduct">Nombre:</label>
+                <input type="text" class="form-control" name="nameSeach" [(ngModel)]="nameSeach" id="idNameProduct"
+                  placeholder="Buscar por nombre...">
+              </div>
+  
+              <div class="form-group">
+                <label for="idSku">SKU:</label>
+                <input type="text" class="form-control" name="skuSearch" [(ngModel)]="skuSearch" id="idSku"
+                  placeholder="Buscar por SKU...">
+              </div>
+  
+  
+            </div>
+            <div class="col-md-6">
+  
+              <div class="form-group mb-md-0">
+                <label for="idPriceSearch">Precio:</label>
+                <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
+                  [options]="options"></ng5-slider>
+              </div>
+  
+              <div class="form-group">
+                <label for="inputState">Categoría:</label>
+                <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputState" class="form-control">
+                  <option [value]="typeCategorySearchClear">Todas</option>
+                  <option *ngFor="let category of productStoreService.categories" [value]="category.id">
+                    {{category.description}} </option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col d-flex justify-content-center">
+  
+              <button class="btn btn-outline-primary mr-1" (click)="searchProducts()">
+                <i *ngIf="!loadPaginator"  class="fas fa-search m-1"></i>  <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner m-1"></i> Buscar</button>
+              <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"><i class="fas fa-broom m-1"></i>
+                Limpiar</button>
+            </div>
+          </div>
+        </div>
+      </form>
+  
+    </div>
+  </div>
+  
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+  
+      <div
+        class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+        <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
+        <div class="dropdown no-arrow">
+          <a class="dropdown-toggle btn btn-primary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-mouse-pointer"></i>
+            Seleccionar Acción
+            <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+            aria-labelledby="dropdownMenuLink">
+            <div class="dropdown-header">Mis productos:</div>
+            <a class="dropdown-item" href="#">Publicar Seleccionados</a>
+            <a class="dropdown-item" href="#">Pausar Seleccionados</a>
+            <a class="dropdown-item" href="#">Eliminar Seleccionados</a> 
+          </div>
+        </div>
+      </div>
+  
+    </div>
+  
+  
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>
+                <div class="custom-control custom-checkbox ">
+                  <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
+                    id="customCheck">
+                  <label class="custom-control-label" for="customCheck"></label>
+                </div>
+              </th>
+              <th>Imagen</th>
+              <th>Nombre</th>
+              <th>SKU</th>
+              <th>Categoria</th>
+              <th>Precio</th>              
+              <th>Cantidad</th>
+              <th>Estado</th>
+              <th class="text-right"><i class="fas fa-mouse-pointer"></i> Acción</th>
+            </tr>
+          </thead>
+  
+          <tbody *ngIf="!loading">
+              <tr *ngFor="let product of pageProducts.itemsGrid">
+                <td>
+                  <div class="custom-control custom-checkbox small">
+                    <input type="checkbox" [ngModel]="product.selected" (change)="product.selected = !product.selected"
+                      class="custom-control-input" [id]="'check' + product.sku">
+                    <label class="custom-control-label" [for]="'check' + product.sku"></label>
+                  </div>
+                </td>
+                <td>
+                  <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage"
+                    alt="Imagen del producto">
+                </td>
+                <td>{{ product.name}}</td>
+                <td>{{ product.sku}}</td>
+                <td>
+                  <div *ngIf="product.categories.length > 0" class="dropdown no-arrow">
+                    {{product.categories[0].description}}
+                    <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
+                      id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                      *ngIf="product.categories.length > 1">
+                      {{ product.categories.length}} <i class="fas fa-eye"></i>
+                    </span>
+                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                      aria-labelledby="dropdownMenuLink">
+                      <ul class="list-group list-group-flush">
+                        <li class="list-group-item dropdown-item" *ngFor="let item of product.categories">
+                          {{ item.description }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div *ngIf="product.categories.length === 0" class="dropdown no-arrow">
+                    <span>Sin categoría</span>
+                  </div>
+                </td>
+                <td>UYU {{ product.priceUYU}} / $ {{product.priceUSD}}</td>
+                <td>{{ product.currentStock}} </td>
+                <td>No Publicado</td>
+                <td class="text-right">
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                          aria-haspopup="true" aria-expanded="false">
+                          <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                          aria-labelledby="dropdownMenuLink">                          
+                          <a class="dropdown-item" href="#">Ver</a>
+                          <a class="dropdown-item" href="#">Publicar</a>
+                          <a class="dropdown-item" href="#">Eliminar</a> 
+                        </div>
+                      </div>
+                    </td>
+              </tr>
+  
+          </tbody>
+        </table>
+  
+      </div>
+  
+      <div  class="d-flex justify-content-center">
+        <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
+      </div>
+  
+      <div class="row justify-content-around" *ngIf="pageProducts.itemsGrid">
+  
+        <nav aria-label="Page navigation">
+          <ul class="pagination" *ngIf="pageProducts?.itemsGrid">
+            <li class="page-item" (click)="previous()"><a class="page-link ">
+                <i class="fas fa-backward"></i>
+              </a></li>
+            <li *ngFor="let page of ' '.repeat(pageProducts.totalPages).split(''), let i = index " (click)="onSelect(i)"
+              [class.active]="i === selectedPage" class="page-item"><a class="page-link pointer">{{i}}</a></li>
+            <li class="page-item" (click)="next()"><a class="page-link">
+                <i class="fas fa-forward"></i>
+              </a></li>
+          </ul>
+        </nav>
+  
+  
+        <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
+          aria-live="polite">
+          <span class="align-middle">Mostrando 1 a 10 de 57 registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+  
+        </div>
+  
+      </div>
+  
+    </div>
+  
+  </div>
+  
+  <!-- Logout Modal-->
+  <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Categorias producto: </h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+        <div class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+          <a class="btn btn-primary" href="login.html">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
