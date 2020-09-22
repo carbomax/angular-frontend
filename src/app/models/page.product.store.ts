@@ -9,6 +9,7 @@ export class PageProductStorage {
   size: number;
   first: boolean;
   sort: any;
+  totalProducts: number;
   currentStock: number;
   selected?: boolean;
 }

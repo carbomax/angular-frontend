@@ -17,6 +17,9 @@ export class ProductsStoreComponent implements OnInit {
 
   public loading = true;
   public loadPaginator = false;
+  public loadingClear = false;
+  public errorProducts = false;
+  public empySearch = false;
   public nameSeach = '';
   public skuSearch = '';
   public typeProductSearchClear = '';
@@ -34,6 +37,7 @@ export class ProductsStoreComponent implements OnInit {
   page = 0;
   size = 5;
   checkAll = false;
+  sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
 
   // Range price filter
   options: Options = {
@@ -58,13 +62,67 @@ export class ProductsStoreComponent implements OnInit {
 
   }
 
+  selectChangeHandler(size): void {
+
+    const pageProductsTemporal = new PageProductStorage();
+    pageProductsTemporal.itemsGrid = this.pageProducts.itemsGrid;
+    this.loadPaginator = true;
+    if ( this.size > size) {
+      this.productStoreService.getPageProducts(this.selectedPage, this.size = +size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemGrid => {
+          console.log(pageItemGrid)
+          if (pageItemGrid.itemsGrid.length > 0) {
+            this.pageProducts = this.productStoreService.pageProducts;
+          } else {
+            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
+          }
+
+          this.loading = false;
+          this.loadPaginator = false;
+
+        }, (error: any) => {
+          this.errorProducts = true;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        })
+    } else {
+      this.productStoreService.getPageProducts( 0, this.size = +size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemGrid => {
+          console.log(pageItemGrid)
+          if (pageItemGrid.itemsGrid.length > 0) {
+            this.pageProducts = this.productStoreService.pageProducts;
+          } else {
+            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
+          }
+          this.selectedPage = 0;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        }, (error: any) => {
+          this.errorProducts = true;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        })
+    }
+
+  }
 
   ngOnInit(): void {
     this.loading = true;
-    this.productStoreService.getPageProducts(0, 3, '', '', -1, -1, -1)
+    this.errorProducts = false;
+    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
-        console.log(pageItemGrid)
         this.pageProducts = this.productStoreService.pageProducts;
+        if (this.pageProducts.itemsGrid.length <= 0) {
+          this.errorProducts = true;
+        }
+        this.loading = false;
+      }, (error: any) => {
+        this.errorProducts = true;
         this.loading = false;
       })
   }
@@ -73,9 +131,12 @@ export class ProductsStoreComponent implements OnInit {
     this.loadPaginator = true;
     this.selectedPage = page;
     this.productStoreService.
-      getPageProducts(this.selectedPage, 3, this.skuSearch,
+      getPageProducts(this.selectedPage, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
+      .subscribe(pageItemGrid =>
+        { this.pageProducts = this.productStoreService.pageProducts;
+          this.loadPaginator = false;
+        }, error => this.loading = false);
 
   }
 
@@ -84,7 +145,7 @@ export class ProductsStoreComponent implements OnInit {
     if (!this.pageProducts.last) {
       this.loadPaginator = true;
       this.productStoreService.
-        getPageProducts(this.selectedPage += 1, 3, this.skuSearch,
+        getPageProducts(this.selectedPage += 1, this.size, this.skuSearch,
           this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
     }
@@ -95,11 +156,10 @@ export class ProductsStoreComponent implements OnInit {
     if (!this.pageProducts.first) {
       this.loadPaginator = true;
       this.productStoreService.
-        getPageProducts(this.selectedPage -= 1, 3, this.skuSearch,
+        getPageProducts(this.selectedPage -= 1, this.size, this.skuSearch,
           this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts;  this.loadPaginator = false;
-
-          console.log(this.pageProducts)
+        .subscribe(pageItemGrid => {
+          this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;
         });
 
     }
@@ -107,15 +167,11 @@ export class ProductsStoreComponent implements OnInit {
 
   }
 
-  search(f: NgForm): void {
-    console.log(f.value)
-  }
 
-
-  selectAllProducts() {
+  selectAllProducts(): void {
     this.checkAll = !this.checkAll;
 
-    this.productsStorage.forEach(element => {
+    this.pageProducts.itemsGrid.forEach(element => {
       element.selected = this.checkAll;
     });
 
@@ -123,24 +179,44 @@ export class ProductsStoreComponent implements OnInit {
 
   searchProducts(): void {
     this.loadPaginator = true;
+    this.empySearch = false;
+    this.loadingClear = false;
     this.productStoreService.
-      getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
+      getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;});
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        this.loadPaginator = false;
+        this.errorProducts = false;
+        if (this.pageProducts.itemsGrid.length === 0) {
+          this.empySearch = true;
+        }
+      }, (error: any) => {
+        console.log('Error', error);
+        this.loadPaginator = false;
+        this.errorProducts = false;
+        this.empySearch = true;
+      });
   }
   // Clear search form
   clearSearch(f: NgForm): void {
-    if (f) {
-      this.nameSeach = '';
-      this.skuSearch = '';
-      this.typeProductSearch = '';
-      this.typeCategorySearch = '';
-      this.minValue = 0;
-      this.maxValue = 500;
-      this.productStoreService.
-        getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => this.pageProducts = this.productStoreService.pageProducts);
-    }
+
+    this.loadingClear = true;
+    this.nameSeach = '';
+    this.skuSearch = '';
+    this.typeProductSearch = '';
+    this.typeCategorySearch = '';
+    this.minValue = 0;
+    this.maxValue = 500;
+    this.productStoreService.
+      getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        this.loadingClear = false;
+      }, (error: any) => {
+        this.loadingClear = false;
+      });
+
   }
 }

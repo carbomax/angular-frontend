@@ -29,13 +29,19 @@ import { PublishMyproductsComponent } from './pages/home/my-products/publish-myp
     NotImagePipe,
     ChooseMarketplacesComponent,
     PublishMyproductsComponent],
+
   exports: [HomeComponent,
     SidebardComponent,
     HeaderComponent,
     BreadcrumbsComponent,
     ProductsStoreComponent,
     ChooseMarketplacesComponent,
+<<<<<<< HEAD
     PublishMyproductsComponent],
+=======
+    PublishMyproductsComponent,
+    NotImagePipe],
+>>>>>>> development
   imports: [
     SharedModule,
     HomeRoutingModule,
