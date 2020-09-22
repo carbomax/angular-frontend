@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Ng5SliderModule } from 'ng5-slider';
 import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-marketplaces/choose-marketplaces.component';
+import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-mar
     ProductsStoreComponent,
     FilterProductsStoragePipe,
     NotImagePipe,
-    ChooseMarketplacesComponent],
+    ChooseMarketplacesComponent,
+    PublishMyproductsComponent],
   exports: [HomeComponent,
     SidebardComponent,
     HeaderComponent,
