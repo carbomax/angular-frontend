@@ -16,6 +16,7 @@ export class ProductsStorageService {
 
   pageProducts: PageProductStorage;
   categories: CategoryProductStoraje [] = [];
+
   constructor(private http: HttpClient) {
     this.pageProducts = new PageProductStorage();
     this.getCategories()
@@ -36,6 +37,7 @@ export class ProductsStorageService {
       this.pageProducts.last = resp.last;
       this.pageProducts.first = resp.first;
       this.pageProducts.sort = resp.sort;
+      this.pageProducts.totalProducts = resp.totalProducts;
       return this.pageProducts;
     }));
   }
