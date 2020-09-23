@@ -6,6 +6,8 @@ import { Options, LabelType } from 'ng5-slider';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PaginationInstance } from 'ngx-pagination';
+import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import { PopupAddcommoninfoComponent } from 'src/app/home/components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 
 declare function initializePlugin();
 
@@ -28,7 +30,7 @@ export class PublishMyproductsComponent implements OnInit {
   public maxValue = 500;
 
   productsStorage: ProductStore[];
-  pageProducts = new PageProductStorage();
+  pageProducts = new PageProductStorage();  
 
   // Paginator
   selectedPage = 0;
@@ -52,7 +54,9 @@ export class PublishMyproductsComponent implements OnInit {
     }
   };
 
-  constructor(public productStoreService: ProductsStorageService) { }
+  constructor(public productStoreService: ProductsStorageService, public dialog: MatDialog) { 
+    
+  }
 
   
   
@@ -142,5 +146,22 @@ export class PublishMyproductsComponent implements OnInit {
     }
   }
 
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = false;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(PopupAddcommoninfoComponent, dialogConfig);
+/*
+    dialogRef.afterClosed().subscribe(
+      data => {
+                this.saveNewCourse(data);
+      }, error => this.logService.print(error, LogService.ERROR_MSG));*/
+  }
+/*
+private saveNewCourse(courseToInsert: Course) {
+    this.apiService.addCourse(courseToInsert).subscribe();
+  }*/
 
 }

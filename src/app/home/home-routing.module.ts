@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProductsStoreComponent } from './pages/home/store/products-store/products-store.component';
 import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-marketplaces/choose-marketplaces.component';
 import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
+import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -13,6 +14,7 @@ const routes: Routes = [
       { path: 'store', component: ProductsStoreComponent },
       { path: 'marketplaces', component: ChooseMarketplacesComponent},      
       { path: 'publish-myproducts', component: PublishMyproductsComponent },
+      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

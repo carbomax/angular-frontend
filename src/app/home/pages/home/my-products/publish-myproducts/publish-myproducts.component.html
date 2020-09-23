@@ -75,8 +75,9 @@
             <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-            aria-labelledby="dropdownMenuLink">
-            <div class="dropdown-header">Mis productos:</div>
+            aria-labelledby="dropdownMenuLink">             
+            <button mat-button (click)="openDialog()">Open dialog</button>
+            <a class="dropdown-item" href="#">Agregar Información</a>
             <a class="dropdown-item" href="#">Publicar Seleccionados</a>
             <a class="dropdown-item" href="#">Pausar Seleccionados</a>
             <a class="dropdown-item" href="#">Eliminar Seleccionados</a> 
@@ -102,7 +103,7 @@
               <th>Imagen</th>
               <th>Nombre</th>
               <th>SKU</th>
-              <th>Categoria</th>
+              <th>Familia</th>
               <th>Precio</th>              
               <th>Cantidad</th>
               <th>Estado</th>
@@ -156,8 +157,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                           aria-labelledby="dropdownMenuLink">                          
-                          <a class="dropdown-item" href="#">Ver</a>
-                          <a class="dropdown-item" href="#">Publicar</a>
+                          <a class="dropdown-item" href="#">Ver</a>                          
                           <a class="dropdown-item" href="#">Eliminar</a> 
                         </div>
                       </div>
@@ -221,3 +221,4 @@
     </div>
   </div>
   
+   
