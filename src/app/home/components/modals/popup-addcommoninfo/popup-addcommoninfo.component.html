@@ -1,141 +1,58 @@
-<div mat-dialog-title>Información Común para articulos seleccionados</div>
+<div mat-dialog-title>Adicionar Dato Común</div>
 <div mat-dialog-content>
   <div class="container-fluid"> 
     <div class="row">
       <div class="col-lg-6">
        
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 cardpopup">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Circle Buttons</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Redactar Descripción</h6>
           </div>
-          <div class="card-body">
-            <p>Use Font Awesome Icons (included with this theme package) along with the circle buttons as shown in the examples below!</p>
-            <!-- Circle Buttons (Default) -->
-            <div class="mb-2">
-              <code>.btn-circle</code>
-            </div>
-            <a href="#" class="btn btn-primary btn-circle">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle">
-              <i class="fas fa-trash"></i>
-            </a>
-            <!-- Circle Buttons (Small) -->
-            <div class="mt-4 mb-2">
-              <code>.btn-circle .btn-sm</code>
-            </div>
-            <a href="#" class="btn btn-primary btn-circle btn-sm">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle btn-sm">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle btn-sm">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle btn-sm">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle btn-sm">
-              <i class="fas fa-trash"></i>
-            </a>
-            <!-- Circle Buttons (Large) -->
-            <div class="mt-4 mb-2">
-              <code>.btn-circle .btn-lg</code>
-            </div>
-            <a href="#" class="btn btn-primary btn-circle btn-lg">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle btn-lg">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle btn-lg">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle btn-lg">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle btn-lg">
-              <i class="fas fa-trash"></i>
-            </a>
+          <div class="card-body">            
+            <textarea class="cardtextarea" placeholder="This is a textarea" rows="6"></textarea>           
           </div>
         </div>
       </div>
 
       <div class="col-lg-6">
 
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 cardpopup">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Circle Buttons</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Seleccionar imagenes</h6>
           </div>
-          <div class="card-body">
-            <p>Use Font Awesome Icons (included with this theme package) along with the circle buttons as shown in the examples below!</p>
-            <!-- Circle Buttons (Default) -->
-            <div class="mb-2">
-              <code>.btn-circle</code>
+          <div class="card-body">           
+            <div class="uploader">
+              <input class="inputbotton" type="file" name="img">
+              <span class="filename" style="user-select: none;">No file selected</span>
+              <span class="actionimage" style="user-select: none;">+</span>
             </div>
-            <a href="#" class="btn btn-primary btn-circle">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle">
-              <i class="fas fa-trash"></i>
-            </a>
-            <!-- Circle Buttons (Small) -->
-            <div class="mt-4 mb-2">
-              <code>.btn-circle .btn-sm</code>
+
+              <div class="row no-gutters align-items-center imagecontainer">
+                <div class="col mr-2">
+                  <a href="#" class="thumbnail">
+                    <img src="http://placehold.it/200x100" alt="">
+                  </a>
+                </div>
+                <div class="col mr-2">                 
+                    <a href="#" class="thumbnail">
+                      <img src="http://placehold.it/200x100" alt="">
+                    </a>                 
+                </div>                
             </div>
-            <a href="#" class="btn btn-primary btn-circle btn-sm">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle btn-sm">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle btn-sm">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle btn-sm">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle btn-sm">
-              <i class="fas fa-trash"></i>
-            </a>
-            <!-- Circle Buttons (Large) -->
-            <div class="mt-4 mb-2">
-              <code>.btn-circle .btn-lg</code>
-            </div>
-            <a href="#" class="btn btn-primary btn-circle btn-lg">
-              <i class="fab fa-facebook-f"></i>
-            </a>
-            <a href="#" class="btn btn-success btn-circle btn-lg">
-              <i class="fas fa-check"></i>
-            </a>
-            <a href="#" class="btn btn-info btn-circle btn-lg">
-              <i class="fas fa-info-circle"></i>
-            </a>
-            <a href="#" class="btn btn-warning btn-circle btn-lg">
-              <i class="fas fa-exclamation-triangle"></i>
-            </a>
-            <a href="#" class="btn btn-danger btn-circle btn-lg">
-              <i class="fas fa-trash"></i>
-            </a>
+
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">                
+                  <a href="#" class="thumbnail">
+                    <img src="http://placehold.it/200x100" alt="">    
+                  </a>                
+              </div>
+              <div class="col mr-2">               
+                  <a href="#" class="thumbnail">
+                    <img src="http://placehold.it/200x100" alt="">                 
+                 </a>               
+              </div>                
+          </div>            
+
           </div>
         </div>
 
