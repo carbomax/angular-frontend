@@ -8,4 +8,6 @@
 .dropdown-item:hover{
   background-color: #0e41db54;
 }
-
+.dropdown-item{
+  padding-left: 2%;
+}
