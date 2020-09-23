@@ -24,10 +24,12 @@ export class ProductsStoreComponent implements OnInit {
   public skuSearch = '';
   public typeProductSearchClear = '';
   public typeCategorySearchClear = '';
+  public typeFamilySearchClear = '';
   public typeProductSearch = '';
   public typeCategorySearch = '';
+  public typeFamilySearch = '';
   public minValue = 0;
-  public maxValue = 500;
+  public maxValue = 20000;
 
   productsStorage: ProductStore[];
   pageProducts = new PageProductStorage();
@@ -42,7 +44,7 @@ export class ProductsStoreComponent implements OnInit {
   // Range price filter
   options: Options = {
     floor: 0,
-    ceil: 500,
+    ceil: this.maxValue,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
@@ -67,9 +69,10 @@ export class ProductsStoreComponent implements OnInit {
     const pageProductsTemporal = new PageProductStorage();
     pageProductsTemporal.itemsGrid = this.pageProducts.itemsGrid;
     this.loadPaginator = true;
-    if ( this.size > size) {
+    if (this.size > size) {
       this.productStoreService.getPageProducts(this.selectedPage, this.size = +size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch,
+        this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => {
           console.log(pageItemGrid)
           if (pageItemGrid.itemsGrid.length > 0) {
@@ -88,8 +91,8 @@ export class ProductsStoreComponent implements OnInit {
 
         })
     } else {
-      this.productStoreService.getPageProducts( 0, this.size = +size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+      this.productStoreService.getPageProducts(0, this.size = +size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => {
           console.log(pageItemGrid)
           if (pageItemGrid.itemsGrid.length > 0) {
@@ -114,7 +117,7 @@ export class ProductsStoreComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.errorProducts = false;
-    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
         if (this.pageProducts.itemsGrid.length <= 0) {
@@ -132,11 +135,11 @@ export class ProductsStoreComponent implements OnInit {
     this.selectedPage = page;
     this.productStoreService.
       getPageProducts(this.selectedPage, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid =>
-        { this.pageProducts = this.productStoreService.pageProducts;
-          this.loadPaginator = false;
-        }, error => this.loading = false);
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        this.loadPaginator = false;
+      }, error => this.loading = false);
 
   }
 
@@ -146,7 +149,7 @@ export class ProductsStoreComponent implements OnInit {
       this.loadPaginator = true;
       this.productStoreService.
         getPageProducts(this.selectedPage += 1, this.size, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
     }
   }
@@ -157,7 +160,7 @@ export class ProductsStoreComponent implements OnInit {
       this.loadPaginator = true;
       this.productStoreService.
         getPageProducts(this.selectedPage -= 1, this.size, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => {
           this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;
         });
@@ -183,7 +186,7 @@ export class ProductsStoreComponent implements OnInit {
     this.loadingClear = false;
     this.productStoreService.
       getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
         this.loadPaginator = false;
@@ -206,16 +209,21 @@ export class ProductsStoreComponent implements OnInit {
     this.skuSearch = '';
     this.typeProductSearch = '';
     this.typeCategorySearch = '';
+    this.typeFamilySearch = '';
     this.minValue = 0;
-    this.maxValue = 500;
+    this.maxValue = 20000;
     this.productStoreService.
       getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
+        if(this.pageProducts.itemsGrid.length > 0){
+          this.empySearch = false;
+        }
         this.loadingClear = false;
       }, (error: any) => {
         this.loadingClear = false;
+
       });
 
   }

@@ -1,4 +1,5 @@
 import { CategoryProductStoraje } from './category.product.storaje';
+import { FamilyProductStorage } from './family.product.store';
 
 export class ProductStore {
   sku: string;
@@ -8,5 +9,6 @@ export class ProductStore {
   currentStock: number;
   images: any[];
   categories: CategoryProductStoraje[];
+  family: FamilyProductStorage;
   selected?: boolean;
 }
