@@ -4,8 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 
-import { FilterProductsStoragePipe } from './pipe/filter-products-storage.pipe';
-import { NotImagePipe } from './pipe/not-image.pipe';
+
 
 //Components
 import { SidebardComponent } from './components/sidebard/sidebard.component';
@@ -17,6 +16,15 @@ import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-mar
 import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
 import { ListMarketplacesComponent } from './pages/home/marketplaces/list-marketplaces/list-marketplaces.component';
 
+import { FilterProductsStoragePipe } from './pipe/filter-products-storage.pipe';
+import { NotImagePipe } from './pipe/not-image.pipe';
+
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Ng5SliderModule } from 'ng5-slider';
+import {MatDialogModule} from '@angular/material/dialog';
+
+import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 
 
 @NgModule({
@@ -30,7 +38,8 @@ import { ListMarketplacesComponent } from './pages/home/marketplaces/list-market
     NotImagePipe,
     ChooseMarketplacesComponent,
     PublishMyproductsComponent,
-    ListMarketplacesComponent],
+    ListMarketplacesComponent,
+    PopupAddcommoninfoComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -40,10 +49,12 @@ import { ListMarketplacesComponent } from './pages/home/marketplaces/list-market
     ChooseMarketplacesComponent,
     PublishMyproductsComponent,
     ListMarketplacesComponent,
+    PopupAddcommoninfoComponent,
     NotImagePipe],
   imports: [
     SharedModule,
     HomeRoutingModule,
+    MatDialogModule
   ]
 })
 export class HomeModule { }

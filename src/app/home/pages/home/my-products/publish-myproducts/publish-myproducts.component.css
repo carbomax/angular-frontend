@@ -3,5 +3,11 @@
     height: 2em !important;
   }
 .actionboxicon{
-    text-align: -moz-left;
+    text-align: start;
+}
+.dropdown-item:hover{
+  background-color: #0e41db54;
+}
+.dropdown-item{
+  padding-left: 2%;
 }
