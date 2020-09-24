@@ -35,13 +35,28 @@
                   [options]="options"></ng5-slider>
               </div>
   
-              <div class="form-group">
-                <label for="inputState">Categoría:</label>
-                <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputState" class="form-control">
-                  <option [value]="typeCategorySearchClear">Todas</option>
-                  <option *ngFor="let category of productStoreService.categories" [value]="category.id">
-                    {{category.description}} </option>
-                </select>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="inputFamily">Familia:</label>
+                    <select name="typeFamilySearch" [(ngModel)]="typeFamilySearch" id="inputFamily" class="form-control">
+                      <option [value]="typeFamilySearchClear">Todas</option>
+                      <option *ngFor="let family of productStoreService.families" [value]="family.id">
+                        {{family.description}} </option>
+                    </select>
+                  </div>
+                </div> 
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="inputFamily">Estado:</label>
+                    <select name="typeFamilySearch" id="inputState" class="form-control">
+                      <option >Todas</option>  
+                      <option >Publicado</option>
+                      <option >No Publicado</option> 
+                      <option >Pausado</option>                    
+                    </select>
+                  </div>
+                </div>                             
               </div>
             </div>
           </div>
@@ -50,7 +65,7 @@
   
               <button class="btn btn-outline-primary mr-1" (click)="searchProducts()">
                 <i *ngIf="!loadPaginator"  class="fas fa-search m-1"></i>  <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner m-1"></i> Buscar</button>
-              <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"><i class="fas fa-broom m-1"></i>
+                <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"> <i *ngIf="loadingClear"  class="fas fa-spin fa-spinner m-1"></i><i  *ngIf="!loadingClear" class="fas fa-broom m-1"></i>
                 Limpiar</button>
             </div>
           </div>
@@ -58,14 +73,13 @@
       </form>
   
     </div>
-  </div>
+</div>
   
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
   
-      <div
-        class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <div class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
         <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
         <div class="dropdown no-arrow">
           <a class="dropdown-toggle btn btn-primary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -125,26 +139,8 @@
                 </td>
                 <td>{{ product.name}}</td>
                 <td>{{ product.sku}}</td>
-                <td>
-                  <div *ngIf="product.categories.length > 0" class="dropdown no-arrow">
-                    {{product.categories[0].description}}
-                    <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
-                      id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                      *ngIf="product.categories.length > 1">
-                      {{ product.categories.length}} <i class="fas fa-eye"></i>
-                    </span>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                      aria-labelledby="dropdownMenuLink">
-                      <ul class="list-group list-group-flush">
-                        <li class="list-group-item dropdown-item" *ngFor="let item of product.categories">
-                          {{ item.description }}</li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div *ngIf="product.categories.length === 0" class="dropdown no-arrow">
-                    <span>Sin categoría</span>
-                  </div>
-                </td>
+                <td *ngIf="product.family">{{ product.family.description }}</td>
+                <td *ngIf="!product.family">Sin familia</td>
                 <td>UYU {{ product.priceUYU}} / $ {{product.priceUSD}}</td>
                 <td>{{ product.currentStock}} </td>
                 <td>No Publicado</td>
@@ -160,7 +156,7 @@
                           <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
                         </div>
                       </div>
-                    </td>
+                </td>
               </tr>
   
           </tbody>
@@ -180,22 +176,43 @@
                 <i class="fas fa-backward"></i>
               </a></li>
             <li *ngFor="let page of ' '.repeat(pageProducts.totalPages).split(''), let i = index " (click)="onSelect(i)"
-              [class.active]="i === selectedPage" class="page-item"><a class="page-link pointer">{{i}}</a></li>
+              [class.active]="i === selectedPage" class="page-item"><a class="page-link pointer">{{i+1}}</a></li>
             <li class="page-item" (click)="next()"><a class="page-link">
                 <i class="fas fa-forward"></i>
               </a></li>
           </ul>
         </nav>
-  
+        <div class="form-group">
+          <select (change)="selectChangeHandler($event.target.value)" class="form-control">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+            <option value="30">30</option>
+        </select>
+        </div>
   
         <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
-          <span class="align-middle">Mostrando 1 a 10 de 57 registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+          <span class="align-middle">Mostrando {{selectedPage+1}} a {{size}} de {{pageProducts.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
   
         </div>
   
       </div>
+      <div class="row justify-content-center" *ngIf="errorProducts">
+
+        <div class="alert alert-info col-8 text-center" role="alert">
+          <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar
+        </div>
   
+      </div>
+  
+      <div class="row justify-content-center" *ngIf="empySearch">
+  
+        <div class="alert alert-info col-10 text-center" role="alert">
+          <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron productos con los criterios de búsqueda especificados
+        </div>
+  
+      </div>
     </div>
   
   </div>

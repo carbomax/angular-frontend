@@ -7,7 +7,7 @@ import { Options, LabelType } from 'ng5-slider';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PaginationInstance } from 'ngx-pagination';
 import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import { PopupAddcommoninfoComponent } from 'src/app/home/components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
+import { PopupAddcommoninfoComponent } from '../../../../components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 
 declare function initializePlugin();
 
@@ -20,14 +20,19 @@ export class PublishMyproductsComponent implements OnInit {
 
   public loading = true;
   public loadPaginator = false;
+  public loadingClear = false;
+  public errorProducts = false;
+  public empySearch = false;  
   public nameSeach = '';
   public skuSearch = '';
-  public typeProductSearchClear = '';
-  public typeCategorySearchClear = '';
-  public typeProductSearch = '';
+  public typeProductSearchClear = ''; 
+  public typeCategorySearchClear = ''; 
+  public typeFamilySearchClear = '';
+  public typeProductSearch = '';  
   public typeCategorySearch = '';
+  public typeFamilySearch = '';
   public minValue = 0;
-  public maxValue = 500;
+  public maxValue = 20000;
 
   productsStorage: ProductStore[];
   pageProducts = new PageProductStorage();  
@@ -37,11 +42,12 @@ export class PublishMyproductsComponent implements OnInit {
   page = 0;
   size = 5;
   checkAll = false;
+  sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
 
   // Range price filter
   options: Options = {
     floor: 0,
-    ceil: 500,
+    ceil: this.maxValue,
     translate: (value: number, label: LabelType): string => {
       switch (label) {
         case LabelType.Low:
@@ -58,15 +64,68 @@ export class PublishMyproductsComponent implements OnInit {
     
   }
 
+  selectChangeHandler(size): void {
 
+    const pageProductsTemporal = new PageProductStorage();
+    pageProductsTemporal.itemsGrid = this.pageProducts.itemsGrid;
+    this.loadPaginator = true;
+    if (this.size > size) {
+      this.productStoreService.getPageProducts(this.selectedPage, this.size = +size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch,
+        this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemGrid => {
+          console.log(pageItemGrid)
+          if (pageItemGrid.itemsGrid.length > 0) {
+            this.pageProducts = this.productStoreService.pageProducts;
+          } else {
+            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
+          }
 
-  ngOnInit(): void {
-    initializePlugin();
+          this.loading = false;
+          this.loadPaginator = false;
+
+        }, (error: any) => {
+          this.errorProducts = true;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        })
+    } else {
+      this.productStoreService.getPageProducts(0, this.size = +size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemGrid => {
+          console.log(pageItemGrid)
+          if (pageItemGrid.itemsGrid.length > 0) {
+            this.pageProducts = this.productStoreService.pageProducts;
+          } else {
+            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
+          }
+          this.selectedPage = 0;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        }, (error: any) => {
+          this.errorProducts = true;
+          this.loading = false;
+          this.loadPaginator = false;
+
+        })
+    }
+
+  }
+
+  ngOnInit(): void {    
     this.loading = true;
-    this.productStoreService.getPageProducts(0, 3, '', '', -1, -1, -1, -1)
-      .subscribe(pageItemGrid => {
-        console.log(pageItemGrid)
+    this.errorProducts = false;
+    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemGrid => {        
         this.pageProducts = this.productStoreService.pageProducts;
+        if (this.pageProducts.itemsGrid.length <= 0) {
+          this.errorProducts = true;
+        }
+        this.loading = false;
+      }, (error: any) => {
+        this.errorProducts = true;
         this.loading = false;
       })
   }
@@ -75,9 +134,12 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadPaginator = true;
     this.selectedPage = page;
     this.productStoreService.
-      getPageProducts(this.selectedPage, 3, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
+    getPageProducts(this.selectedPage, this.size, this.skuSearch,
+      this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+    .subscribe(pageItemGrid => {
+      this.pageProducts = this.productStoreService.pageProducts;
+      this.loadPaginator = false;
+    }, error => this.loading = false);
 
   }
 
@@ -86,8 +148,8 @@ export class PublishMyproductsComponent implements OnInit {
     if (!this.pageProducts.last) {
       this.loadPaginator = true;
       this.productStoreService.
-        getPageProducts(this.selectedPage += 1, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
+      getPageProducts(this.selectedPage += 1, this.size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
     }
   }
@@ -97,11 +159,10 @@ export class PublishMyproductsComponent implements OnInit {
     if (!this.pageProducts.first) {
       this.loadPaginator = true;
       this.productStoreService.
-        getPageProducts(this.selectedPage -= 1, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts;  this.loadPaginator = false;
-
-          console.log(this.pageProducts)
+      getPageProducts(this.selectedPage -= 1, this.size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;
         });
 
     }
@@ -109,15 +170,10 @@ export class PublishMyproductsComponent implements OnInit {
 
   }
 
-  search(f: NgForm): void {
-    console.log(f.value)
-  }
-
-
-  selectAllProducts() {
+  selectAllProducts():void {
     this.checkAll = !this.checkAll;
 
-    this.productsStorage.forEach(element => {
+    this.pageProducts.itemsGrid.forEach(element => {
       element.selected = this.checkAll;
     });
 
@@ -125,27 +181,48 @@ export class PublishMyproductsComponent implements OnInit {
 
   searchProducts(): void {
     this.loadPaginator = true;
+    this.empySearch = false;
+    this.loadingClear = false;
     this.productStoreService.
-      getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;});
+    getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
+      this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+    .subscribe(pageItemGrid => {
+      this.pageProducts = this.productStoreService.pageProducts;
+      this.loadPaginator = false;
+      this.errorProducts = false;
+      if (this.pageProducts.itemsGrid.length === 0) {
+        this.empySearch = true;
+      }
+    }, (error: any) => {
+      console.log('Error', error);
+      this.loadPaginator = false;
+      this.errorProducts = false;
+      this.empySearch = true;
+    });
   }
   // Clear search form
   clearSearch(f: NgForm): void {
-    if (f) {
+    this.loadingClear = true;
       this.nameSeach = '';
       this.skuSearch = '';
       this.typeProductSearch = '';
       this.typeCategorySearch = '';
+      this.typeFamilySearch = '';
       this.minValue = 0;
-      this.maxValue = 500;
+      this.maxValue = 20000;
       this.productStoreService.
-        getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => this.pageProducts = this.productStoreService.pageProducts);
-    }
+      getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        if(this.pageProducts.itemsGrid.length > 0){
+          this.empySearch = false;
   }
-
+    this.loadingClear = false;
+  }, (error: any) => {
+    this.loadingClear = false;
+  });
+}
   openDialog() {
     const dialogConfig = new MatDialogConfig();
 
