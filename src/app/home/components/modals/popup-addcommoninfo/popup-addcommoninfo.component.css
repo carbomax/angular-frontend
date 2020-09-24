@@ -1,9 +1,8 @@
 .cardpopup{
     min-height: 65vh;
 }
-.cardtextarea{
-    
-    width: -moz-available !important;
+.cardtextarea{      
+    width: 100% !important;
     border: 1px solid #d7d7d7 !important;
 }
 .imagecontainer{
