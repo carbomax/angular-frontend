@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ProductsStoreComponent } from './pages/home/store/products-store/products-store.component';
 import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-marketplaces/choose-marketplaces.component';
 import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
+import { ListMarketplacesComponent } from './pages/home/marketplaces/list-marketplaces/list-marketplaces.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -12,7 +13,8 @@ const routes: Routes = [
     children: [
       { path: 'store', component: ProductsStoreComponent },
       { path: 'marketplaces', component: ChooseMarketplacesComponent },
-      { path: 'publish-myproducts', component: PublishMyproductsComponent },      
+      { path: 'publish-myproducts', component: PublishMyproductsComponent },
+      { path: 'list-marketplaces', component: ListMarketplacesComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
