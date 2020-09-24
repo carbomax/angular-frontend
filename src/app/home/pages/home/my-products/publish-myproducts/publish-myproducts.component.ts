@@ -58,12 +58,12 @@ export class PublishMyproductsComponent implements OnInit {
     
   }
 
-  
-  
+
+
   ngOnInit(): void {
     initializePlugin();
     this.loading = true;
-    this.productStoreService.getPageProducts(0, 3, '', '', -1, -1, -1)
+    this.productStoreService.getPageProducts(0, 3, '', '', -1, -1, -1, -1)
       .subscribe(pageItemGrid => {
         console.log(pageItemGrid)
         this.pageProducts = this.productStoreService.pageProducts;
@@ -76,7 +76,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.selectedPage = page;
     this.productStoreService.
       getPageProducts(this.selectedPage, 3, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
 
   }
@@ -87,7 +87,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.loadPaginator = true;
       this.productStoreService.
         getPageProducts(this.selectedPage += 1, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
     }
   }
@@ -98,7 +98,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.loadPaginator = true;
       this.productStoreService.
         getPageProducts(this.selectedPage -= 1, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts;  this.loadPaginator = false;
 
           console.log(this.pageProducts)
@@ -127,7 +127,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadPaginator = true;
     this.productStoreService.
       getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;});
   }
   // Clear search form
@@ -141,7 +141,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.maxValue = 500;
       this.productStoreService.
         getPageProducts(this.selectedPage = 0, 3, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, -1, this.minValue, this.maxValue)
         .subscribe(pageItemGrid => this.pageProducts = this.productStoreService.pageProducts);
     }
   }

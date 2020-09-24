@@ -35,13 +35,28 @@
                 [options]="options"></ng5-slider>
             </div>
 
-            <div class="form-group">
-              <label for="inputState">Categoría:</label>
-              <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputState" class="form-control">
-                <option [value]="typeCategorySearchClear">Todas</option>
-                <option *ngFor="let category of productStoreService.categories" [value]="category.id">
-                  {{category.description}} </option>
-              </select>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="inputFamily">Familia:</label>
+                  <select name="typeFamilySearch" [(ngModel)]="typeFamilySearch" id="inputFamily" class="form-control">
+                    <option [value]="typeFamilySearchClear">Todas</option>
+                    <option *ngFor="let family of productStoreService.families" [value]="family.id">
+                      {{family.description}} </option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="inputCategory">Categoría:</label>
+                  <select name="typeCategorySearch" [(ngModel)]="typeCategorySearch" id="inputCategory" class="form-control">
+                    <option [value]="typeCategorySearchClear">Todas</option>
+                    <option *ngFor="let category of productStoreService.categories" [value]="category.id">
+                      {{category.description}} </option>
+                  </select>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -102,6 +117,7 @@
             <th>Imagen</th>
             <th>Nombre</th>
             <th>SKU</th>
+            <th>Familia</th>
             <th>Categoría</th>
             <th>Precio</th>
             <th class="text-right">Cantidad</th>
@@ -123,6 +139,8 @@
               </td>
               <td>{{ product.name}}</td>
               <td>{{ product.sku}}</td>
+              <td *ngIf="product.family">{{ product.family.description }}</td>
+              <td *ngIf="!product.family">Sin familia</td>
               <td>
                 <div *ngIf="product.categories.length > 0" class="dropdown no-arrow">
                   {{product.categories[0].description}}

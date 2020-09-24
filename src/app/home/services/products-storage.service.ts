@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CategoryProductStoraje } from '../../models/category.product.storaje';
+import { FamilyProductStorage } from '../../models/family.product.store';
 
 @Injectable({
   providedIn: 'root'
@@ -15,19 +16,23 @@ export class ProductsStorageService {
   URI_SERVICE_PRODUCTS = '/products/api';
 
   pageProducts: PageProductStorage;
-  categories: CategoryProductStoraje [] = [];
+  categories: CategoryProductStoraje[] = [];
+  families: FamilyProductStorage[] = [];
 
   constructor(private http: HttpClient) {
     this.pageProducts = new PageProductStorage();
-    this.getCategories()
+    this.getCategories();
+    this.getFamiles();
   }
 
   getPageProducts(page: number, size: number, sku: string, nameProduct: string,
-    categoryId: number, minPrice: number, maxPrice): Observable<PageProductStorage> {
+    categoryId: number, familyId: number, minPrice: number, maxPrice: number): Observable<PageProductStorage> {
 
     const uri = `${this.URI}${this.URI_SERVICE_PRODUCTS}/items-by-filters/${page}/${size}
-    ?sku=${sku}&nameProduct=${nameProduct}&categoryId=${categoryId}
+    ?sku=${sku}&nameProduct=${nameProduct}&categoryId=${categoryId}&familyId=${familyId}
     &minPrice=${minPrice}&maxPrice=${maxPrice}`;
+
+    console.log(uri)
     return this.http.get<PageProductStorage>(uri).pipe(map((resp: any) => {
       this.pageProducts.itemsGrid = resp.itemsGrid;
       this.pageProducts.totalElements = resp.totalElements;
@@ -43,7 +48,10 @@ export class ProductsStorageService {
   }
 
   getCategories(): void {
-    this.http.get<CategoryProductStoraje[]>(`${this.URI}/${this.URI_SERVICE_PRODUCTS}/categories`)
-              .subscribe( resp => this.categories = resp);
+    this.http.get<CategoryProductStoraje[]>(`${this.URI}/${this.URI_SERVICE_PRODUCTS}/categories`).subscribe(resp => this.categories = resp);
+  }
+
+  getFamiles(): void {
+    this.http.get<FamilyProductStorage[]>(`${this.URI}/${this.URI_SERVICE_PRODUCTS}/families`).subscribe(resp => this.families = resp);
   }
 }
