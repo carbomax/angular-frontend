@@ -36,7 +36,7 @@ export class ListMarketplacesComponent implements OnInit {
     this.marketplaceService.getMarketplaces().subscribe(resp => {
       this.marketplaces = resp;
       this.loading = false;
-      if(this.marketplaces.length <= 0){
+      if (this.marketplaces.length <= 0) {
         this.errorMarketplaces = true;
       }
     }, error => {
@@ -58,7 +58,7 @@ export class ListMarketplacesComponent implements OnInit {
   }
 
   createOrUpdateMarketplace(): void {
-
+    this.loading = true;
 
     if (this.selectedMarketplace.id) {
       console.log('update')
@@ -82,6 +82,7 @@ export class ListMarketplacesComponent implements OnInit {
         })
       })
     } else {
+      this.loading = true;
       this.marketplaceService.saveProduct(this.selectedMarketplace).subscribe(resp => {
         this.getMarketplaces();
         Swal.fire({
@@ -118,7 +119,7 @@ export class ListMarketplacesComponent implements OnInit {
 
     }).then((result) => {
       if (result.isConfirmed) {
-
+        this.loading = true;
         console.log('delete')
         this.marketplaceService.deleteProduct(marketplace.id).subscribe(resp => {
           console.log(resp)
