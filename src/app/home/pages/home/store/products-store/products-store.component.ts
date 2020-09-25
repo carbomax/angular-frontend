@@ -5,6 +5,8 @@ import { Options, LabelType } from 'ng5-slider';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PageProductStorage } from '../../../../../models/page.product.store';
+import { MarketplaceService } from '../../../../services/marketplace.service';
+import { Marketplace } from '../../../../../models/marketplace.model';
 
 
 @Component({
@@ -32,6 +34,7 @@ export class ProductsStoreComponent implements OnInit {
 
   productsStorage: ProductStore[];
   pageProducts = new PageProductStorage();
+  marketplaces: Marketplace[] = [];
 
   // Paginator
   selectedPage = 0;
@@ -59,8 +62,21 @@ export class ProductsStoreComponent implements OnInit {
 
 
 
-  constructor(public productStoreService: ProductsStorageService) {
+  constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService) {
+    this.getMarketplaces();
+  }
 
+  getMarketplaces(): void {
+
+    this.marketplaceService.getMarketplaces().subscribe(resp => {
+      this.marketplaces = resp;
+
+
+    }, error => {
+      console.log('Error:', error);
+
+
+    });
   }
 
   selectChangeHandler(size): void {
@@ -216,7 +232,7 @@ export class ProductsStoreComponent implements OnInit {
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
-        if(this.pageProducts.itemsGrid.length > 0){
+        if (this.pageProducts.itemsGrid.length > 0) {
           this.empySearch = false;
         }
         this.loadingClear = false;
