@@ -18,7 +18,8 @@ export class ListMarketplacesComponent implements OnInit {
   public nameMarketplace = '';
   public idMarketplace = '';
   public register = true;
-
+  public loading = true;
+  public errorMarketplaces = false;
   selectedMarketplace: Marketplace = new Marketplace();
 
 
@@ -30,9 +31,19 @@ export class ListMarketplacesComponent implements OnInit {
   }
 
   getMarketplaces(): void {
+    this.loading = true;
+    this.errorMarketplaces = false;
     this.marketplaceService.getMarketplaces().subscribe(resp => {
       this.marketplaces = resp;
-    }, error => console.log('Error:', error));
+      this.loading = false;
+      if(this.marketplaces.length <= 0){
+        this.errorMarketplaces = true;
+      }
+    }, error => {
+      console.log('Error:', error);
+      this.loading = false;
+      this.errorMarketplaces = true;
+    });
   }
 
 
@@ -58,13 +69,8 @@ export class ListMarketplacesComponent implements OnInit {
           icon: 'success',
           title: `Marketplace ${resp.name} ha sido actualizado`,
           showConfirmButton: false,
-          timer: 2000,
-          showClass: {
-            popup: 'animated--fade-in'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOutUp'
-          }
+          timer: 2000
+
         })
       }, error => {
         Swal.fire({
@@ -107,7 +113,9 @@ export class ListMarketplacesComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Aceptar!'
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
     }).then((result) => {
       if (result.isConfirmed) {
 

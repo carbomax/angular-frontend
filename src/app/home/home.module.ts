@@ -18,10 +18,6 @@ import { ListMarketplacesComponent } from './pages/home/marketplaces/list-market
 
 import { FilterProductsStoragePipe } from './pipe/filter-products-storage.pipe';
 import { NotImagePipe } from './pipe/not-image.pipe';
-
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { Ng5SliderModule } from 'ng5-slider';
 import {MatDialogModule} from '@angular/material/dialog';
 
 import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
