@@ -39,7 +39,8 @@ export class SidebarService {
       subtitle: 'Panel',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Administración', url: '#' }
+        { title: 'Administración', url: '#' },
+        { title: 'Marketplaces', url: '/home/list-marketplaces' }
       ]
     }
   ];

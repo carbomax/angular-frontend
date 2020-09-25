@@ -1,0 +1,19 @@
+.edit-action.dropdown-item:hover, .dropdown-item:focus
+{
+  color: #16181b;
+  text-decoration: none;
+  background-color: #36b9cc;
+
+}
+
+.delete-action.dropdown-item:hover, .dropdown-item:focus
+{
+  color: #16181b;
+  text-decoration: none;
+  background-color: #e74a3b;
+}
+
+.dropdown-size {
+  width: 2em !important;
+}
+

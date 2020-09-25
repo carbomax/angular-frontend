@@ -5,7 +5,6 @@ import { Options, LabelType } from 'ng5-slider';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PageProductStorage } from '../../../../../models/page.product.store';
-import { PaginationInstance } from 'ngx-pagination';
 
 
 @Component({
