@@ -11,3 +11,10 @@
 .dropdown-item{
   padding-left: 2%;
 }
+
+.publish-selected{
+  width: auto !important;
+}
+.ico-help{
+  margin-left: 3%;
+}

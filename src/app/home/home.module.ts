@@ -21,6 +21,7 @@ import { NotImagePipe } from './pipe/not-image.pipe';
 import {MatDialogModule} from '@angular/material/dialog';
 
 import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
+import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommon
     ChooseMarketplacesComponent,
     PublishMyproductsComponent,
     ListMarketplacesComponent,
-    PopupAddcommoninfoComponent],
+    PopupAddcommoninfoComponent,
+    EditProductsComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

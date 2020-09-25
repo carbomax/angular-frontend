@@ -91,7 +91,7 @@
           <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
             aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item pointer" href="javascript:void(0);" (click)="openDialog()"><i class="fas fa-plus m-2 text-info"></i>Agregar Información</a>
-            <a class="dropdown-item pointer" href="#"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>
+            <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCentered"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>
             <a class="dropdown-item pointer" href="#"><i class="fas fa-pause m-2 text-secondary"></i>Pausar Seleccionados</a>
             <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a> 
           </div>
@@ -217,24 +217,73 @@
   
   </div>
   
-  <!-- Logout Modal-->
-  <div class="modal fade" id="categoriesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Categorias producto: </h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
+  
+ 
+  
+   <!-- Modal Publish Selected-->
+<div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content publish-selected">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenteredLabel">Publicar seleccionados</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid">  
+      
+            <div class="form-group">
+              <div class="col-sm-4">
+                  <div class="row label-wrapper">
+                    <label class="control-label" for="CategoryId" title="">Categoría</label>
+                    <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div>
+                  </div>
+              </div>
+              <div class="col-sm-8">
+                  <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="margin: 0px -2.01562px 0px 0px; width: 571px; height: 107px;"></textarea>
+                  <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
+
+                  <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
+                      Buscar Categoría
+                  </button>
+              </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-4">
+                <div class="row label-wrapper">
+                  <label class="control-label" for="Warranty" title="">Garantía</label>
+                  <div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+            </div>
         </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
+        <div class="form-group">
+          <div class="col-sm-4">
+              <div class="row label-wrapper">
+              <label class="control-label" for="UserProfileId" title="">Perfíl de publicación</label>
+              <div class="ico-help" title="Seleccione el perfíl de publicación que desae utilizar."><i class="fa fa-question-circle"></i></div></div>
+          </div>
+          <div class="col-sm-8">
+              <select class="custom-select" multiple="multiple" data-val="true" data-val-number="The field Perfíl de publicación must be a number." id="UserProfileId" name="UserProfileId">
+                <option value="1">Raciazek-25%</option>
+                <option value="1">Raciazek-25%</option>
+                <option value="1">Raciazek-25%</option>
+                <option value="1">Raciazek-25%</option>
+                <option value="1">Raciazek-25%</option>
+                <option value="1">Raciazek-25%</option>
+              </select>
+          </div>
+        </div> 
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" class="btn btn-primary">Salvar Cambios</button>
       </div>
     </div>
   </div>
-  
-   
+</div>
