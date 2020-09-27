@@ -152,7 +152,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                           aria-labelledby="dropdownMenuLink">                          
-                          <a class="dropdown-item pointer" href="#"><i class="far fa-eye m-2 text-info"></i>Ver</a>                          
+                          <a class="dropdown-item pointer" href="#" routerLink="../edit-myproducts"><i class="far fa-eye m-2 text-info"></i>Ver</a>                          
                           <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
                         </div>
                       </div>
@@ -222,7 +222,7 @@
   
    <!-- Modal Publish Selected-->
 <div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
+  <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
     <div class="modal-content publish-selected">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenteredLabel">Publicar seleccionados</h5>
@@ -232,57 +232,79 @@
       </div>
       <div class="modal-body">
         <div class="container-fluid">  
-      
-            <div class="form-group">
-              <div class="col-sm-4">
-                  <div class="row label-wrapper">
-                    <label class="control-label" for="CategoryId" title="">Categoría</label>
-                    <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div>
-                  </div>
+     
+          <div class="form-group row mb-2">
+            <div class="col-md-3 izq-aling">
+              <div class="row mb-2">
+                <div class="col-md-5"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
+                <div class="col-md-1"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
               </div>
-              <div class="col-sm-8">
-                  <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="margin: 0px -2.01562px 0px 0px; width: 571px; height: 107px;"></textarea>
-                  <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
-
-                  <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
-                      Buscar Categoría
-                  </button>
-              </div>
-          </div>
-          <div class="form-group">
-            <div class="col-sm-4">
-                <div class="row label-wrapper">
-                  <label class="control-label" for="Warranty" title="">Garantía</label>
-                  <div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div>
-                </div>
             </div>
-            <div class="col-sm-8">
+            <div class="col-md-9"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+              <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
+
+              <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
+                  Buscar Categoría
+              </button>
+          </div>
+          </div>
+
+          <div class="form-group row mb-2">
+            <div class="col-md-3 izq-aling">
+                <div class="row mb-2 label-wrapper">
+                  <div class="col-md-5"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                  <div class="col-md-2"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+                </div>
+            </div>          
+            <div class="col-md-9">
                 <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
                 <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
             </div>
-        </div>
-        <div class="form-group">
-          <div class="col-sm-4">
-              <div class="row label-wrapper">
-              <label class="control-label" for="UserProfileId" title="">Perfíl de publicación</label>
-              <div class="ico-help" title="Seleccione el perfíl de publicación que desae utilizar."><i class="fa fa-question-circle"></i></div></div>
           </div>
-          <div class="col-sm-8">
-              <select class="custom-select" multiple="multiple" data-val="true" data-val-number="The field Perfíl de publicación must be a number." id="UserProfileId" name="UserProfileId">
-                <option value="1">Raciazek-25%</option>
-                <option value="1">Raciazek-25%</option>
-                <option value="1">Raciazek-25%</option>
-                <option value="1">Raciazek-25%</option>
-                <option value="1">Raciazek-25%</option>
-                <option value="1">Raciazek-25%</option>
+
+          <div class="form-group row mb-2">
+            <div class="col-md-3 izq-aling">
+              <div class="row mb-2">
+                
+                <div class="col-md-8 label-wrapper">
+                  <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>                  
+                </div>
+                <div class="col-md-1" style="padding-left: inherit;">
+                  <div class="ico-help" title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-9">            
+                <select class="custom-select" name="Accounts">
+                  <option selected>Open this select menu</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+            </div>
+          </div>
+
+          <div class="form-group row">
+          <div class="col-md-12">
+              <div class="row label-wrapper">
+              <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Tarifa aplicada</label>
+              <div class="ico-help" title="Haga doble clic sobre alguna cuenta para modificar tarifa aplicada."><i class="fa fa-question-circle"></i></div></div>
+          </div>
+          <div class="col-md-12">
+              <select class="custom-select" ng-dblclick="method2($event)" multiple="multiple" data-val="true" id="UserProfileId" name="UserProfileId">
+                <option value="1" (dblclick)="method2($event)">LuisML - 25%</option>
+                <option value="1">Raciazek - 25%</option>
+                <option value="1">YarielML - 50%</option>
+                <option value="1">Luigi - 40%</option>
               </select>
           </div>
-        </div> 
+          </div> 
+        </div>
       </div>
-      </div>
-      <div class="modal-footer">
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-primary">Publicar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" class="btn btn-primary">Salvar Cambios</button>
       </div>
     </div>
   </div>

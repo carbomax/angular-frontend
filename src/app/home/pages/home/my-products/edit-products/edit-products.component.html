@@ -1,1 +1,401 @@
-<p>edit-products works!</p>
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="#product-info-tab" data-toggle="tab" aria-expanded="true">Información del producto</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#product-image-tab" data-toggle="tab">Imágenes</a>
+    </li>  
+    <li class="nav-item">
+        <a class="nav-link" href="#product-publish-tab" data-toggle="tab">Publicar</a>
+    </li>  
+</ul>
+
+<!--Contenido del Tab Informacion-->
+<div class="tab-content">
+    <div class="tab-pane active" id="product-info-tab">      
+      <div class="row">  
+        <div class="card shadow mb-4 cardpopup">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Editar producto</h6>
+            </div>
+            <div class="card-body"> 
+                
+                <div class="form-group row mb-2">
+                    <div class="col-md-6 izq-aling">
+                       
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                <div class="col-md-8"><label class="control-label" for="Warranty" title="">Nombre del producto</label></div>
+                                <div class="col-md-1"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>    
+                    
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2">
+                                    <div class="col-md-8"> <label class="control-label" for="CategoryId" title="">Descripción</label></div>
+                                    <div class="col-md-1"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
+                                </div>
+                            </div>
+                            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+                                <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>     
+                            </div>
+                        </div>
+    
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                <div class="col-md-8"><label class="control-label" for="Warranty" title="">SKU</label></div>
+                                <div class="col-md-1"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                            </div>
+                        </div> 
+
+                    </div>  
+                    
+                    <div class="col-md-6 izq-aling">
+                      
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                <div class="col-md-8"><label class="control-label" for="Warranty" title="">Precio</label></div>
+                                <div class="col-md-1"><div class="ico-help" title="Precio del producto."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <div class="input-group">  
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">UYU</span>
+                                      </div>                                 
+                                    <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="number" step="0.01" min="0" max="10000" value="22.33">                                  
+                                  </div>      
+                            </div>
+                        </div> 
+        
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                <div class="col-md-8"><label class="control-label" for="Warranty" title="">Cantidad de existencias</label></div>
+                                <div class="col-md-1"><div class="ico-help" title="Cantidad actual de productos en existencia."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="number" min="0">
+                                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                            </div>
+                        </div> 
+        
+                        <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                <div class="col-md-8"><label class="control-label" for="Warranty" title="">Envíos habilitados</label></div>
+                                <div class="col-md-1"><div class="ico-help" title="Determina si el producto puede ser enviado"><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck1">  
+                                    <label class="custom-control-label" for="customCheck1"></label>                         
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>                     
+                </div>
+
+                <div class="form-group row mb-2"> 
+                    <div class="col-md-10"></div>
+                    <div class="col-md-2">
+                        <button type="button" class="btn btn-primary">Salvar</button>  
+                        <button type="button" class="btn btn-secondary" data-dismiss="tab" style="margin-left: 2%;">Cerrar</button>                                 
+                    </div>
+                </div>              
+
+            </div>
+          </div>        
+      </div>
+    </div>
+
+    <!--Contenido del Tab Imagen-->
+    <div class="tab-pane" id="product-image-tab">      
+
+        <div class="row">  
+            <div class="card shadow mb-4 cardpopup">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Editar imágenes</h6>
+                </div>
+                <div class="card-body"> 
+                    
+                    <table class="table table-bordered">
+                        <thead class="thead-light" >
+                          <tr>
+                            <th>Imagen</th>
+                            <th>Orden de visualización</th>
+                            <th>Título</th>
+                            <th>Acción</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <th scope="row">
+                                <img alt="3365" src="https://raciazek.agilecommerce.com.uy/content/images/thumbs/0003365_0039640_390a28c9affaf7d44e31a7b4e8541210430411b30277e2c16bf702b2172b4516.jpeg.jpeg" width="75">
+                            </th>
+                            <td style="width: 5%;">2</td>
+                            <td style="width: 25%;">título de foto 2</td>
+                            <td style="width: 6rem;">
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                      aria-haspopup="true" aria-expanded="false">
+                                      <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                      aria-labelledby="dropdownMenuLink">  
+                                      <a class="dropdown-item pointer" href="#"><i class="fas fa-plus m-2 text-info"></i>Adicionar</a>                        
+                                      <a class="dropdown-item pointer" href="#" ><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                      <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                    </div>
+                                  </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <th scope="row">
+                                <img alt="3365" src="https://raciazek.agilecommerce.com.uy/content/images/thumbs/0003365_0039640_390a28c9affaf7d44e31a7b4e8541210430411b30277e2c16bf702b2172b4516.jpeg.jpeg" width="75">
+                            </th>
+                            <td style="width: 5%;">3</td>
+                            <td style="width: 25%;">título de foto 1</td>
+                            <td style="width: 6rem;">
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                      aria-haspopup="true" aria-expanded="false">
+                                      <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                      aria-labelledby="dropdownMenuLink">                          
+                                      <a class="dropdown-item pointer" href="#" ><i class="far fa-eye m-2 text-info"></i>Editar</a>                          
+                                      <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                    </div>
+                                  </div>
+                            </td>
+                          </tr>
+                        
+                        </tbody>
+                      </table>
+    
+                </div>
+              </div>        
+          </div>
+
+    </div>
+
+    <!--Contenido del Tab Publicar-->
+    <div class="tab-pane" id="product-publish-tab">      
+
+        <div class="row">  
+            <div class="card shadow mb-4 cardpopup">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Publicar producto</h6>
+                </div>
+                <div class="card-body"> 
+                   
+                   <!-- <div class="modal-body">
+                        <div class="container-fluid">  
+                     
+                            <div class="form-group row mb-2">
+                                <div class="col-md-4 izq-aling">
+                                    <div class="row mb-2 label-wrapper">
+                                    <div class="col-md-8"><label class="control-label" for="Warranty" title="">Título del producto</label></div>
+                                    <div class="col-md-1"><div class="ico-help" title="Título del producto a publicar."><i class="fa fa-question-circle"></i></div></div>
+                                    </div>
+                                </div>          
+                                <div class="col-md-8">
+                                    <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                    <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                                </div>
+                            </div> 
+
+                          <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                              <div class="row mb-2">
+                                <div class="col-md-8"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
+                                <div class="col-md-1"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
+                              </div>
+                            </div>
+                            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+                              <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
+                
+                              <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
+                                  Buscar Categoría
+                              </button>
+                          </div>
+                          </div>
+                
+                          <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                  <div class="col-md-8"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                                  <div class="col-md-1"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                            </div>
+                          </div>
+                
+                          <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                              <div class="row mb-2">
+                                
+                                <div class="col-md-8 label-wrapper">
+                                  <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>                  
+                                </div>
+                                <div class="col-md-1" style="padding-left: inherit;">
+                                  <div class="ico-help" title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i class="fa fa-question-circle"></i></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-md-8">            
+                                <select class="custom-select" name="Accounts">
+                                  <option selected>Open this select menu</option>
+                                  <option value="1">One</option>
+                                  <option value="2">Two</option>
+                                  <option value="3">Three</option>
+                                </select>
+                                <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+                            </div>
+                          </div>
+                
+                          <div class="form-group row">
+                          <div class="col-md-12">
+                              <div class="row label-wrapper">
+                              <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Tarifa aplicada</label>
+                              <div class="ico-help" title="Haga doble clic sobre alguna cuenta para modificar tarifa aplicada."><i class="fa fa-question-circle"></i></div></div>
+                          </div>
+                          <div class="col-md-12">
+                              <select class="custom-select"  multiple="multiple" data-val="true" id="UserProfileId" name="UserProfileId">
+                                <option value="1" >LuisML - 25%</option>
+                                <option value="1">Raciazek - 25%</option>
+                                <option value="1">YarielML - 50%</option>
+                                <option value="1">Luigi - 40%</option>
+                              </select>
+                          </div>
+                          </div> 
+                        </div>
+                      </div>-->
+                     
+                   
+                      <div class="form-group row mb-2">
+                        <div class="col-md-6 izq-aling">
+                           
+                            <div class="form-group row mb-2">
+                                <div class="col-md-4 izq-aling">
+                                    <div class="row mb-2 label-wrapper">
+                                    <div class="col-md-8"><label class="control-label" for="Warranty" title="">Título del producto</label></div>
+                                    <div class="col-md-1"><div class="ico-help" title="Título del producto a publicar."><i class="fa fa-question-circle"></i></div></div>
+                                    </div>
+                                </div>          
+                                <div class="col-md-8">
+                                    <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                    <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                                </div>
+                            </div> 
+
+                          <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                              <div class="row mb-2">
+                                <div class="col-md-8"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
+                                <div class="col-md-1"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
+                              </div>
+                            </div>
+                            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+                              <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
+                
+                              <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
+                                  Buscar Categoría
+                              </button>
+                          </div>
+                          </div>
+                
+                          <div class="form-group row mb-2">
+                            <div class="col-md-4 izq-aling">
+                                <div class="row mb-2 label-wrapper">
+                                  <div class="col-md-8"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                                  <div class="col-md-1"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+                                </div>
+                            </div>          
+                            <div class="col-md-8">
+                                <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                                <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                            </div>
+                          </div>
+    
+                        </div>  
+                        
+                        <div class="col-md-6 izq-aling">
+                          
+                            <div class="form-group row mb-2">
+                                <div class="col-md-4 izq-aling">
+                                  <div class="row mb-2">
+                                    
+                                    <div class="col-md-8 label-wrapper">
+                                      <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>                  
+                                    </div>
+                                    <div class="col-md-1" style="padding-left: inherit;">
+                                      <div class="ico-help" title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i class="fa fa-question-circle"></i></div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-md-8">            
+                                    <select class="custom-select" name="Accounts">
+                                      <option selected>Open this select menu</option>
+                                      <option value="1">One</option>
+                                      <option value="2">Two</option>
+                                      <option value="3">Three</option>
+                                    </select>
+                                    <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+                                </div>
+                              </div>
+                    
+                              <div class="form-group row mb-2">
+                              <div class="col-md-4 izq-aling">
+                                  <div class="row mb-2">
+                                    <div class="col-md-8 label-wrapper">
+                                        <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Tarifa aplicada</label>                                    
+                                    </div>
+                                  <div class="col-md-1" style="padding-left: inherit;">
+                                    <div class="ico-help" title="Haga doble clic sobre alguna cuenta para modificar tarifa aplicada."><i class="fa fa-question-circle"></i></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-md-8">
+                                  <select class="custom-select"  multiple="multiple" data-val="true" id="UserProfileId" name="UserProfileId">
+                                    <option value="1" >LuisML - 25%</option>
+                                    <option value="1">Raciazek - 25%</option>
+                                    <option value="1">YarielML - 50%</option>
+                                    <option value="1">Luigi - 40%</option>
+                                  </select>
+                              </div>
+                              </div>
+    
+                        </div>                     
+                    </div>
+                </div>
+                <div class="modal-footer">                        
+                    <button type="button" class="btn btn-primary">Publicar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                  </div>
+              </div>        
+          </div>
+
+    </div>
+</div>

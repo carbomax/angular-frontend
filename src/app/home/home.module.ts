@@ -48,6 +48,7 @@ import { EditProductsComponent } from './pages/home/my-products/edit-products/ed
     PublishMyproductsComponent,
     ListMarketplacesComponent,
     PopupAddcommoninfoComponent,
+    EditProductsComponent,
     NotImagePipe],
   imports: [
     SharedModule,

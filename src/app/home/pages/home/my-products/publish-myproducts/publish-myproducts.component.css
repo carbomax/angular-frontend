@@ -13,8 +13,16 @@
 }
 
 .publish-selected{
-  width: auto !important;
+  min-width: auto !important;
+  width: 45rem !important;
 }
 .ico-help{
   margin-left: 3%;
+}
+
+.modal-publish{
+  min-width: max-content !important;
+}
+.izq-aling{
+  padding: inherit;
 }

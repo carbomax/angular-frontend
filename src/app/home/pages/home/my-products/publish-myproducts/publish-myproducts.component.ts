@@ -240,5 +240,8 @@ export class PublishMyproductsComponent implements OnInit {
 private saveNewCourse(courseToInsert: Course) {
     this.apiService.addCourse(courseToInsert).subscribe();
   }*/
+  method2(event): void{
+    var miVariable1 = "tete";
+  }
 
 }
