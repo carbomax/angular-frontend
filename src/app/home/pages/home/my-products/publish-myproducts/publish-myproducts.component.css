@@ -26,3 +26,19 @@
 .izq-aling{
   padding: inherit;
 }
+
+.my-custom-scrollbar {
+  position: relative;
+  min-height: 8em !important;
+  max-height: 12em !important;
+  overflow: auto;
+}
+.table-wrapper-scroll-y {
+  display: block;
+}
+.div-table-border{ 
+  border: solid;
+  border-width: thin;
+  border-radius: 10px;
+  border-color: #d1d3e2;     
+}

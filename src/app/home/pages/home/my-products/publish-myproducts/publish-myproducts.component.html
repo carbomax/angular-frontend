@@ -234,13 +234,13 @@
         <div class="container-fluid">  
      
           <div class="form-group row mb-2">
-            <div class="col-md-3 izq-aling">
+            <div class="col-md-4 izq-aling">
               <div class="row mb-2">
-                <div class="col-md-5"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
-                <div class="col-md-1"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
+                <div class="col-md-10 label-wrapper"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
+                <div class="col-md-1" style="padding-left: inherit;"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
               </div>
             </div>
-            <div class="col-md-9"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
               <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
 
               <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
@@ -250,23 +250,23 @@
           </div>
 
           <div class="form-group row mb-2">
-            <div class="col-md-3 izq-aling">
-                <div class="row mb-2 label-wrapper">
-                  <div class="col-md-5"><label class="control-label" for="Warranty" title="">Garantía</label></div>
-                  <div class="col-md-2"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
+            <div class="col-md-4 izq-aling">
+                <div class="row mb-2">
+                  <div class="col-md-10 label-wrapper"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                  <div class="col-md-1" style="padding-left: inherit;"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
                 </div>
             </div>          
-            <div class="col-md-9">
+            <div class="col-md-8">
                 <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
                 <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
             </div>
           </div>
 
           <div class="form-group row mb-2">
-            <div class="col-md-3 izq-aling">
+            <div class="col-md-4 izq-aling">
               <div class="row mb-2">
                 
-                <div class="col-md-8 label-wrapper">
+                <div class="col-md-10 label-wrapper">
                   <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>                  
                 </div>
                 <div class="col-md-1" style="padding-left: inherit;">
@@ -274,7 +274,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-9">            
+            <div class="col-md-8">            
                 <select class="custom-select" name="Accounts">
                   <option selected>Open this select menu</option>
                   <option value="1">One</option>
@@ -285,26 +285,126 @@
             </div>
           </div>
 
-          <div class="form-group row">
-          <div class="col-md-12">
-              <div class="row label-wrapper">
-              <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Tarifa aplicada</label>
-              <div class="ico-help" title="Haga doble clic sobre alguna cuenta para modificar tarifa aplicada."><i class="fa fa-question-circle"></i></div></div>
+          <div class="form-group row mb-2">
+            <div class="col-md-4 izq-aling">
+              <div class="row mb-2">
+                <div class="col-md-10 label-wrapper">
+                  <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Tarifa
+                    aplicada</label>
+                </div>
+                <div class="col-md-1" style="padding-left: inherit;">
+                  <div class="ico-help"
+                    title="Muestra las cuentas y tarifas listas para ser publicadas en mercado libre."><i
+                      class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+
+              <div class="table-wrapper-scroll-y my-custom-scrollbar div-table-border table-sm ">
+
+                <table class="table table-hover mb-0">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th scope="col">Cuenta</th>
+                      <th scope="col">Tarifa</th>
+                      <th scope="col">Editar</th>
+                      <th scope="col">Eliminar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Raciazek</td>
+                      <td>25%</td>
+                      <td class="text-center"><a href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i></a></td>
+                      <td class="text-center"> <i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                    <tr>
+                      <td>Raciazekfgf</td>
+                      <td>25%</td>
+                      <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
+                      <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                    <tr>
+                      <td>Raciazek</td>
+                      <td>25%</td>
+                      <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
+                      <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                    <tr>
+                      <td>Raciazek</td>
+                      <td>25%</td>
+                      <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
+                      <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                    <tr>
+                      <td>Raciazek</td>
+                      <td>25%</td>
+                      <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
+                      <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                    <tr>
+                      <td>Raciazek</td>
+                      <td>25%</td>
+                      <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
+                      <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
           </div>
-          <div class="col-md-12">
-              <select class="custom-select" ng-dblclick="method2($event)" multiple="multiple" data-val="true" id="UserProfileId" name="UserProfileId">
-                <option value="1" (dblclick)="method2($event)">LuisML - 25%</option>
-                <option value="1">Raciazek - 25%</option>
-                <option value="1">YarielML - 50%</option>
-                <option value="1">Luigi - 40%</option>
-              </select>
-          </div>
-          </div> 
+
         </div>
       </div>
       <div class="modal-footer">        
         <button type="button" class="btn btn-primary">Publicar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal to edit applied rate-->
+<div class="modal" id="tarifaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
+    <div class="modal-content publish-selected">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenteredLabel">Tarifa para aplicar</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group row mb-2">
+          <div class="col-md-6 izq-aling">
+            <div class="row mb-2">
+              
+              <div class="col-md-8 label-wrapper">
+                <label class="control-label" for="Accounts" title="">Tarifa para aplicar</label>                  
+              </div>
+              <div class="col-md-1" style="padding-left: inherit;">
+                <div class="ico-help" title="Seleccione la tarifa que va aplicar a la cuenta de mercado libre."><i class="fa fa-question-circle"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">            
+              <select class="custom-select" name="Accounts">
+                <option selected>Open this select menu</option>
+                <option value="1">25%</option>
+                <option value="2">30%</option>
+                <option value="3">5%</option>
+              </select>
+              <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+          </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">        
+        <button type="button" class="btn btn-primary">Salvar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
