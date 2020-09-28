@@ -23,6 +23,9 @@
 .modal-publish{
   min-width: max-content !important;
 }
+.modal-opacity{
+  background-color: #69696999 !important;
+}
 .izq-aling{
   padding: inherit;
 }
