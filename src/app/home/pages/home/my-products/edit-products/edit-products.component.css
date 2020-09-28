@@ -1,6 +1,14 @@
 .cardpopup{
     width: 100% !important;
 }
+.actionbox{
+    width: 2em !important;
+    height: 2em !important;
+}
+.actionboxicon{
+    text-align: start !important;
+}
+
 
 .my-custom-scrollbar {
     position: relative;

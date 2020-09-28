@@ -318,7 +318,7 @@
                   </div>
                   <div class="col-md-8">
                     <select class="custom-select" name="Accounts">
-                      <option selected>Open this select menu</option>
+                      <option selected>-- Seleccione cuenta para publicar --</option>
                       <option value="1">One</option>
                       <option value="2">Two</option>
                       <option value="3">Three</option>
@@ -350,47 +350,78 @@
                           <tr>
                             <th scope="col">Cuenta</th>
                             <th scope="col">Tarifa</th>
-                            <th scope="col">Editar</th>
-                            <th scope="col">Eliminar</th>
+                            <th scope="col" class="text-right">Acción</th>                            
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
                             <td>Raciazek</td>
                             <td>25%</td>
-                            <td class="text-center"><a href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i></a></td>
-                            <td class="text-center"> <i class="fas fa-trash m-2 text-danger"></i></td>
+                            <td class="text-right">
+                              <div class="dropdown no-arrow">
+                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                    aria-labelledby="dropdownMenuLink">                          
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                  </div>
+                                </div>
+                            </td>
                           </tr>
                           <tr>
                             <td>Raciazekfgf</td>
-                            <td>25%</td>
-                            <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                            <td>25%</td>                            
+                            <td class="text-right">
+                              <div class="dropdown no-arrow">
+                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                    aria-labelledby="dropdownMenuLink">                          
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                  </div>
+                                </div>
+                            </td>
                           </tr>
                           <tr>
                             <td>Raciazek</td>
                             <td>25%</td>
-                            <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
+                            <td class="text-right">
+                              <div class="dropdown no-arrow">
+                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                    aria-labelledby="dropdownMenuLink">                          
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                  </div>
+                                </div>
+                            </td>
                           </tr>
                           <tr>
                             <td>Raciazek</td>
                             <td>25%</td>
-                            <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
-                          </tr>
-                          <tr>
-                            <td>Raciazek</td>
-                            <td>25%</td>
-                            <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
-                          </tr>
-                          <tr>
-                            <td>Raciazek</td>
-                            <td>25%</td>
-                            <td class="text-center"><i class="far fa-edit m-2 text-success"></i></td>
-                            <td class="text-center"><i class="fas fa-trash m-2 text-danger"></i></td>
-                          </tr>
+                            <td class="text-right">
+                              <div class="dropdown no-arrow">
+                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                  </a>
+                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                    aria-labelledby="dropdownMenuLink">                          
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                  </div>
+                                </div>
+                            </td>
+                          </tr>                         
                         </tbody>
                       </table>
                     </div>
@@ -439,7 +470,7 @@
           </div>
           <div class="col-md-6">            
               <select class="custom-select" name="Accounts">
-                <option selected>Open this select menu</option>
+                <option selected>-- Seleccione la tarifa --</option>
                 <option value="1">25%</option>
                 <option value="2">30%</option>
                 <option value="3">5%</option>
