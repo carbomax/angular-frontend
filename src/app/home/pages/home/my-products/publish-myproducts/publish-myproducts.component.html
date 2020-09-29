@@ -9,32 +9,32 @@
     <div class="collapse" id="collapseCardFilterProductStorage">
       <form action="" #f="ngForm">
         <div class="card-body container">
-  
+
           <div class="row p-3">
             <div class="col-md-6">
-  
+
               <div class="form-group">
                 <label for="idNameProduct">Nombre:</label>
                 <input type="text" class="form-control" name="nameSeach" [(ngModel)]="nameSeach" id="idNameProduct"
                   placeholder="Buscar por nombre...">
               </div>
-  
+
               <div class="form-group">
                 <label for="idSku">SKU:</label>
                 <input type="text" class="form-control" name="skuSearch" [(ngModel)]="skuSearch" id="idSku"
                   placeholder="Buscar por SKU...">
               </div>
-  
-  
+
+
             </div>
             <div class="col-md-6">
-  
+
               <div class="form-group mb-md-0">
                 <label for="idPriceSearch">Precio:</label>
                 <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
                   [options]="options"></ng5-slider>
               </div>
-  
+
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
@@ -45,24 +45,24 @@
                         {{family.description}} </option>
                     </select>
                   </div>
-                </div> 
+                </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <label for="inputFamily">Estado:</label>
                     <select name="typeFamilySearch" id="inputState" class="form-control">
-                      <option >Todas</option>  
+                      <option >Todas</option>
                       <option >Publicado</option>
-                      <option >No Publicado</option> 
-                      <option >Pausado</option>                    
+                      <option >No Publicado</option>
+                      <option >Pausado</option>
                     </select>
                   </div>
-                </div>                             
+                </div>
               </div>
             </div>
           </div>
           <div class="row">
             <div class="col d-flex justify-content-center">
-  
+
               <button class="btn btn-outline-primary mr-1" (click)="searchProducts()">
                 <i *ngIf="!loadPaginator"  class="fas fa-search m-1"></i>  <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner m-1"></i> Buscar</button>
                 <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"> <i *ngIf="loadingClear"  class="fas fa-spin fa-spinner m-1"></i><i  *ngIf="!loadingClear" class="fas fa-broom m-1"></i>
@@ -71,14 +71,14 @@
           </div>
         </div>
       </form>
-  
+
     </div>
 </div>
-  
+
   <!-- DataTales Example -->
   <div class="card shadow mb-4">
     <div class="card-header py-3">
-  
+
       <div class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
         <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
         <div class="dropdown no-arrow">
@@ -93,14 +93,14 @@
             <a class="dropdown-item pointer" href="javascript:void(0);" (click)="openDialog()"><i class="fas fa-plus m-2 text-info"></i>Agregar Información</a>
             <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCentered"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>
             <a class="dropdown-item pointer" href="#"><i class="fas fa-pause m-2 text-secondary"></i>Pausar Seleccionados</a>
-            <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a> 
+            <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a>
           </div>
         </div>
       </div>
-  
+
     </div>
-  
-  
+
+
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
@@ -117,13 +117,13 @@
               <th>Nombre</th>
               <th>SKU</th>
               <th>Familia</th>
-              <th>Precio</th>              
+              <th>Precio</th>
               <th>Cantidad</th>
               <th>Estado</th>
               <th class="text-right"><i class="fas fa-mouse-pointer"></i> Acción</th>
             </tr>
           </thead>
-  
+
           <tbody *ngIf="!loading">
               <tr *ngFor="let product of pageProducts.itemsGrid">
                 <td>
@@ -151,25 +151,25 @@
                           <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                          aria-labelledby="dropdownMenuLink">                          
-                          <a class="dropdown-item pointer" href="#" routerLink="../edit-myproducts"><i class="far fa-eye m-2 text-info"></i>Ver</a>                          
-                          <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                          aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item pointer" href="#" routerLink="../edit-myproducts"><i class="far fa-eye m-2 text-info"></i>Ver</a>
+                          <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                         </div>
                       </div>
                 </td>
               </tr>
-  
+
           </tbody>
         </table>
-  
+
       </div>
-  
+
       <div  class="d-flex justify-content-center">
         <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
       </div>
-  
+
       <div class="row justify-content-around" *ngIf="pageProducts.itemsGrid">
-  
+
         <nav aria-label="Page navigation">
           <ul class="pagination" *ngIf="pageProducts?.itemsGrid">
             <li class="page-item" (click)="previous()"><a class="page-link ">
@@ -190,36 +190,36 @@
             <option value="30">30</option>
         </select>
         </div>
-  
+
         <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
           <span class="align-middle">Mostrando {{selectedPage+1}} a {{size}} de {{pageProducts.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
-  
+
         </div>
-  
+
       </div>
       <div class="row justify-content-center" *ngIf="errorProducts">
 
         <div class="alert alert-info col-8 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar
         </div>
-  
+
       </div>
-  
+
       <div class="row justify-content-center" *ngIf="empySearch">
-  
+
         <div class="alert alert-info col-10 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron productos con los criterios de búsqueda especificados
         </div>
-  
+
       </div>
     </div>
-  
+
   </div>
-  
-  
- 
-  
+
+
+
+
    <!-- Modal Publish Selected-->
 <div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
@@ -231,13 +231,13 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="container-fluid">  
-     
+        <div class="container-fluid">
+
           <div class="form-group row mb-2">
             <div class="col-md-4 izq-aling">
               <div class="row mb-2">
                 <div class="col-md-10 label-wrapper"> <label class="control-label" for="CategoryId" title="">Categoría</label></div>
-                <div class="col-md-1" style="padding-left: inherit;"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>  
+                <div class="col-md-1" style="padding-left: inherit;"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>
               </div>
             </div>
             <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
@@ -255,7 +255,7 @@
                   <div class="col-md-10 label-wrapper"><label class="control-label" for="Warranty" title="">Garantía</label></div>
                   <div class="col-md-1" style="padding-left: inherit;"><div class="ico-help" title="Indique las condiciones de garantía ofrecidas para estos productos."><i class="fa fa-question-circle"></i></div></div>
                 </div>
-            </div>          
+            </div>
             <div class="col-md-8">
                 <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
                 <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
@@ -265,16 +265,16 @@
           <div class="form-group row mb-2">
             <div class="col-md-4 izq-aling">
               <div class="row mb-2">
-                
+
                 <div class="col-md-10 label-wrapper">
-                  <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>                  
+                  <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>
                 </div>
                 <div class="col-md-1" style="padding-left: inherit;">
                   <div class="ico-help" title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i class="fa fa-question-circle"></i></div>
                 </div>
               </div>
             </div>
-            <div class="col-md-8">            
+            <div class="col-md-8">
                 <select class="custom-select" name="Accounts">
                   <option selected>Open this select menu</option>
                   <option value="1">One</option>
@@ -308,7 +308,7 @@
                     <tr>
                       <th scope="col">Cuenta</th>
                       <th scope="col">Tarifa</th>
-                      <th scope="col" class="text-right">Acción</th>                      
+                      <th scope="col" class="text-right">Acción</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -322,9 +322,9 @@
                               <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                              aria-labelledby="dropdownMenuLink">                          
-                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                              aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                             </div>
                           </div>
                       </td>
@@ -339,9 +339,9 @@
                               <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                              aria-labelledby="dropdownMenuLink">                          
-                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                              aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                             </div>
                           </div>
                       </td>
@@ -356,13 +356,13 @@
                               <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                              aria-labelledby="dropdownMenuLink">                          
-                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                              aria-labelledby="dropdownMenuLink">
+                              <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                              <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                             </div>
                           </div>
                       </td>
-                    </tr>                    
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -372,7 +372,7 @@
 
         </div>
       </div>
-      <div class="modal-footer">        
+      <div class="modal-footer">
         <button type="button" class="btn btn-primary">Publicar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
       </div>
@@ -395,16 +395,16 @@
         <div class="form-group row mb-2">
           <div class="col-md-6 izq-aling">
             <div class="row mb-2">
-              
+
               <div class="col-md-8 label-wrapper">
-                <label class="control-label" for="Accounts" title="">Tarifa para aplicar</label>                  
+                <label class="control-label" for="Accounts" title="">Tarifa para aplicar</label>
               </div>
               <div class="col-md-1" style="padding-left: inherit;">
                 <div class="ico-help" title="Seleccione la tarifa que va aplicar a la cuenta de mercado libre."><i class="fa fa-question-circle"></i></div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">            
+          <div class="col-md-6">
               <select class="custom-select" name="Accounts">
                 <option selected>-- Seleccione cuenta para publicar --</option>
                 <option value="1">25%</option>
@@ -416,7 +416,7 @@
         </div>
 
       </div>
-      <div class="modal-footer">        
+      <div class="modal-footer">
         <button type="button" class="btn btn-primary">Salvar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
       </div>

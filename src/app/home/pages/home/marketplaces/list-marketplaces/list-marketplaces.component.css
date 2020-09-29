@@ -17,3 +17,6 @@
   width: 2em !important;
 }
 
+.dropdown-item:hover{
+  background-color: #0e41db54;
+}

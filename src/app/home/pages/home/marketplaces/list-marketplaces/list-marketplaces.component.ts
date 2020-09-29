@@ -73,6 +73,7 @@ export class ListMarketplacesComponent implements OnInit {
 
         })
       }, error => {
+        this.loading = false;
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -82,7 +83,6 @@ export class ListMarketplacesComponent implements OnInit {
         })
       })
     } else {
-      this.loading = true;
       this.marketplaceService.saveProduct(this.selectedMarketplace).subscribe(resp => {
         this.getMarketplaces();
         Swal.fire({
@@ -93,6 +93,7 @@ export class ListMarketplacesComponent implements OnInit {
           timer: 2000
         })
       }, error => {
+        this.loading = false;
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -132,10 +133,11 @@ export class ListMarketplacesComponent implements OnInit {
             timer: 2000
           })
         }, error => {
+          this.loading = false;
           Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: `Marketplace no ha sido actualizado`,
+            title: `Marketplace no ha sido eliminado, verifique si tiene usuarios asociados`,
             showConfirmButton: false,
             timer: 2000
           })

@@ -4,10 +4,11 @@ import { CommonModule } from '@angular/common';
 
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { Ng5SliderModule } from 'ng5-slider';
-import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 
+// Multiselect
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
@@ -17,14 +18,16 @@ import { NgxPaginationModule } from 'ngx-pagination';
     FormsModule,
     NgxBootstrapSliderModule,
     Ng5SliderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgSelectModule
   ],
   exports: [
     CommonModule,
     FormsModule,
     NgxBootstrapSliderModule,
     Ng5SliderModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    NgSelectModule
   ]
 })
 export class SharedModule { }
