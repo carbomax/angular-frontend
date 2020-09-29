@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+
 
 import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
@@ -16,12 +16,16 @@ import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-mar
 import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
 import { ListMarketplacesComponent } from './pages/home/marketplaces/list-marketplaces/list-marketplaces.component';
 
-import { FilterProductsStoragePipe } from './pipe/filter-products-storage.pipe';
-import { NotImagePipe } from './pipe/not-image.pipe';
+
+import { NotImagePipe } from './pipes/not-image.pipe';
 import {MatDialogModule} from '@angular/material/dialog';
 
 import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
+import { UsersComponent } from './pages/home/users/users.component';
+import { NotImageProfilePipe } from './pipes/not-image-profile.pipe';
+import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe';
+
 
 
 @NgModule({
@@ -37,7 +41,9 @@ import { EditProductsComponent } from './pages/home/my-products/edit-products/ed
     PublishMyproductsComponent,
     ListMarketplacesComponent,
     PopupAddcommoninfoComponent,
-    EditProductsComponent],
+    EditProductsComponent,
+    UsersComponent,
+    NotImageProfilePipe],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -48,7 +54,9 @@ import { EditProductsComponent } from './pages/home/my-products/edit-products/ed
     PublishMyproductsComponent,
     ListMarketplacesComponent,
     PopupAddcommoninfoComponent,
-    NotImagePipe],
+    UsersComponent,
+    NotImagePipe,
+    NotImageProfilePipe],
   imports: [
     SharedModule,
     HomeRoutingModule,

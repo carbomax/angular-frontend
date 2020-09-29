@@ -21,7 +21,7 @@ export class SidebarService {
       subtitle: 'Mis productos',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Mis productos', url: '/home/marketplaces' }        
+        { title: 'Mis productos', url: '/home/marketplaces' }
       ]
     },
     {
@@ -39,7 +39,7 @@ export class SidebarService {
       subtitle: 'Panel',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Administración', url: '#' },
+        { title: 'Users', url: '/home/users' },
         { title: 'Marketplaces', url: '/home/list-marketplaces' }
       ]
     }
