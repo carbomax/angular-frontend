@@ -56,7 +56,9 @@ import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe'
     PopupAddcommoninfoComponent,
     UsersComponent,
     NotImagePipe,
-    NotImageProfilePipe],
+    NotImageProfilePipe,
+    EditProductsComponent,
+    NotImagePipe],
   imports: [
     SharedModule,
     HomeRoutingModule,

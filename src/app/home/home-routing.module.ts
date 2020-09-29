@@ -8,6 +8,7 @@ import { ListMarketplacesComponent } from './pages/home/marketplaces/list-market
 import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 import { UsersComponent } from './pages/home/users/users.component';
 
+import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,6 +21,7 @@ const routes: Routes = [
       { path: 'list-marketplaces', component: ListMarketplacesComponent },
       { path: 'marketplaces', component: ChooseMarketplacesComponent},
       { path: 'publish-myproducts', component: PublishMyproductsComponent },
+      { path: 'edit-myproducts', component: EditProductsComponent },
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent },
       { path: 'users', component: UsersComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
