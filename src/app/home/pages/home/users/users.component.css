@@ -1,3 +1,7 @@
 .roles-table{
   width: 15rem;
 }
+
+.table td {
+  vertical-align: middle ;
+}

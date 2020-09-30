@@ -108,7 +108,7 @@ export class ListMarketplacesComponent implements OnInit {
   deleteMarketplace(marketplace: Marketplace): void {
 
 
-    Swal.fire({
+      Swal.fire({
       title: 'Está seguro?',
       text: "Usted no podrá revertir esto!",
       icon: 'warning',
