@@ -173,10 +173,10 @@
       <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
     </div>
 
-    <div class="row justify-content-around" *ngIf="pageProducts.itemsGrid">
+    <div class="row justify-content-around" *ngIf="!pageProducts?.itemsGrid">
 
       <nav aria-label="Page navigation">
-        <ul class="pagination" *ngIf="pageProducts?.itemsGrid">
+        <ul class="pagination" >
           <li class="page-item" (click)="previous()"><a  class="page-link ">
               <i class="fas fa-backward"></i>
             </a></li>
@@ -197,7 +197,7 @@
       </select>
       </div>
 
-      <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
+      <div   class="dataTables_info py-2 " id="dataTable_info" role="status"
         aria-live="polite">
         <span class="align-middle">Mostrando {{selectedPage+1}} a {{size}} de {{pageProducts.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
 

@@ -29,16 +29,9 @@
             <td>{{ marketplace.name }}</td>
             <td class="text-center">
               <div class="dropdown no-arrow">
-                <a class="dropdown-toggle btn btn-outline-primary btn-sm actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
+                <a class=" btn btn-outline-primary btn-sm "  role="button" >
                   <i class="fas fa-cogs"></i>
                 </a>
-                <div class="dropdown-menu dropdown-size dropdown-menu-right shadow animated--fade-in btn-block"
-                  aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item pointer" role="button" data-toggle="modal" data-target="#marketplaceModal" (click)="updateModal(marketplace)"> <i class="far fa-edit m-2 text-success" ></i>Editar</a>
-                  <div class="dropdown-divider"></div>
-                  <a class="dropdown-item pointer" (click)="deleteMarketplace(marketplace)"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
-                </div>
               </div>
             </td>
           </tr>

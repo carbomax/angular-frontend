@@ -5,7 +5,10 @@ import { CommonModule } from '@angular/common';
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { Ng5SliderModule } from 'ng5-slider';
 import { FormsModule } from '@angular/forms';
+
+// Pagination
 import { NgxPaginationModule } from 'ngx-pagination';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 // Multiselect
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,6 +22,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxBootstrapSliderModule,
     Ng5SliderModule,
     NgxPaginationModule,
+    NgbModule,
     NgSelectModule
   ],
   exports: [
@@ -27,6 +31,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxBootstrapSliderModule,
     Ng5SliderModule,
     NgxPaginationModule,
+    NgbModule,
     NgSelectModule
   ]
 })

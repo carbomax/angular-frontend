@@ -8,6 +8,8 @@ import { MarketplaceService } from '../../../services/marketplace.service';
 import { Profile } from '../../../../models/profile.model';
 import { Marketplace } from '../../../../models/marketplace.model';
 import { Role } from '../../../../models/role.model';
+import Swal from 'sweetalert2';
+import { User } from '../../../../models/user.model';
 
 @Component({
   selector: 'app-users',
@@ -34,6 +36,11 @@ export class UsersComponent implements OnInit {
   selectedMarketplaces = [];
   selectedRoles = [];
 
+  //Pagination
+  page = 1;
+  pageSize = 5;
+  public loadPaginator = false;
+
   constructor(public userService: UserService, public marketplaceService: MarketplaceService) {
     this.initProfile();
   }
@@ -44,30 +51,130 @@ export class UsersComponent implements OnInit {
     this.loadMarketplaces();
   }
 
-
+  // Paginator
+  selectChangeHandler(value: number): void {
+    this.loadPaginator = true;
+    this.pageSize = value;
+    this.loadPaginator = false;
+  }
 
   createOrUpdateUser(): void {
     this.loading = true;
     this.errorUsers = false;
     this.seletedProfile.user.roles = this.selectedRoles;
     this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
-    console.log(this.seletedProfile)
-    if(this.seletedProfile.id == null){
+    if (this.seletedProfile.id == null) {
       console.log('Saving user..')
       this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
       this.seletedProfile.user.roles = this.selectedRoles;
-      this.userService.saveUserProfile(this.seletedProfile).subscribe( resp => {
+      this.userService.saveUserProfile(this.seletedProfile).subscribe(resp => {
         this.loadProfiles();
-        if(!this.profiles){
+        if (!this.profiles) {
           this.errorUsers = true;
         }
 
-        console.log(resp)
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: `Usuario ${resp.firstName} ha sido creado`,
+          showConfirmButton: false,
+          timer: 2000
+        })
+      }, (error: any) => {
+        this.loading = false;
+        let errorTitle = 'El usuario no ha sido creado';
+        if (error.error.status === 409) {
+          errorTitle = 'Ya existe un usuario con ese email';
+        }
+        console.log('Error creando el usuario:', error);
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: errorTitle,
+          showConfirmButton: false,
+          timer: 2000
+        })
       })
     } else {
       console.log('Updating user..')
+      let userProfile = new Profile();
+      userProfile = this.seletedProfile;
+      userProfile.user.marketplaces = this.selectedMarketplaces;
+      userProfile.user.roles = this.selectedRoles;
+      this.userService.updateUserProfile(userProfile).subscribe(resp => {
+
+        this.loadProfiles();
+        this.seletedProfile = resp;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: `Usuario ${this.seletedProfile.firstName} ha sido actualizado`,
+          showConfirmButton: false,
+          timer: 2000
+
+        })
+      }, error => {
+        console.log('Error al actualizar un usuario', error);
+        this.loading = false;
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `El usuraio no ha sido actualizado`,
+          showConfirmButton: false,
+          timer: 2000
+        })
+      })
     }
   }
+
+
+  deleteUserProfile(profile: Profile): void {
+
+
+    Swal.fire({
+      title: 'Está seguro?',
+      text: "Usted no podrá revertir esto!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true;
+        console.log('delete')
+        this.userService.deleteUserProfile(profile.user.id).subscribe(resp => {
+          console.log(resp)
+          this.loadProfiles();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El usuario ${profile.firstName} ha sido eliminado`,
+            showConfirmButton: false,
+            timer: 2000
+          })
+        }, error => {
+          console.log('Error eliminando el user:', error);
+          this.loading = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `El usuario no ha sido eliminado`,
+            showConfirmButton: false,
+            timer: 2000
+          })
+        })
+      }
+    })
+
+
+
+  }
+
+
+
 
   createModal(): void {
     console.log(this.selectedMarketplaces)
@@ -86,15 +193,19 @@ export class UsersComponent implements OnInit {
 
   loadProfiles(): void {
     this.loading = true;
+    this.errorUsers = false;
     this.userService.getProfiles().subscribe(profilesResp => {
       this.profiles = profilesResp;
       this.loading = false;
+      if (!this.profiles.length) {
+        this.errorUsers = true;
+      }
       console.log(this.profiles);
     },
-    ( error: any) => {
-      this.loading = false;
-      this.errorUsers = true;
-    });
+      (error: any) => {
+        this.loading = false;
+        this.errorUsers = true;
+      });
   }
 
   loadRoles(): void {
