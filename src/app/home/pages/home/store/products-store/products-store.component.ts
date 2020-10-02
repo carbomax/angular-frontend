@@ -135,6 +135,7 @@ export class ProductsStoreComponent implements OnInit {
     this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
+
         if (this.pageProducts.itemsGrid.length <= 0) {
           this.errorProducts = true;
         }
