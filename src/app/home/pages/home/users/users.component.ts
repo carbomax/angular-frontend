@@ -205,6 +205,7 @@ export class UsersComponent implements OnInit {
       (error: any) => {
         this.loading = false;
         this.errorUsers = true;
+        this.profiles = null;
       });
   }
 

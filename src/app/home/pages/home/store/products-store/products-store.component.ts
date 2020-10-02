@@ -37,6 +37,7 @@ export class ProductsStoreComponent implements OnInit {
   marketplaces: Marketplace[] = [];
 
   // Paginator
+  currentPage = 1;
   selectedPage = 0;
   page = 0;
   size = 5;
@@ -80,53 +81,23 @@ export class ProductsStoreComponent implements OnInit {
   }
 
   selectChangeHandler(size): void {
+    this.size = +size;
+    this.loadProductsPaginator();
+  }
 
-    const pageProductsTemporal = new PageProductStorage();
-    pageProductsTemporal.itemsGrid = this.pageProducts.itemsGrid;
+  loadProductsPaginator(page?: number): void{
     this.loadPaginator = true;
-    if (this.size > size) {
-      this.productStoreService.getPageProducts(this.selectedPage, this.size = +size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch,
-        this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => {
-          console.log(pageItemGrid)
-          if (pageItemGrid.itemsGrid.length > 0) {
-            this.pageProducts = this.productStoreService.pageProducts;
-          } else {
-            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
-          }
-
-          this.loading = false;
-          this.loadPaginator = false;
-
-        }, (error: any) => {
-          this.errorProducts = true;
-          this.loading = false;
-          this.loadPaginator = false;
-
-        })
-    } else {
-      this.productStoreService.getPageProducts(0, this.size = +size, this.skuSearch,
+    this.productStoreService.
+      getPageProducts(this.currentPage, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => {
-          console.log(pageItemGrid)
-          if (pageItemGrid.itemsGrid.length > 0) {
-            this.pageProducts = this.productStoreService.pageProducts;
-          } else {
-            this.pageProducts.itemsGrid = pageProductsTemporal.itemsGrid;
-          }
-          this.selectedPage = 0;
-          this.loading = false;
-          this.loadPaginator = false;
-
-        }, (error: any) => {
-          this.errorProducts = true;
-          this.loading = false;
-          this.loadPaginator = false;
-
-        })
-    }
-
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        this.loadPaginator = false;
+      }, error => {
+        this.loading = false;
+        this.errorProducts = true;
+        this.loadPaginator = false;
+      });
   }
 
   ngOnInit(): void {
@@ -146,45 +117,6 @@ export class ProductsStoreComponent implements OnInit {
       })
   }
 
-  onSelect(page: number): void {
-    this.loadPaginator = true;
-    this.selectedPage = page;
-    this.productStoreService.
-      getPageProducts(this.selectedPage, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => {
-        this.pageProducts = this.productStoreService.pageProducts;
-        this.loadPaginator = false;
-      }, error => this.loading = false);
-
-  }
-
-  next(): void {
-    this.loadPaginator = false;
-    if (!this.pageProducts.last) {
-      this.loadPaginator = true;
-      this.productStoreService.
-        getPageProducts(this.selectedPage += 1, this.size, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
-    }
-  }
-
-  previous(): void {
-    this.loadPaginator = false;
-    if (!this.pageProducts.first) {
-      this.loadPaginator = true;
-      this.productStoreService.
-        getPageProducts(this.selectedPage -= 1, this.size, this.skuSearch,
-          this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => {
-          this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;
-        });
-
-    }
-
-
-  }
 
 
   selectAllProducts(): void {
@@ -209,6 +141,7 @@ export class ProductsStoreComponent implements OnInit {
         this.errorProducts = false;
         if (this.pageProducts.itemsGrid.length === 0) {
           this.empySearch = true;
+          this.pageProducts.itemsGrid = null;
         }
       }, (error: any) => {
         console.log('Error', error);
