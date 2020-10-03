@@ -22,24 +22,22 @@
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>Imagen</th>
+            <th>Razón social</th>
+            <th>Tienda</th>
             <th>Nombre</th>
-            <th>Apellidos</th>
             <th>Correo</th>
             <th class="roles-table">Roles</th>
             <th class="roles-table">Marketplaces</th>
+            <th>Habilitado</th>
             <th class="text-center">Acciones</th>
           </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let profile of profiles | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-            <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]=" profile.image |notImageProfile"
-                alt="Imagen del perfil">
-            </td>
+            <td>{{ profile.businessName }}</td>
+            <td>{{ profile.store }}</td>
             <td>{{ profile.firstName }}</td>
-            <td>{{ profile.lastName }}</td>
             <td>{{ profile.user.email }}</td>
             <td>
               <div class="d-flex flex-wrap">
@@ -52,6 +50,13 @@
                 <span *ngFor="let marketplace of profile.user.marketplaces"
                   class="badge badge-warning m-1">{{ marketplace.name != null ? marketplace.name  : 'No asociado' |uppercase }}
                 </span>
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="custom-control custom-checkbox small">
+                <input type="checkbox" [(ngModel)]="profile.user.enabled" (click)="enabledOrDisabled(profile.user)"
+                  class="custom-control-input" [id]="'check' + profile.user.id">
+                <label class="custom-control-label" [for]="'check' + profile.user.id"></label>
               </div>
             </td>
             <td class="text-center">
@@ -76,9 +81,7 @@
 
 
       <div class="row justify-content-around" *ngIf="profiles">
-        <ngb-pagination  [collectionSize]="profiles.length" [pageSize]="pageSize" [(page)]="page">
-          <ng-template ngbPaginationPrevious><i class="fas fa-backward"></i></ng-template>
-          <ng-template ngbPaginationNext> <i class="fas fa-forward"></i> </ng-template>
+        <ngb-pagination [collectionSize]="profiles.length" [boundaryLinks]="true" [pageSize]="pageSize" [(page)]="page">
         </ngb-pagination>
 
 
@@ -116,7 +119,7 @@
 
     <div class="modal fade mt-5" id="marketplaceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
       aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 *ngIf="register" class="modal-title" id="createModalLabel">{{headerCreateModal}}</h5>
@@ -127,6 +130,21 @@
           </div>
           <form ngNativeValidate #f="ngForm">
             <div class="modal-body">
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="inputBusinessName" placeholder="Razón social"
+                      aria-describedby="Razón social" name="businessName" [(ngModel)]="seletedProfile.businessName"
+                      required>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="inputStore" placeholder="Tienda"
+                      aria-describedby="Tienda del usuario" name="store" [(ngModel)]="seletedProfile.store" required>
+                  </div>
+                </div>
+              </div>
               <div class="row">
                 <div class="col-md-6 col-sm-12">
                   <div class="form-group">
@@ -157,6 +175,23 @@
                     <input type="text" class="form-control" id="inputPassword" placeholder="Contraseña del usuario"
                       aria-describedby="Contraseña del usuario" name="password"
                       [(ngModel)]="seletedProfile.user.password" required>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <input type="number" class="form-control" id="inputRut" placeholder="Rut"
+                      aria-describedby="Rut del usuario" name="rut" [(ngModel)]="seletedProfile.rut" required>
+                  </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                  <div class="form-group">
+                    <input type="text" class="form-control" id="inputAddress" placeholder="Dirección"
+                      aria-describedby="Dirección del usuario" name="store" [(ngModel)]="seletedProfile.address"
+                      required>
                   </div>
                 </div>
               </div>

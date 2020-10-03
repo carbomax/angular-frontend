@@ -96,12 +96,11 @@ export class UsersComponent implements OnInit {
         })
       })
     } else {
-      console.log('Updating user..')
-      let userProfile = new Profile();
-      userProfile = this.seletedProfile;
-      userProfile.user.marketplaces = this.selectedMarketplaces;
-      userProfile.user.roles = this.selectedRoles;
-      this.userService.updateUserProfile(userProfile).subscribe(resp => {
+      this.seletedProfile.rut = this.seletedProfile.rut.toString();
+      this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
+      this.seletedProfile.user.roles = this.selectedRoles;
+      console.log(this.seletedProfile)
+      this.userService.updateUserProfile(this.seletedProfile).subscribe(resp => {
 
         this.loadProfiles();
         this.seletedProfile = resp;
@@ -115,6 +114,7 @@ export class UsersComponent implements OnInit {
         })
       }, error => {
         console.log('Error al actualizar un usuario', error);
+        this.loadProfiles();
         this.loading = false;
         Swal.fire({
           position: 'top-end',
@@ -224,11 +224,67 @@ export class UsersComponent implements OnInit {
     })
   }
 
+  enabledOrDisabled(user: User): void {
+    Swal.fire({
+      title: 'Habilitar usuario',
+      text: "Confirma la operación?",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.loading = true;
+        this.userService.enabledOrDisable(user.id, user.enabled).subscribe(resp => {
+          console.log(resp)
+          this.profiles.forEach(p => {
+            if (p.user.id === user.id) {
+              p.user.enabled = resp.enabled;
+            }
+          });
+          this.loading = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `El usuario ha sido habilitado`,
+            showConfirmButton: false,
+            timer: 2000
+          })
+        }, error => {
+          console.log(error);
+          this.loading = false;
+          user.enabled = !user.enabled;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `El usuario no ha sido habilitado`,
+            showConfirmButton: false,
+            timer: 2000
+          })
+        })
+      } else{
+        user.enabled = !user.enabled;
+      }
+    })
+
+
+
+
+  }
+
   initProfile(): void {
     this.seletedProfile = {
       id: null,
       firstName: '',
       lastName: '',
+      businessName: '',
+      enabled: false,
+      rut: '',
+      address: '',
+      store: '',
       user: {
         id: null,
         password: '',

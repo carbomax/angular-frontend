@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Role } from '../../models/role.model';
+import { User } from '../../models/user.model';
 
 
 @Injectable({
@@ -50,5 +51,9 @@ export class UserService {
 
   deleteUserProfile (id: number) {
     return this.http.delete(`${this.URI_SERVICE_USERS}/users/${id}`);
+  }
+
+  enabledOrDisable(id: number, enableOrDisable: boolean): Observable<User> {
+    return this.http.put<User>(`${this.URI_SERVICE_USERS}/users/enable-or-disable/${id}?enable=${enableOrDisable}`, {});
   }
 }
