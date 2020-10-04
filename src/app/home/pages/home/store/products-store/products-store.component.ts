@@ -7,6 +7,10 @@ import { ProductsStorageService } from '../../../../services/products-storage.se
 import { PageProductStorage } from '../../../../../models/page.product.store';
 import { MarketplaceService } from '../../../../services/marketplace.service';
 import { Marketplace } from '../../../../../models/marketplace.model';
+import { SelectedProducResponse } from '../../../../../models/selected.products.response';
+
+import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -35,6 +39,7 @@ export class ProductsStoreComponent implements OnInit {
   productsStorage: ProductStore[];
   pageProducts = new PageProductStorage();
   marketplaces: Marketplace[] = [];
+  selectedProductR = new SelectedProducResponse();
 
   // Paginator
   currentPage = 1;
@@ -63,7 +68,7 @@ export class ProductsStoreComponent implements OnInit {
 
 
 
-  constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService) {
+  constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService, public productsStorageUserService: ProductsStorageUserService) {
     this.getMarketplaces();
   }
 
@@ -175,5 +180,57 @@ export class ProductsStoreComponent implements OnInit {
 
       });
 
+  }
+
+  selectMyProducts(idMarket: any): void{
+    if(idMarket!= null)
+    {
+      let exists_products: String;
+      let productList =[];
+      this.pageProducts.itemsGrid.forEach(element => {
+        if(element.selected === true)
+        {
+          productList.push(element.sku);          
+        }
+      });
+      if(productList.length != 0)
+      {
+      this.productsStorageUserService.storeMyProducts(idMarket, productList).subscribe(resp => {
+        this.selectedProductR = resp;
+        if (!this.selectedProductR.exists) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Sus productos han sido almacenados correctamente`,
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }
+        else{                
+          this.selectedProductR.existingProducts.forEach(element => {
+            exists_products += element + " ";
+          });
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Productos almacenados`,
+            text: `Los productos ${exists_products} ya se encontraban en su almacen`,
+            showConfirmButton: false,
+            timer: 2000
+          });
+        }              
+      })
+      }else{
+        Swal.fire({
+          position: 'top-end',
+          title: 'Productos almacenados',
+          text: "Usted no ha seleccionado productos",
+          icon: 'warning',      
+          showConfirmButton: false,
+          timer: 2000
+        });
+      }
+   
+    } 
   }
 }

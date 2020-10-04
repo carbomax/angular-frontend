@@ -35,4 +35,5 @@ export class MarketplaceService {
   deleteProduct(id: number) {
    return  this.http.delete(`${this.URI}${this.URI_MARKETPLACE}/${id}`);
   }
+
 }
