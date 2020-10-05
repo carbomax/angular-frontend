@@ -1,5 +1,7 @@
+import { ActionResult } from '../enums/actionresult.enum';
+
 export class SelectedProducResponse {
 
     existingProducts: any[];;
-	exists: boolean;  
+    codeResult: ActionResult;  
   }
