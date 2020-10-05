@@ -25,6 +25,7 @@ import { EditProductsComponent } from './pages/home/my-products/edit-products/ed
 import { UsersComponent } from './pages/home/users/users.component';
 import { NotImageProfilePipe } from './pipes/not-image-profile.pipe';
 import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe';
+import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 
 
 
@@ -43,7 +44,8 @@ import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe'
     PopupAddcommoninfoComponent,
     EditProductsComponent,
     UsersComponent,
-    NotImageProfilePipe],
+    NotImageProfilePipe,
+    ListMarginsComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

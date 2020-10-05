@@ -49,7 +49,7 @@ export class UserService {
     return this.http.put<Profile>(`${this.URI_SERVICE_USERS}/users/update-user-profile/${profile.id}/${profile.user.id}`, profile);
   }
 
-  deleteUserProfile (id: number) {
+  deleteUserProfile(id: number) {
     return this.http.delete(`${this.URI_SERVICE_USERS}/users/${id}`);
   }
 

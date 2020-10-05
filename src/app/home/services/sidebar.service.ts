@@ -39,7 +39,8 @@ export class SidebarService {
       subtitle: 'Panel',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Users', url: '/home/users' },
+        { title: 'Usuarios', url: '/home/users' },
+        { title: 'Margenes', url: '/home/margins' },
         { title: 'Marketplaces', url: '/home/list-marketplaces' }
       ]
     }
