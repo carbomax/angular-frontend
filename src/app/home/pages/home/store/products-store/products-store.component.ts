@@ -7,10 +7,12 @@ import { ProductsStorageService } from '../../../../services/products-storage.se
 import { PageProductStorage } from '../../../../../models/page.product.store';
 import { MarketplaceService } from '../../../../services/marketplace.service';
 import { Marketplace } from '../../../../../models/marketplace.model';
+import { ActionResult } from '../../../../../enums/actionresult.enum';
 import { SelectedProducResponse } from '../../../../../models/selected.products.response';
 
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
 import Swal from 'sweetalert2';
+import { ParsedPropertyType } from '@angular/compiler';
 
 
 @Component({
@@ -185,7 +187,7 @@ export class ProductsStoreComponent implements OnInit {
   selectMyProducts(idMarket: any): void{
     if(idMarket!= null)
     {
-      let exists_products: String;
+      let exists_products = "";
       let productList =[];
       this.pageProducts.itemsGrid.forEach(element => {
         if(element.selected === true)
@@ -197,37 +199,51 @@ export class ProductsStoreComponent implements OnInit {
       {
       this.productsStorageUserService.storeMyProducts(idMarket, productList).subscribe(resp => {
         this.selectedProductR = resp;
-        if (!this.selectedProductR.exists) {
+        let p =  this.selectedProductR.codeResult ;
+        if (this.selectedProductR.codeResult === ActionResult.DONE) {
           Swal.fire({
             position: 'top-end',
             icon: 'success',
             title: `Sus productos han sido almacenados correctamente`,
             showConfirmButton: false,
-            timer: 2000
+            timer: 5000
           });
         }
-        else{                
+        else if (this.selectedProductR.codeResult === ActionResult.PARTIAL){                
           this.selectedProductR.existingProducts.forEach(element => {
-            exists_products += element + " ";
+            exists_products = element + ", " + exists_products;
           });
           Swal.fire({
             position: 'top-end',
             icon: 'success',
             title: `Productos almacenados`,
-            text: `Los productos ${exists_products} ya se encontraban en su almacen`,
+            text: `Los productos se almacenaron correctamente excepto ${exists_products} que ya se encontraban en su almacen`,
             showConfirmButton: false,
-            timer: 2000
+            timer: 5000
+          });
+        }
+        else {                
+          this.selectedProductR.existingProducts.forEach(element => {
+            exists_products = exists_products + ", " + element ;
+          });
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: `Productos no almacenados`,
+            text: `Todos los productos seleccionados ya se encontraban en su almacen`,
+            showConfirmButton: false,
+            timer: 5000
           });
         }              
       })
       }else{
         Swal.fire({
           position: 'top-end',
-          title: 'Productos almacenados',
+          title: 'Error en lista',
           text: "Usted no ha seleccionado productos",
           icon: 'warning',      
           showConfirmButton: false,
-          timer: 2000
+          timer: 5000
         });
       }
    
