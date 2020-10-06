@@ -9,6 +9,7 @@ import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommon
 import { UsersComponent } from './pages/home/users/users.component';
 
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
+import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -24,6 +25,7 @@ const routes: Routes = [
       { path: 'edit-myproducts', component: EditProductsComponent },
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent },
       { path: 'users', component: UsersComponent },
+      { path: 'margins', component: ListMarginsComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
