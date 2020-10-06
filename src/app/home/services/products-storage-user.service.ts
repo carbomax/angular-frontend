@@ -16,7 +16,7 @@ export class ProductsStorageUserService {
 
   storeMyProducts( marketplace: Number, products: any[]): Observable<SelectedProducResponse>{
     //obtener el usuario autenticado
-    const params = `${this.URI}${this.URI_PRODUCTS_STORE_USER}/select-myproducts/?idUser=${1}&marketplace=${marketplace}
+    const params = `${this.URI}${this.URI_PRODUCTS_STORE_USER}/select-myproducts/?idProfile=${1}&marketplace=${marketplace}
     &products=${products}`;
 
     return this.http.get<SelectedProducResponse>(params);
