@@ -62,7 +62,8 @@ import { MarginTypesPipe } from './pipes/margin-types.pipe';
     NotImagePipe,
     NotImageProfilePipe,
     EditProductsComponent,
-    NotImagePipe],
+    NotImagePipe,
+    ListMarginsComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,
