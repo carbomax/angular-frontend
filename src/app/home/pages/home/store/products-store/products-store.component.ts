@@ -184,6 +184,7 @@ export class ProductsStoreComponent implements OnInit {
 
   }
 
+  // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
     if (idMarket != null) {
       let exists_products = "";

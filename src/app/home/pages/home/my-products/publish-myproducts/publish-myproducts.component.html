@@ -48,12 +48,12 @@
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
-                    <label for="inputFamily">Estado:</label>
-                    <select name="typeFamilySearch" id="inputState" class="form-control">
-                      <option >Todas</option>
-                      <option >Publicado</option>
-                      <option >No Publicado</option>
-                      <option >Pausado</option>
+                    <label for="inputState">Estado:</label>
+                    <select name="typeStateSearch" [(ngModel)]="typeStateSearch" id="inputState" class="form-control">
+                      <option [value]="typeStateSearchClear">Todas</option>
+                      <option [value]="stateEnum.PUBLISHED">Publicado</option>
+                      <option [value]="stateEnum.NOPUBLISHED">No Publicado</option>
+                      <option [value]="stateEnum.PAUSED">Pausado</option>
                     </select>
                   </div>
                 </div>
@@ -65,7 +65,7 @@
 
               <button class="btn btn-outline-primary mr-1" (click)="searchProducts()">
                 <i *ngIf="!loadPaginator"  class="fas fa-search m-1"></i>  <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner m-1"></i> Buscar</button>
-                <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"> <i *ngIf="loadingClear"  class="fas fa-spin fa-spinner m-1"></i><i  *ngIf="!loadingClear" class="fas fa-broom m-1"></i>
+              <button class="btn btn-outline-secondary ml-1" (click)="clearSearch(f)"> <i *ngIf="loadingClear"  class="fas fa-spin fa-spinner m-1"></i><i  *ngIf="!loadingClear" class="fas fa-broom m-1"></i>
                 Limpiar</button>
             </div>
           </div>
@@ -125,7 +125,7 @@
           </thead>
 
           <tbody *ngIf="!loading">
-              <tr *ngFor="let product of pageProducts.itemsGrid">
+              <tr *ngFor="let product of pageProducts.itemsMeliGrid">
                 <td>
                   <div class="custom-control custom-checkbox small">
                     <input type="checkbox" [ngModel]="product.selected" (change)="product.selected = !product.selected"
@@ -168,20 +168,9 @@
         <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
       </div>
 
-      <div class="row justify-content-around" *ngIf="pageProducts.itemsGrid">
-
-        <nav aria-label="Page navigation">
-          <ul class="pagination" *ngIf="pageProducts?.itemsGrid">
-            <li class="page-item" (click)="previous()"><a class="page-link ">
-                <i class="fas fa-backward"></i>
-              </a></li>
-            <li *ngFor="let page of ' '.repeat(pageProducts.totalPages).split(''), let i = index " (click)="onSelect(i)"
-              [class.active]="i === selectedPage" class="page-item"><a class="page-link pointer">{{i+1}}</a></li>
-            <li class="page-item" (click)="next()"><a class="page-link">
-                <i class="fas fa-forward"></i>
-              </a></li>
-          </ul>
-        </nav>
+      <div class="row justify-content-around" *ngIf="pageProducts?.itemsMeliGrid">
+        <ngb-pagination (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProducts.totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
+  
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
             <option value="5">5</option>
@@ -190,29 +179,31 @@
             <option value="30">30</option>
         </select>
         </div>
-
-        <div  class="dataTables_info py-2 " id="dataTable_info" role="status"
+  
+        <div   class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
-          <span class="align-middle">Mostrando {{selectedPage+1}} a {{size}} de {{pageProducts.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
-
+          <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+  
         </div>
-
+  
       </div>
+  
       <div class="row justify-content-center" *ngIf="errorProducts">
-
+  
         <div class="alert alert-info col-8 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar
         </div>
-
+  
       </div>
-
+  
       <div class="row justify-content-center" *ngIf="empySearch">
-
+  
         <div class="alert alert-info col-10 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron productos con los criterios de búsqueda especificados
         </div>
-
+  
       </div>
+
     </div>
 
   </div>
