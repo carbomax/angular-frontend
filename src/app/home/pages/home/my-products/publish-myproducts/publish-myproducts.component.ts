@@ -37,7 +37,7 @@ export class PublishMyproductsComponent implements OnInit {
   public maxValue = 20000;  
 
   productsStorage: ProductCustom[];
-  pageProducts = new PageProductMeliStorage();
+  pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
 
   // Paginator
@@ -80,7 +80,7 @@ export class PublishMyproductsComponent implements OnInit {
     getPageMyCustomProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {
-        this.pageProducts = this.productStoreUserService.pageProductsMeli;
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         this.loadPaginator = false;
       }, error => {
         this.loading = false;
@@ -94,8 +94,8 @@ export class PublishMyproductsComponent implements OnInit {
     this.errorProducts = false;
     this.productStoreUserService.getPageMyCustomProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {        
-        this.pageProducts = this.productStoreUserService.pageProductsMeli;
-        if (this.pageProducts.itemsMeliGrid.length <= 0) {
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        if (this.pageProductsMeli.itemsMeliGrid.length <= 0) {
           this.errorProducts = true;
         }
         this.loading = false;
@@ -148,7 +148,7 @@ export class PublishMyproductsComponent implements OnInit {
   selectAllProducts():void {
     this.checkAll = !this.checkAll;
 
-    this.pageProducts.itemsMeliGrid.forEach(element => {
+    this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       element.selected = this.checkAll;
     });
 
@@ -163,12 +163,12 @@ export class PublishMyproductsComponent implements OnInit {
     getPageMyCustomProducts(this.selectedPage = 0, this.size, this.skuSearch,
       this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
     .subscribe(pageItemCustomGrid => {
-      this.pageProducts = this.productStoreUserService.pageProductsMeli;
+      this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
       this.loadPaginator = false;
       this.errorProducts = false;
-      if (this.pageProducts.itemsMeliGrid.length === 0) {
+      if (this.pageProductsMeli.itemsMeliGrid.length === 0) {
         this.empySearch = true;
-        this.pageProducts.itemsMeliGrid = null;
+        this.pageProductsMeli.itemsMeliGrid = null;
       }
     }, (error: any) => {
       console.log('Error', error);
@@ -192,8 +192,8 @@ export class PublishMyproductsComponent implements OnInit {
     getPageMyCustomProducts(this.selectedPage = 0, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
-        this.pageProducts = this.productStoreUserService.pageProductsMeli;
-        if (this.pageProducts.itemsMeliGrid.length > 0) {
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        if (this.pageProductsMeli.itemsMeliGrid.length > 0) {
           this.empySearch = false;
         }
         this.loadingClear = false;
