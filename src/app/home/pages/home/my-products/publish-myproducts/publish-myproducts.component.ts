@@ -80,7 +80,7 @@ export class PublishMyproductsComponent implements OnInit {
     getPageMyCustomProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;            
         this.loadPaginator = false;
       }, error => {
         this.loading = false;
@@ -89,12 +89,12 @@ export class PublishMyproductsComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {    
-    this.loading = true;
+  ngOnInit(): void {   
+    this.loading = true;    
     this.errorProducts = false;
     this.productStoreUserService.getPageMyCustomProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {        
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;               
         if (this.pageProductsMeli.itemsMeliGrid.length <= 0) {
           this.errorProducts = true;
         }
@@ -104,47 +104,6 @@ export class PublishMyproductsComponent implements OnInit {
         this.loading = false;
       })
   }
-/*ver OJO
-  onSelect(page: number): void {
-    this.loadPaginator = true;
-    this.selectedPage = page;
-    this.productStoreService.
-    getPageProducts(this.selectedPage, this.size, this.skuSearch,
-      this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-    .subscribe(pageItemGrid => {
-      this.pageProducts = this.productStoreService.pageProducts;
-      this.loadPaginator = false;
-    }, error => this.loading = false);
-
-  }
-
-  next(): void {
-    this.loadPaginator = false;
-    if (!this.pageProducts.last) {
-      this.loadPaginator = true;
-      this.productStoreService.
-      getPageProducts(this.selectedPage += 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-        .subscribe(pageItemGrid => { this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false; });
-    }
-  }
-
-  previous(): void {
-    this.loadPaginator = false;
-    if (!this.pageProducts.first) {
-      this.loadPaginator = true;
-      this.productStoreService.
-      getPageProducts(this.selectedPage -= 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemGrid => {
-        this.pageProducts = this.productStoreService.pageProducts; this.loadPaginator = false;
-        });
-
-    }
-
-
-  }
-*/
   selectAllProducts():void {
     this.checkAll = !this.checkAll;
 

@@ -169,8 +169,8 @@
       </div>
 
       <div class="row justify-content-around" *ngIf="pageProductsMeli?.itemsMeliGrid">
-        <ngb-pagination (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
-  
+        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
+                 
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
             <option value="5">5</option>
@@ -297,14 +297,14 @@
                   <thead class="thead-dark">
                     <tr>
                       <th scope="col">Cuenta</th>
-                      <th scope="col">Tarifa</th>
+                      <th scope="col">Margen de ganancia</th>
                       <th scope="col" class="text-right">Acción</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>Raciazek</td>
-                      <td>25%</td>
+                      <td class="text-center">25%</td>
                       <td class="text-right">
                         <div class="dropdown no-arrow">
                             <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -321,7 +321,7 @@
                     </tr>
                     <tr>
                       <td>Raciazekfgf</td>
-                      <td>25%</td>
+                      <td class="text-center">25%</td>
                       <td class="text-right">
                         <div class="dropdown no-arrow">
                             <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -338,7 +338,7 @@
                     </tr>
                     <tr>
                       <td>Raciazek</td>
-                      <td>25%</td>
+                      <td class="text-center">25%</td>
                       <td class="text-right">
                         <div class="dropdown no-arrow">
                             <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"

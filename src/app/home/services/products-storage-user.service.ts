@@ -44,8 +44,7 @@ export class ProductsStorageUserService {
   
     return this.http.get<PageProductMeliStorage>(uri).pipe(map((resp: any) => {
       this.pageProductsMeli.itemsMeliGrid = resp.itemsMeliGridList;
-      this.pageProductsMeli.totalElements = resp.totalElements;
-      this.pageProductsMeli.currentStock = resp.currentStock;
+      this.pageProductsMeli.totalElements = resp.totalElements;      
       this.pageProductsMeli.size = resp.size;
       this.pageProductsMeli.totalPages = resp.totalPages;
       this.pageProductsMeli.last = resp.last;

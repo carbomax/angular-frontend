@@ -9,7 +9,6 @@ export class PageProductMeliStorage {
     size: number;
     first: boolean;
     sort: any;
-    totalProducts: number;
-    currentStock: number;
+    totalProducts: number;    
     selected?: boolean;
   }
