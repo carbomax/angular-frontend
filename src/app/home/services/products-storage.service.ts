@@ -48,11 +48,11 @@ export class ProductsStorageService {
   }
 
   getCategories(): void {
-    this.http.get<CategoryProductStoraje[]>(`${this.URI}/${this.URI_SERVICE_PRODUCTS}/categories`).subscribe(resp => this.categories = resp);
+    this.http.get<CategoryProductStoraje[]>(`${this.URI}${this.URI_SERVICE_PRODUCTS}/categories`).subscribe(resp => this.categories = resp);
   }
 
   getFamiles(): void {
-    this.http.get<FamilyProductStorage[]>(`${this.URI}/${this.URI_SERVICE_PRODUCTS}/families`).subscribe(resp => this.families = resp);
+    this.http.get<FamilyProductStorage[]>(`${this.URI}${this.URI_SERVICE_PRODUCTS}/families`).subscribe(resp => this.families = resp);
   }
- 
+
 }
