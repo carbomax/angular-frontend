@@ -18,6 +18,7 @@
         <div class="card-header py-3">
           <h6 class="m-0 font-weight-bold text-primary">Editar producto</h6>
         </div>
+        <!--Contenido del producto-->
         <div class="card-body">
        
           <div class="form-group row mb-2">
@@ -136,14 +137,11 @@
 
             </div>
           </div>
-       
-        
-
-        </div>
+        </div>        
 
       <!--Contenido del Tab Imagen-->
         <div class="card-body">
-
+          <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#imageModal"><i class="fas fa-plus m-2 text-info"></i>  Adicionar imagen</button> 
           <table class="table table-bordered">
             <thead class="thead-light">
               <tr>
@@ -451,6 +449,76 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteProduct()" >Aceptar</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">Cancelar</button>        
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Modal to Added Image-->
+<div class="modal modal-opacity" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
+    <div class="modal-content publish-selected">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imageModalLabel">Adicionar imagen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group row mb-2">
+          <div class="col-md-4 izq-aling">
+            <div class="row mb-2 label-wrapper">
+              <div class="col-md-8"><label class="control-label" for="titleImage" title="">Título de la imagen</label></div>
+              <div class="col-md-1">
+                <div class="ico-help" title="Identificador de la imagen."><i
+                    class="fa fa-question-circle"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <input class="form-control text-box single-line" id="titleImage" name="titleImage" type="text"  >
+            <span class="field-validation-valid" data-valmsg-for="titleImage" data-valmsg-replace="true"></span>
+          </div>
+        </div>
+        <div class="form-group row mb-2">
+          <div class="col-md-4 izq-aling">
+            <div class="row mb-2 label-wrapper">
+              <div class="col-md-8"><label class="control-label" for="orderImage" title="">Orden de visualización</label></div>
+              <div class="col-md-1">
+                <div class="ico-help" title="Orden de publicación de las imagenes en mercado libre."><i
+                    class="fa fa-question-circle"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <input class="form-control text-box single-line" id="orderImage" name="orderImage" type="number" min="0" >
+            <span class="field-validation-valid" data-valmsg-for="orderImage" data-valmsg-replace="true"></span>
+          </div>
+        </div>
+      <!-- Buttons Adicionar Imagen -->
+      <div class="form-group row mb-2">
+        <div class="col-md-4">
+          <div >
+            <a href="#" class="thumbnail">
+              <img src="http://placehold.it/100x100" alt="">
+           </a>
+        </div>
+        </div>   
+          <div class="row mb-2">
+          <div class="col-md-6">
+            <input type="file" class="btn btn-primary" text="Subir Imagen" style="width: inherit;">           
+          </div>   
+          <div class="col-md-6">            
+            <button type="button" class="btn btn-secondary" data-dismiss="tab"
+                style="margin-left: 2%;">Agregar imagen</button>
+          </div>  
+      </div>
+    </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Salvar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
