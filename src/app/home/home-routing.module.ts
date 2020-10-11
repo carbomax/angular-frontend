@@ -10,22 +10,25 @@ import { UsersComponent } from './pages/home/users/users.component';
 
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
+import { AuthGuard } from '../auth/guard/auth.guard';
+import { RoleGuard } from '../auth/guard/role.guard';
+import { RoleEnum } from '../enums/role.enum';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: '', component: HomeComponent,
     children: [
-      { path: 'store', component: ProductsStoreComponent },
-      { path: 'marketplaces', component: ChooseMarketplacesComponent },
-      { path: 'publish-myproducts', component: PublishMyproductsComponent },
-      { path: 'list-marketplaces', component: ListMarketplacesComponent },
-      { path: 'marketplaces', component: ChooseMarketplacesComponent},
-      { path: 'publish-myproducts', component: PublishMyproductsComponent },
-      { path: 'edit-myproducts/:id', component: EditProductsComponent },
-      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent },
-      { path: 'users', component: UsersComponent },
-      { path: 'margins', component: ListMarginsComponent },
+      { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard]},
+      { path: 'marketplaces', component: ChooseMarketplacesComponent , canActivate: [AuthGuard]},
+      { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard]},
+      { path: 'list-marketplaces', component: ListMarketplacesComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN} },
+      { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard]},
+      { path: 'publish-myproducts', component: PublishMyproductsComponent , canActivate: [AuthGuard]},
+      { path: 'edit-myproducts', component: EditProductsComponent , canActivate: [AuthGuard]},
+      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent , canActivate: [AuthGuard]},
+      { path: 'users', component: UsersComponent , canActivate: [AuthGuard]},
+      { path: 'margins', component: ListMarginsComponent , canActivate: [AuthGuard]},
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
