@@ -39,12 +39,13 @@ export class PublishMyproductsComponent implements OnInit {
   productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
-
+  
   // Paginator
-  currentPage = 1;
+  totalPages:number;
+  currentPage:number = 1;
   selectedPage = 0;
   page = 0;
-  size = 5;
+  size:number = 5;
   checkAll = false;
   sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
 
@@ -80,7 +81,8 @@ export class PublishMyproductsComponent implements OnInit {
     getPageMyCustomProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;            
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;   
+        this.totalPages =  +this.pageProductsMeli.totalPages;        
         this.loadPaginator = false;
       }, error => {
         this.loading = false;
@@ -94,7 +96,8 @@ export class PublishMyproductsComponent implements OnInit {
     this.errorProducts = false;
     this.productStoreUserService.getPageMyCustomProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {        
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;               
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli; 
+        this.totalPages =  +this.pageProductsMeli.totalPages;                
         if (this.pageProductsMeli.itemsMeliGrid.length <= 0) {
           this.errorProducts = true;
         }
@@ -123,6 +126,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
     .subscribe(pageItemCustomGrid => {
       this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+      this.totalPages =  +this.pageProductsMeli.totalPages;  
       this.loadPaginator = false;
       this.errorProducts = false;
       if (this.pageProductsMeli.itemsMeliGrid.length === 0) {
@@ -152,6 +156,7 @@ export class PublishMyproductsComponent implements OnInit {
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        this.totalPages =  +this.pageProductsMeli.totalPages;  
         if (this.pageProductsMeli.itemsMeliGrid.length > 0) {
           this.empySearch = false;
         }

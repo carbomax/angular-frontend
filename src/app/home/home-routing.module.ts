@@ -22,7 +22,7 @@ const routes: Routes = [
       { path: 'list-marketplaces', component: ListMarketplacesComponent },
       { path: 'marketplaces', component: ChooseMarketplacesComponent},
       { path: 'publish-myproducts', component: PublishMyproductsComponent },
-      { path: 'edit-myproducts', component: EditProductsComponent },
+      { path: 'edit-myproducts/:id', component: EditProductsComponent },
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent },
       { path: 'users', component: UsersComponent },
       { path: 'margins', component: ListMarginsComponent },

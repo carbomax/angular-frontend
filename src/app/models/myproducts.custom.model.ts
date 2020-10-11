@@ -1,6 +1,7 @@
 import { FamilyProductStorage } from './family.product.store';
 
 export class ProductCustom {
+    id: number;
     sku: string;
     name: string;
     priceUYU: number;    

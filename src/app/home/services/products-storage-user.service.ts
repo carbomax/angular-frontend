@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { SelectedProducResponse } from '../../models/selected.products.response';
 import { MarketplaceDetails } from '../../models/marketplace.details';
 import { PageProductMeliStorage } from '../../models/page.myproduct.custom.model';
+import { EditableProductModel } from '../../models/editable.product.model';
 
 @Injectable({
   providedIn: 'root'
@@ -42,7 +43,7 @@ export class ProductsStorageUserService {
     ?sku=${sku}&nameProduct=${nameProduct}&state=${state}&familyId=${familyId}
     &minPrice=${minPrice}&maxPrice=${maxPrice}`;
   
-    return this.http.get<PageProductMeliStorage>(uri).pipe(map((resp: any) => {
+    return this.http.get<PageProductMeliStorage>(uri).pipe(map((resp: any) => {     
       this.pageProductsMeli.itemsMeliGrid = resp.itemsMeliGridList;
       this.pageProductsMeli.totalElements = resp.totalElements;      
       this.pageProductsMeli.size = resp.size;
@@ -53,6 +54,16 @@ export class ProductsStorageUserService {
       this.pageProductsMeli.totalProducts = resp.totalProducts;
       return this.pageProductsMeli;
     }));
+  }
+
+  getCustomProduct(id: number): Observable<EditableProductModel>{
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/product-info/${id}`;
+    return this.http.get<EditableProductModel>(params);
+  }
+
+  updateCustomProduct(product: EditableProductModel, imageToDelete: number[]): Observable<EditableProductModel>{
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/edit-product-info/?imagesToDelete=${imageToDelete}`;
+    return this.http.put<EditableProductModel>(params, product);
   }
 
 }

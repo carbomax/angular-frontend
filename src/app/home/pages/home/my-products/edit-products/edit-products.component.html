@@ -11,6 +11,7 @@
 
 <div class="tab-content">
   <!--Contenido del Tab Informacion-->
+  <form #f="ngForm">
   <div class="tab-pane active" id="product-info-tab">
     <div class="row">
       <div class="card shadow mb-4 cardpopup">
@@ -18,7 +19,7 @@
           <h6 class="m-0 font-weight-bold text-primary">Editar producto</h6>
         </div>
         <div class="card-body">
-
+       
           <div class="form-group row mb-2">
             <div class="col-md-6 izq-aling">
 
@@ -34,7 +35,7 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="NameProd" name="NameProd" type="text" value="">
+                  <input class="form-control text-box single-line" id="NameProd" name="NameProd" type="text" [(ngModel)]="editableProduct.productName" >
                   <span class="field-validation-valid" data-valmsg-for="NameProd" data-valmsg-replace="true"></span>
                 </div>
               </div>
@@ -51,7 +52,7 @@
                   </div>
                 </div>
                 <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="Description"
-                    name="Description" rows="4" style="height: 107px;"></textarea>
+                    name="Description" rows="4" style="height: 107px;" [(ngModel)]="editableProduct.description"></textarea>
                   <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>
                 </div>
               </div>
@@ -67,7 +68,7 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="SKU" name="SKU" type="text" value="">
+                  <input class="form-control text-box single-line" id="SKU" name="SKU" type="text" value="" [(ngModel)]="editableProduct.sku" disabled >
                   <span class="field-validation-valid" data-valmsg-for="SKU" data-valmsg-replace="true"></span>
                 </div>
               </div>
@@ -91,7 +92,7 @@
                       <span class="input-group-text">UYU</span>
                     </div>
                     <input class="form-control text-box single-line" id="CurrencyCost" name="CurrencyCost" type="number"
-                      step="0.01" min="0" max="10000" value="22.33" disabled>
+                      step="0.01" min="0" max="10000" [(ngModel)]="editableProduct.price_cost" disabled>
                   </div>
                 </div>
               </div>
@@ -111,7 +112,7 @@
                       <span class="input-group-text">UYU</span>
                     </div>
                     <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
-                      step="0.01" min="0" max="10000" value="22.33">
+                      step="0.01" min="0" max="10000" [(ngModel)]="editableProduct.price">
                   </div>
                 </div>
               </div>
@@ -128,14 +129,14 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="Cant" name="Cant" type="number" min="0">
-                  <span class="field-validation-valid" data-valmsg-for="Cant" data-valmsg-replace="true"></span>
+                  <input class="form-control text-box single-line" id="Cant" name="Cant" type="number" min="0" [(ngModel)]="editableProduct.currentStock" disabled>
+                  <span class="field-validation-valid" data-valmsg-for="Cant" data-valmsg-replace="true" ></span>
                 </div>
               </div>           
 
             </div>
           </div>
-
+       
         
 
         </div>
@@ -152,15 +153,18 @@
                 <th>Acción</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
+            <tbody>              
+              <tr *ngFor="let image of editableProduct.images">
                 <th scope="row">
-                  <img alt="3365"
-                    src="https://raciazek.agilecommerce.com.uy/content/images/thumbs/0003365_0039640_390a28c9affaf7d44e31a7b4e8541210430411b30277e2c16bf702b2172b4516.jpeg.jpeg"
-                    width="75">
+                  <img alt="imagen ilustrativa"
+                    src="{{image.photos}}" *ngIf="!edit || id !== image.id"
+                    width="55">
+                  <input class="form-control text-box single-line" type="text" name="urlP" [(ngModel)]="urlP" *ngIf="edit && id === image.id">
                 </th>
-                <td style="width: 5%;">2</td>
-                <td style="width: 25%;">título de foto 2</td>
+                <td style="width: 5%;" *ngIf="!edit || id !== image.id">{{image.order}}</td>
+                <td style="width: 5%;" *ngIf="edit && id === image.id"><input class="form-control text-box single-line" type="number" name="orderP" min="0" [(ngModel)]="orderP"></td>
+                <td style="width: 25%;" *ngIf="!edit || id !== image.id">{{image.title}}</td>
+                <td style="width: 25%;" *ngIf="edit && id === image.id"><input class="form-control text-box single-line" type="text" name="titleP" [(ngModel)]="titleP"></td>
                 <td style="width: 6rem;">
                   <div class="dropdown no-arrow">
                     <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink"
@@ -168,37 +172,15 @@
                       <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                      aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item pointer" href="#"><i class="fas fa-plus m-2 text-info"></i>Adicionar</a>
-                      <a class="dropdown-item pointer" href="#"><i class="far fa-edit m-2 text-success"></i>Editar</a>
-                      <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                      aria-labelledby="dropdownMenuLink">                      
+                      <a class="dropdown-item pointer" href="javascript:void(0);" (click)="editProduct(image)" *ngIf="id !== image.id"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                      <a class="dropdown-item pointer" href="javascript:void(0);" (click)="updateProduct(image)" *ngIf="id === image.id"><i class="far fa-edit m-2 text-success"></i>Actualizar</a>
+                      <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previousDelete(image)" *ngIf="id !== image.id"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                      <a class="dropdown-item pointer" href="javascript:void(0);" (click)="cancelProduct()" *ngIf="id === image.id"><i class="fas fa-trash m-2 text-danger"></i>Cancelar</a>
                     </div>
                   </div>
                 </td>
-              </tr>
-              <tr>
-                <th scope="row">
-                  <img alt="3365"
-                    src="https://raciazek.agilecommerce.com.uy/content/images/thumbs/0003365_0039640_390a28c9affaf7d44e31a7b4e8541210430411b30277e2c16bf702b2172b4516.jpeg.jpeg"
-                    width="75">
-                </th>
-                <td style="width: 5%;">3</td>
-                <td style="width: 25%;">título de foto 1</td>
-                <td style="width: 6rem;">
-                  <div class="dropdown no-arrow">
-                    <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink"
-                      data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                      aria-labelledby="dropdownMenuLink">
-                      <a class="dropdown-item pointer" href="#"><i class="far fa-eye m-2 text-info"></i>Editar</a>
-                      <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-
+              </tr>              
             </tbody>
           </table>
 
@@ -210,14 +192,14 @@
             <div class="form-group row mb-2">
               <div class="col-md-10"></div>
               <div class="col-md-2">
-                <button type="button" class="btn btn-primary">Salvar</button>
+                <button type="button" class="btn btn-primary" (click)="saveForm()">Salvar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="tab"
                   style="margin-left: 2%;">Cerrar</button>
               </div>
             </div>
 
   </div>
-
+  </form>
   <!--Contenido del Tab Publicar-->
   <div class="tab-pane" id="product-publish-tab">
     <div class="row">
@@ -453,46 +435,22 @@
 </div>
 
 
-
-<!--Modal to edit applied rate-->
-<div class="modal" id="tarifaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
-    <div class="modal-content publish-selected">
+<!-- Modal -->
+<div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenteredLabel">Tarifa para aplicar</h5>
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-
-        <div class="form-group row mb-2">
-          <div class="col-md-6 izq-aling">
-            <div class="row mb-2">
-              
-              <div class="col-md-8 label-wrapper">
-                <label class="control-label" for="Accounts" title="">Tarifa para aplicar</label>                  
-              </div>
-              <div class="col-md-1" style="padding-left: inherit;">
-                <div class="ico-help" title="Seleccione la tarifa que va aplicar a la cuenta de mercado libre."><i class="fa fa-question-circle"></i></div>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6">            
-              <select class="custom-select" name="Accounts">
-                <option selected>-- Seleccione la tarifa --</option>
-                <option value="1">25%</option>
-                <option value="2">30%</option>
-                <option value="3">5%</option>
-              </select>
-              <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
-          </div>
-        </div>
-
+        ¿Estas seguro de eliminar la imagen del producto?
       </div>
-      <div class="modal-footer">        
-        <button type="button" class="btn btn-primary">Salvar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteProduct()" >Aceptar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">Cancelar</button>        
       </div>
     </div>
   </div>

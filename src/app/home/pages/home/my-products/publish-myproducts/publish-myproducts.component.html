@@ -152,7 +152,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                           aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item pointer" href="#" routerLink="../edit-myproducts"><i class="far fa-eye m-2 text-info"></i>Ver</a>
+                          <a class="dropdown-item pointer" [routerLink]="['../edit-myproducts', product.id]"><i class="far fa-eye m-2 text-info"></i>Ver</a>
                           <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                         </div>
                       </div>
@@ -169,7 +169,7 @@
       </div>
 
       <div class="row justify-content-around" *ngIf="pageProductsMeli?.itemsMeliGrid">
-        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
+        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
                  
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
