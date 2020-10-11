@@ -18,12 +18,27 @@
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Bienvenido a <small>Pepeganga</small>!</h1>
                   </div>
-                  <form class="user">
+
+                  <div *ngIf="badCredentials" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Usuario</strong>  o <strong>clave</strong> incorrectas!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <div *ngIf="error500" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Malas noticias</strong>  ha ocurrido un error, por favor contacte con el administrador!
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+
+                  <form action="POST" class="user">
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address...">
+                      <input [(ngModel)]="user.email" name="email" type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." autofocus>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                      <input  [(ngModel)]="user.password" name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
@@ -31,9 +46,9 @@
                         <label class="custom-control-label" for="customCheck">Recuérdame</label>
                       </div>
                     </div>
-                    <a routerLink="/home" class="btn btn-primary btn-user btn-block">
-                      Entrar
-                    </a>
+                    <button (click)="login()"  class="btn btn-primary btn-user btn-block">
+                      <i *ngIf="loading"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> {{loginIntoText}}
+                    </button>
                   </form>
                   <hr>
                   <div class="text-center">

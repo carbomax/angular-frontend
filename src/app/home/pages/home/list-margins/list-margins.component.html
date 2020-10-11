@@ -51,7 +51,7 @@
         </tbody>
 
 
-          <div class="row justify-content-around" *ngIf="margins">
+          <div class="row justify-content-around" *ngIf="margins.length > 0">
             <div class="col-md-5 col-sm-12">
               <ngb-pagination [collectionSize]="margins.length" [boundaryLinks]="true" [pageSize]="pageSize"
                 [(page)]="page">

@@ -62,10 +62,10 @@ export class UsersComponent implements OnInit {
     this.loading = true;
     this.errorUsers = false;
     this.seletedProfile.user.roles = this.selectedRoles;
-    this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
+    this.seletedProfile.marketplaces = this.selectedMarketplaces;
     if (this.seletedProfile.id == null) {
       console.log('Saving user..')
-      this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
+      this.seletedProfile.marketplaces = this.selectedMarketplaces;
       this.seletedProfile.user.roles = this.selectedRoles;
       this.userService.saveUserProfile(this.seletedProfile).subscribe(resp => {
         this.loadProfiles();
@@ -97,7 +97,7 @@ export class UsersComponent implements OnInit {
       })
     } else {
       this.seletedProfile.rut = this.seletedProfile.rut.toString();
-      this.seletedProfile.user.marketplaces = this.selectedMarketplaces;
+      this.seletedProfile.marketplaces = this.selectedMarketplaces;
       this.seletedProfile.user.roles = this.selectedRoles;
       console.log(this.seletedProfile)
       this.userService.updateUserProfile(this.seletedProfile).subscribe(resp => {
@@ -188,7 +188,7 @@ export class UsersComponent implements OnInit {
     this.register = false;
     this.seletedProfile = profile;
     this.selectedRoles = this.seletedProfile.user.roles;
-    this.selectedMarketplaces = this.seletedProfile.user.marketplaces;
+    this.selectedMarketplaces = this.seletedProfile.marketplaces;
   }
 
   loadProfiles(): void {
@@ -285,10 +285,10 @@ export class UsersComponent implements OnInit {
       rut: '',
       address: '',
       store: '',
+      marketplaces: [],
       user: {
         id: null,
         password: '',
-        marketplaces: [],
         roles: [],
         email: ''
       }
