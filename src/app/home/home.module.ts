@@ -27,6 +27,7 @@ import { NotImageProfilePipe } from './pipes/not-image-profile.pipe';
 import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe';
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { MarginTypesPipe } from './pipes/margin-types.pipe';
+import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
 
 
 
@@ -47,7 +48,8 @@ import { MarginTypesPipe } from './pipes/margin-types.pipe';
     UsersComponent,
     NotImageProfilePipe,
     ListMarginsComponent,
-    MarginTypesPipe],
+    MarginTypesPipe,
+    UserAdminComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
