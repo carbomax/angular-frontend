@@ -25,7 +25,7 @@ const routes: Routes = [
       { path: 'list-marketplaces', component: ListMarketplacesComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN} },
       { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard]},
       { path: 'publish-myproducts', component: PublishMyproductsComponent , canActivate: [AuthGuard]},
-      { path: 'edit-myproducts', component: EditProductsComponent , canActivate: [AuthGuard]},
+      { path: 'edit-myproducts/:id', component: EditProductsComponent , canActivate: [AuthGuard]},
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent , canActivate: [AuthGuard]},
       { path: 'users', component: UsersComponent , canActivate: [AuthGuard]},
       { path: 'margins', component: ListMarginsComponent , canActivate: [AuthGuard]},

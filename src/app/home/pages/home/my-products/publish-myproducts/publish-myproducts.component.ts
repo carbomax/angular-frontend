@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
 import { ProductCustom } from 'src/app/models/myproducts.custom.model';
 import { Options, LabelType } from 'ng5-slider';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
+
 import { PaginationInstance } from 'ngx-pagination';
 import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { PopupAddcommoninfoComponent } from '../../../../components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
@@ -40,6 +44,9 @@ export class PublishMyproductsComponent implements OnInit {
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   
+  //security
+  profileId: number;
+  
   // Paginator
   totalPages:number;
   currentPage:number = 1;
@@ -65,7 +72,8 @@ export class PublishMyproductsComponent implements OnInit {
     }
   };
 
-  constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog) { 
+  constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
+    private authService: AuthService, private router: Router) { 
     
   }
 
@@ -76,37 +84,48 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   loadProductsPaginator(page?: number): void {
-    this.loadPaginator = true;
-    this.productStoreUserService.
-    getPageMyCustomProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemCustomGrid => {
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;   
-        this.totalPages =  +this.pageProductsMeli.totalPages;        
-        this.loadPaginator = false;
-      }, error => {
-        this.loading = false;
-        this.errorProducts = true;
-        this.loadPaginator = false;
-      });
+    this.profileId = null;    
+      this.profileId = this.authService.authenticationDataExtrac().profileId;
+      this.loadPaginator = true;
+      this.productStoreUserService.
+      getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
+          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemCustomGrid => {
+          this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;   
+          this.totalPages =  +this.pageProductsMeli.totalPages;        
+          this.loadPaginator = false;
+        }, error => {
+          this.loading = false;
+          this.errorProducts = true;
+          this.loadPaginator = false;
+        });           
   }
 
   ngOnInit(): void {   
-    this.loading = true;    
-    this.errorProducts = false;
-    this.productStoreUserService.getPageMyCustomProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-      .subscribe(pageItemCustomGrid => {        
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli; 
-        this.totalPages =  +this.pageProductsMeli.totalPages;                
-        if (this.pageProductsMeli.itemsMeliGrid.length <= 0) {
+    if(this.authService.isAuthenticated)
+    { 
+      this.profileId = null; 
+      this.profileId = this.authService.authenticationDataExtrac().profileId;
+      this.loading = true;    
+      this.errorProducts = false;
+      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        .subscribe(pageItemCustomGrid => {        
+          this.pageProductsMeli = this.productStoreUserService.pageProductsMeli; 
+          this.totalPages =  +this.pageProductsMeli.totalPages;                
+          if (this.pageProductsMeli.itemsMeliGrid.length <= 0) {
+            this.errorProducts = true;
+          }
+          this.loading = false;
+        }, (error: any) => {
           this.errorProducts = true;
-        }
-        this.loading = false;
-      }, (error: any) => {
-        this.errorProducts = true;
-        this.loading = false;
-      })
+          this.loading = false;
+        })
+    }
+    else{
+      this.router.navigate(['auth/login']);
+    }
   }
+
   selectAllProducts():void {
     this.checkAll = !this.checkAll;
 
@@ -118,27 +137,37 @@ export class PublishMyproductsComponent implements OnInit {
 
   /* ********************  Here begin the searching ************************** */
   searchProducts(): void {
-    this.loadPaginator = true;
-    this.empySearch = false;
-    this.loadingClear = false;
-    this.productStoreUserService.
-    getPageMyCustomProducts(this.selectedPage = 0, this.size, this.skuSearch,
-      this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
-    .subscribe(pageItemCustomGrid => {
-      this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
-      this.totalPages =  +this.pageProductsMeli.totalPages;  
-      this.loadPaginator = false;
-      this.errorProducts = false;
-      if (this.pageProductsMeli.itemsMeliGrid.length === 0) {
+
+    if(this.authService.isAuthenticated)
+    { 
+      this.profileId = null; 
+      this.profileId = this.authService.authenticationDataExtrac().profileId;
+
+      this.loadPaginator = true;
+      this.empySearch = false;
+      this.loadingClear = false;
+      this.productStoreUserService.
+      getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      .subscribe(pageItemCustomGrid => {
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        this.totalPages =  +this.pageProductsMeli.totalPages;  
+        this.loadPaginator = false;
+        this.errorProducts = false;
+        if (this.pageProductsMeli.itemsMeliGrid.length === 0) {
+          this.empySearch = true;
+          this.pageProductsMeli.itemsMeliGrid = null;
+        }
+      }, (error: any) => {
+        console.log('Error', error);
+        this.loadPaginator = false;
+        this.errorProducts = false;
         this.empySearch = true;
-        this.pageProductsMeli.itemsMeliGrid = null;
-      }
-    }, (error: any) => {
-      console.log('Error', error);
-      this.loadPaginator = false;
-      this.errorProducts = false;
-      this.empySearch = true;
-    });
+      });
+    }
+    else{
+      this.router.navigate(['auth/login']);
+    }
   }
   // Clear search form
   clearSearch(f: NgForm): void {
@@ -152,7 +181,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.minValue = 0;
     this.maxValue = 20000;
     this.productStoreUserService.
-    getPageMyCustomProducts(this.selectedPage = 0, this.size, this.skuSearch,
+    getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
