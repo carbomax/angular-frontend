@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ProductStore } from '../../../../../models/product.store';
 import { Options, LabelType } from 'ng5-slider';
 
@@ -11,6 +12,7 @@ import { ActionResult } from '../../../../../enums/actionresult.enum';
 import { SelectedProducResponse } from '../../../../../models/selected.products.response';
 
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import { AuthService } from 'src/app/core/services/auth.service';
 import Swal from 'sweetalert2';
 import { ParsedPropertyType } from '@angular/compiler';
 
@@ -43,6 +45,9 @@ export class ProductsStoreComponent implements OnInit {
   marketplaces: Marketplace[] = [];
   selectedProductR = new SelectedProducResponse();
 
+  //Security
+  idProfile: number;
+
   // Paginator
   currentPage = 1;
   selectedPage = 0;
@@ -70,7 +75,8 @@ export class ProductsStoreComponent implements OnInit {
 
 
 
-  constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService, public productsStorageUserService: ProductsStorageUserService) {
+  constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService,
+     public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router) {
     this.getMarketplaces();
   }
 
@@ -184,66 +190,87 @@ export class ProductsStoreComponent implements OnInit {
 
   }
 
+  // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
-    if (idMarket != null) {
-      let exists_products = "";
-      let productList = [];
-      this.pageProducts.itemsGrid.forEach(element => {
-        if (element.selected === true) {
-          productList.push(element.sku);
-        }
-      });
-      if (productList.length != 0) {
-        this.productsStorageUserService.storeMyProducts(idMarket, productList).subscribe(resp => {
-          this.selectedProductR = resp;
-          let p = this.selectedProductR.codeResult;
-          if (this.selectedProductR.codeResult === ActionResult.DONE) {
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `Sus productos han sido almacenados correctamente`,
-              showConfirmButton: false,
-              timer: 5000
-            });
+    if(this.authService.isAuthenticated)
+    {
+      this.idProfile = this.authService.authenticationDataExtrac().profileId;
+
+      if (idMarket != null) {
+        let exists_products = "";
+        let productList = [];
+        this.pageProducts.itemsGrid.forEach(element => {
+          if (element.selected === true) {
+            productList.push(element.sku);
           }
-          else if (this.selectedProductR.codeResult === ActionResult.PARTIAL) {
-            this.selectedProductR.existingProducts.forEach(element => {
-              exists_products = element + ", " + exists_products;
-            });
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `Productos almacenados`,
-              text: `Los productos se almacenaron correctamente excepto ${exists_products} que ya se encontraban en su almacen`,
-              showConfirmButton: false,
-              timer: 5000
-            });
-          }
-          else {
-            this.selectedProductR.existingProducts.forEach(element => {
-              exists_products = exists_products + ", " + element;
-            });
-            Swal.fire({
-              position: 'top-end',
-              icon: 'warning',
-              title: `Productos no almacenados`,
-              text: `Todos los productos seleccionados ya se encontraban en su almacen`,
-              showConfirmButton: false,
-              timer: 5000
-            });
-          }
-        })
-      } else {
-        Swal.fire({
-          position: 'top-end',
-          title: 'Error en lista',
-          text: "Usted no ha seleccionado productos",
-          icon: 'warning',
-          showConfirmButton: false,
-          timer: 5000
         });
+        if (productList.length != 0) {
+          this.productsStorageUserService.storeMyProducts(this.idProfile, idMarket, productList).subscribe(resp => {
+            this.selectedProductR = resp;
+            let p = this.selectedProductR.codeResult;
+            if (this.selectedProductR.codeResult === ActionResult.DONE) {
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: `Sus productos han sido almacenados correctamente`,
+                showConfirmButton: false,
+                timer: 5000
+              });
+            }
+            else if (this.selectedProductR.codeResult === ActionResult.PARTIAL) {
+              this.selectedProductR.existingProducts.forEach(element => {
+                exists_products = element + ", " + exists_products;
+              });
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: `Productos almacenados`,
+                text: `Los productos se almacenaron correctamente excepto ${exists_products} que ya se encontraban en su almacen`,
+                showConfirmButton: false,
+                timer: 5000
+              });
+            }
+            else {
+              this.selectedProductR.existingProducts.forEach(element => {
+                exists_products = exists_products + ", " + element;
+              });
+              Swal.fire({
+                position: 'top-end',
+                icon: 'warning',
+                title: `Productos no almacenados`,
+                text: `Todos los productos seleccionados ya se encontraban en su almacen`,
+                showConfirmButton: false,
+                timer: 5000
+              });
+            }
+          })
+        } else {
+          Swal.fire({
+            position: 'top-end',
+            title: 'Error en lista',
+            text: "Usted no ha seleccionado productos",
+            icon: 'warning',
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }
+  
       }
 
     }
+    else{
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: `No autorizado`,
+        text: `Usted no tiene permiso a esta funcionalidad. Por favor de autenticarse.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+    }
+      
+  
+
+ 
   }
 }
