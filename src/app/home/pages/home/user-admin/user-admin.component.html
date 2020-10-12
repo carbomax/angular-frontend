@@ -7,10 +7,10 @@
 
     <div
       class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
-      <h6 class="m-0 font-weight-bold text-primary">Vendedores</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Administradores</h6>
       <button type="button" class="btn btn-primary btn-sm btn-user" data-toggle="modal" (click)="createModal()"
         data-target="#marketplaceModal">
-        <i class="fas fa-plus-circle"></i> Registrar vendedor
+        <i class="fas fa-plus-circle"></i> Registrar usuario
       </button>
     </div>
 
@@ -22,8 +22,6 @@
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>Razón social</th>
-            <th>Tienda</th>
             <th>Nombre</th>
             <th>Correo</th>
             <th class="roles-table">Roles</th>
@@ -35,8 +33,6 @@
 
         <tbody>
           <tr *ngFor="let profile of profiles | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
-            <td>{{ profile.businessName }}</td>
-            <td>{{ profile.store }}</td>
             <td>{{ profile.firstName }}</td>
             <td>{{ profile.user.email }}</td>
             <td>
@@ -61,7 +57,7 @@
             </td>
             <td class="text-center">
               <div class="dropdown no-arrow">
-                <a class="dropdown-toggle btn btn-outline-primary btn-sm actionbox" href="#" role="button"
+                <a  class="dropdown-toggle btn btn-outline-primary btn-sm actionbox" href="#" role="button"
                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
                 </a>
@@ -69,37 +65,37 @@
                   aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item pointer" role="button" data-toggle="modal" data-target="#marketplaceModal"
                     (click)="updateModal(profile)"> <i class="far fa-edit m-2 text-success"></i>Editar</a>
-                  <a class="dropdown-item pointer" (click)="deleteUserProfile(profile)"><i
+                  <a [ngClass]="{'disabled': verifyCurrentUser(profile)}" class="dropdown-item pointer" (click)="deleteUserProfile(profile)"><i
                       class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                 </div>
               </div>
             </td>
           </tr>
         </tbody>
-
       </table>
 
       <div class="container" *ngIf="profiles.length > 0">
-          <div class="row justify-content-around">
-            <ngb-pagination [collectionSize]="profiles.length" [boundaryLinks]="true" [pageSize]="pageSize" [(page)]="page">
-            </ngb-pagination>
+        <div class="row justify-content-around">
+          <ngb-pagination [collectionSize]="profiles.length" [boundaryLinks]="true" [pageSize]="pageSize"
+            [(page)]="page">
+          </ngb-pagination>
 
 
-            <div class="form-group">
-              <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-                <option value="5">5</option>
-                <option value="10">10</option>
-                <option value="15">15</option>
-                <option value="20">20</option>
-              </select>
-            </div>
-
-            <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-              <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{profiles.length}} registros <i
-                  *ngIf="loadPaginator" class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
-
-            </div>
+          <div class="form-group">
+            <select (change)="selectChangeHandler($event.target.value)" class="form-control">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
           </div>
+
+          <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
+            <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{profiles.length}} registros <i
+                *ngIf="loadPaginator" class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+
+          </div>
+        </div>
       </div>
 
     </div>
@@ -134,21 +130,6 @@
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
-                  <input type="text" class="form-control" id="inputBusinessName" placeholder="Razón social"
-                    aria-describedby="Razón social" name="businessName" [(ngModel)]="seletedProfile.businessName"
-                    required>
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="inputStore" placeholder="Tienda"
-                    aria-describedby="Tienda del usuario" name="store" [(ngModel)]="seletedProfile.store" required>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <div class="form-group">
                   <input type="text" class="form-control" id="inputName" placeholder="Nombre"
                     aria-describedby="Nombre del usuario" name="firstName" [(ngModel)]="seletedProfile.firstName"
                     required>
@@ -174,8 +155,7 @@
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                   <input type="text" class="form-control" id="inputPassword" placeholder="Contraseña del usuario"
-                    aria-describedby="Contraseña del usuario" name="password" [(ngModel)]="seletedProfile.user.password"
-                    required>
+                    aria-describedby="Contraseña del usuario" name="password" [(ngModel)]="seletedProfile.user.password">
                 </div>
               </div>
             </div>

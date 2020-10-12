@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Margin } from '../../../../models/margin';
 import { MarginService } from '../../../services/margin.service';
 import Swal from 'sweetalert2';
+import { Marketplace } from '../../../../models/marketplace.model';
+import { MarketplaceService } from '../../../services/marketplace.service';
 
 @Component({
   selector: 'app-list-margins',
@@ -12,7 +14,8 @@ export class ListMarginsComponent implements OnInit {
 
   public selectedMargin: Margin = new Margin();
   public margins: Margin[] = [];
-
+  public marketplaces: Marketplace[] = [];
+  public selectedMarketplaces: Marketplace[] = [];
   // Modal
   public headerCreateModal = 'Crear margen';
   public headerUpdateModal = 'Actualizar margen';
@@ -25,16 +28,23 @@ export class ListMarginsComponent implements OnInit {
   public page = 1;
   public pageSize = 5;
 
-  constructor(public marginService: MarginService) {
+  constructor(public marginService: MarginService, public marketplaceService: MarketplaceService) {
     this.initialize();
   }
 
   ngOnInit(): void {
     this.loadMargins();
+    this.loadMarketplaces();
   }
 
-   // Paginator
-   selectChangeHandler(value: number): void {
+  loadMarketplaces(): void {
+    this.marketplaceService.getMarketplaces().subscribe(marketplacesResp => {
+      this.marketplaces = marketplacesResp;
+      console.log(this.marketplaces);
+    })
+  }
+  // Paginator
+  selectChangeHandler(value: number): void {
     this.loadPaginator = true;
     this.pageSize = value;
     this.loadPaginator = false;
@@ -43,9 +53,10 @@ export class ListMarginsComponent implements OnInit {
 
   createOrUpdateMargin(): void {
     this.loading = true;
+    this.errorMargins = false;
     if (this.selectedMargin.id) {
       console.log('update')
-      this.marginService.updateMargin(this.selectedMargin, 1).subscribe(resp => {
+      this.marginService.updateMargin(this.selectedMargin).subscribe(resp => {
         this.loadMargins();
         Swal.fire({
           position: 'top-end',
@@ -67,29 +78,46 @@ export class ListMarginsComponent implements OnInit {
         })
       })
     } else {
-      this.marginService.saveMargin(this.selectedMargin, 1).subscribe(marginResponse => {
-        console.log(marginResponse);
-        this.loadMargins();
-        this.loading = false;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: `Marketplace ${marginResponse.name} ha sido creado`,
-          showConfirmButton: false,
-          timer: 2000
 
-        });
-      }, error => {
-        console.log(error);
+      if (this.margins.map(m => m.name.toLowerCase()).includes(this.selectedMargin.name.toLowerCase())) {
         this.loading = false;
+        this.errorMargins = false;
         Swal.fire({
           position: 'top-end',
           icon: 'error',
-          title: `Marketplace no ha sido creado`,
+          title: `Ya existe un margen con ese nombre`,
           showConfirmButton: false,
           timer: 2000
+        });
+
+      } else {
+        this.selectedMargin.marketplaceId = this.selectedMarketplaces[0].id;
+        this.marginService.saveMargin(this.selectedMargin).subscribe(marginResponse => {
+          console.log(marginResponse);
+          this.loadMargins();
+          this.loading = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Marketplace ${marginResponse.name} ha sido creado`,
+            showConfirmButton: false,
+            timer: 2000
+
+          });
+        }, error => {
+          console.log(error);
+          this.loading = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Margen no ha sido creado`,
+            showConfirmButton: false,
+            timer: 2000
+          })
         })
-      })
+      }
+
+
     }
   }
 
@@ -156,6 +184,9 @@ export class ListMarginsComponent implements OnInit {
     this.loading = true;
     this.marginService.getMargins().subscribe(marginsResp => {
       this.margins = marginsResp;
+      if (this.margins.length === 0) {
+        this.errorMargins = true;
+      }
       this.loading = false;
     }, error => {
       console.log('Error:', error);
@@ -168,6 +199,7 @@ export class ListMarginsComponent implements OnInit {
     this.selectedMargin = {
       name: '',
       type: 2,
+      marketplaceId: 0,
       value: 25
     }
   }

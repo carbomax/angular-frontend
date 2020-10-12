@@ -10,9 +10,11 @@ import { UsersComponent } from './pages/home/users/users.component';
 
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
+import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from '../auth/guard/role.guard';
 import { RoleEnum } from '../enums/role.enum';
+
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -29,6 +31,7 @@ const routes: Routes = [
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent , canActivate: [AuthGuard]},
       { path: 'users', component: UsersComponent , canActivate: [AuthGuard]},
       { path: 'margins', component: ListMarginsComponent , canActivate: [AuthGuard]},
+      { path: 'users-admin', component: UserAdminComponent , canActivate: [AuthGuard, RoleGuard],  data: {role: RoleEnum.ADMIN}},
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

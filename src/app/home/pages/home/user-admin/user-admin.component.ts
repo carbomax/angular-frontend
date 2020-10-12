@@ -11,18 +11,21 @@ import { Role } from '../../../../models/role.model';
 import Swal from 'sweetalert2';
 import { User } from '../../../../models/user.model';
 import { RoleEnum } from '../../../../enums/role.enum';
+import { AuthService } from '../../../../core/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  selector: 'app-user-admin',
+  templateUrl: './user-admin.component.html',
+  styleUrls: ['./user-admin.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UserAdminComponent implements OnInit {
 
   // Handle errors
   public loading = false;
   public errorUsers = false;
   public emptySeach = false;
+  public changeMyself = false;
 
   // Modal
   public headerCreateModal = 'Registrar usuario';
@@ -30,6 +33,7 @@ export class UsersComponent implements OnInit {
   public register = true;
   public seletedProfile: Profile;
   public profiles: Profile[] = [];
+  public currentUser = '';
   public roles: Role[] = [];
   public marketplaces: Marketplace[] = [];
 
@@ -37,16 +41,18 @@ export class UsersComponent implements OnInit {
   selectedMarketplaces = [];
   selectedRoles = [];
 
-  //Pagination
+  // Pagination
   page = 1;
   pageSize = 5;
   public loadPaginator = false;
 
-  constructor(public userService: UserService, public marketplaceService: MarketplaceService) {
+  constructor(public userService: UserService, public marketplaceService: MarketplaceService,
+              public authService: AuthService, public router: Router) {
     this.initProfile();
   }
 
   ngOnInit(): void {
+
     this.loadProfiles();
     this.loadRoles();
     this.loadMarketplaces();
@@ -97,43 +103,76 @@ export class UsersComponent implements OnInit {
         })
       })
     } else {
-      this.seletedProfile.rut = this.seletedProfile.rut.toString();
-      this.seletedProfile.marketplaces = this.selectedMarketplaces;
-      this.seletedProfile.user.roles = this.selectedRoles;
-      console.log(this.seletedProfile)
-      this.userService.updateUserProfile(this.seletedProfile).subscribe(resp => {
 
-        this.loadProfiles();
-        this.seletedProfile = resp;
+      if(this.verifyCurrentUser(this.seletedProfile)){
         Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: `Usuario ${this.seletedProfile.firstName} ha sido actualizado`,
-          showConfirmButton: false,
-          timer: 2000
+          title: 'Está seguro?',
+          text: 'Si actualiza sus propios datos deberá iniciar sesión!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#1cc88a',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar',
+         cancelButtonText: 'Cancelar',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.changeMyself = true;
+            this.updateProfile();
+          } else {
+            this.loading = false;
+          }
 
         })
-      }, error => {
-        console.log('Error al actualizar un usuario', error);
-        this.loadProfiles();
-        this.loading = false;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: `El usuraio no ha sido actualizado`,
-          showConfirmButton: false,
-          timer: 2000
-        })
-      })
+      } else {
+        this.updateProfile();
+      }
+
     }
   }
 
+  updateProfile(): void {
+    this.seletedProfile.rut = this.seletedProfile.rut.toString();
+    this.seletedProfile.marketplaces = this.selectedMarketplaces;
+    this.seletedProfile.user.roles = this.selectedRoles;
+    console.log(this.seletedProfile)
+    this.userService.updateUserProfile(this.seletedProfile).subscribe(resp => {
+
+      if(this.changeMyself){
+        this.profiles = [];
+        this.authService.logout();
+        this.router.navigate(['auth/login']);
+      }
+      this.loading = false;
+      this.loadProfiles();
+      this.seletedProfile = resp;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Usuario ${this.seletedProfile.firstName} ha sido actualizado`,
+        showConfirmButton: false,
+        timer: 2000
+
+      })
+    }, error => {
+      console.log('Error al actualizar un usuario', error);
+      this.loadProfiles();
+      this.loading = false;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `El usuraio no ha sido actualizado`,
+        showConfirmButton: false,
+        timer: 2000
+      })
+    })
+  }
 
   deleteUserProfile(profile: Profile): void {
 
+
     Swal.fire({
       title: 'Está seguro?',
-      text: "Usted no podrá revertir esto. Tenga ene cuenta que se eliminaran todas las operaciones de este usuario en el sistema!",
+      text: 'Usted no podrá revertir esto. Tenga ene cuenta que se eliminaran todas las operaciones de este usuario en el sistema!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -147,6 +186,7 @@ export class UsersComponent implements OnInit {
         console.log('delete')
         this.userService.deleteUserProfile(profile.user.id).subscribe(resp => {
           console.log(resp)
+          this.loadProfiles();
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -154,7 +194,6 @@ export class UsersComponent implements OnInit {
             showConfirmButton: false,
             timer: 2000
           })
-          this.loadProfiles();
         }, error => {
           console.log('Error eliminando el user:', error);
           this.loading = false;
@@ -191,18 +230,26 @@ export class UsersComponent implements OnInit {
     this.selectedMarketplaces = this.seletedProfile.marketplaces;
   }
 
+  verifyCurrentUser(profile: Profile): boolean {
+    return profile.user.email === this.currentUser;
+  }
+
   loadProfiles(): void {
+    this.changeMyself = false;
     this.loading = true;
     this.errorUsers = false;
     this.userService.getProfiles().subscribe(profilesResp => {
+
+      console.log(profilesResp)
       this.profiles = [];
-      console.log('Cargando user vendores ', profilesResp)
-      this.profiles = profilesResp.filter(p => !p.user.roles.map( r => r.name).includes(RoleEnum.ADMIN));
+      this.profiles = profilesResp.filter(p => p.user.roles.map(r => r.name).includes(RoleEnum.ADMIN));
       this.loading = false;
-      if (!this.profiles.length) {
+      if (this.profiles.length <= 0) {
         this.errorUsers = true;
+      } else{
+        this.currentUser = this.authService.authenticationDataExtrac().email;
       }
-      console.log(this.profiles);
+
     },
       (error: any) => {
         this.loading = false;
@@ -210,10 +257,11 @@ export class UsersComponent implements OnInit {
         this.profiles = null;
       });
   }
-
   loadRoles(): void {
     this.userService.getRoles().subscribe(rolesResp => {
-      this.roles = rolesResp.filter(r => r.name.toLowerCase() !== RoleEnum.ADMIN.toLowerCase());
+      this.roles = rolesResp;
+      console.log(RoleEnum.INVITED)
+      this.roles = this.roles.filter(m => m.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase());
       console.log(this.roles);
     });
 
@@ -267,7 +315,7 @@ export class UsersComponent implements OnInit {
             timer: 2000
           })
         })
-      } else{
+      } else {
         user.enabled = !user.enabled;
       }
     })

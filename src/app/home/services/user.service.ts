@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { Profile } from '../../models/profile.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { Role } from '../../models/role.model';
 import { User } from '../../models/user.model';
 
@@ -25,9 +25,11 @@ export class UserService {
 
   getProfiles(): Observable<Profile[]> {
     return this.http.get<Profile[]>(`${this.URI_SERVICE_USERS}/profiles`)
-      .pipe(map((resp: Profile[]) => {
+      .pipe(
+        map((resp: Profile[]) => {
         // Para mas adelante guardar en el localStorage
         this.profiles = resp;
+        this.profiles.map( p => p.user.password = '');
         return this.profiles;
       }));
   }
