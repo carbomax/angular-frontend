@@ -16,7 +16,8 @@ import { EditableProductModel } from '../../models/editable.product.model';
 export class ProductsStorageUserService {
 
   URI = environment.URI_ROOT;
-  URI_PRODUCTS_ACTIONS = '/products/api';   
+  URI_PRODUCTS_ACTIONS = '/products/api'; 
+  URI_UPLOAD_ACTIONS = '/upload/api';  
   pageProductsMeli: PageProductMeliStorage;
 
   constructor(private http: HttpClient) { 
@@ -74,4 +75,9 @@ export class ProductsStorageUserService {
     return this.http.put<EditableProductModel>(params, product);
   }
 
+  uploadImage(formData: FormData): Observable<string>{
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    return this.http.post<string>(params, formData);
+  }
+  
 }
