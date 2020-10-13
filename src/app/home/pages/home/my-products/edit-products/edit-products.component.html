@@ -29,7 +29,7 @@
               <div class="form-group row mb-2">
                 <div class="col-md-4 izq-aling">
                   <div class="row mb-2 label-wrapper">
-                    <div class="col-md-8"><label class="control-label" for="NameProd" title="">Nombre del
+                    <div class="col-md-8"><label class="control-label" for="productName" title="">Nombre del
                         producto</label></div>
                     <div class="col-md-1">
                       <div class="ico-help" title="Nombre actual del producto a editar."><i
@@ -38,8 +38,8 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="NameProd" name="NameProd" type="text" [(ngModel)]="editableProduct.productName" >
-                  <span class="field-validation-valid" data-valmsg-for="NameProd" data-valmsg-replace="true"></span>
+                  <input class="form-control text-box single-line" id="productName" name="productName" type="text" [(ngModel)]="editableProduct.productName" >
+                  <span class="field-validation-valid" data-valmsg-for="productName" data-valmsg-replace="true"></span>
                 </div>
               </div>
 
@@ -103,7 +103,7 @@
               <div class="form-group row mb-2" style="margin-top: 6%;">
                 <div class="col-md-4 izq-aling">
                   <div class="row mb-2 label-wrapper">
-                    <div class="col-md-8"><label class="control-label" for="Currency" title="">Precio a publicar</label></div>
+                    <div class="col-md-8"><label class="control-label" for="Currency" title="">Precio de publicación</label></div>
                     <div class="col-md-1">
                       <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
                     </div>
@@ -192,9 +192,10 @@
             <div class="form-group row mb-2">
               <div class="col-md-10"></div>
               <div class="col-md-2">
-                <button type="button" class="btn btn-primary" (click)="saveForm()">Salvar</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="tab"
-                  style="margin-left: 2%;">Cerrar</button>
+                <button type="button" class="btn btn-primary" (click)="saveForm()">Salvar</button>              
+                <a class="btn btn-secondary" routerLink="/publish-myproducts" data-toggle="collapse" 
+                 style="margin-left: 2%;">Cerrar                  
+                </a>
               </div>
             </div>
    </form>
@@ -462,7 +463,7 @@
     <div class="modal-content publish-selected">
       <div class="modal-header">
         <h5 class="modal-title" id="imageModalLabel">Adicionar imagen</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" (click)="clearImage()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -478,7 +479,7 @@
             </div>
           </div>
           <div class="col-md-8">
-            <input class="form-control text-box single-line" id="titleImage" name="titleImage" type="text"  >
+            <input class="form-control text-box single-line" id="titleImage" name="titleImage" type="text" [(ngModel)]="titleImage">
             <span class="field-validation-valid" data-valmsg-for="titleImage" data-valmsg-replace="true"></span>
           </div>
         </div>
@@ -493,34 +494,41 @@
             </div>
           </div>
           <div class="col-md-8">
-            <input class="form-control text-box single-line" id="orderImage" name="orderImage" type="number" min="0" >
+            <input class="form-control text-box single-line" id="orderImage" name="orderImage" type="number" min="0" [(ngModel)]="orderImage" >
             <span class="field-validation-valid" data-valmsg-for="orderImage" data-valmsg-replace="true"></span>
           </div>
         </div>
       <!-- Buttons Adicionar Imagen -->
       <div class="form-group row mb-2">
-        <div class="col-md-4">
-          <div >
-            <a href="#" class="thumbnail">
-              <img src="http://placehold.it/100x100" alt="">
-           </a>
+
+        <div class="col-md-4 izq-aling">
+          <div class="row mb-2 label-wrapper">
+            <div class="col-md-8"><label class="control-label" for="uploadImage" title="">Seleccione una imagen</label></div>
+            <div class="col-md-1">
+              <div class="ico-help" title="La imagen a seleccionar no debe exceder los 2 MB de tamaño."><i
+                  class="fa fa-question-circle"></i></div>
+            </div>
+          </div>
         </div>
-        </div>   
-          <div class="row mb-2">
-          <div class="col-md-6">
-            <input type="file" class="btn btn-primary" text="Subir Imagen" style="width: inherit;">           
-          </div>   
-          <div class="col-md-6">            
-            <button type="button" class="btn btn-secondary" data-dismiss="tab"
-                style="margin-left: 2%;">Agregar imagen</button>
-          </div>  
+
+        <div class="col-md-8">
+          <div >
+            <a href="javascript:void(0);" class="thumbnail">            
+              <img [src]="imgURL" height="150" width="150" *ngIf="imgURL">
+           </a>
+          </div>
+          <div style="width: inherit; margin-top: 2%;">
+            <input type="file" #file accept='image/*' class="btn btn-primary" name="uploadImage" (change)="preview(file.files)" style="width: inherit;">     
+            <span style="color:red;" *ngIf="message">{{message}}</span>      
+          </div> 
+        </div>
+
       </div>
-    </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Salvar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="addedImage()">Adicionar</button>
+        <button type="button" #closeModal class="btn btn-secondary" data-dismiss="modal" (click)="clearImage()">Cancelar</button>
       </div>
     </div>
   </div>
