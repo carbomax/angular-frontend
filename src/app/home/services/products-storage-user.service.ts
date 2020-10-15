@@ -75,9 +75,19 @@ export class ProductsStorageUserService {
     return this.http.put<EditableProductModel>(params, product);
   }
 
-  uploadImage(formData: FormData): Observable<string>{
+  uploadImage(formData: FormData): Observable<any>{
     const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
-    return this.http.post<string>(params, formData);
+    return this.http.post<any>(params, formData);
+  }
+
+  deleteImages(imageToDelete: string[]): Observable<any>{
+    let finalImageList = [];
+    imageToDelete.forEach(element => {
+      var position = element.lastIndexOf("/");
+      finalImageList.push(element.substring(position+1));
+ });
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file-delete/${finalImageList}`;
+    return this.http.delete<any>(params);
   }
   
 }
