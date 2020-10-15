@@ -14,6 +14,7 @@ export class EditProductsComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
 
   productsDeletedList: number[];
+  imagesDeletedList: string[];
   editableProduct: EditableProductModel; 
   imageToDelete: Image;
 
@@ -35,7 +36,7 @@ export class EditProductsComponent implements OnInit {
   ngOnInit(): void {
     this.getCustomProduct();
     this.productsDeletedList = [];    
-   
+    this.imagesDeletedList = [];
   }
 
   getCustomProduct(){
@@ -47,6 +48,7 @@ export class EditProductsComponent implements OnInit {
   saveForm(){
     this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
       this.editableProduct = item;
+      this.productsDeletedList = [];
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -55,6 +57,13 @@ export class EditProductsComponent implements OnInit {
         showConfirmButton: false,
         timer: 5000
       });
+
+      //Elimino las imagenes fisicamente del servidor
+      if(this.imagesDeletedList.length !== 0){
+      this.productsStorageUserService.deleteImages(this.imagesDeletedList).subscribe();
+      this.imagesDeletedList = [];
+    }
+      
     },(error: any) => {
       Swal.fire({
         position: 'top-end',
@@ -64,7 +73,8 @@ export class EditProductsComponent implements OnInit {
         showConfirmButton: false,
         timer: 5000
       });
-
+      this.imagesDeletedList = [];
+      this.productsDeletedList = [];
     });  
    
   };
@@ -94,8 +104,9 @@ export class EditProductsComponent implements OnInit {
     this.clear();
   }
 
-  deleteProduct(){
+  deleteImage(){
     this.productsDeletedList.push(this.imageToDelete.id); 
+    this.imagesDeletedList.push(this.imageToDelete.photos);
     let position = this.editableProduct.images.indexOf(this.imageToDelete);
     this.editableProduct.images.splice(position, 1);
   }
@@ -164,22 +175,24 @@ export class EditProductsComponent implements OnInit {
     formData.append('image', this.file, this.file.name);
 
     this.productsStorageUserService.uploadImage(formData)
-      .subscribe(resp => {        
+      .subscribe(resp => {  
+        if(resp.success === true) {   
         let image_added = new Image();
         image_added.order = this.orderImage;
         image_added.title = this.titleImage;
-        image_added.photos = resp;
+        image_added.photos = resp.reason;
         this.editableProduct.images.push(image_added);
       
-        this.clearImage();   
-        
+        this.clearImage();
+        this.close();   
+      }
       },(error: any) => {
         if(error.status >= 200 && error.status <= 299)
         {
           let image_added = new Image();
           image_added.order = this.orderImage;
           image_added.title = this.titleImage;
-          image_added.photos = error.message;
+          image_added.photos = error.error.text;
           this.editableProduct.images.push(image_added);
         }
         else if(error.error.message.includes('Maximum upload size exceeded')){        

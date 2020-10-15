@@ -22,39 +22,20 @@
           </div>
           <div class="card-body">
             <div class="uploader">
-              <input class="inputbotton" type="file" name="img">
+              <input class="inputbotton" type="file" name="uploadImage" #file accept='image/*' (change)="preview(file.files)">
+              <span style="color:red;" *ngIf="message">{{message}}</span>
               <span class="filename" style="user-select: none;">Archivo no cargado</span>
               <span class="actionimage" style="user-select: none;">+</span>
             </div>
-
-              <div class="row no-gutters align-items-center imagecontainer">
-                <div class="col mr-2">
-                  <a href="#" class="thumbnail">
-                    <img src="http://placehold.it/200x100" alt="">
+              <div class="row">
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-4 col-md-6 mb-4 imagecontainer" *ngFor="let image of imagesList">
+                  <a href="javascript:void(0);" class="thumbnail" (click)="deleteImage(image)">
+                    <img [src]="image" height="150" width="150">
                   </a>
-                </div>
-                <div class="col mr-2">
-                    <a href="#" class="thumbnail">
-                      <img src="http://placehold.it/200x100" alt="">
-                    </a>
-                </div>
-            </div>
-
-            <div class="row no-gutters align-items-center">
-              <div class="col mr-2">
-                  <a href="#" class="thumbnail">
-                    <img src="http://placehold.it/200x100" alt="">
-                  </a>
-              </div>
-              <div class="col mr-2">
-                  <a href="#" class="thumbnail">
-                    <img src="http://placehold.it/200x100" alt="">
-                 </a>
+                </div>  
               </div>
           </div>
-
-          </div>
-        </div>
 
       </div>
     </div>
