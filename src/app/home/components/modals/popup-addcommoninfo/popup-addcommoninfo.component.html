@@ -9,7 +9,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Redactar descripción</h6>
           </div>
           <div class="card-body">
-            <textarea class="cardtextarea" placeholder="Descripción" rows="6"></textarea>
+            <textarea class="cardtextarea" placeholder="Descripción" name="description" id="description" rows="6" (ngModel)="description"></textarea>
           </div>
         </div>
       </div>
@@ -44,7 +44,7 @@
 <div mat-dialog-actions>
   <div class="row d-block" style="margin-left: 80%;">
     <div class="col-4 float-sm-left">
-      <button type="button" class="btn btn-primary">Salvar</button>
+      <button type="button" class="btn btn-primary" >Salvar</button>
     </div>
     <div class="col-4 float-sm-left" style="margin-left: 7%;">
       <button type="button" class="btn btn-secondary">Cancelar</button>

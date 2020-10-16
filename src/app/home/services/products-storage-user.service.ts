@@ -8,6 +8,7 @@ import { SelectedProducResponse } from '../../models/selected.products.response'
 import { MarketplaceDetails } from '../../models/marketplace.details';
 import { PageProductMeliStorage } from '../../models/page.myproduct.custom.model';
 import { EditableProductModel } from '../../models/editable.product.model';
+import { Image } from 'src/app/models/image.model';
 
 
 @Injectable({
@@ -80,6 +81,11 @@ export class ProductsStorageUserService {
     return this.http.post<any>(params, formData);
   }
 
+  uploadImageList(formDataList: FormData): Observable<any>{
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-filelist`;
+    return this.http.post<any>(params, formDataList);
+  }
+
   deleteImages(imageToDelete: string[]): Observable<any>{
     let finalImageList = [];
     imageToDelete.forEach(element => {
@@ -88,6 +94,23 @@ export class ProductsStorageUserService {
  });
     const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file-delete/${finalImageList}`;
     return this.http.delete<any>(params);
+  }
+
+  updateCommonInfo(idProfile: number, description: string, productIdList: string[], imageToAddList: string[]): Observable<any>{
+    let string_profile = idProfile.toString();
+    let encodeProfile = btoa(string_profile);
+    let imageListToSend = [];
+
+    imageToAddList.forEach(element =>{
+      if(element.length !== 0){
+        let ima = new Image();
+        ima.photos = element;
+        imageListToSend.push(ima);
+      }
+    })
+
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${productIdList}`;
+    return this.http.put<any>(params, imageListToSend);
   }
   
 }

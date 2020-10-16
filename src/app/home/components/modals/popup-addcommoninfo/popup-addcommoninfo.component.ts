@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-
+import { Component, OnInit, Input } from '@angular/core';
 @Component({
   selector: 'app-popup-addcommoninfo',
   templateUrl: './popup-addcommoninfo.component.html',
@@ -7,22 +6,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PopupAddcommoninfoComponent implements OnInit {
 
+  
+
   message: string;
   file: any;
   imagePath: string;
   imgURL: any;
   imagesList: string[];
   
-  current: number;
-  next: number;
-  newContainer = false;
+  description = "";
 
   constructor() { }
 
   ngOnInit(): void {
-    this.imagesList = [];
-    this.current = -1;
-    this.next = 0;
+    this.imagesList = [];   
   }
 
   /* ************* Subir Imagenes ********** */
@@ -61,6 +58,9 @@ export class PopupAddcommoninfoComponent implements OnInit {
       }
     })
   }
-  
+
+  saveImageList(){
+
+  }
 
 }
