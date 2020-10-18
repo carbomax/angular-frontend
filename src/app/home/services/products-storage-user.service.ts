@@ -20,9 +20,11 @@ export class ProductsStorageUserService {
   URI_PRODUCTS_ACTIONS = '/products/api'; 
   URI_UPLOAD_ACTIONS = '/upload/api';  
   pageProductsMeli: PageProductMeliStorage;
+  list: any[];
 
   constructor(private http: HttpClient) { 
     this.pageProductsMeli = new PageProductMeliStorage();
+    this.list = [];
   }
 
   storeMyProducts(idProfile: number, marketplace: Number, products: any[]): Observable<SelectedProducResponse>{    
@@ -81,11 +83,16 @@ export class ProductsStorageUserService {
     return this.http.post<any>(params, formData);
   }
 
-  uploadImageList(formDataList: FormData): Observable<any>{
-    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-filelist`;
-    return this.http.post<any>(params, formDataList);
+  uploadImageSyn(formData: FormData[]): any{
+    formData.forEach(element => {
+      const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+      this.http.post<any>(params, element).subscribe(resp =>{
+        this.list.push(resp.success);
+      });
+    });
+    
   }
-
+ 
   deleteImages(imageToDelete: string[]): Observable<any>{
     let finalImageList = [];
     imageToDelete.forEach(element => {

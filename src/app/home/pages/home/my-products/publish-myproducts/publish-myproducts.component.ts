@@ -47,6 +47,7 @@ export class PublishMyproductsComponent implements OnInit {
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
+  disabled = false;
   
   //security
   profileId: number;
@@ -167,7 +168,11 @@ export class PublishMyproductsComponent implements OnInit {
 
       }
     });
-
+    if(this.checkAll === false){
+      this.disable = true;
+    }else{
+      this.disable = false;
+    }
   }
 
   selectProduct(product: ProductCustom): void{
@@ -183,6 +188,11 @@ export class PublishMyproductsComponent implements OnInit {
       if(product.selected === false){
         this.productsSelected.splice(position, 1);
       }
+    }
+    if(product.selected === false){
+      this.disable = true;      
+    }else{
+      this.disable = false;
     }
   }
 
@@ -279,7 +289,7 @@ export class PublishMyproductsComponent implements OnInit {
   saveCommonInfo(){
     this.imageFailsList = [];
     this.imageStoreList = [];
-    let result = this.addImageList();
+    var result = this.addImageList();
 
     if(result){
       let skuProductList = [];
@@ -399,43 +409,56 @@ export class PublishMyproductsComponent implements OnInit {
           return false;
         }
       })
-    }
+    }        
+let list = [];
+    this.fileList.forEach(element => {     
+      var formData: FormData = new FormData();   
+      formData.append('image', element, element.name); 
+      list.push(formData);          
+  })
 
-    this.fileList.forEach(element => { 
-      const formData: FormData = new FormData();     
-      formData.append('image', element, element.name);
-     
-      this.productStoreUserService.uploadImage(formData).subscribe(resp => {
-         if(resp.success){
-           this.imageStoreList.push(resp.reason);
-         }                      
-      },(error: any) => {
-        if(error.error.message.includes('Maximum upload size exceeded')){   
-           this.imageFailsList.push(element.name);
+  this.productStoreUserService.uploadImageSyn(list);/*.subscribe(resp => {
+    if(resp.success){
+      this.imageStoreList.push(resp.reason);
+    }else{
+      this.imageFailsList.push(element.name);
+    }                    
+  },(error: any) => {
+    this.imageFailsList.push(element.name);
+  });  */
+    
+    /*.subscribe(resp => {
+        if(resp.success){
+          this.imageStoreList.push(resp.reason);
+        }                      
+    },(error: any) => {
+      if(error.error.message.includes('Maximum upload size exceeded')){   
+          //this.imageFailsList.push(element.name);
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error`,
+        text: 'La imagen {{element.name}} excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+        showConfirmButton: false,
+        timer: 5000
+      });        
+      }else{
+      /*  this.imageFailsList.push(element.name);
         Swal.fire({
           position: 'top-end',
           icon: 'error',
           title: `Error`,
-          text: 'La imagen {{element.name}} excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          text: 'Error almacenando la imagen {{element.name}}. Contacte con el administrador',
           showConfirmButton: false,
           timer: 5000
-        });        
-        }else{
-          this.imageFailsList.push(element.name);
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: `Error`,
-            text: 'Error almacenando la imagen {{element.name}}. Contacte con el administrador',
-            showConfirmButton: false,
-            timer: 5000
-          });          
-        }              
-      });
+        });     */     
+   /*   }              
+    });*/
       
-    }); 
-    if(this.imageStoreList.length > 0)
-    return true;   
+    if(this.imageStoreList.length > 0){
+      return true;
+    }
+       
   }
 
   clearAllImage(){
