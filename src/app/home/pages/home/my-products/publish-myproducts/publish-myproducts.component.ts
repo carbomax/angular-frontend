@@ -47,7 +47,7 @@ export class PublishMyproductsComponent implements OnInit {
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
-  disabled = false;
+  disable: boolean;
   
   //security
   profileId: number;
@@ -124,6 +124,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.imagesList = [];   
     this.fileList = [];
     this.productsSelected = []; 
+    this.disable = true;
 
     if(this.authService.isAuthenticated)
     { 
@@ -169,9 +170,9 @@ export class PublishMyproductsComponent implements OnInit {
       }
     });
     if(this.checkAll === false){
-      this.disabled = true;
+      this.disable = true;
     }else{
-      this.disabled = false;
+      this.disable = false;
     }
   }
 
@@ -190,9 +191,9 @@ export class PublishMyproductsComponent implements OnInit {
       }
     }
     if(product.selected === false){
-      this.disabled = true;      
+      this.disable = true;      
     }else{
-      this.disabled = false;
+      this.disable = false;
     }
   }
 
