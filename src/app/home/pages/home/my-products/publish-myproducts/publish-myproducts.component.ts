@@ -169,9 +169,9 @@ export class PublishMyproductsComponent implements OnInit {
       }
     });
     if(this.checkAll === false){
-      this.disable = true;
+      this.disabled = true;
     }else{
-      this.disable = false;
+      this.disabled = false;
     }
   }
 
@@ -190,9 +190,9 @@ export class PublishMyproductsComponent implements OnInit {
       }
     }
     if(product.selected === false){
-      this.disable = true;      
+      this.disabled = true;      
     }else{
-      this.disable = false;
+      this.disabled = false;
     }
   }
 
