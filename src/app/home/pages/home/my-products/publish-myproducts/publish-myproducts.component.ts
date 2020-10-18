@@ -47,7 +47,7 @@ export class PublishMyproductsComponent implements OnInit {
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
-  disable: boolean;
+  disable: boolean = true;
   
   //security
   profileId: number;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductStore } from '../../../../../models/product.store';
@@ -23,6 +23,7 @@ import { ParsedPropertyType } from '@angular/compiler';
   styleUrls: ['./products-store.component.css']
 })
 export class ProductsStoreComponent implements OnInit {
+  @ViewChild('closeModal') closeModal;
 
   public loading = true;
   public loadPaginator = false;
@@ -47,6 +48,9 @@ export class ProductsStoreComponent implements OnInit {
 
   //Security
   idProfile: number;
+
+  //Loading Modal
+  loadingModal = false;
 
   // Paginator
   currentPage = 1;
@@ -189,9 +193,15 @@ export class ProductsStoreComponent implements OnInit {
       });
 
   }
+  //Cierra un modal
+  close(){
+    this.closeModal.nativeElement.click();
+  }
 
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
+    this.loadingModal = true;
+    this.close();
     if(this.authService.isAuthenticated)
     {
       this.idProfile = this.authService.authenticationDataExtrac().profileId;
@@ -209,6 +219,8 @@ export class ProductsStoreComponent implements OnInit {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
+              this.loadingModal = false;
+              this.close();
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -221,6 +233,8 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = element + ", " + exists_products;
               });
+              this.loadingModal = false;
+              this.close();
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -234,6 +248,8 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = exists_products + ", " + element;
               });
+              this.loadingModal = false;
+              this.close();
               Swal.fire({
                 position: 'top-end',
                 icon: 'warning',
@@ -245,6 +261,8 @@ export class ProductsStoreComponent implements OnInit {
             }
           })
         } else {
+          this.loadingModal = false;
+          this.close();
           Swal.fire({
             position: 'top-end',
             title: 'Error en lista',
@@ -259,6 +277,8 @@ export class ProductsStoreComponent implements OnInit {
 
     }
     else{
+      this.loadingModal = false;
+      this.close();
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
