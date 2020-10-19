@@ -300,9 +300,27 @@ export class PublishMyproductsComponent implements OnInit {
   saveCommonInfo(){
     this.imageFailsList = [];
     this.imageStoreList = [];
-    var result = this.addImageList();
+   // var result = this.addImageList();
+  /*  for(let i = 0; i < this.fileList.length; i++){
+      let formData: FormData = new FormData(); 
+      formData.append('image',  this.fileList[i], this.fileList[i].name);
+      this.productStoreUserService.uploadImageSyn(formData).then(data => {
+        console.log(data)
+        this.imageStoreList.push(data.reason); 
+      });
+      //this.imageStoreList.push(resp.reason); 
+    } */
+    for(let i = 0; i < this.fileList.length; i++){
+      let formData: FormData = new FormData(); 
+      formData.append('image',  this.fileList[i], this.fileList[i].name);
+      this.productStoreUserService.uploadImage(formData).subscribe(data => {
+        console.log(data)
+        this.imageStoreList.push(data.reason); 
+      });
+      
+    } 
 
-    if(result){
+    if(true){
       let skuProductList = [];
       this.profileId = null;    
       this.profileId = this.authService.authenticationDataExtrac().profileId; 
@@ -419,24 +437,25 @@ export class PublishMyproductsComponent implements OnInit {
           return false;
         }
       })
-    }        
-let list = [];
-    this.fileList.forEach(element => {     
-      var formData: FormData = new FormData();   
-      formData.append('image', element, element.name); 
-      list.push(formData);          
-  })
+    }   
 
-  this.productStoreUserService.uploadImageSyn(list);/*.subscribe(resp => {
-    if(resp.success){
-      this.imageStoreList.push(resp.reason);
-    }else{
+
+for(let i = 0; i < this.fileList.length; i++){
+  let formData: FormData = new FormData(); 
+  formData.append('image',  this.fileList[i], this.fileList[i].name);
+  this.productStoreUserService.uploadImageSyn(formData).then(data => {
+    console.log('First Promise resolved.')
+    this.imageStoreList.push(data.reason); 
+  });
+  //this.imageStoreList.push(resp.reason); 
+}    
+      
+  /*else{
       this.imageFailsList.push(element.name);
     }                    
   },(error: any) => {
-    this.imageFailsList.push(element.name);
-  });  */
-    
+    this.imageFailsList.push(element.name);*/
+  
     /*.subscribe(resp => {
         if(resp.success){
           this.imageStoreList.push(resp.reason);
@@ -465,9 +484,9 @@ let list = [];
    /*   }              
     });*/
       
-    if(this.imageStoreList.length > 0){
+  /*  if(this.imageStoreList.length > 0){
       return true;
-    }
+    }*/
        
   }
 

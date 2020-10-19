@@ -83,14 +83,10 @@ export class ProductsStorageUserService {
     return this.http.post<any>(params, formData);
   }
 
-  uploadImageSyn(formData: FormData[]): any{
-    formData.forEach(element => {
-      const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
-      this.http.post<any>(params, element).subscribe(resp =>{
-        this.list.push(resp.success);
-      });
-    });
-    
+  async uploadImageSyn(formData: FormData){
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;   
+    let result = await this.http.post<any>(params, formData).toPromise();     
+    return result;
   }
  
   deleteImages(imageToDelete: string[]): Observable<any>{
