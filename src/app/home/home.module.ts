@@ -28,6 +28,7 @@ import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe'
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { MarginTypesPipe } from './pipes/margin-types.pipe';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
+import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 
 
 
@@ -49,7 +50,8 @@ import { UserAdminComponent } from './pages/home/user-admin/user-admin.component
     NotImageProfilePipe,
     ListMarginsComponent,
     MarginTypesPipe,
-    UserAdminComponent],
+    UserAdminComponent,
+    PublishedProductComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -60,6 +62,7 @@ import { UserAdminComponent } from './pages/home/user-admin/user-admin.component
     PublishMyproductsComponent,
     ListMarketplacesComponent,
     PopupAddcommoninfoComponent,
+    PublishedProductComponent,
     UsersComponent,
     NotImagePipe,
     NotImageProfilePipe,

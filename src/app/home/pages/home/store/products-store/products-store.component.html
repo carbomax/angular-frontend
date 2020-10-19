@@ -84,7 +84,7 @@
       <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
       <div class="dropdown no-arrow">
         <a class="dropdown-toggle btn btn-primary" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="false">
+          aria-haspopup="true" aria-expanded="false" [class.disabled]="disabled">
           <i class="fas fa-paper-plane"></i>
           Seleccionar a marketplace
           <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
@@ -109,7 +109,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
                   id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
@@ -128,7 +128,7 @@
             <tr *ngFor="let product of pageProducts.itemsGrid">
               <td>
                 <div class="custom-control custom-checkbox small">
-                  <input type="checkbox" [ngModel]="product.selected" (change)="product.selected = !product.selected"
+                  <input type="checkbox" [ngModel]="product.selected" (change)="selectProduct(product)"
                     class="custom-control-input" [id]="'check' + product.sku">
                   <label class="custom-control-label" [for]="'check' + product.sku"></label>
                 </div>

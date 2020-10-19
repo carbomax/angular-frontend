@@ -83,7 +83,7 @@
         <h6 class="m-0 font-weight-bold text-primary">Listado de productos</h6>
         <div class="dropdown no-arrow">
           <a class="dropdown-toggle btn btn-primary" href="javascript:void(0);" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-            aria-haspopup="true" aria-expanded="false" [disabled]="disable">
+            aria-haspopup="true" aria-expanded="false" [class.disabled]="disable">
             <i class="fas fa-mouse-pointer"></i>
             Seleccionar Acción
             <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
@@ -108,7 +108,7 @@
             <tr>
               <th>
                 <div class="custom-control custom-checkbox ">
-                  <input type="checkbox" ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
+                  <input type="checkbox" #checkAllP ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
                     id="customCheck">
                   <label class="custom-control-label" for="customCheck"></label>
                 </div>

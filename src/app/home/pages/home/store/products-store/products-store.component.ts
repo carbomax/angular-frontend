@@ -24,8 +24,9 @@ import { ParsedPropertyType } from '@angular/compiler';
 })
 export class ProductsStoreComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
-
-  public loading = true;
+  @ViewChild('checkAllP') checkAllP;
+  
+  public loading = false;
   public loadPaginator = false;
   public loadingClear = false;
   public errorProducts = false;
@@ -45,12 +46,16 @@ export class ProductsStoreComponent implements OnInit {
   pageProducts = new PageProductStorage();
   marketplaces: Marketplace[] = [];
   selectedProductR = new SelectedProducResponse();
+  productsSelected: string[];
+  
+  //Para el boton Seleccionar Marketplace
+  disabled = true;
 
   //Security
   idProfile: number;
 
   //Loading Modal
-  loadingModal = false;
+  loadingModal = false;  
 
   // Paginator
   currentPage = 1;
@@ -102,22 +107,41 @@ export class ProductsStoreComponent implements OnInit {
     this.loadProductsPaginator(1);
   }
 
-  loadProductsPaginator(page?: number): void {
+  loadProductsPaginator(page?: number): void {   
     this.loadPaginator = true;
     this.productStoreService.
       getPageProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
-        this.loadPaginator = false;
+        var countSelected = 0;        
+        this.pageProducts.itemsGrid.forEach(element => {
+          this.productsSelected.forEach(select => {
+            if(element.sku === select){
+              element.selected = true;
+              countSelected++;
+            }
+          });          
+        });    
+        if(countSelected === this.size){
+          this.checkAll = true;
+          this.checkAllP.nativeElement.checked = 1;
+        }
+        else{
+          this.checkAll = false;
+          this.checkAllP.nativeElement.checked = 0;
+        } 
+        this.loadPaginator = false; 
       }, error => {
         this.loading = false;
         this.errorProducts = true;
         this.loadPaginator = false;
-      });
+      });      
   }
 
   ngOnInit(): void {
+    this.productsSelected = []; 
+    this.disabled = true;
     this.loading = true;
     this.errorProducts = false;
     this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
@@ -141,8 +165,46 @@ export class ProductsStoreComponent implements OnInit {
 
     this.pageProducts.itemsGrid.forEach(element => {
       element.selected = this.checkAll;
+      if(element.selected === true) {
+        let position1 = this.productsSelected.indexOf(element.sku);
+        if(position1 === -1){
+          this.productsSelected.push(element.sku);
+        }
+      }
+      else{
+        let position = this.productsSelected.indexOf(element.sku);
+        if(position !== -1){
+          this.productsSelected.splice(position, 1);
+        }
+      }
     });
+    if(this.productsSelected.length === 0){
+      this.disabled = true;
+    }else{
+      this.disabled = false;
+    }
 
+  }
+
+  selectProduct(product: ProductStore): void{
+    let position = this.productsSelected.indexOf(product.sku);
+    if(position === -1){
+      product.selected = !product.selected;
+      if(product.selected === true) { 
+        this.productsSelected.push(product.sku);     
+      } 
+    }
+    else{
+      product.selected = !product.selected;      
+      if(product.selected === false){
+        this.productsSelected.splice(position, 1);
+      }
+    }
+    if(this.productsSelected.length === 0){
+      this.disabled = true;      
+    }else{
+      this.disabled = false;
+    }
   }
 
   searchProducts(): void {
@@ -200,22 +262,15 @@ export class ProductsStoreComponent implements OnInit {
 
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
-    this.loadingModal = true;
-    this.close();
+    this.loadingModal = true;   
     if(this.authService.isAuthenticated)
     {
       this.idProfile = this.authService.authenticationDataExtrac().profileId;
 
       if (idMarket != null) {
-        let exists_products = "";
-        let productList = [];
-        this.pageProducts.itemsGrid.forEach(element => {
-          if (element.selected === true) {
-            productList.push(element.sku);
-          }
-        });
-        if (productList.length != 0) {
-          this.productsStorageUserService.storeMyProducts(this.idProfile, idMarket, productList).subscribe(resp => {
+        let exists_products = "";    
+        if (this.productsSelected.length != 0) {
+          this.productsStorageUserService.storeMyProducts(this.idProfile, idMarket, this.productsSelected).subscribe(resp => {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
@@ -288,9 +343,6 @@ export class ProductsStoreComponent implements OnInit {
         timer: 5000
       });
     }
-      
-  
-
  
   }
 }

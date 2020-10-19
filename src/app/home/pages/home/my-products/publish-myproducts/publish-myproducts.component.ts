@@ -26,6 +26,7 @@ declare function initializePlugin();
 export class PublishMyproductsComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal;
+  @ViewChild('checkAllP') checkAllP;
 
   public loading = true;
   public loadPaginator = false;
@@ -46,7 +47,7 @@ export class PublishMyproductsComponent implements OnInit {
   productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
-  productsSelected: ProductCustom[];
+  productsSelected: string[];
   disable: boolean = true;
   
   //security
@@ -111,7 +112,24 @@ export class PublishMyproductsComponent implements OnInit {
           this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;   
-          this.totalPages =  +this.pageProductsMeli.totalPages;        
+          //this.totalPages =  +this.pageProductsMeli.totalPages;           
+          var countSelected = 0;
+          this.pageProductsMeli.itemsMeliGrid.forEach(element => {
+            this.productsSelected.forEach(select => {
+              if(element.sku === select){
+                element.selected = true;
+                countSelected++;
+              }
+            });          
+          }); 
+          if(countSelected === this.size){
+            this.checkAll = true;
+            this.checkAllP.nativeElement.checked = 1;
+          }
+          else{
+            this.checkAll = false;
+            this.checkAllP.nativeElement.checked = 0;
+          } 
           this.loadPaginator = false;
         }, error => {
           this.loading = false;
@@ -156,20 +174,19 @@ export class PublishMyproductsComponent implements OnInit {
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       element.selected = this.checkAll;
       if(element.selected === true) {
-        let position1 = this.productsSelected.indexOf(element);
+        let position1 = this.productsSelected.indexOf(element.sku);
         if(position1 === -1){
-          this.productsSelected.push(element);
+          this.productsSelected.push(element.sku);
         }
       }
       else{
-        let position = this.productsSelected.indexOf(element);
+        let position = this.productsSelected.indexOf(element.sku);
         if(position !== -1){
           this.productsSelected.splice(position, 1);
         }
-
       }
     });
-    if(this.checkAll === false){
+    if(this.productsSelected.length === 0){
       this.disable = true;
     }else{
       this.disable = false;
@@ -177,11 +194,11 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   selectProduct(product: ProductCustom): void{
-    let position = this.productsSelected.indexOf(product);
+    let position = this.productsSelected.indexOf(product.sku);
     if(position === -1){
       product.selected = !product.selected;
       if(product.selected === true) { 
-        this.productsSelected.push(product);     
+        this.productsSelected.push(product.sku);     
       } 
     }
     else{
@@ -190,7 +207,7 @@ export class PublishMyproductsComponent implements OnInit {
         this.productsSelected.splice(position, 1);
       }
     }
-    if(product.selected === false){
+    if(this.productsSelected.length === 0){
       this.disable = true;      
     }else{
       this.disable = false;
@@ -278,14 +295,7 @@ export class PublishMyproductsComponent implements OnInit {
                 this.saveNewCourse(data);
       }, error => this.logService.print(error, LogService.ERROR_MSG));
   }
-*/
-  getProductSelected(): void{
-    this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-      if(element.selected === true){
-        this.productsSelected.push(element);
-      }
-    });
-  }
+*/ 
 
   saveCommonInfo(){
     this.imageFailsList = [];
@@ -295,11 +305,9 @@ export class PublishMyproductsComponent implements OnInit {
     if(result){
       let skuProductList = [];
       this.profileId = null;    
-      this.profileId = this.authService.authenticationDataExtrac().profileId;
-      this.productsSelected.forEach(element => {
-        skuProductList.push(element.sku);
-      });
-      this.productStoreUserService.updateCommonInfo(this.profileId, this.description, skuProductList, this.imageStoreList).subscribe(result => {
+      this.profileId = this.authService.authenticationDataExtrac().profileId; 
+      if(this.productsSelected.length !== 0){ 
+       this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
         if(result.success === true){
           Swal.fire({
             position: 'top-end',
@@ -332,6 +340,7 @@ export class PublishMyproductsComponent implements OnInit {
           timer: 5000
         });
       }); 
+      }
     }
     else{
       Swal.fire({

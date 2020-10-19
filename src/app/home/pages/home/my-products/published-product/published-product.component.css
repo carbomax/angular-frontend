@@ -1,0 +1,14 @@
+.syncUpSelected{margin-right: 2px;}
+.actionbox{
+    width: 2em !important;
+    height: 2em !important;
+  }
+  .actionboxicon{
+    text-align: start;
+}
+.dropdown-item:hover{
+  background-color: #0e41db54;
+}
+.dropdown-item{
+  padding-left: 2%;
+}

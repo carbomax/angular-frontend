@@ -12,6 +12,9 @@ import { Image } from '../../../../../models/image.model';
 })
 export class EditProductsComponent implements OnInit {  
   @ViewChild('closeModal') closeModal;
+  @ViewChild('closeModalLoading') closeModalLoading;
+ //Loading Modal
+ loadingModal = false; 
 
   productsDeletedList: number[];
   imagesDeletedList: string[];
@@ -34,6 +37,7 @@ export class EditProductsComponent implements OnInit {
   constructor(private _router: ActivatedRoute, public productsStorageUserService: ProductsStorageUserService ) { }
 
   ngOnInit(): void {
+    this.loadingModal = false;
     this.getCustomProduct();
     this.productsDeletedList = [];    
     this.imagesDeletedList = [];
@@ -46,9 +50,12 @@ export class EditProductsComponent implements OnInit {
   }
 
   saveForm(){
+    this.loadingModal = true; 
     this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
       this.editableProduct = item;
       this.productsDeletedList = [];
+      this.loadingModal = false;       
+      this.close();
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -65,6 +72,8 @@ export class EditProductsComponent implements OnInit {
     }
       
     },(error: any) => {
+      this.loadingModal = false;      
+      this.close();
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -228,9 +237,9 @@ export class EditProductsComponent implements OnInit {
     this.file = null;    
   }
 
-
   close(){
     this.closeModal.nativeElement.click();
+    this.closeModalLoading.nativeElement.click();
   }
 
 }
