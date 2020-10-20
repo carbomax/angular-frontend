@@ -109,7 +109,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" (click)="selectAllProducts()" class="custom-control-input"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()" class="custom-control-input"
                   id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>

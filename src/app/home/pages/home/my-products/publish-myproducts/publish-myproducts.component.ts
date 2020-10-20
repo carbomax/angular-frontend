@@ -26,7 +26,11 @@ declare function initializePlugin();
 export class PublishMyproductsComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal;
+  @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('checkAllP') checkAllP;
+
+  //Loading Modal
+  loadingModal = false; 
 
   public loading = true;
   public loadPaginator = false;
@@ -85,8 +89,7 @@ export class PublishMyproductsComponent implements OnInit {
   imagePath: string;
   imgURL: any;
   imagesList: string[];
-  imageStoreList: string[];
-  imageFailsList: string[];
+  imageStoreList: string[];  
   description = "";
 
 
@@ -139,10 +142,13 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   ngOnInit(): void { 
+    this.loadingModal = false;
     this.imagesList = [];   
     this.fileList = [];
     this.productsSelected = []; 
     this.disable = true;
+    this.imageStoreList = [];
+    
 
     if(this.authService.isAuthenticated)
     { 
@@ -276,69 +282,51 @@ export class PublishMyproductsComponent implements OnInit {
 
   }
 
-
-  /* ******************************* Here begin the Component Modal to Publish Products ****************************** */
- /*
-  openDialog() {
-
-
-
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(PopupAddcommoninfoComponent, dialogConfig);
-
-    dialogRef.afterClosed().subscribe(
-      data => {
-                this.saveNewCourse(data);
-      }, error => this.logService.print(error, LogService.ERROR_MSG));
-  }
-*/ 
-
   saveCommonInfo(){
-    this.imageFailsList = [];
-    this.imageStoreList = [];
-   // var result = this.addImageList();
-  /*  for(let i = 0; i < this.fileList.length; i++){
-      let formData: FormData = new FormData(); 
-      formData.append('image',  this.fileList[i], this.fileList[i].name);
-      this.productStoreUserService.uploadImageSyn(formData).then(data => {
-        console.log(data)
-        this.imageStoreList.push(data.reason); 
+    this.loadingModal = true;
+    this.imageStoreList = []; 
+    if(this.productsSelected.length === 0)
+    {            
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error en el proceso`,
+        text: `Usted no ha seleccionado productos en la tabla`,
+        showConfirmButton: false,
+        timer: 5000
       });
-      //this.imageStoreList.push(resp.reason); 
-    } */
-    for(let i = 0; i < this.fileList.length; i++){
-      let formData: FormData = new FormData(); 
-      formData.append('image',  this.fileList[i], this.fileList[i].name);
-      this.productStoreUserService.uploadImage(formData).subscribe(data => {
-        console.log(data)
-        this.imageStoreList.push(data.reason); 
-      });
-      
+      this.closeActiveModalLoading();
+      return;
     } 
 
-    if(true){
-      let skuProductList = [];
-      this.profileId = null;    
-      this.profileId = this.authService.authenticationDataExtrac().profileId; 
-      if(this.productsSelected.length !== 0){ 
-       this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
-        if(result.success === true){
+    if ( this.fileList.length !== 0) {  
+      this.fileList.forEach(ima =>{
+        if (ima.type.match(/image\/*/) === null) {
+          this.close();
           Swal.fire({
             position: 'top-end',
-            icon: 'success',
-            title: `Información almacenada`,
-            text: `La información fue almacenada correctamente`,
+            icon: 'error',
+            title: `Solo imagenes`,
+            text: 'Existen archivos que no son una imagen',
             showConfirmButton: false,
             timer: 5000
-          });
-          this.clearAllImage();
-          this.closeModal();
+          });   
+          this.closeActiveModalLoading();  
+          return;
+        }
+      })
+    }    
+    
+   if(this.fileList.length !== 0)
+   { 
+    this.productStoreUserService.uploadImageSyn(this.fileList).then(data => {     
+      let resultList = data;
+      resultList.forEach(element => {
+        if(element.success === true){
+          this.imageStoreList.push(element.reason);
         }
         else{
+          this.closeActiveModalLoading();    
           Swal.fire({
             position: 'top-end',
             icon: 'error',
@@ -347,29 +335,100 @@ export class PublishMyproductsComponent implements OnInit {
             showConfirmButton: false,
             timer: 5000
           });
-        }
-      }, error => {
+        }       
+      });
+      if(resultList.length === this.imageStoreList.length){
+        this.updateInDataBaseCommonInfo();             
+      }else{
+        this.closeActiveModalLoading();    
         Swal.fire({
           position: 'top-end',
           icon: 'error',
           title: `Error en el proceso`,
-          text: `Error almacenando su información. Contacte con el administrador del sistema`,
+          text: `Error almacenando imágenes. Contacte con el administrador`,
+          showConfirmButton: false,
+          timer: 5000
+        });        
+       }
+    },error => {
+      this.closeActiveModalLoading(); 
+      if(error.error.message.includes('Maximum upload size exceeded')){
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: 'Su imagen excede el tamaño máximo permitido de 2MB (Mega Byte).',
           showConfirmButton: false,
           timer: 5000
         });
-      }); 
+      }else{      
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+          showConfirmButton: false,
+          timer: 5000
+        })
       }
+    });
+   }else if(this.description.length !== 0){
+      this.updateInDataBaseCommonInfo();
     }
-    else{
+    else{         
       Swal.fire({
         position: 'top-end',
         icon: 'error',
         title: `Error en el proceso`,
-        text: `Error almacenando su información. Contacte con el administrador del sistema`,
+        text: `Usted no ha adicionado nueva información.`,
         showConfirmButton: false,
         timer: 5000
       });
+      this.closeActiveModalLoading();
+      return;
     }
+  }
+
+  updateInDataBaseCommonInfo(){
+    this.profileId = null;    
+    this.profileId = this.authService.authenticationDataExtrac().profileId; 
+
+    this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
+      if(result.success === true){   
+        this.closeActiveModalLoading();            
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Información almacenada`,
+            text: `La información fue almacenada correctamente`,
+            showConfirmButton: false,
+            timer: 5000
+          });
+         this.clearAllImage();
+         this.close();           
+      }
+      else{
+        this.closeActiveModalLoading();    
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+      }
+    },error => {
+      this.closeActiveModalLoading();    
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error en el proceso`,
+        text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+    }) 
   }
 
   /* ************* Modal View Upload Images ********** */
@@ -438,55 +497,8 @@ export class PublishMyproductsComponent implements OnInit {
         }
       })
     }   
-
-
-for(let i = 0; i < this.fileList.length; i++){
-  let formData: FormData = new FormData(); 
-  formData.append('image',  this.fileList[i], this.fileList[i].name);
-  this.productStoreUserService.uploadImageSyn(formData).then(data => {
-    console.log('First Promise resolved.')
-    this.imageStoreList.push(data.reason); 
-  });
-  //this.imageStoreList.push(resp.reason); 
-}    
-      
-  /*else{
-      this.imageFailsList.push(element.name);
-    }                    
-  },(error: any) => {
-    this.imageFailsList.push(element.name);*/
-  
-    /*.subscribe(resp => {
-        if(resp.success){
-          this.imageStoreList.push(resp.reason);
-        }                      
-    },(error: any) => {
-      if(error.error.message.includes('Maximum upload size exceeded')){   
-          //this.imageFailsList.push(element.name);
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: `Error`,
-        text: 'La imagen {{element.name}} excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
-        showConfirmButton: false,
-        timer: 5000
-      });        
-      }else{
-      /*  this.imageFailsList.push(element.name);
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: `Error`,
-          text: 'Error almacenando la imagen {{element.name}}. Contacte con el administrador',
-          showConfirmButton: false,
-          timer: 5000
-        });     */     
-   /*   }              
-    });*/
-      
-  /*  if(this.imageStoreList.length > 0){
-      return true;
-    }*/
+ 
+ 
        
   }
 
@@ -500,6 +512,13 @@ for(let i = 0; i < this.fileList.length; i++){
 
   close(){
     this.closeModal.nativeElement.click();
+    this.closeModalLoading.nativeElement.click();
+  }
+
+  closeActiveModalLoading(){    
+    this.loadingModal = false;
+    this.closeModalLoading.nativeElement.click(); 
+    //this.closeModalLoading.nativeElement.modal('hide');
   }
 
 }

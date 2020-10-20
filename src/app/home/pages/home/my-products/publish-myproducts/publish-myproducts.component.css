@@ -47,3 +47,155 @@
 }
 
 /*Para el Modal de Adicionar Info comun*/
+.cardtextarea{
+  width: 100% !important;  
+}
+.cardpopup{
+  width: 25rem !important;
+}
+.card-body{
+  min-height: 10.5em !important;
+}
+.imagecontainer{
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  min-width: max-content !important;  
+}
+.imagecontainer:hover{
+  color: #fff !important;  
+  border-color: #2653d4 !important;
+}
+/*Para el boton de subir imagenes*/
+div.uploader {
+  width: 100%;    
+  box-shadow: none;
+  border: 1px solid #ccc;
+  height: 28px;
+  background: #fff;
+  box-sizing: border-box;    
+}
+.uploader {
+  width: 190px;  
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.inputbotton{
+  width: 100%;
+  box-sizing: border-box;
+  opacity: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  float: right;
+  height: 25px;
+  border: none;
+  cursor: default;
+  line-height: 30px;
+  margin: 0;
+  padding: 0;
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-overflow: ellipsis;
+}
+.filename{
+  user-select: none;
+
+}
+span.filename{
+  border-right: none;
+width: 120px;
+height: 24px;
+margin: 2px 0px 2px 2px;
+line-height: 24px;
+color: #777;
+font-size: 11px;
+padding: 0px 10px;
+float: left;
+display: block;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+cursor: default;
+box-sizing: border-box;
+}
+.actionimage{
+  user-select: none;
+}
+span.actionimage{
+  float: right;
+width: 22px;
+text-align: center;
+height: 22px;
+margin-top: 2px;
+margin-right: 2px;
+margin-bottom: 2px;
+border-radius: 2px;
+background: #549fc4;
+background-size: 100%;
+background-image: -moz-linear-gradient(top, #7ab4d1, #549fc4);
+color: white;
+text-shadow: none;
+font-size: 16px;
+line-height: 20px;
+font-weight: bold;
+padding: 2px 0px;
+overflow: hidden;
+cursor: pointer;
+}
+
+
+/*Efecto eliminar imagen*/
+@import "lesshat";
+
+.div-img img{
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+
+  display:block;
+  margin-left: auto;
+  margin-right: auto;  
+  height: 125px;   
+  width: 95px;
+  transform:scale(1);
+  -ms-transform:scale(1); /* IE 9 */
+  -moz-transform:scale(1); /* Firefox */
+  -webkit-transform:scale(1); /* Safari and Chrome */
+  -o-transform:scale(1); /* Opera */
+  -webkit-transition: all 500ms ease-in-out; /* IE 9*/
+  -moz-transition: all 500ms ease-in-out; /* Firefox*/
+  -ms-transition: all 500ms ease-in-out; /* Safari and Chrome */
+  -o-transition: all 500ms ease-in-out; /* Opera   */    
+}      
+
+.div-img img:hover {
+    opacity: 0.5;
+    transform:scale(0.8);
+    -ms-transform:scale(0.8); /* IE 9 */
+    -moz-transform:scale(0.8); /* Firefox */
+    -webkit-transform:scale(0.8); /* Safari and Chrome */
+    -o-transform:scale(0.8); /* Opera*/      
+    z-index: -1;
+}
+  .div-img:hover {    
+    z-index: 5;    
+}
+  
+
+/*Para el Modal Cargando*/
+.modal-content-loading{
+  width: auto !important;
+}
+
+
+
+
+
+
+
