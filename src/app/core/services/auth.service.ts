@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 
 import { User } from '../../models/user.model';
 import { AuthenticationData } from '../models/authentication.data.models';
+import { MeliAccountService } from 'src/app/home/services/meli-account.service';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,7 @@ export class AuthService {
   clearLocalStorage(): void {
     localStorage.removeItem('token');
     sessionStorage.removeItem('email');
+    localStorage.removeItem('reference');
   }
 
   public jsonParseAtob(data: any): any {

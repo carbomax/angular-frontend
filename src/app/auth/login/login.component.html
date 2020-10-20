@@ -33,12 +33,12 @@
                     </button>
                   </div>
 
-                  <form action="POST" class="user">
+                  <form ngNativeValidate #f="ngForm" (ngSubmit)="login()"  class="user">
                     <div class="form-group">
-                      <input [(ngModel)]="user.email" name="email" type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." autofocus>
+                      <input [(ngModel)]="user.email" name="email" type="email" class="form-control form-control-user" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." autofocus required>
                     </div>
                     <div class="form-group">
-                      <input  [(ngModel)]="user.password" name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password">
+                      <input  [(ngModel)]="user.password" name="password" type="password" class="form-control form-control-user" id="exampleInputPassword" placeholder="Password" required >
                     </div>
                     <div class="form-group">
                       <div class="custom-control custom-checkbox small">
@@ -46,7 +46,7 @@
                         <label class="custom-control-label" for="customCheck">Recuérdame</label>
                       </div>
                     </div>
-                    <button (click)="login()"  class="btn btn-primary btn-user btn-block">
+                    <button type="submit"  class="btn btn-primary btn-user btn-block">
                       <i *ngIf="loading"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> {{loginIntoText}}
                     </button>
                   </form>

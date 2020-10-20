@@ -126,7 +126,7 @@
               <div class="col md-4">
                 <div class="form-group">
                   <ng-select class="mt-md-3" [items]="marketplaces" name="selectedMarketplaces" bindLabel="name"
-                    placeholder="Seleccione marketplace" appendTo="body" multiple="false" required
+                    placeholder="Seleccione marketplace"  [multiple]="false"  appendTo="body" required
                     [(ngModel)]="selectedMarketplaces">
                   </ng-select>
                 </div>
@@ -159,6 +159,7 @@
           </div>
           <div class="modal-footer">
 
+            {{selectedMarketplaces | json}}
             <button *ngIf="register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"
               (click)="createOrUpdateMargin()">Crear</button>
             <button *ngIf="!register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"

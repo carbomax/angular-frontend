@@ -23,6 +23,7 @@
         <thead>
           <tr>
             <th>Nombre</th>
+            <th>Apellidos</th>
             <th>Correo</th>
             <th class="roles-table">Roles</th>
             <th class="roles-table">Marketplaces</th>
@@ -34,6 +35,7 @@
         <tbody>
           <tr *ngFor="let profile of profiles | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
             <td>{{ profile.firstName }}</td>
+            <td>{{ profile.lastName }}</td>
             <td>{{ profile.user.email }}</td>
             <td>
               <div class="d-flex flex-wrap">
@@ -160,22 +162,6 @@
               </div>
             </div>
 
-
-            <div class="row">
-              <div class="col-md-6 col-sm-12">
-                <div class="form-group">
-                  <input type="number" class="form-control" id="inputRut" placeholder="Rut"
-                    aria-describedby="Rut del usuario" name="rut" [(ngModel)]="seletedProfile.rut" required>
-                </div>
-              </div>
-              <div class="col-md-6 col-sm-12">
-                <div class="form-group">
-                  <input type="text" class="form-control" id="inputAddress" placeholder="Dirección"
-                    aria-describedby="Dirección del usuario" name="store" [(ngModel)]="seletedProfile.address" required>
-                </div>
-              </div>
-            </div>
-
             <div class="row">
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
@@ -189,7 +175,7 @@
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                   <ng-select [items]="marketplaces" name="selectedMarketplaces" bindLabel="name"
-                    placeholder="Seleccione marketplace" appendTo="body" multiple="true" required
+                    placeholder="Seleccione marketplace" appendTo="body" multiple="true"
                     [(ngModel)]="selectedMarketplaces">
                   </ng-select>
                 </div>

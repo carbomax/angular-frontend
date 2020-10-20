@@ -15,7 +15,7 @@ export class ListMarginsComponent implements OnInit {
   public selectedMargin: Margin = new Margin();
   public margins: Margin[] = [];
   public marketplaces: Marketplace[] = [];
-  public selectedMarketplaces: Marketplace[] = [];
+  public selectedMarketplaces: Marketplace = new Marketplace();
   // Modal
   public headerCreateModal = 'Crear margen';
   public headerUpdateModal = 'Actualizar margen';
@@ -54,8 +54,10 @@ export class ListMarginsComponent implements OnInit {
   createOrUpdateMargin(): void {
     this.loading = true;
     this.errorMargins = false;
+    console.log(this.selectedMarketplaces)
     if (this.selectedMargin.id) {
       console.log('update')
+      this.selectedMargin.marketplaceId = this.selectedMarketplaces.id;
       this.marginService.updateMargin(this.selectedMargin).subscribe(resp => {
         this.loadMargins();
         Swal.fire({
@@ -91,7 +93,7 @@ export class ListMarginsComponent implements OnInit {
         });
 
       } else {
-        this.selectedMargin.marketplaceId = this.selectedMarketplaces[0].id;
+        this.selectedMargin.marketplaceId = this.selectedMarketplaces.id;
         this.marginService.saveMargin(this.selectedMargin).subscribe(marginResponse => {
           console.log(marginResponse);
           this.loadMargins();
@@ -127,7 +129,7 @@ export class ListMarginsComponent implements OnInit {
 
     Swal.fire({
       title: 'Está seguro?',
-      text: "Usted no podrá revertir esto!",
+      text: 'Usted no podrá revertir esto!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -168,11 +170,17 @@ export class ListMarginsComponent implements OnInit {
 
   createModal(): void {
     this.register = true;
+    this.selectedMarketplaces = null;
     this.initialize();
   }
 
   updateModal(margin: Margin): void {
+    console.log(margin)
     this.selectedMargin = margin;
+    this.selectedMarketplaces = margin.marketplace;
+    console.log(this.selectedMarketplaces)
+
+    //console.log(this.selectedMarketplaces)
     this.register = false;
   }
 
@@ -202,6 +210,7 @@ export class ListMarginsComponent implements OnInit {
       marketplaceId: 0,
       value: 25
     }
+
   }
 
 }

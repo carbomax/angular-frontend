@@ -172,7 +172,7 @@ export class UserAdminComponent implements OnInit {
 
     Swal.fire({
       title: 'Está seguro?',
-      text: 'Usted no podrá revertir esto. Tenga ene cuenta que se eliminaran todas las operaciones de este usuario en el sistema!',
+      text: 'Usted no podrá revertir esto. Tenga en cuenta que se eliminaran todas las operaciones de este usuario en el sistema!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -261,7 +261,7 @@ export class UserAdminComponent implements OnInit {
     this.userService.getRoles().subscribe(rolesResp => {
       this.roles = rolesResp;
       console.log(RoleEnum.INVITED)
-      this.roles = this.roles.filter(m => m.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase());
+      this.roles = this.roles.filter(m => m.name.toLowerCase() !== RoleEnum.SELLER.toLowerCase());
       console.log(this.roles);
     });
 

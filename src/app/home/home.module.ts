@@ -28,6 +28,7 @@ import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe'
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { MarginTypesPipe } from './pipes/margin-types.pipe';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
+import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 
 
 
@@ -49,7 +50,8 @@ import { UserAdminComponent } from './pages/home/user-admin/user-admin.component
     NotImageProfilePipe,
     ListMarginsComponent,
     MarginTypesPipe,
-    UserAdminComponent],
+    UserAdminComponent,
+    MeliAccountsComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

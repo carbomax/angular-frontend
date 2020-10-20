@@ -1,0 +1,195 @@
+<!-- DataTales Example -->
+
+
+
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+
+    <div
+      class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <h6 class="m-0 font-weight-bold text-primary">Cuentas</h6>
+      <button type="button" class="btn btn-primary btn-sm btn-user" data-toggle="modal" (click)="createModal()"
+        data-target="#marketplaceModal">
+        <i class="fas fa-plus-circle"></i> Registrar cuenta
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th class="text-center">Mercado libre</th>
+            <th class="text-center">Estado cuenta</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let account of meliAccounts | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+            <td>{{ account.businessName }}</td>
+            <td>{{ account.businessDescription }}</td>
+
+
+
+            <td class="text-center">
+
+
+              <div class="container">
+                <div class="row justify-content-center">
+
+
+                  <button placement="bottom" ngbTooltip="Vincular cuenta a Mercado Libre" type="button"
+                    (click)="redirect(account.id)" class="btn btn-sm btn-outline-warning"><i
+                      class="far fa-paper-plane"></i> Vincular </button>
+
+                </div>
+              </div>
+            </td>
+            <td class="text-center">
+
+
+
+
+              <button *ngIf="account.status === 0 || account.status === 1" placement="bottom"
+                ngbTooltip="Cuenta no vinculada" type="button" (click)="redirect(account.id)"
+                class="btn btn-sm btn-secondary"><i class="far fa-times-circle"></i> No vinculada </button>
+
+              <button *ngIf="account.status === 2" placement="bottom" ngbTooltip="Cuenta vinculada satisfactoriamente"
+                type="button" (click)="redirect(account.id)" class="btn btn-sm btn-success"><i
+                  class="far fa-check-circle"></i> Vinculada </button>
+
+
+            </td>
+            <td class="text-center">
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle btn btn-outline-primary btn-sm actionbox" href="#" role="button"
+                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-size dropdown-menu-right shadow animated--fade-in btn-block"
+                  aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item pointer" role="button" data-toggle="modal" data-target="#marketplaceModal"
+                    (click)="updateModal(account)"> <i class="far fa-edit m-2 text-success"></i>Editar</a>
+                  <a class="dropdown-item pointer" (click)="deleteAccount(account)"><i
+                      class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+      <div class="container" *ngIf="meliAccounts.length > 0">
+        <div class="row justify-content-around">
+          <ngb-pagination [collectionSize]="meliAccounts.length" [boundaryLinks]="true" [pageSize]="pageSize"
+            [(page)]="page">
+          </ngb-pagination>
+
+
+          <div class="form-group">
+            <select (change)="selectChangeHandler($event.target.value)" class="form-control">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+
+          <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
+            <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{meliAccounts.length}} registros <i
+                *ngIf="loadPaginator" class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="loading && !loadingSynchronization" class="d-flex justify-content-center">
+      <i class="fas fa-spin fa-spinner fa-2x "></i>
+    </div>
+    <div class="row justify-content-center">
+
+      <div *ngIf="meliAccounts.length <= 0 && !loading" class="alert alert-info col-8 text-center" role="alert">
+        <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay cuentas para mostrar
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="fondo-modal animated fadeIn fast" [class.oculto]="!loadingSynchronization">
+
+    <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel"
+      aria-hidden="true" style="display: block;">
+      <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+        <div class="modal-content-loading">
+          <div class="modal-body">
+            <div class="d-flex flex-column mb-3">
+              <div class="p-2 bd-highlight text-center"><i *ngIf="loadingSynchronization"
+                  class="fas fa-spin fa-3x fa-spinner spinner-color"></i>
+              </div>
+              <div class="p-2 bd-highlight">
+                <p style="color: black !important;">{{descriptionStatusAccount}}</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Logout Modal-->
+
+  <div class="modal fade mt-5" id="marketplaceModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog " role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 *ngIf="register" class="modal-title" id="createModalLabel">{{headerCreateModal}}</h5>
+          <h5 *ngIf="!register" class="modal-title" id="updateModalLabel">{{headerUpdateModal}}</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form ngNativeValidate #f="ngForm">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="inputName" placeholder="Nombre de la cuenta"
+                    aria-describedby="Nombre de la cuenta" name="businessName"
+                    [(ngModel)]="selectedMeliAccount.businessName" required>
+                </div>
+              </div>
+              <div class="col-md-12 col-sm-12">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="inputLastName" placeholder="Descripción de la cuenta"
+                    aria-describedby="Descripción de la cuenta" name="businessDescription"
+                    [(ngModel)]="selectedMeliAccount.businessDescription">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+
+            <button *ngIf="register" class="btn btn-primary" (click)="createOrUpdateAccount()" data-dismiss="modal"
+              [disabled]="!f.form.valid">Registrar</button>
+            <button *ngIf="!register" class="btn btn-primary" (click)="createOrUpdateAccount()" data-dismiss="modal"
+              [disabled]="!f.form.valid">Actualizar</button>
+
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
