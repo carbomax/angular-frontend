@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
 import { ProductCustom } from 'src/app/models/myproducts.custom.model';
@@ -24,6 +25,13 @@ declare function initializePlugin();
 })
 export class PublishMyproductsComponent implements OnInit {
 
+  @ViewChild('closeModal') closeModal;
+  @ViewChild('closeModalLoading') closeModalLoading;
+  @ViewChild('checkAllP') checkAllP;
+
+  //Loading Modal
+  loadingModal = false; 
+
   public loading = true;
   public loadPaginator = false;
   public loadingClear = false;
@@ -43,6 +51,8 @@ export class PublishMyproductsComponent implements OnInit {
   productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
+  productsSelected: string[];
+  disable: boolean = true;
   
   //security
   profileId: number;
@@ -72,6 +82,19 @@ export class PublishMyproductsComponent implements OnInit {
     }
   };
 
+  //Variables from Add Common Data Modal
+  message: string;
+  file: any;
+  fileList: any[];
+  imagePath: string;
+  imgURL: any;
+  imagesList: string[];
+  imageStoreList: string[];  
+  description = "";
+
+
+
+
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
     private authService: AuthService, private router: Router) { 
     
@@ -92,7 +115,24 @@ export class PublishMyproductsComponent implements OnInit {
           this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;   
-          this.totalPages =  +this.pageProductsMeli.totalPages;        
+          //this.totalPages =  +this.pageProductsMeli.totalPages;           
+          var countSelected = 0;
+          this.pageProductsMeli.itemsMeliGrid.forEach(element => {
+            this.productsSelected.forEach(select => {
+              if(element.sku === select){
+                element.selected = true;
+                countSelected++;
+              }
+            });          
+          }); 
+          if(countSelected === this.size){
+            this.checkAll = true;
+            this.checkAllP.nativeElement.checked = 1;
+          }
+          else{
+            this.checkAll = false;
+            this.checkAllP.nativeElement.checked = 0;
+          } 
           this.loadPaginator = false;
         }, error => {
           this.loading = false;
@@ -101,7 +141,15 @@ export class PublishMyproductsComponent implements OnInit {
         });           
   }
 
-  ngOnInit(): void {   
+  ngOnInit(): void { 
+    this.loadingModal = false;
+    this.imagesList = [];   
+    this.fileList = [];
+    this.productsSelected = []; 
+    this.disable = true;
+    this.imageStoreList = [];
+    
+
     if(this.authService.isAuthenticated)
     { 
       this.profileId = null; 
@@ -131,8 +179,45 @@ export class PublishMyproductsComponent implements OnInit {
 
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       element.selected = this.checkAll;
+      if(element.selected === true) {
+        let position1 = this.productsSelected.indexOf(element.sku);
+        if(position1 === -1){
+          this.productsSelected.push(element.sku);
+        }
+      }
+      else{
+        let position = this.productsSelected.indexOf(element.sku);
+        if(position !== -1){
+          this.productsSelected.splice(position, 1);
+        }
+      }
     });
+    if(this.productsSelected.length === 0){
+      this.disable = true;
+    }else{
+      this.disable = false;
+    }
+  }
 
+  selectProduct(product: ProductCustom): void{
+    let position = this.productsSelected.indexOf(product.sku);
+    if(position === -1){
+      product.selected = !product.selected;
+      if(product.selected === true) { 
+        this.productsSelected.push(product.sku);     
+      } 
+    }
+    else{
+      product.selected = !product.selected;      
+      if(product.selected === false){
+        this.productsSelected.splice(position, 1);
+      }
+    }
+    if(this.productsSelected.length === 0){
+      this.disable = true;      
+    }else{
+      this.disable = false;
+    }
   }
 
   /* ********************  Here begin the searching ************************** */
@@ -197,27 +282,243 @@ export class PublishMyproductsComponent implements OnInit {
 
   }
 
+  saveCommonInfo(){
+    this.loadingModal = true;
+    this.imageStoreList = []; 
+    if(this.productsSelected.length === 0)
+    {            
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error en el proceso`,
+        text: `Usted no ha seleccionado productos en la tabla`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      this.closeActiveModalLoading();
+      return;
+    } 
 
-  /* ******************************* Here begin the Component Modal to Publish Products ****************************** */
-  openDialog() {
-    const dialogConfig = new MatDialogConfig();
-
-    dialogConfig.disableClose = false;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(PopupAddcommoninfoComponent, dialogConfig);
-/*
-    dialogRef.afterClosed().subscribe(
-      data => {
-                this.saveNewCourse(data);
-      }, error => this.logService.print(error, LogService.ERROR_MSG));*/
+    if ( this.fileList.length !== 0) {  
+      this.fileList.forEach(ima =>{
+        if (ima.type.match(/image\/*/) === null) {
+          this.close();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Solo imagenes`,
+            text: 'Existen archivos que no son una imagen',
+            showConfirmButton: false,
+            timer: 5000
+          });   
+          this.closeActiveModalLoading();  
+          return;
+        }
+      })
+    }    
+    
+   if(this.fileList.length !== 0)
+   { 
+    this.productStoreUserService.uploadImageSyn(this.fileList).then(data => {     
+      let resultList = data;
+      resultList.forEach(element => {
+        if(element.success === true){
+          this.imageStoreList.push(element.reason);
+        }
+        else{
+          this.closeActiveModalLoading();    
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error en el proceso`,
+            text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }       
+      });
+      if(resultList.length === this.imageStoreList.length){
+        this.updateInDataBaseCommonInfo();             
+      }else{
+        this.closeActiveModalLoading();    
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: `Error almacenando imágenes. Contacte con el administrador`,
+          showConfirmButton: false,
+          timer: 5000
+        });        
+       }
+    },error => {
+      this.closeActiveModalLoading(); 
+      if(error.error.message.includes('Maximum upload size exceeded')){
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: 'Su imagen excede el tamaño máximo permitido de 2MB (Mega Byte).',
+          showConfirmButton: false,
+          timer: 5000
+        });
+      }else{      
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+          showConfirmButton: false,
+          timer: 5000
+        })
+      }
+    });
+   }else if(this.description.length !== 0){
+      this.updateInDataBaseCommonInfo();
+    }
+    else{         
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error en el proceso`,
+        text: `Usted no ha adicionado nueva información.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      this.closeActiveModalLoading();
+      return;
+    }
   }
-/*
-private saveNewCourse(courseToInsert: Course) {
-    this.apiService.addCourse(courseToInsert).subscribe();
-  }*/
-  method2(event): void{
-    var miVariable1 = "tete";
+
+  updateInDataBaseCommonInfo(){
+    this.profileId = null;    
+    this.profileId = this.authService.authenticationDataExtrac().profileId; 
+
+    this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
+      if(result.success === true){   
+        this.closeActiveModalLoading();            
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Información almacenada`,
+            text: `La información fue almacenada correctamente`,
+            showConfirmButton: false,
+            timer: 5000
+          });
+         this.clearAllImage();
+         this.close();           
+      }
+      else{
+        this.closeActiveModalLoading();    
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error en el proceso`,
+          text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+      }
+    },error => {
+      this.closeActiveModalLoading();    
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error en el proceso`,
+        text: `La información no fue almacenada. Contacte con el administrador del sistema`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+    }) 
+  }
+
+  /* ************* Modal View Upload Images ********** */
+  preview(files) {
+    if (files.length === 0){
+      this.file = null;
+      this.message = "Archivo inválido";
+      return;
+    }  
+ 
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.file = null;
+      this.message = "El archivo no es una imagen.";
+      return;
+    }
+ 
+    var reader = new FileReader();    
+    reader.readAsDataURL(files[0]); 
+    reader.onload = (_event) => { 
+      this.imgURL = reader.result; 
+      this.imagesList.push(this.imgURL);
+      this.message = "";
+      this.fileList.push(files[0]);      
+    }
+
+  }
+
+  deleteImage(image){
+
+    this.imagesList.forEach(element => {
+      if(element === image){
+        let position = this.imagesList.indexOf(image);
+        //elimino de la lista de rutas
+        this.imagesList.splice(position, 1);
+        
+        //elimino de la lista de imagenes (byte)
+        var reader = new FileReader();
+        this.fileList.forEach(element1 => {
+          reader.readAsDataURL(element1);
+          reader.onload = (_event) => { 
+            let url = reader.result; 
+            if(url === image){
+              let position1 = this.fileList.indexOf(element1);
+              this.fileList.splice(position1, 1);
+            } 
+          }
+        });
+      }
+    })
+  }
+
+  addImageList() {
+    if ( this.fileList.length !== 0) {  
+      this.fileList.forEach(ima =>{
+        if (ima.type.match(/image\/*/) === null) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Solo imagenes`,
+            text: 'Existen archivos que no son una imagen',
+            showConfirmButton: false,
+            timer: 5000
+          });     
+          return false;
+        }
+      })
+    }   
+ 
+ 
+       
+  }
+
+  clearAllImage(){
+    this.message= "";  
+    this.fileList = [];   
+    this.imagesList = [];
+    this.imageStoreList = [];
+    this.description = "";
+  }
+
+  close(){
+    this.closeModal.nativeElement.click();
+    this.closeModalLoading.nativeElement.click();
+  }
+
+  closeActiveModalLoading(){    
+    this.loadingModal = false;
+    this.closeModalLoading.nativeElement.click(); 
+    //this.closeModalLoading.nativeElement.modal('hide');
   }
 
 }

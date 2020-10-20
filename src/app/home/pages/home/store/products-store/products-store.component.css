@@ -5,3 +5,7 @@
   .table td {
     vertical-align: middle ;
   }
+
+  .modal-content-loading{
+    width: auto !important;
+  }

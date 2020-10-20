@@ -8,6 +8,7 @@ import { SelectedProducResponse } from '../../models/selected.products.response'
 import { MarketplaceDetails } from '../../models/marketplace.details';
 import { PageProductMeliStorage } from '../../models/page.myproduct.custom.model';
 import { EditableProductModel } from '../../models/editable.product.model';
+import { Image } from 'src/app/models/image.model';
 
 
 @Injectable({
@@ -16,11 +17,14 @@ import { EditableProductModel } from '../../models/editable.product.model';
 export class ProductsStorageUserService {
 
   URI = environment.URI_ROOT;
-  URI_PRODUCTS_ACTIONS = '/products/api';   
+  URI_PRODUCTS_ACTIONS = '/products/api'; 
+  URI_UPLOAD_ACTIONS = '/upload/api';  
   pageProductsMeli: PageProductMeliStorage;
+  list: any[];
 
   constructor(private http: HttpClient) { 
     this.pageProductsMeli = new PageProductMeliStorage();
+    this.list = [];
   }
 
   storeMyProducts(idProfile: number, marketplace: Number, products: any[]): Observable<SelectedProducResponse>{    
@@ -74,4 +78,49 @@ export class ProductsStorageUserService {
     return this.http.put<EditableProductModel>(params, product);
   }
 
+  uploadImage(formData: FormData): Observable<any>{
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    return this.http.post<any>(params, formData);
+  }
+
+  async uploadImageSyn(fileList: any[]): Promise<any>{
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    let resultList: any[] = [];
+
+    for(let i=0; i<fileList.length; i++){
+      let formData: FormData = new FormData(); 
+      formData.append('image', fileList[i], fileList[i].name);
+      let result = await this.http.post<any>(params, formData).toPromise();
+      resultList.push(result); 
+    }
+    return resultList;
+  }
+ 
+  deleteImages(imageToDelete: string[]): Observable<any>{
+    let finalImageList = [];
+    imageToDelete.forEach(element => {
+      var position = element.lastIndexOf("/");
+      finalImageList.push(element.substring(position+1));
+ });
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file-delete/${finalImageList}`;
+    return this.http.delete<any>(params);
+  }
+
+  updateCommonInfo(idProfile: number, description: string, productIdList: string[], imageToAddList: string[]): Observable<any>{
+    let string_profile = idProfile.toString();
+    let encodeProfile = btoa(string_profile);
+    let imageListToSend = [];
+
+    imageToAddList.forEach(element =>{
+      if(element.length !== 0){
+        let ima = new Image();
+        ima.photos = element;
+        imageListToSend.push(ima);
+      }
+    })
+
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${productIdList}`;
+    return this.http.put<any>(params, imageListToSend);
+  }
+  
 }

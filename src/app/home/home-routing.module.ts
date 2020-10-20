@@ -9,6 +9,7 @@ import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommon
 import { UsersComponent } from './pages/home/users/users.component';
 
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
+import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
 import { AuthGuard } from '../auth/guard/auth.guard';
@@ -25,10 +26,9 @@ const routes: Routes = [
       { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard]},
       { path: 'marketplaces', component: ChooseMarketplacesComponent , canActivate: [AuthGuard]},
       { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard]},
-      { path: 'list-marketplaces', component: ListMarketplacesComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN} },
-      { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard]},
-      { path: 'publish-myproducts', component: PublishMyproductsComponent , canActivate: [AuthGuard]},
+      { path: 'list-marketplaces', component: ListMarketplacesComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN} },         
       { path: 'edit-myproducts/:id', component: EditProductsComponent , canActivate: [AuthGuard]},
+      { path: 'published-products', component: PublishedProductComponent , canActivate: [AuthGuard]},      
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent , canActivate: [AuthGuard]},
       { path: 'sellers', component: UsersComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN}},
       { path: 'margins', component: ListMarginsComponent , canActivate: [AuthGuard]},

@@ -1,6 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { NgForm } from '@angular/forms';
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
 import Swal from 'sweetalert2';
 import { EditableProductModel } from '../../../../../models/editable.product.model';
@@ -11,12 +10,24 @@ import { Image } from '../../../../../models/image.model';
   templateUrl: './edit-products.component.html',
   styleUrls: ['./edit-products.component.css']
 })
-export class EditProductsComponent implements OnInit {
+export class EditProductsComponent implements OnInit {  
+  @ViewChild('closeModal') closeModal;
+  @ViewChild('closeModalLoading') closeModalLoading;
+ //Loading Modal
+ loadingModal = false; 
 
   productsDeletedList: number[];
+  imagesDeletedList: string[];
   editableProduct: EditableProductModel; 
   imageToDelete: Image;
+
   edit = false;  
+  message: string;
+  imagePath: string;
+  imgURL: any;
+  file: any;
+  titleImage:string;
+  orderImage: number;
   
   id: number = -1;
   public urlP = "";
@@ -26,9 +37,10 @@ export class EditProductsComponent implements OnInit {
   constructor(private _router: ActivatedRoute, public productsStorageUserService: ProductsStorageUserService ) { }
 
   ngOnInit(): void {
+    this.loadingModal = false;
     this.getCustomProduct();
-    this.productsDeletedList = [];  
-    this.titleP = "dsdfsdf";  
+    this.productsDeletedList = [];    
+    this.imagesDeletedList = [];
   }
 
   getCustomProduct(){
@@ -38,8 +50,12 @@ export class EditProductsComponent implements OnInit {
   }
 
   saveForm(){
+    this.loadingModal = true; 
     this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
       this.editableProduct = item;
+      this.productsDeletedList = [];
+      this.loadingModal = false;       
+      this.close();
       Swal.fire({
         position: 'top-end',
         icon: 'success',
@@ -48,7 +64,16 @@ export class EditProductsComponent implements OnInit {
         showConfirmButton: false,
         timer: 5000
       });
+
+      //Elimino las imagenes fisicamente del servidor
+      if(this.imagesDeletedList.length !== 0){
+      this.productsStorageUserService.deleteImages(this.imagesDeletedList).subscribe();
+      this.imagesDeletedList = [];
+    }
+      
     },(error: any) => {
+      this.loadingModal = false;      
+      this.close();
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -57,7 +82,8 @@ export class EditProductsComponent implements OnInit {
         showConfirmButton: false,
         timer: 5000
       });
-
+      this.imagesDeletedList = [];
+      this.productsDeletedList = [];
     });  
    
   };
@@ -72,11 +98,7 @@ export class EditProductsComponent implements OnInit {
   }
 
   updateProduct(image: Image){
-    if(image.id === this.id){
-      /*let position = this.editableProduct.images.indexOf(image);
-      this.editableProduct.images[position].order = image.order;
-      this.editableProduct.images[position].title = image.title;
-      this.editableProduct.images[position].photos = image.photos;  */
+    if(image.id === this.id){    
       image.order = this.orderP;
       image.title = this.titleP;
       image.photos = this.urlP;
@@ -91,8 +113,9 @@ export class EditProductsComponent implements OnInit {
     this.clear();
   }
 
-  deleteProduct(){
+  deleteImage(){
     this.productsDeletedList.push(this.imageToDelete.id); 
+    this.imagesDeletedList.push(this.imageToDelete.photos);
     let position = this.editableProduct.images.indexOf(this.imageToDelete);
     this.editableProduct.images.splice(position, 1);
   }
@@ -108,6 +131,115 @@ export class EditProductsComponent implements OnInit {
     this.id = -1;
     this.edit = false;
     this.imageToDelete = null;
+  }
+
+  /* ************* Subir Imagenes ********** */
+  preview(files) {
+    if (files.length === 0){
+      this.file = null;
+      this.message = "Archivo inválido";
+      return;
+    }  
+ 
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.file = null;
+      this.message = "El archivo no es una imagen.";
+      return;
+    }
+ 
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]); 
+    reader.onload = (_event) => { 
+      this.imgURL = reader.result; 
+      this.message = "";
+      this.file = files[0];
+    }
+  }
+
+  addedImage() {
+    if (!this.file) {  
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Debe seleccionar un archivo`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      return;
+    }
+    if (this.file.type.match(/image\/*/) == null) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Solo imagenes`,
+        text: 'El archivo no es una imagen',
+        showConfirmButton: false,
+        timer: 5000
+      });     
+      return;
+    }
+    const formData: FormData = new FormData();
+    formData.append('image', this.file, this.file.name);
+
+    this.productsStorageUserService.uploadImage(formData)
+      .subscribe(resp => {  
+        if(resp.success === true) {   
+        let image_added = new Image();
+        image_added.order = this.orderImage;
+        image_added.title = this.titleImage;
+        image_added.photos = resp.reason;
+        this.editableProduct.images.push(image_added);
+      
+        this.clearImage();
+        this.close();   
+      }
+      },(error: any) => {
+        if(error.status >= 200 && error.status <= 299)
+        {
+          let image_added = new Image();
+          image_added.order = this.orderImage;
+          image_added.title = this.titleImage;
+          image_added.photos = error.error.text;
+          this.editableProduct.images.push(image_added);
+        }
+        else if(error.error.message.includes('Maximum upload size exceeded')){        
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error`,
+          text: 'Su imagen excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          showConfirmButton: false,
+          timer: 5000
+        });
+        }else{
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error`,
+            text: 'Error almacenando la imagen. Contacte con el administrador',
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }
+        this.clearImage();
+        this.close();
+        
+      });
+  }
+  clearImage(){
+    this.orderImage = null;
+    this.titleImage = "";
+    this.message = "";
+    this.imagePath = "";
+    this.imgURL = null;
+    this.file = null;    
+  }
+
+  close(){
+    this.closeModal.nativeElement.click();
+    this.closeModalLoading.nativeElement.click();
   }
 
 }
