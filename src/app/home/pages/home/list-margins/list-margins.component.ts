@@ -179,8 +179,6 @@ export class ListMarginsComponent implements OnInit {
     this.selectedMargin = margin;
     this.selectedMarketplaces = margin.marketplace;
     console.log(this.selectedMarketplaces)
-
-    //console.log(this.selectedMarketplaces)
     this.register = false;
   }
 
