@@ -102,9 +102,8 @@ export class UsersComponent implements OnInit {
       this.seletedProfile.user.roles = this.selectedRoles;
       console.log(this.seletedProfile)
       this.userService.updateUserProfile(this.seletedProfile).subscribe(resp => {
-
-        this.loadProfiles();
         this.seletedProfile = resp;
+        this.loadProfiles();
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -113,6 +112,7 @@ export class UsersComponent implements OnInit {
           timer: 2000
 
         })
+
       }, error => {
         console.log('Error al actualizar un usuario', error);
         this.loadProfiles();
@@ -133,7 +133,7 @@ export class UsersComponent implements OnInit {
 
     Swal.fire({
       title: 'Está seguro?',
-      text: "Usted no podrá revertir esto. Tenga ene cuenta que se eliminaran todas las operaciones de este usuario en el sistema!",
+      text: 'Usted no podrá revertir esto. Tenga en cuenta que se eliminaran todas las operaciones de este usuario en el sistema!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -197,7 +197,7 @@ export class UsersComponent implements OnInit {
     this.userService.getProfiles().subscribe(profilesResp => {
       this.profiles = [];
       console.log('Cargando user vendores ', profilesResp)
-      this.profiles = profilesResp.filter(p => !p.user.roles.map( r => r.name).includes(RoleEnum.ADMIN));
+      this.profiles = profilesResp.filter(p => p.user.roles.map( r => r.name).includes(RoleEnum.SELLER));
       this.loading = false;
       if (!this.profiles.length) {
         this.errorUsers = true;
@@ -213,7 +213,7 @@ export class UsersComponent implements OnInit {
 
   loadRoles(): void {
     this.userService.getRoles().subscribe(rolesResp => {
-      this.roles = rolesResp.filter(r => r.name.toLowerCase() !== RoleEnum.ADMIN.toLowerCase());
+      this.roles = rolesResp.filter(r => r.name.toLowerCase() === RoleEnum.SELLER.toLowerCase());
       console.log(this.roles);
     });
 
@@ -229,7 +229,7 @@ export class UsersComponent implements OnInit {
   enabledOrDisabled(user: User): void {
     Swal.fire({
       title: 'Habilitar usuario',
-      text: "Confirma la operación?",
+      text: 'Confirma la operación?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

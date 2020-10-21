@@ -15,6 +15,7 @@ import { UserAdminComponent } from './pages/home/user-admin/user-admin.component
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from '../auth/guard/role.guard';
 import { RoleEnum } from '../enums/role.enum';
+import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 
 
 const routes: Routes = [
@@ -22,16 +23,17 @@ const routes: Routes = [
   {
     path: '', component: HomeComponent,
     children: [
-      { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard]},
-      { path: 'marketplaces', component: ChooseMarketplacesComponent , canActivate: [AuthGuard]},
-      { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard]},
-      { path: 'list-marketplaces', component: ListMarketplacesComponent , canActivate: [AuthGuard, RoleGuard], data: {role: RoleEnum.ADMIN} },         
-      { path: 'edit-myproducts/:id', component: EditProductsComponent , canActivate: [AuthGuard]},
-      { path: 'published-products', component: PublishedProductComponent , canActivate: [AuthGuard]},      
-      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent , canActivate: [AuthGuard]},
-      { path: 'users', component: UsersComponent , canActivate: [AuthGuard]},
-      { path: 'margins', component: ListMarginsComponent , canActivate: [AuthGuard]},
-      { path: 'users-admin', component: UserAdminComponent , canActivate: [AuthGuard, RoleGuard],  data: {role: RoleEnum.ADMIN}},
+      { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] },
+      { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] },
+      { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard] },
+      { path: 'list-marketplaces', component: ListMarketplacesComponent, canActivate: [AuthGuard, RoleGuard], data: { role: RoleEnum.ADMIN } },
+      { path: 'edit-myproducts/:id', component: EditProductsComponent, canActivate: [AuthGuard] },
+      { path: 'published-products', component: PublishedProductComponent, canActivate: [AuthGuard] },
+      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent, canActivate: [AuthGuard] },
+      { path: 'sellers', component: UsersComponent, canActivate: [AuthGuard, RoleGuard], data: { role: RoleEnum.ADMIN } },
+      { path: 'margins', component: ListMarginsComponent, canActivate: [AuthGuard] },
+      { path: 'users-admin', component: UserAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { role: RoleEnum.ADMIN } },
+      { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

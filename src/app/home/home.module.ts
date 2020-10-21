@@ -28,6 +28,7 @@ import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe'
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { MarginTypesPipe } from './pipes/margin-types.pipe';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
+import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 
 
@@ -51,6 +52,7 @@ import { PublishedProductComponent } from './pages/home/my-products/published-pr
     ListMarginsComponent,
     MarginTypesPipe,
     UserAdminComponent,
+    MeliAccountsComponent,
     PublishedProductComponent],
 
   exports: [HomeComponent,

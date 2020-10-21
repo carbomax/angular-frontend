@@ -16,4 +16,25 @@
   width: 70em !important;
 }
 
+.oculto {
+  display: none;
+}
+
+.fondo-modal {
+  background-color: rgba(111, 128, 204, 0.4);
+  left: 0px;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 9999;
+}
+
+.modal-opacity{
+  opacity: 0.3;
+}
+
+.spinner-color{
+    color: #3962dd;
+}
 

@@ -40,10 +40,12 @@ export class SidebarService {
       subtitle: 'Panel',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Administradores', url: '/home/users-admin' },
-        { title: 'Vendedores', url: '/home/users' },
-        { title: 'Margenes', url: '/home/margins' },
-        { title: 'Marketplaces', url: '/home/list-marketplaces' }
+        { title: 'Usuarios', url: '/home/users-admin' },
+        { title: 'Vendedores', url: '/home/sellers' },
+        { title: 'Márgenes', url: '/home/margins' },
+        { title: 'Marketplaces', url: '/home/list-marketplaces' },
+        { title: 'Cuentas Mercado Libre', url: '/home/meli-accounts' },
+
       ]
     }
   ];
