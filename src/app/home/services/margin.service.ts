@@ -18,12 +18,11 @@ export class MarginService {
   authenticationData: AuthenticationData = new AuthenticationData();
   profileId: number;
   constructor(private http: HttpClient, private authService: AuthService) {
-    this.profileId = this.authService.authenticationDataExtrac().profileId;
-    console.log(this.profileId)
+
    }
 
   getMargins(): Observable<Margin[]> {
-    console.log(this.profileId)
+    this.profileId = this.authService.authenticationDataExtrac().profileId;
     return this.http.get<Margin[]>(`${this.URI}${this.URI_MARGIN}/${this.profileId}`)
     .pipe(map( (marginResp: Margin[]) => {
       this.margins = marginResp;

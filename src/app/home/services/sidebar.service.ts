@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from '../../core/services/auth.service';
+import { RoleEnum } from '../../enums/role.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class SidebarService {
       subtitle: 'Productos',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Listar productos', url: '/home/store' }
+        { title: 'Listar productos', url: '/home/store', roles: [RoleEnum.ADMIN, RoleEnum.SELLER, RoleEnum.INVITED]}
       ]
     },
     {
@@ -21,8 +23,8 @@ export class SidebarService {
       subtitle: 'Mis productos',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Mis productos', url: '/home/marketplaces' },
-        { title: 'Productos Publicados', url: '/home/published-products' }
+        { title: 'Mis productos', url: '/home/marketplaces' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]},
+        { title: 'Productos Publicados', url: '/home/published-products', roles: [RoleEnum.ADMIN, RoleEnum.SELLER] }
       ]
     },
     {
@@ -31,7 +33,7 @@ export class SidebarService {
       subtitle: 'Ventas',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Listado de ventas', url: '#' }
+        { title: 'Listado de ventas', url: '#' , roles: [RoleEnum.ADMIN]}
       ]
     },
     {
@@ -40,16 +42,20 @@ export class SidebarService {
       subtitle: 'Panel',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Usuarios', url: '/home/users-admin' },
-        { title: 'Vendedores', url: '/home/sellers' },
-        { title: 'Márgenes', url: '/home/margins' },
-        { title: 'Marketplaces', url: '/home/list-marketplaces' },
-        { title: 'Cuentas Mercado Libre', url: '/home/meli-accounts' },
+        { title: 'Usuarios', url: '/home/users-admin', roles: [RoleEnum.ADMIN] },
+        { title: 'Vendedores', url: '/home/sellers' , roles: [RoleEnum.ADMIN]},
+        { title: 'Márgenes', url: '/home/margins', roles: [RoleEnum.ADMIN, RoleEnum.SELLER] },
+        { title: 'Marketplaces', url: '/home/list-marketplaces' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]},
+        { title: 'Cuentas Mercado Libre', url: '/home/meli-accounts' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]}
 
       ]
     }
   ];
 
 
-  constructor() { }
+  constructor(public authService: AuthService) { }
+
+  hashRoles(roles?: string[]): boolean {
+    return this.authService.hasRole(roles);
+  }
 }

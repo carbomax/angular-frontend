@@ -158,8 +158,6 @@
 
           </div>
           <div class="modal-footer">
-
-            {{selectedMarketplaces | json}}
             <button *ngIf="register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"
               (click)="createOrUpdateMargin()">Crear</button>
             <button *ngIf="!register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"
