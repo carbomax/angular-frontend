@@ -16,7 +16,7 @@
           <table class="table table-hover">         
             <tbody>
               <tr>              
-                <td>Mark</td>              
+                <td></td>              
               </tr>            
             </tbody>
           </table>
@@ -28,7 +28,7 @@
   <!-- Sub Categorias -->
   <div *ngIf="subcategory && meliCategory !== null">
     <div class="card" *ngFor="let pathcategory of meliCategory.path_from_root; let i = index">
-      <div class="card-header" id="heading" style="padding: 0.30rem 1.25rem;">
+      <div class="card-header" id="heading" style="padding: 0.20rem 1.25rem;">
         <h5 class="mb-0">
           <button class="btn btn-link" data-toggle="collapse" *ngIf="i === meliCategory.path_from_root.length - 1" attr.data-target="#collapse{{pathcategory.id}}"  aria-expanded="false" attr.aria-controls="collapse{{pathcategory.id}}">
             {{pathcategory.name}}

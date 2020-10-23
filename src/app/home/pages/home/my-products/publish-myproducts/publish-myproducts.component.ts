@@ -525,14 +525,6 @@ export class PublishMyproductsComponent implements OnInit {
     //this.closeModalLoading.nativeElement.modal('hide');
   }
 
-/* ************* Modal View Publish Selected ********** */
-showCategoryModal(){
-  //this.router.navigate(['meli-category', { path: this.categoryPath }],);
-  this.close();  
-  this.router.navigate(['meli-category']); 
-  //window.open('../meli-category', '400', '650', true);  
-}
-
 getPath(pathList: string[]){
   this.pathList = [];
   this.pathList = pathList;
