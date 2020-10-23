@@ -94,7 +94,8 @@ export class PublishMyproductsComponent implements OnInit {
 
   //Variables from Publish in Meli
   categoryPath: string; 
-
+  home: boolean = false;
+  pathList: string[];
 
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
     private authService: AuthService, private router: Router) { 
@@ -149,6 +150,8 @@ export class PublishMyproductsComponent implements OnInit {
     this.productsSelected = []; 
     this.disable = true;
     this.imageStoreList = [];
+    
+    this.pathList = [];
     
 
     if(this.authService.isAuthenticated)
@@ -528,6 +531,17 @@ showCategoryModal(){
   this.close();  
   this.router.navigate(['meli-category']); 
   //window.open('../meli-category', '400', '650', true);  
+}
+
+getPath(pathList: string[]){
+  this.pathList = [];
+  this.pathList = pathList;
+  this.home = false;
+}
+
+setHome(){
+  this.home = true;
+  this.pathList = [];
 }
 
 }

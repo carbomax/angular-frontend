@@ -214,7 +214,7 @@
    <!-- Modal Publish Selected-->
 <div class="modal" id="exampleModalCentered" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
-    <div class="modal-content publish-selected">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenteredLabel">Publicar seleccionados</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -222,7 +222,213 @@
         </button>
       </div>
       <div class="modal-body">
+        <!--Here-->
         <div class="container-fluid">
+
+          <div class="form-group row mb-2">
+            <div class="col-md-6 izq-aling">
+
+              <div class="form-group row mb-2">
+                <div class="col-md-3 izq-aling">
+                 
+                </div>
+                <div class="col-md-8">
+                    <nav aria-label="breadcrumb" id="CategoryName">
+                      <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>                        
+                        <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>                        
+                      </ol>
+                    </nav>                                
+                </div>
+              </div>
+
+              <div class="form-group row mb-2">
+                <div class="col-md-3 izq-aling">
+                  <div class="row mb-2">
+                    <div class="col-md-8"> <label class="control-label" for="CategoryId" title="">Seleccionar Categoría</label>
+                    </div>
+                    <div class="col-md-1">
+                      <div class="ico-help" title="Seleccione la categoría donde desea publicar los productos."><i
+                          class="fa fa-question-circle"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8"> 
+                  <app-meli-category-path [home]='home' (pathOut)='getPath($event)'></app-meli-category-path>                
+                </div>
+              </div>
+
+            </div>
+
+            <div class="col-md-6 izq-aling">
+
+              <div class="form-group row mb-2">
+                <div class="col-md-4 izq-aling">
+                  <div class="row mb-2 label-wrapper">
+                    <div class="col-md-8"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                    <div class="col-md-1">
+                      <div class="ico-help"
+                        title="Indique las condiciones de garantía ofrecidas para estos productos."><i
+                          class="fa fa-question-circle"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                  <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                </div>
+              </div>
+
+              <div class="form-group row mb-2" >
+                <div class="col-md-4 izq-aling">
+                  <div class="row mb-2">
+                    <div class="col-md-9 label-wrapper" ><label class="control-label" for="Currency" title="">Precio a publicar</label></div>
+                    <div class="col-md-1">
+                      <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="input-group">
+                    <div class="input-group-append">
+                      <span class="input-group-text">UYU</span>
+                    </div>
+                    <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
+                      step="0.01" min="0" max="10000" value="22.33">
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group row mb-2">
+                <div class="col-md-4 izq-aling">
+                  <div class="row mb-2">
+
+                    <div class="col-md-10 label-wrapper">
+                      <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>
+                    </div>
+                    <div class="col-md-1" style="padding-left: inherit;">
+                      <div class="ico-help"
+                        title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i
+                          class="fa fa-question-circle"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <select class="custom-select" name="Accounts">
+                    <option selected>-- Seleccione cuenta para publicar --</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </select>
+                  <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+                </div>
+              </div>
+
+              <div class="form-group row mb-2">
+                <div class="col-md-4 izq-aling">
+                  <div class="row mb-2">
+                    <div class="col-md-10 label-wrapper">
+                      <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Margen de ganancia</label>
+                    </div>
+                    <div class="col-md-1" style="padding-left: inherit;">
+                      <div class="ico-help"
+                        title="Muestra las cuentas y tarifas listas para ser publicadas en mercado libre."><i
+                          class="fa fa-question-circle"></i></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+
+                  <div class="table-wrapper-scroll-y my-custom-scrollbar div-table-border table-sm ">
+
+                    <table class="table table-hover mb-0">
+                      <thead class="thead-dark">
+                        <tr>
+                          <th scope="col">Cuenta</th>
+                          <th scope="col" class="text-center">Margen de ganancia</th>
+                          <th scope="col" class="text-right">Acción</th>                            
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>Raciazek</td>
+                          <td class="text-center">25%</td>
+                          <td class="text-right">
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                  aria-labelledby="dropdownMenuLink">                          
+                                  <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                  <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                </div>
+                              </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Raciazekfgf</td>
+                          <td class="text-center">25%</td>                            
+                          <td class="text-right">
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                  aria-labelledby="dropdownMenuLink">                          
+                                  <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                  <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                </div>
+                              </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Raciazek</td>
+                          <td class="text-center">25%</td>
+                          <td class="text-right">
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                  aria-labelledby="dropdownMenuLink">                          
+                                  <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                  <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                </div>
+                              </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Raciazek</td>
+                          <td class="text-center">25%</td>
+                          <td class="text-right">
+                            <div class="dropdown no-arrow">
+                                <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                                  aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                                  aria-labelledby="dropdownMenuLink">                          
+                                  <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                  <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                </div>
+                              </div>
+                          </td>
+                        </tr>                         
+                      </tbody>
+                    </table>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      <!--  <div class="container-fluid">
 
           <div class="form-group row mb-2">
             <div class="col-md-4 izq-aling">
@@ -360,7 +566,7 @@
             </div>
           </div>
 
-        </div>
+        </div> -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">Publicar</button>
