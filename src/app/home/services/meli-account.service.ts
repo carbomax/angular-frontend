@@ -24,7 +24,7 @@ export class MeliAccountService {
   meliAccounts: MeliAccount [] = [];
 
   constructor(public authService: AuthService, public http: HttpClient) {
-     this.profileId = this.authService.authenticationDataExtrac().profileId;
+
    }
 
   public redirectToMeli(id: number): void {
@@ -33,6 +33,7 @@ export class MeliAccountService {
   }
 
   public getAccounts(): Observable<MeliAccount[]> {
+    this.profileId = this.authService.authenticationDataExtrac().profileId;
     return this.http.get<MeliAccount[]>(`${this.URI_MELI_BUSINESS}/by-profile/${this.profileId}`)
     .pipe(
       map( (resp: any) => {

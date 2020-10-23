@@ -52,8 +52,9 @@ export class AuthService {
   setTokenStorage(data: any): void {
     localStorage.setItem('token', 'Bearer ' + data.access_token);
     const payload = this.jsonParseAtob(data.access_token.split('.')[1]);
+    console.log('payload', payload)
     sessionStorage.setItem('email', payload.user_name);
-    sessionStorage.setItem('email', payload.profileName);
+    sessionStorage.setItem('name', payload.profileName);
 
   }
 
@@ -71,6 +72,7 @@ export class AuthService {
   clearLocalStorage(): void {
     localStorage.removeItem('token');
     sessionStorage.removeItem('email');
+    sessionStorage.removeItem('name');
     localStorage.removeItem('reference');
   }
 
@@ -95,8 +97,11 @@ export class AuthService {
     }
   }
 
-  hasRole(role: string): boolean {
-    return this.authenticationDataExtrac().roles.includes(role);
+  hasRole(roles: string[]): boolean {
+    if(roles && this.isAuthenticated()){
+      return roles.filter(r => this.authenticationDataExtrac().roles.includes(r)).length > 0;
+    }
+    return false;
   }
 
 }
