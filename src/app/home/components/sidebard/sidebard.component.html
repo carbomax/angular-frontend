@@ -34,14 +34,20 @@
       <i [class]="item.icon"></i>
       <span class="ml-2">{{ item.title }}</span>
     </a>
-    <div [id]="'test'+i" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div  [id]="'test'+i" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
       <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">{{ item.subtitle }}</h6>
-        <a class="collapse-item" *ngFor="let subitem of item.submenu" [routerLink]="subitem.url" >{{ subitem.title }}</a>
+        <h6  class="collapse-header">{{ item.subtitle }}</h6>
+        <div *ngFor="let subitem of item.submenu" >
+
+          <a class="collapse-item" *ngIf="sidebarService.hashRoles(subitem.roles)" [routerLink]="subitem.url" >
+            {{ subitem.title }}
+          </a>
+        </div>
+
       </div>
     </div>
  <!-- Divider -->
-  <hr [class]="item.divider">
+  <hr  [class]="item.divider">
  </li>
 
   <!-- Sidebar Toggler (Sidebar) -->

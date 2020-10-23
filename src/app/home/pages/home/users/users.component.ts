@@ -251,7 +251,7 @@ export class UsersComponent implements OnInit {
           Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: `El usuario ha sido habilitado`,
+            title: resp.enabled ? `El usuario ha sido habilitado` : `El usuario ha sido deshabilitado`,
             showConfirmButton: false,
             timer: 2000
           })
