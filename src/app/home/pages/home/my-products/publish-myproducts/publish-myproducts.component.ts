@@ -92,7 +92,8 @@ export class PublishMyproductsComponent implements OnInit {
   imageStoreList: string[];  
   description = "";
 
-
+  //Variables from Publish in Meli
+  categoryPath: string; 
 
 
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
@@ -520,5 +521,13 @@ export class PublishMyproductsComponent implements OnInit {
     this.closeModalLoading.nativeElement.click(); 
     //this.closeModalLoading.nativeElement.modal('hide');
   }
+
+/* ************* Modal View Publish Selected ********** */
+showCategoryModal(){
+  //this.router.navigate(['meli-category', { path: this.categoryPath }],);
+  this.close();  
+  this.router.navigate(['meli-category']); 
+  //window.open('../meli-category', '400', '650', true);  
+}
 
 }

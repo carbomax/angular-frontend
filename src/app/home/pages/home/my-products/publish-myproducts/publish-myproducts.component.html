@@ -231,10 +231,10 @@
                 <div class="col-md-1" style="padding-left: inherit;"> <div class="ico-help" title="Seleccione la categoría donde desa publicar los productos."><i class="fa fa-question-circle"></i></div></div>
               </div>
             </div>
-            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName" name="CategoryName" rows="4" style="height: 107px;"></textarea>
+            <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="categoryPath" name="categoryPath" rows="4" style="height: 107px;"></textarea>
               <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
 
-              <button type="submit" onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;" class="btn btn-primary">
+              <button type="submit" (click)="showCategoryModal()"  target="_blank" class="btn btn-primary">
                   Buscar Categoría
               </button>
           </div>
