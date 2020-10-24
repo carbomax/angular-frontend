@@ -242,7 +242,14 @@ export class UserAdminComponent implements OnInit {
 
       console.log(profilesResp)
       this.profiles = [];
-      this.profiles = profilesResp.filter(p => p.user.roles.map(r => r.name).includes(RoleEnum.ADMIN));
+      profilesResp.forEach( p => {
+        p.user.roles.forEach( r => {
+          if(r.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase() || r.name.toLowerCase() === RoleEnum.INVITED.toLowerCase()){
+            this.profiles.push(p);
+          }
+        })
+      })
+    //  this.profiles = profilesResp.filter(p => p.user.roles.map(r => r.name).includes(RoleEnum.ADMIN || RoleEnum.INVITED));
       this.loading = false;
       if (this.profiles.length <= 0) {
         this.errorUsers = true;
@@ -260,9 +267,8 @@ export class UserAdminComponent implements OnInit {
   loadRoles(): void {
     this.userService.getRoles().subscribe(rolesResp => {
       this.roles = rolesResp;
-      console.log(RoleEnum.INVITED)
       this.roles = this.roles.filter(m => m.name.toLowerCase() !== RoleEnum.SELLER.toLowerCase());
-      console.log(this.roles);
+
     });
 
   }
