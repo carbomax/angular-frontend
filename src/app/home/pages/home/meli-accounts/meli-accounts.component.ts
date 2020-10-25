@@ -294,5 +294,4 @@ export class MeliAccountsComponent implements OnInit {
     }
   }
 
-
 }
