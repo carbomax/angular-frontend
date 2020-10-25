@@ -223,7 +223,7 @@
       </div>
       <div class="modal-body">
         <!--Here-->
-        <div class="container-fluid">
+        <div class="container">
 
           <div class="form-group row mb-2">
             <div class="col-md-6 izq-aling">
@@ -314,9 +314,9 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <select class="custom-select" name="meliAccount" [(ngModel)]="meliAccount">
-                    <option selected (click)="updateMeliAccountListView(false)">-- Seleccione cuenta para publicar --</option>
-                    <option [value]="account" (click)="updateMeliAccountListView(true)" *ngFor="let account of meliAccountsList">
+                  <select class="custom-select" name="meliAccount" (change)="updateMeliAccountListView($event.target.value)">
+                    <option selected [value]="-1" >-- Seleccione cuenta para publicar --</option>
+                    <option [value]="account.id" *ngFor="let account of meliAccountsList">
                       {{account.businessName}}</option>                  
                   </select>
                   <span class="field-validation-valid" data-valmsg-for="meliAccount" data-valmsg-replace="true"></span>
@@ -361,7 +361,7 @@
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                                   aria-labelledby="dropdownMenuLink">                          
                                   <a class="dropdown-item pointer" href="javascript:void(0);" (click)="editRelationAccountMargin(relationship)" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                  <a class="dropdown-item pointer" href="javascript:void(0);" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                  <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
                                 </div>
                               </div>
                           </td>
@@ -379,7 +379,7 @@
        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary">Publicar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModalPublish()" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
@@ -410,18 +410,18 @@
             </div>
           </div>
           <div class="col-md-6">
-              <select class="custom-select" name="Margin" [(ngModel)]="margin">
+              <select class="custom-select" name="margin" [(ngModel)]="margin">
                 <option selected [value]="-1">-- Seleccione cuenta para publicar --</option>
-                <option [value]="marginSelected" *ngFor="let marginSelected of marginsList">{{margin.name}}</option>               
+                <option [value]="marginSelected.id" *ngFor="let marginSelected of marginsList">{{marginSelected.name}}</option>               
               </select>
-              <span class="field-validation-valid" data-valmsg-for="Margin" data-valmsg-replace="true"></span>
+              <span class="field-validation-valid" data-valmsg-for="margin" data-valmsg-replace="true"></span>
           </div>
         </div>
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="updateRelationShip(margin)" >Salvar</button>
-        <button type="button" class="btn btn-secondary" (click)="clearAll()" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="updateRelationShip()" >Salvar</button>
+        <button type="button" class="btn btn-secondary" #closeMargin (click)="clearAll()" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>
@@ -493,7 +493,26 @@
 
 
 
-
+<!-- Modal Confirmation to delete relationship -->
+<div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro de eliminar la esta configuración?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRelationAccountMargin()" >Aceptar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearAll()">Cancelar</button>        
+      </div>
+    </div>
+  </div>
+</div>
 
 <!--  Modal para cargando -->
 <div class="modal" id="loadingModal" tabindex="-1" role="dialog"  aria-labelledby="loadingModalLabel" aria-hidden="true">

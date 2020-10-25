@@ -21,6 +21,7 @@ import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogR
 import { PopupAddcommoninfoComponent } from '../../../../components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 import { States } from 'src/app/enums/states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
+import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 
 declare function initializePlugin();
 
@@ -34,6 +35,7 @@ export class PublishMyproductsComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
   @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('checkAllP') checkAllP;
+  @ViewChild('closeMargin') closeMargin;
 
   //Loading Modal
   loadingModal = false; 
@@ -102,12 +104,12 @@ export class PublishMyproductsComponent implements OnInit {
   categoryPath: string; 
   home: boolean = false;
   pathList: string[];
-  meliAccountsList: MeliAccount[];
-  meliAccount: MeliAccount; 
+  meliAccountsList: MeliAccount[];   
+  initialMeliAccounts: MeliAccount[];
   account_margin: AccountMarginModel;
   accountMarginsList: AccountMarginModel[];
-  marginsList: Margin[];
-  margin: Margin;
+  marginsList: Margin[];  
+  margin: number;
   
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
     private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, private router: Router) { 
@@ -155,10 +157,8 @@ export class PublishMyproductsComponent implements OnInit {
         });           
   }
 
-  ngOnInit(): void {     
-    this.margin = new Margin();
-    this.account_margin = new AccountMarginModel();
-    this.meliAccount = new MeliAccount();
+  ngOnInit(): void { 
+    this.account_margin = new AccountMarginModel();      
     this.getAccountMeli();  
     this.getMargins();  
     this.loadingModal = false;
@@ -555,12 +555,14 @@ export class PublishMyproductsComponent implements OnInit {
 
   getAccountMeli(){
     this.meliAccountsList = [];
+    this.initialMeliAccounts = [];
     this.meliAccountService.getAccounts().subscribe(resp => {
       resp.forEach(element => {
-        if(element.status === 3 && element.marketplaceId === MarketplaceType.MERCADOLIBRE){
+        if(element.status === AccountMeliStates.SYNCHRONIZED && element.marketplaceId === MarketplaceType.MERCADOLIBRE){          
           this.meliAccountsList.push(element);
         }
-      }); 
+      });
+      this.meliAccountsList.forEach(element => { this.initialMeliAccounts.push(element);});
     })    
   }
 
@@ -575,16 +577,18 @@ export class PublishMyproductsComponent implements OnInit {
     })
   }
 
-  updateMeliAccountListView(valid: boolean){
-    if(this.meliAccount !== null && valid === true){
+  updateMeliAccountListView(meliAccount: number){   
+    if(meliAccount !== -1){
+      var account = this.meliAccountsList.find(element => element.id == meliAccount)
+
       let accountMargin = new AccountMarginModel();
-      accountMargin.accountName = this.meliAccount.businessName;
-      accountMargin.idAccount = this.meliAccount.id;
+      accountMargin.accountName = account.businessName;
+      accountMargin.idAccount = account.id;
       accountMargin.idMargin = -1;
       accountMargin.nameMargin = "";
       this.accountMarginsList.push(accountMargin);
 
-      let index = this.meliAccountsList.indexOf(this.meliAccount);
+      let index = this.meliAccountsList.indexOf(account);
       this.meliAccountsList.splice(index, 1);
     }
   }
@@ -593,17 +597,57 @@ export class PublishMyproductsComponent implements OnInit {
     this.account_margin = relationship;    
   }
 
-  updateRelationShip(margin: Margin){
-    let position = this.accountMarginsList.indexOf(this.account_margin);
-  
-    this.account_margin.idMargin = margin.id;
-    this.account_margin.nameMargin = margin.name;
-    this.accountMarginsList[position] = this.account_margin;
+  updateRelationShip(){
+    if(this.margin == -1) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `error`,
+        text: `Seleccione un margen`,
+        showConfirmButton: false,
+        timer: 5000
+      });      
+    }
+    else{
+      let position = this.accountMarginsList.indexOf(this.account_margin);
+      var margin = this.marginsList.find(element => element.id == this.margin);
+      this.account_margin.idMargin = margin.id;
+      this.account_margin.nameMargin = margin.name;
+      this.accountMarginsList[position] = this.account_margin;
+      this.closeModalMargin();
+    }
+  }
+
+  previewDelete(relationship: AccountMarginModel){
+    this.account_margin = relationship;
+  }
+
+  deleteRelationAccountMargin(){
+    if(this.account_margin != null){
+      let account = this.initialMeliAccounts.find(element => element.id == this.account_margin.idAccount);
+      let position = this.initialMeliAccounts.indexOf(account);
+      this.meliAccountsList.splice(position, 0, account);
+      let position2 = this.accountMarginsList.indexOf(this.account_margin);
+      this.accountMarginsList.splice(position2, 1);      
+    }
   }
 
   clearAll(){
+    this.account_margin = null;    
+  }
+
+  closeModalPublish(){
     this.account_margin = null;
-    this.margin = null;
+    this.accountMarginsList = [];
+    this.meliAccountsList = [];
+    this.pathList = [];
+    this.home = true;
+    this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
+  }
+
+  closeModalMargin(){     
+    this.clearAll();  
+    this.closeMargin.nativeElement.click();         
   }
 
 }
