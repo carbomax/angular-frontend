@@ -17,5 +17,5 @@ export class MeliAccount {
   userType?: string;
   points?: number;
   siteId?: string;
-
+  marketplaceId?: number;
 }

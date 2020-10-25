@@ -2,19 +2,25 @@ import { Component, OnInit, ViewChild  } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
+import { Options, LabelType } from 'ng5-slider';
 
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
+import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
 import { ProductCustom } from 'src/app/models/myproducts.custom.model';
-import { Options, LabelType } from 'ng5-slider';
+import { Margin } from 'src/app/models/margin';
+import { MeliAccount } from 'src/app/models/meli.account';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import { MarginService } from '../../../../services/margin.service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { MeliAccountService } from '../../../../services/meli-account.service';
 
 import { PaginationInstance } from 'ngx-pagination';
 import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { PopupAddcommoninfoComponent } from '../../../../components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 import { States } from 'src/app/enums/states.enum';
+import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 
 declare function initializePlugin();
 
@@ -96,10 +102,16 @@ export class PublishMyproductsComponent implements OnInit {
   categoryPath: string; 
   home: boolean = false;
   pathList: string[];
-
+  meliAccountsList: MeliAccount[];
+  meliAccount: MeliAccount; 
+  account_margin: AccountMarginModel;
+  accountMarginsList: AccountMarginModel[];
+  marginsList: Margin[];
+  margin: Margin;
+  
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
-    private authService: AuthService, private router: Router) { 
-    
+    private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, private router: Router) { 
+      
   }
 
   //Change size elements of the table
@@ -143,14 +155,19 @@ export class PublishMyproductsComponent implements OnInit {
         });           
   }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {     
+    this.margin = new Margin();
+    this.account_margin = new AccountMarginModel();
+    this.meliAccount = new MeliAccount();
+    this.getAccountMeli();  
+    this.getMargins();  
     this.loadingModal = false;
     this.imagesList = [];   
     this.fileList = [];
     this.productsSelected = []; 
     this.disable = true;
     this.imageStoreList = [];
-    
+    this.accountMarginsList = [];
     this.pathList = [];
     
 
@@ -525,15 +542,68 @@ export class PublishMyproductsComponent implements OnInit {
     //this.closeModalLoading.nativeElement.modal('hide');
   }
 
-getPath(pathList: string[]){
-  this.pathList = [];
-  this.pathList = pathList;
-  this.home = false;
-}
+  getPath(pathList: string[]){
+    this.pathList = [];
+    this.pathList = pathList;
+    this.home = false;
+  }
 
-setHome(){
-  this.home = true;
-  this.pathList = [];
-}
+  setHome(){
+    this.home = true;
+    this.pathList = [];
+  }
+
+  getAccountMeli(){
+    this.meliAccountsList = [];
+    this.meliAccountService.getAccounts().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.status === 3 && element.marketplaceId === MarketplaceType.MERCADOLIBRE){
+          this.meliAccountsList.push(element);
+        }
+      }); 
+    })    
+  }
+
+  getMargins(){
+    this.marginsList = [];
+    this.marginService.getMargins().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){
+          this.marginsList.push(element);
+        }
+      });
+    })
+  }
+
+  updateMeliAccountListView(valid: boolean){
+    if(this.meliAccount !== null && valid === true){
+      let accountMargin = new AccountMarginModel();
+      accountMargin.accountName = this.meliAccount.businessName;
+      accountMargin.idAccount = this.meliAccount.id;
+      accountMargin.idMargin = -1;
+      accountMargin.nameMargin = "";
+      this.accountMarginsList.push(accountMargin);
+
+      let index = this.meliAccountsList.indexOf(this.meliAccount);
+      this.meliAccountsList.splice(index, 1);
+    }
+  }
+
+  editRelationAccountMargin(relationship: AccountMarginModel){
+    this.account_margin = relationship;    
+  }
+
+  updateRelationShip(margin: Margin){
+    let position = this.accountMarginsList.indexOf(this.account_margin);
+  
+    this.account_margin.idMargin = margin.id;
+    this.account_margin.nameMargin = margin.name;
+    this.accountMarginsList[position] = this.account_margin;
+  }
+
+  clearAll(){
+    this.account_margin = null;
+    this.margin = null;
+  }
 
 }
