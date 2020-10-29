@@ -13,11 +13,12 @@ export class MeliCategoryPathComponent implements OnInit {
 
   @Input() home: boolean;
   @Output() pathOut: EventEmitter<string[]> = new EventEmitter<string[]>();
+  @Output() categorySelected: EventEmitter<string> = new EventEmitter<string>();
   pathList: string[];
 
   meliCategoryList: MeliCategory[]; 
   meliCategory: MeliCategory;
-  subcategory: boolean = false;
+  subcategory: boolean = false;   
 
   constructor(public meliPublicationsService: MeliPublicationsService) {
     this.meliCategory = new MeliCategory();
@@ -39,6 +40,7 @@ export class MeliCategoryPathComponent implements OnInit {
       this.home = false;  
       this.subcategory = false;
       this.pathList = [];
+      this.meliCategory = new MeliCategory();
     }
   }
 
@@ -49,9 +51,14 @@ export class MeliCategoryPathComponent implements OnInit {
       this.meliCategory = resp;      
       this.meliCategory.path_from_root.forEach(element => {
       this.pathList.push(element.name);
+      if(Object.keys(this.meliCategory).length !== 0){
+        if(this.meliCategory.children_categories.length === 0)
+            this.categorySelected.emit(this.meliCategory.id);
+      }
       });
     });
-    this.pathOut.emit(this.pathList);
-  }
+    this.pathOut.emit(this.pathList);    
+   
+  } 
   
 }

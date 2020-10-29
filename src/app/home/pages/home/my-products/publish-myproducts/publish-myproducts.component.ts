@@ -15,6 +15,7 @@ import { ProductsStorageUserService } from '../../../../services/products-storag
 import { MarginService } from '../../../../services/margin.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { MeliAccountService } from '../../../../services/meli-account.service';
+import { MeliPublicationsService } from '../../../../services/meli-publications.service';
 
 import { PaginationInstance } from 'ngx-pagination';
 import {MatDialog, MatDialogModule, MatDialogConfig, MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -59,7 +60,7 @@ export class PublishMyproductsComponent implements OnInit {
   productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
-  productsSelected: string[];
+  productsSelected: ProductCustom[];
   disable: boolean = true;
   
   //security
@@ -110,9 +111,10 @@ export class PublishMyproductsComponent implements OnInit {
   accountMarginsList: AccountMarginModel[];
   marginsList: Margin[];  
   margin: number;
+  lastCategorySelected: string = '';
   
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
-    private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, private router: Router) { 
+    private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, public meliPublicationsService: MeliPublicationsService, private router: Router) { 
       
   }
 
@@ -135,7 +137,7 @@ export class PublishMyproductsComponent implements OnInit {
           var countSelected = 0;
           this.pageProductsMeli.itemsMeliGrid.forEach(element => {
             this.productsSelected.forEach(select => {
-              if(element.sku === select){
+              if(element === select){
                 element.selected = true;
                 countSelected++;
               }
@@ -201,13 +203,13 @@ export class PublishMyproductsComponent implements OnInit {
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       element.selected = this.checkAll;
       if(element.selected === true) {
-        let position1 = this.productsSelected.indexOf(element.sku);
+        let position1 = this.productsSelected.indexOf(element);
         if(position1 === -1){
-          this.productsSelected.push(element.sku);
+          this.productsSelected.push(element);
         }
       }
       else{
-        let position = this.productsSelected.indexOf(element.sku);
+        let position = this.productsSelected.indexOf(element);
         if(position !== -1){
           this.productsSelected.splice(position, 1);
         }
@@ -221,11 +223,11 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   selectProduct(product: ProductCustom): void{
-    let position = this.productsSelected.indexOf(product.sku);
+    let position = this.productsSelected.indexOf(product);
     if(position === -1){
       product.selected = !product.selected;
       if(product.selected === true) { 
-        this.productsSelected.push(product.sku);     
+        this.productsSelected.push(product);     
       } 
     }
     else{
@@ -548,6 +550,10 @@ export class PublishMyproductsComponent implements OnInit {
     this.home = false;
   }
 
+  getCategorySelected(idCategory: string){
+    this.lastCategorySelected = idCategory;   
+  }
+
   setHome(){
     this.home = true;
     this.pathList = [];
@@ -613,6 +619,8 @@ export class PublishMyproductsComponent implements OnInit {
       var margin = this.marginsList.find(element => element.id == this.margin);
       this.account_margin.idMargin = margin.id;
       this.account_margin.nameMargin = margin.name;
+      this.account_margin.typeMargin = margin.type;
+      this.account_margin.valueMargin = margin.value;
       this.accountMarginsList[position] = this.account_margin;
       this.closeModalMargin();
     }
@@ -648,6 +656,10 @@ export class PublishMyproductsComponent implements OnInit {
   closeModalMargin(){     
     this.clearAll();  
     this.closeMargin.nativeElement.click();         
+  }
+
+  publishProducts(){
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, "", this.productsSelected);
   }
 
 }

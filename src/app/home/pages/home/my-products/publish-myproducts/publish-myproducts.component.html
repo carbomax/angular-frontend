@@ -254,7 +254,7 @@
                   </div>
                 </div>
                 <div class="col-md-8"> 
-                  <app-meli-category-path [home]='home' (pathOut)='getPath($event)'></app-meli-category-path>                
+                  <app-meli-category-path [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
                 </div>
               </div>
 
@@ -378,7 +378,7 @@
         </div>
        </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Publicar</button>
+        <button type="button" class="btn btn-primary" (click)="publishProducts()">Publicar</button>
         <button type="button" class="btn btn-secondary" (click)="closeModalPublish()" data-dismiss="modal">Cancelar</button>
       </div>
     </div>

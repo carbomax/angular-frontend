@@ -9,6 +9,9 @@ import { MarketplaceDetails } from '../../models/marketplace.details';
 import { PageProductMeliStorage } from '../../models/page.myproduct.custom.model';
 import { EditableProductModel } from '../../models/editable.product.model';
 import { Image } from 'src/app/models/image.model';
+import { ProductCustom } from '../../models/myproducts.custom.model'
+
+import { AuthService } from 'src/app/core/services/auth.service'
 
 
 @Injectable({
@@ -21,10 +24,12 @@ export class ProductsStorageUserService {
   URI_UPLOAD_ACTIONS = '/upload/api';  
   pageProductsMeli: PageProductMeliStorage;
   list: any[];
+  profileId: number;
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient, private authService: AuthService) { 
     this.pageProductsMeli = new PageProductMeliStorage();
     this.list = [];
+    this.profileId = this.authService.authenticationDataExtrac().profileId;
   }
 
   storeMyProducts(idProfile: number, marketplace: Number, products: any[]): Observable<SelectedProducResponse>{    
@@ -106,7 +111,7 @@ export class ProductsStorageUserService {
     return this.http.delete<any>(params);
   }
 
-  updateCommonInfo(idProfile: number, description: string, productIdList: string[], imageToAddList: string[]): Observable<any>{
+  updateCommonInfo(idProfile: number, description: string, productList: ProductCustom[], imageToAddList: string[]): Observable<any>{
     let string_profile = idProfile.toString();
     let encodeProfile = btoa(string_profile);
     let imageListToSend = [];
@@ -119,8 +124,18 @@ export class ProductsStorageUserService {
       }
     })
 
-    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${productIdList}`;
+    let skuList: string[] = [];
+    productList.forEach(element => {
+      skuList.push(element.sku);
+    });
+    
+
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${skuList}`;
     return this.http.put<any>(params, imageListToSend);
   }
-  
+
+  getFullProductsById(idProductsList: number[]): Observable<any>{ 
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/full-product-id/?ids=${idProductsList}`;
+    return this.http.get<any>(params);
+  }
 }
