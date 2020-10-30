@@ -112,18 +112,12 @@ export class MeliPublicationsService {
           itemCustomList.push(new ItemCustomModel(item, element.id));          
         })
     
-      const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
-      this.http.post<any>(params, itemCustomList).subscribe(result =>{
-        result.forEach(resp => {
-          this.responsePublicationList.push(resp); 
-        });
-        //return this.responsePublicationList;
+        const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
+        this.http.post<any>(params, itemCustomList).subscribe(result =>{});        
       });
      
-      });
-       
-    }); 
-       
+      });      
+            
   }
 
 
