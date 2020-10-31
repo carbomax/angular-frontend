@@ -33,7 +33,7 @@ export class SidebarService {
       subtitle: 'Ventas',
       divider: 'sidebar-divider',
       submenu: [
-        { title: 'Listado de ventas', url: '#' , roles: [RoleEnum.ADMIN]}
+        { title: 'Órdenes', url: '/home/seller-orders' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]}
       ]
     },
     {

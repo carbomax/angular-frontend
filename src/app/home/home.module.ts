@@ -30,6 +30,7 @@ import { MarginTypesPipe } from './pipes/margin-types.pipe';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
 import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
+import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 
 
 
@@ -53,7 +54,8 @@ import { PublishedProductComponent } from './pages/home/my-products/published-pr
     MarginTypesPipe,
     UserAdminComponent,
     MeliAccountsComponent,
-    PublishedProductComponent],
+    PublishedProductComponent,
+    SellerOrdersComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -70,7 +72,8 @@ import { PublishedProductComponent } from './pages/home/my-products/published-pr
     NotImageProfilePipe,
     EditProductsComponent,
     NotImagePipe,
-    ListMarginsComponent],
+    ListMarginsComponent,
+    SellerOrdersComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,
