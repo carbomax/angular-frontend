@@ -37,6 +37,7 @@ export class PublishMyproductsComponent implements OnInit {
   @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('checkAllP') checkAllP;
   @ViewChild('closeMargin') closeMargin;
+  @ViewChild('closePublishModal') closePublishModal;
 
   //Loading Modal
   loadingModal = false; 
@@ -60,7 +61,7 @@ export class PublishMyproductsComponent implements OnInit {
   productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
-  productsSelected: ProductCustom[];
+  productsSelected: ProductCustom[];  
   disable: boolean = true;
   
   //security
@@ -137,7 +138,7 @@ export class PublishMyproductsComponent implements OnInit {
           var countSelected = 0;
           this.pageProductsMeli.itemsMeliGrid.forEach(element => {
             this.productsSelected.forEach(select => {
-              if(element === select){
+              if(element.id === select.id){
                 element.selected = true;
                 countSelected++;
               }
@@ -166,7 +167,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadingModal = false;
     this.imagesList = [];   
     this.fileList = [];
-    this.productsSelected = []; 
+    this.productsSelected = [];    
     this.disable = true;
     this.imageStoreList = [];
     this.accountMarginsList = [];
@@ -203,13 +204,15 @@ export class PublishMyproductsComponent implements OnInit {
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       element.selected = this.checkAll;
       if(element.selected === true) {
-        let position1 = this.productsSelected.indexOf(element);
+        let position1 = -1;
+        this.productsSelected.forEach(pro => {if(pro.id === element.id){position1 = this.productsSelected.indexOf(pro);}});      
         if(position1 === -1){
           this.productsSelected.push(element);
         }
       }
       else{
-        let position = this.productsSelected.indexOf(element);
+        let position = -1;
+        this.productsSelected.forEach(pro => {if(pro.id === element.id){position = this.productsSelected.indexOf(pro);}});   
         if(position !== -1){
           this.productsSelected.splice(position, 1);
         }
@@ -223,7 +226,8 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   selectProduct(product: ProductCustom): void{
-    let position = this.productsSelected.indexOf(product);
+    let position = -1;
+    this.productsSelected.forEach(pro => {if(pro.id === product.id){position = this.productsSelected.indexOf(pro);}});
     if(position === -1){
       product.selected = !product.selected;
       if(product.selected === true) { 
@@ -651,6 +655,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.pathList = [];
     this.home = true;
     this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
+    this.closePublishModal.nativeElement.click(); 
   }
 
   closeModalMargin(){     
@@ -659,7 +664,33 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   publishProducts(){
+    this.pageProductsMeli.itemsMeliGrid.forEach(element => {
+      if(element.selected === true){
+        element.state = "Publicado";
+        this.accountMarginsList.forEach(accmar => {
+          if(accmar.idMargin !== -1){
+            if(accmar.typeMargin === 1){
+              element.priceUYU = element.priceUYU + accmar.valueMargin
+            }
+            else{
+              element.priceUYU = (element.priceUYU * (accmar.valueMargin/100)) + element.priceUYU;
+            }
+          }
+        });        
+      }
+    });
+    Swal.fire({
+      position: 'top-end',
+      icon: 'info',
+      title: `Productos en publicación`,
+      text: `Los productos están siendo publicados`,
+      showConfirmButton: false,
+      timer: 5000
+    });  
+
+   // llamada al servicio Publicar
     this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, "", this.productsSelected);
+    this.closeModalPublish();
   }
 
 }

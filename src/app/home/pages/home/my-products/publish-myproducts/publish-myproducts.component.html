@@ -141,9 +141,9 @@
                 <td>{{ product.sku}}</td>
                 <td *ngIf="product.family">{{ product.family.description }}</td>
                 <td *ngIf="!product.family">Sin familia</td>
-                <td>UYU {{ product.priceUYU}} / $ {{product.priceUSD}}</td>
+                <td>UYU {{ product.priceUYU}} </td>
                 <td>{{ product.currentStock}} </td>
-                <td>No Publicado</td>
+                <td>{{ product.state}}</td>
                 <td class="text-right">
                     <div class="dropdown no-arrow">
                         <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -217,7 +217,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalCenteredLabel">Publicar seleccionados</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" (click)="closeModalPublish()" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -273,31 +273,15 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                <div class="col-md-8">                  
+                  <select class="custom-select" name="Warranty" id="Warranty">
+                    <option> -- Seleccione tipo de Garantía --</option>
+                      <option value="1" selected>Garantía del vendedor</option>
+                      <option value="2">Garantía de fábrica</option> 
+                  </select>
                   <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
                 </div>
-              </div>
-
-              <div class="form-group row mb-2" >
-                <div class="col-md-4 izq-aling">
-                  <div class="row mb-2">
-                    <div class="col-md-9 label-wrapper" ><label class="control-label" for="Currency" title="">Precio a publicar</label></div>
-                    <div class="col-md-1">
-                      <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-8">
-                  <div class="input-group">
-                    <div class="input-group-append">
-                      <span class="input-group-text">UYU</span>
-                    </div>
-                    <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
-                      step="0.01" min="0" max="10000" value="22.33">
-                  </div>
-                </div>
-              </div>
+              </div>        
 
               <div class="form-group row mb-2">
                 <div class="col-md-4 izq-aling">
@@ -379,7 +363,7 @@
        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" (click)="publishProducts()">Publicar</button>
-        <button type="button" class="btn btn-secondary" (click)="closeModalPublish()" data-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="closeModalPublish()" #closePublishModal data-dismiss="modal">Cancelar</button>
       </div>
     </div>
   </div>

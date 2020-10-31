@@ -19,5 +19,4 @@ export class EditableProductModel{
 	price_cost: number;
 	
 	currentStock: number;
-
 }

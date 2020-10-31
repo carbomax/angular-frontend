@@ -1,9 +1,16 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import { MeliAccountService } from '../../../../services/meli-account.service';
+import { MarginService } from '../../../../services/margin.service';
 import Swal from 'sweetalert2';
 import { EditableProductModel } from '../../../../../models/editable.product.model';
 import { Image } from '../../../../../models/image.model';
+import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
+import { Margin } from 'src/app/models/margin';
+import { MeliAccount } from 'src/app/models/meli.account';
+import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
+import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 
 @Component({
   selector: 'app-edit-products',
@@ -19,7 +26,7 @@ export class EditProductsComponent implements OnInit {
   productsDeletedList: number[];
   imagesDeletedList: string[];
   editableProduct: EditableProductModel; 
-  imageToDelete: Image;
+  imageToDelete: Image;  
 
   edit = false;  
   message: string;
@@ -34,13 +41,25 @@ export class EditProductsComponent implements OnInit {
   public titleP: string;
   public orderP: number = -1;
 
-  constructor(private _router: ActivatedRoute, public productsStorageUserService: ProductsStorageUserService ) { }
+  /**Seccion para la vista Publicar */
+  meliAccountsList: MeliAccount[]; 
+  accountMarginsList: AccountMarginModel[];
+  initialMeliAccounts: MeliAccount[];
+  account_margin: AccountMarginModel; 
+  marginsList: Margin[];   
+  margin: number;
+
+
+  constructor(private _router: ActivatedRoute, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
+    public marginService: MarginService ) { }
 
   ngOnInit(): void {
     this.loadingModal = false;
     this.getCustomProduct();
     this.productsDeletedList = [];    
     this.imagesDeletedList = [];
+    this.accountMarginsList = [];
+    this.account_margin = new AccountMarginModel();
   }
 
   getCustomProduct(){
@@ -240,6 +259,88 @@ export class EditProductsComponent implements OnInit {
   close(){
     this.closeModal.nativeElement.click();
     this.closeModalLoading.nativeElement.click();
+  }
+
+  /** Seccion para la vista Publicar */
+
+  updateMeliAccountListView(meliAccount: number){   
+    if(meliAccount !== -1){
+      var account = this.meliAccountsList.find(element => element.id == meliAccount)
+
+      let accountMargin = new AccountMarginModel();
+      accountMargin.accountName = account.businessName;
+      accountMargin.idAccount = account.id;
+      accountMargin.idMargin = -1;
+      accountMargin.nameMargin = "";
+      this.accountMarginsList.push(accountMargin);
+
+      let index = this.meliAccountsList.indexOf(account);
+      this.meliAccountsList.splice(index, 1);
+    }
+  }
+
+  getAccountMeli(){
+    this.meliAccountsList = [];
+    this.initialMeliAccounts = [];
+    this.meliAccountService.getAccounts().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.status === AccountMeliStates.SYNCHRONIZED && element.marketplaceId === MarketplaceType.MERCADOLIBRE){          
+          this.meliAccountsList.push(element);
+        }
+      });
+      this.meliAccountsList.forEach(element => { this.initialMeliAccounts.push(element);});
+    })    
+  }
+
+  deleteRelationAccountMargin(){
+    if(this.account_margin != null){
+      let account = this.initialMeliAccounts.find(element => element.id == this.account_margin.idAccount);
+      let position = this.initialMeliAccounts.indexOf(account);
+      this.meliAccountsList.splice(position, 0, account);
+      let position2 = this.accountMarginsList.indexOf(this.account_margin);
+      this.accountMarginsList.splice(position2, 1);      
+    }
+  }
+
+  getMargins(){
+    this.marginsList = [];
+    this.marginService.getMargins().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){
+          this.marginsList.push(element);
+        }
+      });
+    })
+  }
+
+  editRelationAccountMargin(relationship: AccountMarginModel){
+    this.account_margin = relationship;    
+  }
+
+  updateRelationShip(){
+    if(this.margin == -1) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `error`,
+        text: `Seleccione un margen`,
+        showConfirmButton: false,
+        timer: 5000
+      });      
+    }
+    else{
+      let position = this.accountMarginsList.indexOf(this.account_margin);
+      var margin = this.marginsList.find(element => element.id == this.margin);
+      this.account_margin.idMargin = margin.id;
+      this.account_margin.nameMargin = margin.name;
+      this.account_margin.typeMargin = margin.type;
+      this.account_margin.valueMargin = margin.value;
+      this.accountMarginsList[position] = this.account_margin;     
+    }
+  }
+
+  previewDelete(relationship: AccountMarginModel){
+    this.account_margin = relationship;
   }
 
 }

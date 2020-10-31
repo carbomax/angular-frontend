@@ -227,7 +227,7 @@
                   </div>
                   <div class="col-md-8">
                     <input class="form-control text-box single-line" id="TitleProd" name="TitleProd" type="text"
-                      value="">
+                      value="{{editableProduct.productName}}" disabled>
                     <span class="field-validation-valid" data-valmsg-for="TitleProd" data-valmsg-replace="true"></span>
                   </div>
                 </div>
@@ -266,8 +266,12 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-md-8">
-                    <input class="form-control text-box single-line" id="Warranty" name="Warranty" type="text" value="">
+                  <div class="col-md-8">                    
+                    <select class="custom-select" name="Warranty" id="Warranty">
+                      <option selected> -- Seleccione tipo de Garantía -- </option>
+                      <option value="1">Garantía del vendedor</option>
+                      <option value="2">Garantía de fábrica</option>                     
+                    </select>
                     <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
                   </div>
                 </div>
@@ -291,11 +295,10 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-                    <select class="custom-select" name="Accounts">
-                      <option selected>-- Seleccione cuenta para publicar --</option>
-                      <option value="1">One</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
+                    <select class="custom-select" name="meliAccount" >
+                      <option [value]="-1" >-- Seleccione cuenta para publicar --</option>
+                      <option [value]="account.id" *ngFor="let account of meliAccountsList">
+                        {{account.businessName}}</option>                  
                     </select>
                     <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
                   </div>
@@ -316,7 +319,7 @@
                         <span class="input-group-text">UYU</span>
                       </div>
                       <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
-                        step="0.01" min="0" max="10000" value="22.33">
+                        step="0.01" min="0" max="10000" value="22.33" disabled>
                     </div>
                   </div>
                 </div>
@@ -347,9 +350,9 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td>Raciazek</td>
-                            <td class="text-center">25%</td>
+                          <tr *ngFor="let relationship of accountMarginsList">
+                            <td>{{relationship.accountName}}</td>
+                            <td class="text-center">{{relationship.nameMargin}}</td>
                             <td class="text-right">
                               <div class="dropdown no-arrow">
                                   <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -358,63 +361,12 @@
                                   </a>
                                   <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                                     aria-labelledby="dropdownMenuLink">                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" (click)="editRelationAccountMargin(relationship)" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
+                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
                                   </div>
                                 </div>
                             </td>
-                          </tr>
-                          <tr>
-                            <td>Raciazekfgf</td>
-                            <td class="text-center">25%</td>                            
-                            <td class="text-right">
-                              <div class="dropdown no-arrow">
-                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                                    aria-labelledby="dropdownMenuLink">                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
-                                  </div>
-                                </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Raciazek</td>
-                            <td class="text-center">25%</td>
-                            <td class="text-right">
-                              <div class="dropdown no-arrow">
-                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                                    aria-labelledby="dropdownMenuLink">                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
-                                  </div>
-                                </div>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>Raciazek</td>
-                            <td class="text-center">25%</td>
-                            <td class="text-right">
-                              <div class="dropdown no-arrow">
-                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                                    aria-labelledby="dropdownMenuLink">                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                    <a class="dropdown-item pointer" href="#"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
-                                  </div>
-                                </div>
-                            </td>
-                          </tr>                         
+                          </tr>                                                    
                         </tbody>
                       </table>
                     </div>
