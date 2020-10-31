@@ -1,3 +1,4 @@
+/*Para la vista general*/
 .actionbox{
     width: 2em !important;
     height: 2em !important;
@@ -16,6 +17,9 @@
   min-width: auto !important;
   width: 45rem !important;
 }
+/********* TERMINA AQUI* ********/
+
+/********* Modal Publicar* ********/
 .ico-help{
   margin-left: 3%;
 }
@@ -45,6 +49,7 @@
   border-radius: 10px;
   border-color: #d1d3e2;     
 }
+/********* TERMINA AQUI* ********/
 
 /*Para el Modal de Adicionar Info comun*/
 .cardtextarea{
@@ -65,6 +70,7 @@
   color: #fff !important;  
   border-color: #2653d4 !important;
 }
+
 /*Para el boton de subir imagenes*/
 div.uploader {
   width: 100%;    
@@ -186,7 +192,7 @@ cursor: pointer;
   .div-img:hover {    
     z-index: 5;    
 }
-  
+/********* TERMINA AQUI* ********/
 
 /*Para el Modal Cargando*/
 .modal-content-loading{

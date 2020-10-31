@@ -5,7 +5,6 @@ import { SharedModule } from '../shared/shared.module';
 import { HomeRoutingModule } from './home-routing.module';
 
 
-
 //Components
 import { SidebardComponent } from './components/sidebard/sidebard.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -31,6 +30,7 @@ import { UserAdminComponent } from './pages/home/user-admin/user-admin.component
 import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
+import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
 
 
 
@@ -55,7 +55,8 @@ import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-
     UserAdminComponent,
     MeliAccountsComponent,
     PublishedProductComponent,
-    SellerOrdersComponent],
+    SellerOrdersComponent,
+    MeliCategoryPathComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -73,11 +74,13 @@ import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-
     EditProductsComponent,
     NotImagePipe,
     ListMarginsComponent,
-    SellerOrdersComponent],
+    SellerOrdersComponent,
+    MeliCategoryPathComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,
     MatDialogModule
+
   ]
 })
 export class HomeModule { }
