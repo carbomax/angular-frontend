@@ -20,8 +20,6 @@ export class LoginComponent implements OnInit {
 
   public loading = false;
   public loginIntoText = 'Entrar';
-  public fielsEmptys = 'Este campo es obligatorio';
-  public emailErrorMessage = '';
 
 
 
