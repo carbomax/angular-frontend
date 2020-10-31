@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 
 import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
 import { Ng5SliderModule } from 'ng5-slider';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Pagination
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -19,6 +19,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     NgxBootstrapSliderModule,
     Ng5SliderModule,
     NgxPaginationModule,
@@ -32,7 +33,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
-    NgSelectModule
+    NgSelectModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }
