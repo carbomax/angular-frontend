@@ -3,6 +3,8 @@ import { NgForm } from '@angular/forms';
 import { PageProductStorage } from '../../../../../models/page.product.store';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { ProductStore } from '../../../../../models/product.store';
+import { ProductsMeliPublishedService } from '../../../../services/products.meli.published.service';
+import { ProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
 
 @Component({
   selector: 'app-published-product',
@@ -12,7 +14,7 @@ import { ProductStore } from '../../../../../models/product.store';
 export class PublishedProductComponent implements OnInit {
   meliAccountSearchClear = '';
   typeStateSearchClear = '';
-  disable = true;  
+  disable = true;
 
   public loading = true;
   public loadPaginator = false;
@@ -37,8 +39,12 @@ export class PublishedProductComponent implements OnInit {
 
    //Loading Modal
    loadingModal = false;
+   productsMeliPublished: ProductMeliPublished[] = [];
+  constructor(public productsMeliPublishedService: ProductsMeliPublishedService) {
 
-  constructor(public productStoreService: ProductsStorageService) { }
+    // Test
+    this.loadProductsPaginator(1);
+  }
 
   selectChangeHandler(size): void {
     this.size = +size;
@@ -47,37 +53,18 @@ export class PublishedProductComponent implements OnInit {
 
   loadProductsPaginator(page?: number): void {
     this.loadPaginator = true;
-    this.productStoreService.
-      getPageProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
-        '', -1, -1, 0, 2000)
-      .subscribe(pageItemGrid => {
-        this.pageProducts = this.productStoreService.pageProducts;
+    this.loading = true;
+    this.productsMeliPublishedService.
+      getProductsPublished(0, 15).subscribe( (resp: any)  =>  {
+        this.productsMeliPublished = resp;
         this.loadPaginator = false;
-      }, error => {
         this.loading = false;
-        this.errorProducts = true;
-        this.loadPaginator = false;
       });
+
   }
 
   ngOnInit(): void {
-    this.disable = true;
-    this.productsSelected = []; 
 
-    this.loading = true;
-    this.errorProducts = false;
-    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, '', -1 , -1 , 0, 2000)
-      .subscribe(pageItemGrid => {
-        this.pageProducts = this.productStoreService.pageProducts;
-
-        if (this.pageProducts.itemsGrid.length <= 0) {
-          this.errorProducts = true;
-        }
-        this.loading = false;
-      }, (error: any) => {
-        this.errorProducts = true;
-        this.loading = false;
-      })
   }
 
   searchProductsPublished(){}
@@ -87,7 +74,7 @@ export class PublishedProductComponent implements OnInit {
 
     this.loadingClear = true;
     this.idMeliSearch = '';
-    this.skuSearch = '';  
+    this.skuSearch = '';
     this.meliAccountSearch = '';
     this.typeStateSearch = '';
   }
@@ -122,18 +109,18 @@ export class PublishedProductComponent implements OnInit {
     let position = this.productsSelected.indexOf(product);
     if(position === -1){
       product.selected = !product.selected;
-      if(product.selected === true) { 
-        this.productsSelected.push(product);     
-      } 
+      if(product.selected === true) {
+        this.productsSelected.push(product);
+      }
     }
     else{
-      product.selected = !product.selected;      
+      product.selected = !product.selected;
       if(product.selected === false){
         this.productsSelected.splice(position, 1);
       }
     }
     if(product.selected === false){
-      this.disable = true;      
+      this.disable = true;
     }else{
       this.disable = false;
     }

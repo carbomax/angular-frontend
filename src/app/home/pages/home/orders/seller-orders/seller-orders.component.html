@@ -1,0 +1,38 @@
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+
+    <div
+      class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <h6 class="m-0 font-weight-bold text-primary">Órdenes</h6>
+    </div>
+  </div>
+
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Estado del pago</th>
+            <th>Estado del envío</th>
+            <th>Cliente</th>
+            <th>Fecha creación</th>
+            <th>Monto total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let item of orders">
+                <td>{{ item.status }}</td>
+                <td>{{item.shippingId}}</td>
+                <td>{{ item.seller.nickname }}</td>
+                <td>{{ item.dateCreated |date}}</td>
+                <td>{{ item.totalAmount}}</td>
+
+            </tr>
+
+
+        </tbody>
+      </table>
+    </div>
