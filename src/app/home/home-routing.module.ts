@@ -17,6 +17,7 @@ import { AuthGuard } from '../auth/guard/auth.guard';
 import { RoleGuard } from '../auth/guard/role.guard';
 import { RoleEnum } from '../enums/role.enum';
 import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
+import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
       { path: 'margins', component: ListMarginsComponent, canActivate: [AuthGuard] },
       { path: 'users-admin', component: UserAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] } },
       { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard] },
+      { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] },
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
