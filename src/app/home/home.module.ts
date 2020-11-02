@@ -19,6 +19,7 @@ import { ListMarketplacesComponent } from './pages/home/marketplaces/list-market
 import { NotImagePipe } from './pipes/not-image.pipe';
 import {MatDialogModule} from '@angular/material/dialog';
 
+
 import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
 import { UsersComponent } from './pages/home/users/users.component';
@@ -31,6 +32,7 @@ import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.
 import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
+
 
 
 
@@ -80,7 +82,6 @@ import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/
     SharedModule,
     HomeRoutingModule,
     MatDialogModule
-
   ]
 })
 export class HomeModule { }

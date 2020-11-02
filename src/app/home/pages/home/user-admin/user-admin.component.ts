@@ -157,10 +157,15 @@ export class UserAdminComponent implements OnInit {
       console.log('Error al actualizar un usuario', error);
       this.loadProfiles();
       this.loading = false;
+
+      let errorTitle = 'El usuario no ha sido actualizado';
+      if (error.error.status === 409) {
+        errorTitle = 'Ya existe un usuario con ese email';
+      }
       Swal.fire({
         position: 'top-end',
         icon: 'error',
-        title: `El usuraio no ha sido actualizado`,
+        title: errorTitle,
         showConfirmButton: false,
         timer: 2000
       })

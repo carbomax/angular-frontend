@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { MeliOrdersService } from '../../../../services/meli-orders.service';
+import { OrdersStatusEnum } from '../../../../../enums/orders.status.enum';
+import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
+import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-seller-orders',
@@ -8,15 +13,44 @@ import { HttpClient } from '@angular/common/http';
 })
 export class SellerOrdersComponent implements OnInit {
 
-orders: any [] = []
-  constructor(private http: HttpClient) { }
+  orderPage = new OrderPage();
+  page = 1;
+  size = 1;
+
+  hoveredDate: NgbDate | null = null;
+
+  modelFrom: NgbDateStruct;
+  modelTo: NgbDateStruct;
+  today = this.calendar.getToday();
+
+  orderStatusClear = '';
+  orderStatusSearch = '';
+
+  constructor(public meliOrderService: MeliOrdersService,
+              private calendar: NgbCalendar,
+              public formatter: NgbDateParserFormatter) { }
 
   ngOnInit(): void {
-    this.http.get('http://localhost:9999/pepeganga/meli/api/orders/by-all-profile-accounts/22?page=0&size=1')
-    .subscribe( (resp: any) => {
-      this.orders = resp
-      console.log(this.orders)
+   this.loadOrders();
+  }
+
+
+  selectChangeHandler(size): void {
+    this.size = +size;
+    this.loadOrders();
+  }
+
+  loadProductsPaginator(page): void{
+   this.page = page;
+   this.loadOrders();
+  }
+
+  loadOrders(): void {
+    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, []).subscribe( (resp: OrderPage) => {
+      this.orderPage = resp;
     });
   }
+
+
 
 }
