@@ -23,21 +23,21 @@ import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: '', component: HomeComponent,
+    path: '', component: HomeComponent, data: {title: 'Inicio'},
     children: [
-      { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] },
-      { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] },
-      { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard] },
-      { path: 'list-marketplaces', component: ListMarketplacesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] } },
-      { path: 'edit-myproducts/:id', component: EditProductsComponent, canActivate: [AuthGuard] },
-      { path: 'published-products', component: PublishedProductComponent, canActivate: [AuthGuard] },
-      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent, canActivate: [AuthGuard] },
-      { path: 'meli-category', component: MeliCategoryPathComponent, canActivate: [AuthGuard] },
-      { path: 'sellers', component: UsersComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] } },
-      { path: 'margins', component: ListMarginsComponent, canActivate: [AuthGuard] },
-      { path: 'users-admin', component: UserAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] } },
-      { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard] },
-      { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] },
+      { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] ,data: {title: 'Almacén'} },
+      { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] ,data: {title: 'Mis productos'} },
+      { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard] ,data: {title: 'Productos publicados'}},
+      { path: 'list-marketplaces', component: ListMarketplacesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] , title: 'Marketplaces'} },
+      { path: 'edit-myproducts/:id', component: EditProductsComponent, canActivate: [AuthGuard] ,data: {title: 'Inicio'}},
+      { path: 'published-products', component: PublishedProductComponent, canActivate: [AuthGuard] ,data: {title: 'Inicio'}},
+      { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent, canActivate: [AuthGuard] ,data: {title: 'Inicio'}},
+      { path: 'meli-category', component: MeliCategoryPathComponent, canActivate: [AuthGuard] ,data: {title: 'Inicio'}},
+      { path: 'sellers', component: UsersComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] , title: 'Vendedores'} },
+      { path: 'margins', component: ListMarginsComponent, canActivate: [AuthGuard] ,data: {title: 'Márgenes'}},
+      { path: 'users-admin', component: UserAdminComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] , title: 'Usuarios'} },
+      { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard] ,data: {title: 'Cuentas mercado libre'}},
+      { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] ,data: {title: 'Ordenes'}},
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
