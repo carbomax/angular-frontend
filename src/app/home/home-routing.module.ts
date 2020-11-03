@@ -24,7 +24,7 @@ import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: '', component: HomeComponent,
+    path: '', component: HomeComponent, data: {title: 'Inicio'},
     children: [
       { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] },
       { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] },

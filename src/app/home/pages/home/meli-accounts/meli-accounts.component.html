@@ -56,7 +56,7 @@
 
 
 
-              <button *ngIf="account.status === 0 || account.status === 1" placement="bottom"
+              <button  *ngIf="account.status === 0 || account.status === 1" placement="bottom"
                 ngbTooltip="Cuenta no vinculada" type="button" (click)="redirect(account.id)"
                 class="btn btn-sm btn-secondary"><i class="far fa-times-circle"></i> No vinculada </button>
 
