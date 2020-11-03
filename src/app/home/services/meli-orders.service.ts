@@ -26,12 +26,22 @@ export class MeliOrdersService {
 
   constructor(private http: HttpClient, private authService: AuthService){}
 
-  public getAllOrdersByProfile(page: number, size: number, statusFilter: string[]): Observable<OrderPage> {
+  public getAllOrdersByProfile(page: number, size: number, statusFilter: string[], nameClient: string, dateFrom, dateTo): Observable<OrderPage> {
     this.profileId = this.authService.authenticationDataExtrac().profileId;
     if(statusFilter.length <= 0 ){
       statusFilter = ['paid', 'cancelled'];
     }
-    return this.http.get<OrderPage>(`${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&&statusFilter=${statusFilter}`);
+    if(dateFrom == null){
+      dateFrom = 0;
+    }
+    if(dateTo == null){
+      dateTo = 99999999;
+    }
+
+
+    const url = `${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&&statusFilter=${statusFilter}&nameClient=${nameClient}&dateFrom=${dateFrom}&dateTo=${dateTo}`
+    console.log(url)
+    return this.http.get<OrderPage>(url);
   }
 
 }
