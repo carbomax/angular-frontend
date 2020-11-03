@@ -10,6 +10,7 @@ import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/
 import { UsersComponent } from './pages/home/users/users.component';
 
 import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
+import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
 import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
 import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
 import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
@@ -30,6 +31,7 @@ const routes: Routes = [
       { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard] },
       { path: 'list-marketplaces', component: ListMarketplacesComponent, canActivate: [AuthGuard, RoleGuard], data: { roles: [RoleEnum.ADMIN] } },
       { path: 'edit-myproducts/:id', component: EditProductsComponent, canActivate: [AuthGuard] },
+      { path: 'edit-products-published/:product', component: EditProductsPublishedComponent, canActivate: [AuthGuard] },
       { path: 'published-products', component: PublishedProductComponent, canActivate: [AuthGuard] },
       { path: 'addcommoninfocomponent', component: PopupAddcommoninfoComponent, canActivate: [AuthGuard] },
       { path: 'meli-category', component: MeliCategoryPathComponent, canActivate: [AuthGuard] },

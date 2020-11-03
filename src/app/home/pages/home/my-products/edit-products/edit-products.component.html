@@ -29,7 +29,7 @@
               <div class="form-group row mb-2">
                 <div class="col-md-4 izq-aling">
                   <div class="row mb-2 label-wrapper">
-                    <div class="col-md-8"><label class="control-label" for="productName" title="">Nombre del
+                    <div class="col-md-8"><label class="control-label" for="editableProduct" title="">Nombre del
                         producto</label></div>
                     <div class="col-md-1">
                       <div class="ico-help" title="Nombre actual del producto a editar."><i
@@ -38,8 +38,8 @@
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <input class="form-control text-box single-line" id="productName" name="productName" type="text" [(ngModel)]="editableProduct.productName" >
-                  <span class="field-validation-valid" data-valmsg-for="productName" data-valmsg-replace="true"></span>
+                  <input class="form-control text-box single-line" id="editableProduct" name="editableProduct" type="text" [(ngModel)]="editableProduct.productName" >
+                  <span class="field-validation-valid" data-valmsg-for="editableProduct" data-valmsg-replace="true"></span>
                 </div>
               </div>
 
@@ -209,7 +209,7 @@
           <h6 class="m-0 font-weight-bold text-primary">Publicar producto</h6>
         </div>
         <div class="card-body">
-          <div class="container-fluid">
+          <div class="">
 
             <div class="form-group row mb-2">
               <div class="col-md-6 izq-aling">
@@ -242,18 +242,53 @@
                             class="fa fa-question-circle"></i></div>
                       </div>
                     </div>
+                 </div>
+                 <div class="col-md-8"> 
+                    <!--  DE AQUI--> 
+                  <div *ngIf="responsePredictor.predictor === true">
+                    <div class="card border-left-primary shadow h-200 py-2 card-category">        
+                      <div class="card-body card-body-category" >
+                        <div class="row no-gutters align-items-center">
+                          <div class="col mr-3">
+                          <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >Mercado Libre</div>
+                          <div class="mb-0 text-gray-300">Productos:</div>
+                        </div>                      
+                        </div>  
+                      </div>
+                    </div> 
                   </div>
-                  <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="CategoryName"
-                      name="CategoryName" rows="4" style="height: 107px;"></textarea>
-                    <span class="field-validation-valid" data-valmsg-for="CategoryId" data-valmsg-replace="true"></span>
+                    <div class="col-md-8 path-category" *ngIf="responsePredictor.predictor === false || withoutPredictor === true">
+                      <nav aria-label="breadcrumb" id="CategoryName">
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>                        
+                          <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>                        
+                        </ol>
+                      </nav>                                
+                    </div>
+                    <app-meli-category-path *ngIf="responsePredictor.predictor === false || withoutPredictor === true" [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
+                
+                  
+                    <!-- Hasta aqui  -->
 
-                    <button type="submit"
-                      onclick="javascript:OpenWindow('/Plugins/MercadoLibreCategory/SelectCategoryPopup', 400, 650, true); return false;"
-                      class="btn btn-primary">
-                      Buscar Categoría
-                    </button>
-                  </div>
+                    <div class="row" *ngIf="responsePredictor.predictor === true">
+                      <div class="col-md-12">
+                        <a class="" href="javascript:void(0);" aria-haspopup="true" aria-expanded="false" (click)="activeAllCategory()">
+                          <div class="row">
+                            <div class="col-md-1"><i class="fas fa-hand-point-right"></i></div>
+                            <div class="col-md-8"><p>Elegir otra categoria</p></div>
+                          </div>                   
+                        </a>
+                      </div>                  
+                    </div>
+                    
                 </div>
+               </div>  
+              </div> 
+
+              <div class="col-md-6 izq-aling">                
+
+
+  <!--                     -->
 
                 <div class="form-group row mb-2">
                   <div class="col-md-4 izq-aling">
@@ -265,42 +300,29 @@
                             class="fa fa-question-circle"></i></div>
                       </div>
                     </div>
+                  </div>          
+                
+                  <div class="col-md-8"> 
+                    <div class="custom-control custom-checkbox">
+                      <input type="checkbox" ([ngModel])="warranty" (change)="warranty = !warranty" class="custom-control-input" id="warranty">
+                      <label class="custom-control-label" for="warranty">Habilitar garantía</label>
+                    </div> 
                   </div>
-                  <div class="col-md-8">                    
-                    <select class="custom-select" name="Warranty" id="Warranty">
-                      <option selected> -- Seleccione tipo de Garantía -- </option>
-                      <option value="1">Garantía del vendedor</option>
-                      <option value="2">Garantía de fábrica</option>                     
+                  <div class="col-md-4 izq-aling"></div>
+                  <div class="col-md-4"> 
+                    <p>Tipo de garantía</p>                  
+                    <select class="custom-select" name="warrantyType" id="warrantyType" (change)="warrantyType = $event.target.value" [(ngModel)]="warrantyType" [disabled]="!warranty">
+                      <option value="-1" selected> -- Seleccione --</option>
+                        <option value="2230280">Garantía del vendedor</option>
+                        <option value="2230279">Garantía de fábrica</option> 
                     </select>
-                    <span class="field-validation-valid" data-valmsg-for="Warranty" data-valmsg-replace="true"></span>
+                    <span class="field-validation-valid" data-valmsg-for="warrantyType" data-valmsg-replace="true"></span>
                   </div>
-                </div>
-
-              </div>
-
-              <div class="col-md-6 izq-aling">
-
-                <div class="form-group row mb-2">
-                  <div class="col-md-4 izq-aling">
-                    <div class="row mb-2">
-
-                      <div class="col-md-10 label-wrapper">
-                        <label class="control-label" for="Accounts" title="">Cuentas de Mercado Libre</label>
-                      </div>
-                      <div class="col-md-1" style="padding-left: inherit;">
-                        <div class="ico-help"
-                          title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i
-                            class="fa fa-question-circle"></i></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-8">
-                    <select class="custom-select" name="meliAccount" >
-                      <option [value]="-1" >-- Seleccione cuenta para publicar --</option>
-                      <option [value]="account.id" *ngFor="let account of meliAccountsList">
-                        {{account.businessName}}</option>                  
-                    </select>
-                    <span class="field-validation-valid" data-valmsg-for="Accounts" data-valmsg-replace="true"></span>
+                  <div class="col-md-4">
+                    <p>Tiempo de garantía</p>                  
+                    <input class="form-control text-box single-line" type="number" step="5" min="0" max="180" [(ngModel)]="warrantyTime" 
+                        name="warrantyTime" id="warrantyTime" [disabled]="!warranty">
+                    <span class="field-validation-valid" data-valmsg-for="warrantyTime" data-valmsg-replace="true"></span>
                   </div>
                 </div>
 
@@ -324,7 +346,9 @@
                   </div>
                 </div>
 
-                <div class="form-group row mb-2">
+          
+
+                <div class="form-group row mb-2" style="margin-top: 2rem;">
                   <div class="col-md-4 izq-aling">
                     <div class="row mb-2">
                       <div class="col-md-10 label-wrapper">
@@ -338,7 +362,7 @@
                     </div>
                   </div>
                   <div class="col-md-8">
-
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tarifaModal">Agregar</button>
                     <div class="table-wrapper-scroll-y my-custom-scrollbar div-table-border table-sm ">
 
                       <table class="table table-hover mb-0">
@@ -346,7 +370,7 @@
                           <tr>
                             <th scope="col">Cuenta</th>
                             <th scope="col" class="text-center">Margen de ganancia</th>
-                            <th scope="col" class="text-right">Acción</th>                            
+                            <th scope="col" class="text-right">Eliminar</th>                            
                           </tr>
                         </thead>
                         <tbody>
@@ -354,32 +378,20 @@
                             <td>{{relationship.accountName}}</td>
                             <td class="text-center">{{relationship.nameMargin}}</td>
                             <td class="text-right">
-                              <div class="dropdown no-arrow">
-                                  <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                                    aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                                  </a>
-                                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                                    aria-labelledby="dropdownMenuLink">                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" (click)="editRelationAccountMargin(relationship)" data-toggle="modal" data-target="#tarifaModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>                          
-                                    <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a> 
-                                  </div>
-                                </div>
+                              <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModalRelationShip" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>                          
                             </td>
-                          </tr>                                                    
+                          </tr>                                                
                         </tbody>
                       </table>
                     </div>
-
                   </div>
                 </div>
-
               </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Publicar</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+           </div>
+         </div>
+          <div class="modal-footer">        
+            <button type="button" class="btn btn-primary" (click)="publishProducts()" [disabled]="lastCategorySelected === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeModalPublish()">Cerrar</button>
           </div>
         </div>
       </div>
@@ -388,7 +400,7 @@
 </div>
 
 
-<!-- Modal -->
+<!-- Modal de Confirmacion para eliminar imagen del producto -->
 <div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -500,6 +512,92 @@
         <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>   
       </div>
        
+    </div>
+  </div>
+</div>
+
+<!--Modal to add applied rate and select account-->
+<div class="modal modal-opacity" id="tarifaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenteredLabel"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container">
+          <div class="form-group row mb-2">
+            <div class="col-md-5 izq-aling">
+              <div class="row mb-2">
+
+                <div class="col-md-10 label-wrapper">
+                  <label class="control-label" for="meliAccount" title="">Cuentas de Mercado Libre</label>
+                </div>
+                <div class="col-md-1" style="padding-left: inherit;">
+                  <div class="ico-help"
+                    title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i
+                      class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+              <select class="custom-select" name="meliAccount"  [(ngModel)]="meliAccount">
+                <option selected [value]="-1" >-- Seleccione una cuenta --</option>
+                <option [value]="account.id" *ngFor="let account of meliAccountsList">
+                  {{account.businessName}}</option>                  
+              </select>
+              <span class="field-validation-valid" data-valmsg-for="meliAccount" data-valmsg-replace="true"></span>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
+            <div class="col-md-5 izq-aling">
+              <div class="row mb-2">
+
+                <div class="col-md-10 label-wrapper">
+                  <label class="control-label" for="Accounts" title="">Marge de ganancia</label>
+                </div>
+                <div class="col-md-1" style="padding-left: inherit;">
+                  <div class="ico-help" title="Seleccione la tarifa que va aplicar a la cuenta de mercado libre."><i class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-7">
+                <select class="custom-select" name="margin" [(ngModel)]="margin">
+                  <option selected [value]="-1">-- Seleccione un margen --</option>
+                  <option [value]="marginSelected.id" *ngFor="let marginSelected of marginsList">{{marginSelected.name}}</option>               
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="margin" data-valmsg-replace="true"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" (click)="addRelationAccountMargin()" [disabled]="meliAccount == -1">Guardar</button>
+        <button type="button" class="btn btn-secondary" #closeMargin (click)="clearSome()" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmation to delete relationship -->
+<div class="modal" id="confirmationModalRelationShip" tabindex="-1" role="dialog" aria-labelledby="confirmationModalRelationShipLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmationModalRelationShipLabel">Confirmación</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ¿Estas seguro de eliminar la configuración?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRelationAccountMargin()" >Aceptar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearSome()">Cancelar</button>        
+      </div>
     </div>
   </div>
 </div>

@@ -26,11 +26,17 @@ export  class ProductMeliPublished {
 
   public status: string;
 
+  public saleStatus: number;
+
   public sku: string;
 
   public accountName: string;
 
   public images: string[];
+
+  public description: string;
+
+  public currentStock: number;
 
   public selected = false;
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { PageProductStorage } from '../../../../../models/page.product.store';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { ProductStore } from '../../../../../models/product.store';
@@ -40,7 +41,7 @@ export class PublishedProductComponent implements OnInit {
    //Loading Modal
    loadingModal = false;
    productsMeliPublished: ProductMeliPublished[] = [];
-  constructor(public productsMeliPublishedService: ProductsMeliPublishedService) {
+  constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService) {
 
     // Test
     this.loadProductsPaginator(1);
@@ -124,6 +125,18 @@ export class PublishedProductComponent implements OnInit {
     }else{
       this.disable = false;
     }
+  }
+
+  navegateToEdit(product: ProductMeliPublished){
+    let prod = JSON.stringify(product);    
+    this.router.navigate(['edit-products-published', prod]);    
+  }
+
+  cipherContent(content: string){ 
+      let encodeContent = btoa(content);
+      let piece = Math.trunc(encodeContent.length / 3);
+      let truck = content.substring(piece, piece*2) + content.substring(0, piece) + content.substring(piece*2);
+      return truck;
   }
 
 }

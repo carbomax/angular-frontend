@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { NgForm } from '@angular/forms';
 
-import { MeliCategory } from 'src/app/models/meli-category.model';
+import { MeliCategory } from 'src/app/models/meli-publication/meli-category.model';
 import { MeliPublicationsService } from '../../../../services/meli-publications.service';
 
 @Component({
@@ -54,6 +54,8 @@ export class MeliCategoryPathComponent implements OnInit {
       if(Object.keys(this.meliCategory).length !== 0){
         if(this.meliCategory.children_categories.length === 0)
             this.categorySelected.emit(this.meliCategory.id);
+        else
+            this.categorySelected.emit('-1');
       }
       });
     });

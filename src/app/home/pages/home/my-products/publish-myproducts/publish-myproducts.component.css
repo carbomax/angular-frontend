@@ -49,6 +49,9 @@
   border-radius: 10px;
   border-color: #d1d3e2;     
 }
+.delete-icon:hover{
+  color:#f50303 !important;
+}
 /********* TERMINA AQUI* ********/
 
 /*Para el Modal de Adicionar Info comun*/
@@ -157,7 +160,7 @@ cursor: pointer;
 
 
 /*Efecto eliminar imagen*/
-@import "lesshat";
+/*@import "lesshat";*/
 
 .div-img img{
   -webkit-border-radius: 10px;

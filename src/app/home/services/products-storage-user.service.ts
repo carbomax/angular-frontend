@@ -138,4 +138,19 @@ export class ProductsStorageUserService {
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/full-product-id/?ids=${idProductsList}`;
     return this.http.get<any>(params);
   }
+
+  deleteProductsFromStore(productsList: ProductCustom[]): Observable<boolean>{
+    let idList: number[] = [];
+    productsList.forEach(elem => {
+      idList.push(elem.id)
+    })
+
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/delete-products/${idList}`;
+    return this.http.delete<boolean>(params);
+  }
+
+  deleteProductFromStore(product: ProductCustom): Observable<boolean>{
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/delete-product/${product.id}`;
+    return this.http.delete<boolean>(params);
+  }
 }

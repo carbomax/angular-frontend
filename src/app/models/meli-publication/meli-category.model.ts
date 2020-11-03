@@ -1,4 +1,4 @@
-import { MeliPathRoot } from '../models/meli-path-from-root.model';
+import { MeliPathRoot } from './meli-path-from-root.model';
 
 export class MeliCategory {
 

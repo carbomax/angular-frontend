@@ -1,0 +1,631 @@
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link active" href="#product-info-tab" data-toggle="tab" aria-expanded="true">Información del
+        producto</a>
+    </li>  
+    <li class="nav-item">
+      <a class="nav-link" href="#product-publish-tab" data-toggle="tab">Publicar</a>
+    </li>
+  </ul>
+  
+  
+  <div class="tab-content">
+    <!--Contenido del Tab Informacion-->
+    
+    <div class="tab-pane active" id="product-info-tab">
+     <form #f="ngForm">
+      <div class="row">
+        <div class="card shadow mb-4 cardpopup">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Editar producto</h6>
+          </div>
+          
+          <!--Contenido del producto-->
+          <div class="card-body">
+         
+            <div class="form-group row mb-2">
+              <div class="col-md-6 izq-aling">
+  
+                <div class="form-group row mb-2">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2 label-wrapper">
+                      <div class="col-md-8"><label class="control-label" for="productMeliPublished" title="" >Nombre del
+                          producto</label></div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Nombre actual del producto a editar."><i
+                            class="fa fa-question-circle"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <input class="form-control text-box single-line" id="productMeliPublished" name="productMeliPublished" type="text"
+                         [(ngModel)]="productMeliPublished.title" [disabled]="productMeliPublished.status === statesOfMeli.ACTIVE && productMeliPublished.saleStatus === 1">
+                    <span class="field-validation-valid" data-valmsg-for="productMeliPublished" data-valmsg-replace="true"></span>
+                  </div>
+                </div>
+  
+                <div class="form-group row mb-2">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2">
+                      <div class="col-md-8"> <label class="control-label" for="Description" title="">Descripción</label>
+                      </div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Descripción del producto."><i class="fa fa-question-circle"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8"> <textarea class="form-control valid" cols="20" id="Description"
+                      name="Description" rows="4" style="height: 107px;" [(ngModel)]="productMeliPublished.description"></textarea>
+                    <span class="field-validation-valid" data-valmsg-for="Description" data-valmsg-replace="true"></span>
+                  </div>
+                </div>
+  
+                <div class="form-group row mb-2">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2 label-wrapper">
+                      <div class="col-md-8"><label class="control-label" for="SKU" title="">SKU</label></div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Código unico que identifica el producto."><i
+                            class="fa fa-question-circle"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <input class="form-control text-box single-line" id="SKU" name="SKU" type="text" value="" [(ngModel)]="productMeliPublished.sku" disabled >
+                    <span class="field-validation-valid" data-valmsg-for="SKU" data-valmsg-replace="true"></span>
+                  </div>
+                </div>
+  
+              </div>
+  
+              <div class="col-md-6 izq-aling">
+  
+                <div class="form-group row mb-2">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2 label-wrapper">
+                      <div class="col-md-8"><label class="control-label" for="CurrencyCost" title="">Precio Costo</label></div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Precio costo del producto."><i class="fa fa-question-circle"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="input-group">
+                      <div class="input-group-append">
+                        <span class="input-group-text">UYU</span>
+                      </div>
+                      <input class="form-control text-box single-line" id="CurrencyCost" name="CurrencyCost" type="number"
+                        step="0.01" min="0" max="10000" [(ngModel)]="productMeliPublished.pricePublication" disabled>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="form-group row mb-2" style="margin-top: 6%;">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2 label-wrapper">
+                      <div class="col-md-8"><label class="control-label" for="Currency" title="">Precio de publicación</label></div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="input-group">
+                      <div class="input-group-append">
+                        <span class="input-group-text">UYU</span>
+                      </div>
+                      <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
+                        step="0.01" min="0" max="10000" [(ngModel)]="productMeliPublished.pricePublication">
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="form-group row mb-2">
+                  <div class="col-md-4 izq-aling">
+                    <div class="row mb-2 label-wrapper">
+                      <div class="col-md-8"><label class="control-label" for="Cant" title="">Cantidad de
+                          existencias</label></div>
+                      <div class="col-md-1">
+                        <div class="ico-help" title="Cantidad actual de productos en existencia."><i
+                            class="fa fa-question-circle"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-8">
+                    <input class="form-control text-box single-line" id="Cant" name="Cant" type="number" min="0" [(ngModel)]="productMeliPublished.currentStock" disabled>
+                    <span class="field-validation-valid" data-valmsg-for="Cant" data-valmsg-replace="true" ></span>
+                  </div>
+                </div>           
+  
+              </div>
+            </div>
+          </div>        
+  
+        <!--Contenido del Tab Imagen-->
+          <div class="card-body">
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#imageModal"><i class="fas fa-plus m-2 text-info"></i>  Agregar imagen</button> 
+            <table class="table table-bordered">
+              <thead class="thead-light">
+                <tr>
+                  <th>Imágenes</th>
+                  <th>Orden de visualización</th>
+                  <th>Título</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody>              
+                <tr *ngFor="let image of productMeliPublished.images">
+                  <th scope="row">
+                    <img alt="imagen ilustrativa"
+                      src="{{image.photos}}" *ngIf="!edit || id !== image.id"
+                      width="55">
+                    <input class="form-control text-box single-line" type="text" name="urlP" [(ngModel)]="urlP" *ngIf="edit && id === image.id">
+                  </th>
+                  <td style="width: 5%;" *ngIf="!edit || id !== image.id">{{image.order}}</td>
+                  <td style="width: 5%;" *ngIf="edit && id === image.id"><input class="form-control text-box single-line" type="number" name="orderP" min="0" [(ngModel)]="orderP"></td>
+                  <td style="width: 25%;" *ngIf="!edit || id !== image.id">{{image.title}}</td>
+                  <td style="width: 25%;" *ngIf="edit && id === image.id"><input class="form-control text-box single-line" type="text" name="titleP" [(ngModel)]="titleP"></td>
+                  <td style="width: 6rem;">
+                    <div class="dropdown no-arrow">
+                      <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                        aria-labelledby="dropdownMenuLink">                      
+                        <a class="dropdown-item pointer" href="javascript:void(0);" (click)="editProduct(image)" *ngIf="id !== image.id"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                        <a class="dropdown-item pointer" href="javascript:void(0);" (click)="updateProduct(image)" *ngIf="id === image.id"><i class="far fa-edit m-2 text-success"></i>Actualizar</a>
+                        <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previousDelete(image)" *ngIf="id !== image.id"><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                        <a class="dropdown-item pointer" href="javascript:void(0);" (click)="cancelProduct()" *ngIf="id === image.id"><i class="fas fa-trash m-2 text-danger"></i>Cancelar</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>              
+              </tbody>
+            </table>
+  
+          </div>
+  
+        </div>
+      </div>
+              <!-- Buttons -->
+              <div class="form-group row mb-2">
+                <div class="col-md-10"></div>
+                <div class="col-md-2">
+                  <button type="button" class="btn btn-primary" (click)="saveForm()" data-toggle="modal" data-target="#loadingModal">Guardar</button>              
+                  <a class="btn btn-secondary" routerLink="/published-products" data-toggle="collapse" 
+                   style="margin-left: 2%;">Cerrar                  
+                  </a>
+                </div>
+              </div>
+     </form>
+    </div>
+   
+    <!--Contenido del Tab Publicar-->
+    <div class="tab-pane" id="product-publish-tab">
+      <div class="row">
+        <div class="card shadow mb-4 cardpopup">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Publicar producto</h6>
+          </div>
+          <div class="card-body">
+            <div class="">
+  
+              <div class="form-group row mb-2">
+                <div class="col-md-6 izq-aling">
+  
+                  <div class="form-group row mb-2">
+                    <div class="col-md-4 izq-aling">
+                      <div class="row mb-2 label-wrapper">
+                        <div class="col-md-8"><label class="control-label" for="TitleProd" title="">Título del
+                            producto</label></div>
+                        <div class="col-md-1">
+                          <div class="ico-help" title="Título del producto a publicar."><i
+                              class="fa fa-question-circle"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <input class="form-control text-box single-line" id="TitleProd" name="TitleProd" type="text"
+                        value="{{productMeliPublished.title}}" disabled>
+                      <span class="field-validation-valid" data-valmsg-for="TitleProd" data-valmsg-replace="true"></span>
+                    </div>
+                  </div>
+  
+                  <div class="form-group row mb-2">
+                    <div class="col-md-4 izq-aling">
+                      <div class="row mb-2">
+                        <div class="col-md-8"> <label class="control-label" for="CategoryId" title="">Categoría</label>
+                        </div>
+                        <div class="col-md-1">
+                          <div class="ico-help" title="Seleccione la categoría donde desea publicar los productos."><i
+                              class="fa fa-question-circle"></i></div>
+                        </div>
+                      </div>
+                   </div>
+                   <div class="col-md-8"> 
+                      <!--  DE AQUI--> 
+                    <div *ngIf="responsePredictor.predictor === true && productMeliPublished.status === statesOfMeli.FAIL">
+                      <div class="card border-left-primary shadow h-200 py-2 card-category">        
+                        <div class="card-body card-body-category" >
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-3">
+                            <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >Mercado Libre</div>
+                            <div class="mb-0 text-gray-300">Productos:</div>
+                          </div>                      
+                          </div>  
+                        </div>
+                      </div> 
+                    </div>
+                    <!-- Para cuando tiene Publicaciones Activas -->
+                    <div *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE">
+                      <div class="card border-left-primary shadow h-200 py-2 card-category">        
+                        <div class="card-body card-body-category" >
+                          <div class="row no-gutters align-items-center">
+                            <div class="col mr-3">
+                            <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >{{meliCategoryActive.name}}</div>
+                            <div class="mb-0 text-gray-500">{{pathActive}}</div>
+                          </div>                      
+                          </div>  
+                        </div>
+                      </div> 
+                    </div>
+
+                      <div class="col-md-8 path-category" *ngIf="(responsePredictor.predictor === false || withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL">
+                        <nav aria-label="breadcrumb" id="CategoryName">
+                          <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>                        
+                            <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>                        
+                          </ol>
+                        </nav>                                
+                      </div>
+                      <app-meli-category-path *ngIf="(responsePredictor.predictor === false || withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL" [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
+                  
+                    
+                      <!-- Hasta aqui  -->
+  
+                      <div class="row" *ngIf="responsePredictor.predictor === true && productMeliPublished.status === statesOfMeli.FAIL">
+                        <div class="col-md-12">
+                          <a class="" href="javascript:void(0);" aria-haspopup="true" aria-expanded="false" (click)="activeAllCategory()">
+                            <div class="row">
+                              <div class="col-md-1"><i class="fas fa-hand-point-right"></i></div>
+                              <div class="col-md-8"><p>Elegir otra categoria</p></div>
+                            </div>                   
+                          </a>
+                        </div>                  
+                      </div>
+                      
+                  </div>
+                 </div>  
+                </div> 
+  
+                <div class="col-md-6 izq-aling">                
+  
+  
+    <!--                     -->
+  
+                  <div class="form-group row mb-2">
+                    <div class="col-md-4 izq-aling">
+                      <div class="row mb-2 label-wrapper">
+                        <div class="col-md-8"><label class="control-label" for="Warranty" title="">Garantía</label></div>
+                        <div class="col-md-1">
+                          <div class="ico-help"
+                            title="Indique las condiciones de garantía ofrecidas para estos productos."><i
+                              class="fa fa-question-circle"></i></div>
+                        </div>
+                      </div>
+                    </div>          
+                  
+                    <div class="col-md-8"> 
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" ([ngModel])="warranty" (change)="warranty = !warranty" class="custom-control-input" id="warranty" 
+                              [disabled]="productMeliPublished.status === statesOfMeli.ACTIVE">
+                        <label class="custom-control-label" for="warranty">Habilitar garantía</label>
+                      </div> 
+                    </div>
+                    <div class="col-md-4 izq-aling"></div>
+                    <div class="col-md-4"> 
+                      <p>Tipo de garantía</p>                  
+                      <select class="custom-select" name="warrantyType" id="warrantyType" (change)="warrantyType = $event.target.value" [(ngModel)]="warrantyType" 
+                            [disabled]="!warranty || productMeliPublished.status === statesOfMeli.ACTIVE">
+                        <option value="-1" selected> -- Seleccione --</option>
+                          <option value="2230280">Garantía del vendedor</option>
+                          <option value="2230279">Garantía de fábrica</option> 
+                      </select>
+                      <span class="field-validation-valid" data-valmsg-for="warrantyType" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="col-md-4">
+                      <p>Tiempo de garantía</p>                  
+                      <input class="form-control text-box single-line" type="number" step="5" min="0" max="180" [(ngModel)]="warrantyTime" 
+                          name="warrantyTime" id="warrantyTime" [disabled]="!warranty || productMeliPublished.status === statesOfMeli.ACTIVE">
+                      <span class="field-validation-valid" data-valmsg-for="warrantyTime" data-valmsg-replace="true"></span>
+                    </div>
+                  </div>
+  <!--
+                  <div class="form-group row mb-2" >
+                    <div class="col-md-4 izq-aling">
+                      <div class="row mb-2">
+                        <div class="col-md-9 label-wrapper" ><label class="control-label" for="Currency" title="">Precio a publicar</label></div>
+                        <div class="col-md-1">
+                          <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="input-group">
+                        <div class="input-group-append">
+                          <span class="input-group-text">UYU</span>
+                        </div>
+                        <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
+                          step="0.01" min="0" max="10000" value="22.33" disabled>
+                      </div>
+                    </div>
+                  </div>
+  
+            -->
+  
+                  <div class="form-group row mb-2" style="margin-top: 2rem;">
+                    <div class="col-md-4 izq-aling">
+                      <div class="row mb-2">
+                        <div class="col-md-10 label-wrapper">
+                          <label class="control-label" for="UserProfileId" title="">Cuenta mercado Libre - Margen de ganancia</label>
+                        </div>
+                        <div class="col-md-1" style="padding-left: inherit;">
+                          <div class="ico-help"
+                            title="Muestra las cuentas y tarifas listas para ser publicadas en mercado libre."><i
+                              class="fa fa-question-circle"></i></div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="custom-control custom-switch">                           
+                        <input type="checkbox" class="custom-control-input" id="customSwitch1" [disabled]="reloadConfig"
+                              (change)="changeConfig($event.target.checked)" (ngModel)="activeConfig" #checkConfig>
+                        <label class="custom-control-label" for="customSwitch1">Modificar Configuración</label>
+                    </div>
+                      <fieldset><legend> Configurar </legend>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#tarifaModal" *ngIf="activeConfig">Agregar</button>
+                        <div class="table-wrapper-scroll-y my-custom-scrollbar div-table-border table-sm ">
+    
+                          <table class="table table-hover mb-0">
+                            <thead class="thead-dark">
+                              <tr>
+                                <th scope="col">Cuenta</th>
+                                <th scope="col" class="text-center">Margen de ganancia</th>
+                                <th scope="col" class="text-right" *ngIf="activeConfig">Eliminar</th>                            
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let relationship of accountMarginsList">
+                                <td>{{relationship.accountName}}</td>
+                                <td class="text-center">{{relationship.nameMargin}}</td>
+                                <td class="text-right" *ngIf="activeConfig">
+                                  <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModalRelationShip" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>                          
+                                </td>
+                              </tr>                                                
+                            </tbody>
+                          </table>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </div>
+                </div>
+             </div>
+           </div>
+            <div class="modal-footer">        
+              <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.FAIL" 
+                  [disabled]="lastCategorySelected === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
+              <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE" 
+                  [disabled]="accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Republicar</button>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditPublished()">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <!-- Modal de Confirmacion para eliminar imagen del producto -->
+  <div class="modal" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalLabel">Confirmación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ¿Estas seguro de eliminar la imagen del producto? <br> Sus cambios tendran efecto una vez que salve el producto.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteImage()" >Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clear()">Cancelar</button>        
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--Modal to Added Image-->
+  <div class="modal modal-opacity" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
+      <div class="modal-content publish-selected">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel">Agregar imagen</h5>
+          <button type="button" class="close" data-dismiss="modal" (click)="clearImage()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group row mb-2">
+            <div class="col-md-4 izq-aling">
+              <div class="row mb-2 label-wrapper">
+                <div class="col-md-8"><label class="control-label" for="titleImage" title="">Título de la imagen</label></div>
+                <div class="col-md-1">
+                  <div class="ico-help" title="Identificador de la imagen."><i
+                      class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="titleImage" name="titleImage" type="text" [(ngModel)]="titleImage">
+              <span class="field-validation-valid" data-valmsg-for="titleImage" data-valmsg-replace="true"></span>
+            </div>
+          </div>
+          <div class="form-group row mb-2">
+            <div class="col-md-4 izq-aling">
+              <div class="row mb-2 label-wrapper">
+                <div class="col-md-8"><label class="control-label" for="orderImage" title="">Orden de visualización</label></div>
+                <div class="col-md-1">
+                  <div class="ico-help" title="Orden de publicación de las imagenes en mercado libre."><i
+                      class="fa fa-question-circle"></i></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="orderImage" name="orderImage" type="number" min="0" [(ngModel)]="orderImage" >
+              <span class="field-validation-valid" data-valmsg-for="orderImage" data-valmsg-replace="true"></span>
+            </div>
+          </div>
+        <!-- Buttons Adicionar Imagen -->
+        <div class="form-group row mb-2">
+  
+          <div class="col-md-4 izq-aling">
+            <div class="row mb-2 label-wrapper">
+              <div class="col-md-8"><label class="control-label" for="uploadImage" title="">Seleccione una imagen</label></div>
+              <div class="col-md-1">
+                <div class="ico-help" title="La imagen a seleccionar no debe exceder los 2 MB de tamaño."><i
+                    class="fa fa-question-circle"></i></div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-md-8">
+            <div >
+              <a href="javascript:void(0);" class="thumbnail">            
+                <img [src]="imgURL" height="150" width="150" *ngIf="imgURL">
+             </a>
+            </div>
+            <div style="width: inherit; margin-top: 2%;">
+              <input type="file" #file accept='image/*' class="btn btn-primary" name="uploadImage" (change)="preview(file.files)" style="width: inherit;">     
+              <span style="color:red;" *ngIf="message">{{message}}</span>      
+            </div> 
+          </div>
+  
+        </div>
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addedImage()">Agregar</button>
+          <button type="button" #closeModal class="btn btn-secondary" data-dismiss="modal" (click)="clearImage()">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!--  Modal para cargando -->
+  <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+      <div class="modal-content modal-content-loading">
+        <div class="modal-header" hidden>
+          <h5 class="modal-title"  id="loadingModalLabel">Modal title</h5>
+          <button type="button" class="close" #closeModalLoading data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>   
+        </div>
+         
+      </div>
+    </div>
+  </div>
+  
+  <!--Modal to add applied rate and select account-->
+  <div class="modal modal-opacity" id="tarifaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenteredLabel"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <div class="form-group row mb-2">
+              <div class="col-md-5 izq-aling">
+                <div class="row mb-2">
+  
+                  <div class="col-md-10 label-wrapper">
+                    <label class="control-label" for="meliAccount" title="">Cuentas de Mercado Libre</label>
+                  </div>
+                  <div class="col-md-1" style="padding-left: inherit;">
+                    <div class="ico-help"
+                      title="Seleccione las cuentas de Mercado Libre en las que desea publicar."><i
+                        class="fa fa-question-circle"></i></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                <select class="custom-select" name="meliAccount"  [(ngModel)]="meliAccount">
+                  <option selected [value]="-1" >-- Seleccione una cuenta --</option>
+                  <option [value]="account.id" *ngFor="let account of meliAccountsList">
+                    {{account.businessName}}</option>                  
+                </select>
+                <span class="field-validation-valid" data-valmsg-for="meliAccount" data-valmsg-replace="true"></span>
+              </div>
+            </div>
+            <div class="form-group row mb-2">
+              <div class="col-md-5 izq-aling">
+                <div class="row mb-2">
+  
+                  <div class="col-md-10 label-wrapper">
+                    <label class="control-label" for="Accounts" title="">Marge de ganancia</label>
+                  </div>
+                  <div class="col-md-1" style="padding-left: inherit;">
+                    <div class="ico-help" title="Seleccione la tarifa que va aplicar a la cuenta de mercado libre."><i class="fa fa-question-circle"></i></div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-7">
+                  <select class="custom-select" name="margin" [(ngModel)]="margin">
+                    <option selected [value]="-1">-- Seleccione un margen --</option>
+                    <option [value]="marginSelected.id" *ngFor="let marginSelected of marginsList">{{marginSelected.name}}</option>               
+                  </select>
+                  <span class="field-validation-valid" data-valmsg-for="margin" data-valmsg-replace="true"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="addRelationAccountMargin()" [disabled]="meliAccount == -1">Guardar</button>
+          <button type="button" class="btn btn-secondary" #closeMargin (click)="clearSome()" data-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Confirmation to delete relationship -->
+  <div class="modal" id="confirmationModalRelationShip" tabindex="-1" role="dialog" aria-labelledby="confirmationModalRelationShipLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmationModalRelationShipLabel">Confirmación</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ¿Estas seguro de eliminar la configuración?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRelationAccountMargin()" >Aceptar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearSome()">Cancelar</button>        
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -23,6 +23,7 @@ import { PopupAddcommoninfoComponent } from '../../../../components/modals/popup
 import { States } from 'src/app/enums/states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
+import { elementAt } from 'rxjs/operators';
 
 declare function initializePlugin();
 
@@ -63,6 +64,8 @@ export class PublishMyproductsComponent implements OnInit {
   stateEnum = States;
   productsSelected: ProductCustom[];  
   disable: boolean = true;
+  loadingDeleteProduct: boolean = false;
+  productToDelete: ProductCustom;
   
   //security
   profileId: number;
@@ -111,8 +114,12 @@ export class PublishMyproductsComponent implements OnInit {
   account_margin: AccountMarginModel;
   accountMarginsList: AccountMarginModel[];
   marginsList: Margin[];  
-  margin: number;
-  lastCategorySelected: string = '';
+  margin: number = -1;  
+  meliAccount: number = -1;
+  lastCategorySelected: string = '-1';
+  warrantyType: number = -1;
+  warrantyTime: number = 0;
+  warranty: boolean = false;
   
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog, 
     private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, public meliPublicationsService: MeliPublicationsService, private router: Router) { 
@@ -161,7 +168,7 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   ngOnInit(): void { 
-    this.account_margin = new AccountMarginModel();      
+    this.account_margin = new AccountMarginModel(); 
     this.getAccountMeli();  
     this.getMargins();  
     this.loadingModal = false;
@@ -458,6 +465,123 @@ export class PublishMyproductsComponent implements OnInit {
     }) 
   }
 
+  deleteProducts(){
+    this.loadingModal = true;
+    this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp =>{
+        if(resp === true)
+        {
+          this.closeActiveModalLoading();  
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Éxitos`,
+            text: `Los productos fueron eliminados satisfactoriamente.`,
+            showConfirmButton: false,
+            timer: 5000
+          });
+          this.productsSelected.forEach(select => {
+              this.pageProductsMeli.itemsMeliGrid.forEach(element => {            
+              if(element.id === select.id){
+                let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
+                if(position >= 0){
+                    this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
+                }                
+              }
+            });          
+          }); 
+          this.productsSelected = [];
+          if(this.productsSelected.length === 0){
+            this.disable = true;      
+          }else{
+            this.disable = false;
+          }
+        }
+        else{
+          this.closeActiveModalLoading();  
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error eliminando`,
+            text: `Productos no eliminados. Sincronize y vuelva a intentarlo`,
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }
+    }, error => {
+        this.closeActiveModalLoading();  
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error eliminando`,
+          text: `Productos no eliminados. Sincronize y vuelva a intentarlo`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+    });
+    
+  }
+  
+  deleteOneProduct(product: ProductCustom){
+    this.productToDelete = product;
+    this.loadingDeleteProduct =  true;    
+    this.productStoreUserService.deleteProductFromStore(product).subscribe(resp =>{
+      if(resp === true)
+      {    
+        this.loadingDeleteProduct =  false; 
+        this.productToDelete = null;   
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: `Éxitos`,
+          text: `Producto eliminados satisfactoriamente.`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+      
+          this.pageProductsMeli.itemsMeliGrid.forEach(element => {            
+          if(element === product){
+            let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
+              if(position >= 0){
+                  this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
+              }                
+            }
+          }); 
+         
+          let pos = this.productsSelected.indexOf(product);
+          if(pos !== -1)
+            this.productsSelected.splice(pos, 1);
+          if(this.productsSelected.length === 0){
+            this.disable = true;      
+          }else{
+            this.disable = false;
+          }
+      }
+      else{
+        this.productToDelete = null;  
+        this.loadingDeleteProduct =  false;   
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error eliminando`,
+          text: `Producto no eliminado. Sincronice y vuelva a intentarlo`,
+          showConfirmButton: false,
+          timer: 5000
+        });
+      }
+  }, error => {
+    this.productToDelete = null;  
+    this.loadingDeleteProduct =  false;   
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error eliminando`,
+        text: `Producto no eliminado. Sincronice y vuelva a intentarlo`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+  });
+  }
+
   /* ************* Modal View Upload Images ********** */
   preview(files) {
     if (files.length === 0){
@@ -587,48 +711,30 @@ export class PublishMyproductsComponent implements OnInit {
     })
   }
 
-  updateMeliAccountListView(meliAccount: number){   
-    if(meliAccount !== -1){
-      var account = this.meliAccountsList.find(element => element.id == meliAccount)
-
+  addRelationAccountMargin(){   
+    if(this.meliAccount !== -1){      
       let accountMargin = new AccountMarginModel();
+
+      var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
       accountMargin.accountName = account.businessName;
       accountMargin.idAccount = account.id;
-      accountMargin.idMargin = -1;
-      accountMargin.nameMargin = "";
-      this.accountMarginsList.push(accountMargin);
 
+      if(this.margin !== -1){
+        var margin = this.marginsList.find(element => element.id == this.margin);
+        accountMargin.idMargin =  margin.id;
+        accountMargin.nameMargin = margin.name;
+        accountMargin.typeMargin = margin.type;
+        accountMargin.valueMargin = margin.value; 
+      }else{
+        accountMargin.idMargin = -1;
+        accountMargin.nameMargin = "";
+      }
+      this.accountMarginsList.push(accountMargin);
       let index = this.meliAccountsList.indexOf(account);
       this.meliAccountsList.splice(index, 1);
+      this.closeModalMargin();      
     }
-  }
-
-  editRelationAccountMargin(relationship: AccountMarginModel){
-    this.account_margin = relationship;    
-  }
-
-  updateRelationShip(){
-    if(this.margin == -1) {
-      Swal.fire({
-        position: 'top-end',
-        icon: 'error',
-        title: `error`,
-        text: `Seleccione un margen`,
-        showConfirmButton: false,
-        timer: 5000
-      });      
-    }
-    else{
-      let position = this.accountMarginsList.indexOf(this.account_margin);
-      var margin = this.marginsList.find(element => element.id == this.margin);
-      this.account_margin.idMargin = margin.id;
-      this.account_margin.nameMargin = margin.name;
-      this.account_margin.typeMargin = margin.type;
-      this.account_margin.valueMargin = margin.value;
-      this.accountMarginsList[position] = this.account_margin;
-      this.closeModalMargin();
-    }
-  }
+  } 
 
   previewDelete(relationship: AccountMarginModel){
     this.account_margin = relationship;
@@ -645,7 +751,9 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   clearAll(){
-    this.account_margin = null;    
+    this.account_margin = null; 
+    this.margin = -1; 
+    this.meliAccount = -1;  
   }
 
   closeModalPublish(){
@@ -654,6 +762,9 @@ export class PublishMyproductsComponent implements OnInit {
     this.meliAccountsList = [];
     this.pathList = [];
     this.home = true;
+    this.warrantyType = -1;
+    this.warrantyTime = -1;
+    this.warranty = false;
     this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
     this.closePublishModal.nativeElement.click(); 
   }
@@ -663,20 +774,11 @@ export class PublishMyproductsComponent implements OnInit {
     this.closeMargin.nativeElement.click();         
   }
 
-  publishProducts(){
+  publishProducts(){    
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
       if(element.selected === true){
-        element.state = "Publicado";
-        this.accountMarginsList.forEach(accmar => {
-          if(accmar.idMargin !== -1){
-            if(accmar.typeMargin === 1){
-              element.priceUYU = element.priceUYU + accmar.valueMargin
-            }
-            else{
-              element.priceUYU = (element.priceUYU * (accmar.valueMargin/100)) + element.priceUYU;
-            }
-          }
-        });        
+        let pos = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
+        this.pageProductsMeli.itemsMeliGrid.splice(pos, 1);
       }
     });
     Swal.fire({
@@ -689,7 +791,7 @@ export class PublishMyproductsComponent implements OnInit {
     });  
 
    // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, "", this.productsSelected);
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
     this.closeModalPublish();
   }
 
