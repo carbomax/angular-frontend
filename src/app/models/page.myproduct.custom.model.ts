@@ -9,6 +9,6 @@ export class PageProductMeliStorage {
     size: number;
     first: boolean;
     sort: any;
-    totalProducts: number;    
+    totalProducts: number;
     selected?: boolean;
   }
