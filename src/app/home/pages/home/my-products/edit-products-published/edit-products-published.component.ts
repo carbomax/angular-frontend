@@ -16,6 +16,7 @@ import { MeliAccount } from 'src/app/models/meli.account';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
+import { EditableProductModel } from 'src/app/models/editable.product.model';
 
 
 @Component({
@@ -159,10 +160,19 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   saveForm(){
-    /*
+    
     this.loadingModal = true; 
-    this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
-      this.editableProduct = item;
+    let editableProduct: EditableProductModel = new EditableProductModel();
+    editableProduct.id = this.productMeliPublished.mlPublicationId;
+    editableProduct.currentStock = this.productMeliPublished.currentStock;
+    editableProduct.description = this.productMeliPublished.description;
+    editableProduct.images = this.productMeliPublished.images;
+    editableProduct.price = +this.productMeliPublished.pricePublication;
+    editableProduct.productName = this.productMeliPublished.title;
+    editableProduct.sku = this.productMeliPublished.sku;
+    editableProduct.states = 1;
+    
+    this.productsStorageUserService.updateCustomProduct(editableProduct, this.productsDeletedList).subscribe(item => {  
       this.productsDeletedList = [];
       this.loadingModal = false;       
       this.close();
@@ -195,10 +205,10 @@ export class EditProductsPublishedComponent implements OnInit {
       this.imagesDeletedList = [];
       this.productsDeletedList = [];
     });  
-   */
+   
   };
 
-  editProduct(image: Image){
+  editImage(image: Image){
     this.id = +image.id;
     this.edit = true;
 
@@ -207,7 +217,7 @@ export class EditProductsPublishedComponent implements OnInit {
     this.urlP = image.photos   
   }
 
-  updateProduct(image: Image){
+  updateImage(image: Image){
     if(image.id === this.id){    
       image.order = this.orderP;
       image.title = this.titleP;
@@ -219,16 +229,16 @@ export class EditProductsPublishedComponent implements OnInit {
     }
   }
 
-  cancelProduct(){
+  cancelImage(){
     this.clear();
   }
 
   deleteImage(){
-    /*
+    
     this.productsDeletedList.push(this.imageToDelete.id); 
     this.imagesDeletedList.push(this.imageToDelete.photos);
-    let position = this.editableProduct.images.indexOf(this.imageToDelete);
-    this.editableProduct.images.splice(position, 1);*/
+    let position = this.productMeliPublished.images.indexOf(this.imageToDelete);
+    this.productMeliPublished.images.splice(position, 1);
   }
 
   previousDelete(image: Image){
@@ -301,7 +311,7 @@ export class EditProductsPublishedComponent implements OnInit {
         image_added.order = this.orderImage;
         image_added.title = this.titleImage;
         image_added.photos = resp.reason;
-       // this.editableProduct.images.push(image_added);
+        this.productMeliPublished.images.push(image_added);
       
         this.clearImage();
         this.close();   
@@ -313,14 +323,14 @@ export class EditProductsPublishedComponent implements OnInit {
           image_added.order = this.orderImage;
           image_added.title = this.titleImage;
           image_added.photos = error.error.text;
-          //this.editableProduct.images.push(image_added);
+          this.productMeliPublished.images.push(image_added);
         }
         else if(error.error.message.includes('Maximum upload size exceeded')){        
         Swal.fire({
           position: 'top-end',
           icon: 'error',
           title: `Error`,
-          text: 'Su imagen excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          text: 'Su imagen excede el tamaño máximo de configurado, Contacte con el administrador para mayor información',
           showConfirmButton: false,
           timer: 5000
         });
@@ -496,8 +506,7 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   closeEditPublished(){
-    this.clearAll();
-    //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);}); 
+    this.clearAll();     
     this.router.navigate(['/published-products']);
   }
 

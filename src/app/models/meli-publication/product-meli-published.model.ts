@@ -1,3 +1,5 @@
+import { Image } from '../image.model';
+
 export  class ProductMeliPublished {
 
   public id: number;
@@ -32,7 +34,7 @@ export  class ProductMeliPublished {
 
   public accountName: string;
 
-  public images: string[];
+  public images: Image[];
 
   public description: string;
 

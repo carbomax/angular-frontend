@@ -153,7 +153,7 @@
                 </div>
                   </td>
                 <td class="text-right"> <i *ngIf="loadingDeleteProduct && productToDelete === product;"  class="fas fa-spin fa-spinner fa-2x ml-2"></i>
-                    <div class="dropdown no-arrow" *ngIf="!loadingDeleteProduct">
+                    <div class="dropdown no-arrow" *ngIf="productToDelete !== product">
                         <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
                           aria-haspopup="true" aria-expanded="false">
                           <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
