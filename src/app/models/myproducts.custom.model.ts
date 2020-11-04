@@ -4,9 +4,9 @@ export class ProductCustom {
     id: number;
     sku: string;
     name: string;
-    priceUYU: number;    
+    priceUYU: number;
     currentStock: number;
-    images: any[];    
+    images: any[];
     family: FamilyProductStorage;
     state: string;
     selected?: boolean;

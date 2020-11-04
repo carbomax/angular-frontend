@@ -91,7 +91,7 @@
           <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
             aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#commonInfoModal"><i class="fas fa-plus m-2 text-info"></i>Agregar Información</a>
-            <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCentered"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>          
+            <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCentered"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>
             <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#loadingModal" (click)="deleteProducts()"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a>
           </div>
         </div>
@@ -119,7 +119,7 @@
               <th>Precio publicación</th>
               <th>Cantidad</th>
               <th>Estado</th>
-              <th class="text-right"><i class="fas fa-mouse-pointer"></i> Acción</th>
+              <th class="text-right">Acción</th>
             </tr>
           </thead>
 
@@ -142,7 +142,16 @@
                 <td *ngIf="!product.family">Sin familia</td>
                 <td>UYU {{ product.priceUYU}} </td>
                 <td>{{ product.currentStock}} </td>
-                <td>{{ product.state}}</td>
+                <td>
+                  <div *ngIf="product.state === 'Publicado'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
+                  role="alert">
+                  <i class="far fa-check-circle"></i> Publicado
+                </div>
+                  <div *ngIf="product.state === 'No Publicado'" style="padding: 0.25rem 1.25rem;"
+                  class="alert alert-sm alert-danger  mb-0" role="alert">
+                  <i class="far fa-times-circle"></i> {{ product.state}}
+                </div>
+                  </td>
                 <td class="text-right"> <i *ngIf="loadingDeleteProduct && productToDelete === product;"  class="fas fa-spin fa-spinner fa-2x ml-2"></i>
                     <div class="dropdown no-arrow" *ngIf="!loadingDeleteProduct">
                         <a class="dropdown-toggle btn btn-primary actionbox" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
@@ -167,9 +176,9 @@
         <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
       </div>
 
-      <div class="row justify-content-around" *ngIf="pageProductsMeli?.itemsMeliGrid">
-        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="totalPages" [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
-                 
+      <div class="row justify-content-around" *ngIf="pageProductsMeli.totalElements > 0">
+        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalElements" [(page)]="currentPage" [pageSize]="size"  [boundaryLinks]="true"></ngb-pagination>
+
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
             <option value="5">5</option>
@@ -178,29 +187,29 @@
             <option value="30">30</option>
         </select>
         </div>
-  
+
         <div   class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
           <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProductsMeli.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
-  
+
         </div>
-  
+
       </div>
-  
+
       <div class="row justify-content-center" *ngIf="errorProducts">
-  
+
         <div class="alert alert-info col-8 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar
         </div>
-  
+
       </div>
-  
+
       <div class="row justify-content-center" *ngIf="empySearch">
-  
+
         <div class="alert alert-info col-10 text-center" role="alert">
           <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron productos con los criterios de búsqueda especificados
         </div>
-  
+
       </div>
 
     </div>
@@ -229,15 +238,15 @@
 
               <div class="form-group row mb-2">
                 <div class="col-md-3 izq-aling">
-                 
+
                 </div>
                 <div class="col-md-8">
                     <nav aria-label="breadcrumb" id="CategoryName">
                       <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>                        
-                        <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>                        
+                        <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>
+                        <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>
                       </ol>
-                    </nav>                                
+                    </nav>
                 </div>
               </div>
 
@@ -252,8 +261,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="col-md-8"> 
-                  <app-meli-category-path [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
+                <div class="col-md-8">
+                  <app-meli-category-path [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>
                 </div>
               </div>
 
@@ -271,31 +280,31 @@
                           class="fa fa-question-circle"></i></div>
                     </div>
                   </div>
-                </div>          
-               
-                <div class="col-md-8"> 
+                </div>
+
+                <div class="col-md-8">
                   <div class="custom-control custom-checkbox">
                     <input type="checkbox" ([ngModel])="warranty" (change)="warranty = !warranty" class="custom-control-input" id="warranty">
                     <label class="custom-control-label" for="warranty">Habilitar garantía</label>
-                  </div> 
+                  </div>
                 </div>
                 <div class="col-md-4 izq-aling"></div>
-                <div class="col-md-4"> 
-                  <p>Tipo de garantía</p>                  
+                <div class="col-md-4">
+                  <p>Tipo de garantía</p>
                   <select class="custom-select" name="warrantyType" id="warrantyType" [(ngModel)]="warrantyType" [disabled]="!warranty">
                     <option value="-1" selected> -- Seleccione --</option>
                       <option value="2230280">Garantía del vendedor</option>
-                      <option value="2230279">Garantía de fábrica</option> 
+                      <option value="2230279">Garantía de fábrica</option>
                   </select>
                   <span class="field-validation-valid" data-valmsg-for="warrantyType" data-valmsg-replace="true"></span>
                 </div>
                 <div class="col-md-4">
-                  <p>Tiempo de garantía</p>                  
-                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="180" [(ngModel)]="warrantyTime" 
+                  <p>Tiempo de garantía</p>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="180" [(ngModel)]="warrantyTime"
                       name="warrantyTime" id="warrantyTime" [disabled]="!warranty">
                   <span class="field-validation-valid" data-valmsg-for="warrantyTime" data-valmsg-replace="true"></span>
                 </div>
-              </div>        
+              </div>
 
               <div class="form-group row mb-2" style="margin-top: 2rem;">
                 <div class="col-md-4 izq-aling">
@@ -319,7 +328,7 @@
                         <tr>
                           <th scope="col">Cuenta</th>
                           <th scope="col" class="text-center">Margen de ganancia</th>
-                          <th scope="col" class="text-right">Eliminar</th>                            
+                          <th scope="col" class="text-right">Eliminar</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -327,9 +336,9 @@
                           <td>{{relationship.accountName}}</td>
                           <td class="text-center">{{relationship.nameMargin}}</td>
                           <td class="text-right">
-                            <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>                          
+                            <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>
                           </td>
-                        </tr>                                                
+                        </tr>
                       </tbody>
                     </table>
                   </div>
@@ -379,7 +388,7 @@
               <select class="custom-select" name="meliAccount"  [(ngModel)]="meliAccount">
                 <option selected [value]="-1" >-- Seleccione una cuenta --</option>
                 <option [value]="account.id" *ngFor="let account of meliAccountsList">
-                  {{account.businessName}}</option>                  
+                  {{account.businessName}}</option>
               </select>
               <span class="field-validation-valid" data-valmsg-for="meliAccount" data-valmsg-replace="true"></span>
             </div>
@@ -399,7 +408,7 @@
             <div class="col-md-7">
                 <select class="custom-select" name="margin" [(ngModel)]="margin">
                   <option selected [value]="-1">-- Seleccione un margen --</option>
-                  <option [value]="marginSelected.id" *ngFor="let marginSelected of marginsList">{{marginSelected.name}}</option>               
+                  <option [value]="marginSelected.id" *ngFor="let marginSelected of marginsList">{{marginSelected.name}}</option>
                 </select>
                 <span class="field-validation-valid" data-valmsg-for="margin" data-valmsg-replace="true"></span>
             </div>
@@ -430,7 +439,7 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-6 col-sm-12">
-      
+
               <div class="card shadow mb-4 cardpopup">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Redactar descripción</h6>
@@ -440,8 +449,8 @@
                 </div>
               </div>
             </div>
-      
-            <div class="col-md-6 col-sm-12 cardpopup">           
+
+            <div class="col-md-6 col-sm-12 cardpopup">
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">Seleccionar imágenes</h6>
@@ -456,15 +465,15 @@
                     <div class="row">
                       <!-- Earnings (Monthly) Card Example -->
                       <div class="col-xl-3 col-md-6 mb-1 imagecontainer" *ngFor="let image of imagesList">
-                        <a href="javascript:void(0);" class="thumbnail div-img" (click)="deleteImage(image)">                          
+                        <a href="javascript:void(0);" class="thumbnail div-img" (click)="deleteImage(image)">
                           <img class="img" [src]="image" alt="Eliminar" title="Eliminar">
                         </a>
-                      </div>  
+                      </div>
                     </div>
                 </div>
-      
+
               </div>
-             
+
           </div>
         </div>
       </div>
@@ -495,7 +504,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-dismiss="modal" (click)="deleteRelationAccountMargin()" >Aceptar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearAll()">Cancelar</button>        
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="clearAll()">Cancelar</button>
       </div>
     </div>
   </div>
@@ -512,9 +521,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>   
+        <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>
       </div>
-       
+
     </div>
   </div>
 </div>
