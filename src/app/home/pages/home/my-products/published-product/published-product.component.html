@@ -141,7 +141,7 @@
 
             </td>
             <td>{{ product.lastUpgrade |date:'dd/MM/yyyy'}}</td>
-            <td><a [href]="product.permalink">{{product.idPublicationMeli}}</a></td>
+            <td><a [href]="product.permalink" target="_blanck">{{product.idPublicationMeli}}</a></td>
             <td>{{ product.sku }}</td>
             <td>
               <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
@@ -155,7 +155,7 @@
               </div>
             </td>
             <td>UYU <strong>{{product.pricePublication }}</strong></td>
-            <td> cantidad </td>
+            <td class="text-right"> {{ product.currentStock }} </td>
             <td>{{ product.accountName }}</td>
             <td class="text-right">
               <div class="dropdown no-arrow">
