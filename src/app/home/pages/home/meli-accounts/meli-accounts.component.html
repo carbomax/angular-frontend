@@ -56,7 +56,7 @@
 
 
 
-              <button  *ngIf="account.status === 0 || account.status === 1" placement="bottom"
+              <button *ngIf="account.status === 0 || account.status === 1" placement="bottom"
                 ngbTooltip="Cuenta no vinculada" type="button" (click)="redirect(account.id)"
                 class="btn btn-sm btn-secondary"><i class="far fa-times-circle"></i> No vinculada </button>
 
@@ -103,17 +103,16 @@
           </div>
 
           <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-            <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{meliAccounts.length}} registros <i
-                *ngIf="loadPaginator" class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+            <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{meliAccounts.length}} registros</span>
 
           </div>
         </div>
       </div>
 
     </div>
-    <div *ngIf="loading && !loadingSynchronization" class="d-flex justify-content-center">
+    <!-- <div *ngIf="loading && !loadingSynchronization" class="d-flex justify-content-center">
       <i class="fas fa-spin fa-spinner fa-2x "></i>
-    </div>
+    </div> -->
     <div class="row justify-content-center">
 
       <div *ngIf="meliAccounts.length <= 0 && !loading" class="alert alert-info col-8 text-center" role="alert">
@@ -124,28 +123,9 @@
   </div>
 
 
-  <div class="fondo-modal animated fadeIn fast" [class.oculto]="!loadingSynchronization">
+  <app-global-loading [globalLoading]="loadingSynchronization" [globalLoadingDescription]="descriptionStatusAccount" ></app-global-loading>
 
-    <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel"
-      aria-hidden="true" style="display: block;">
-      <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-        <div class="modal-content-loading">
-          <div class="modal-body">
-            <div class="d-flex flex-column mb-3">
-              <div class="p-2 bd-highlight text-center"><i *ngIf="loadingSynchronization"
-                  class="fas fa-spin fa-3x fa-spinner spinner-color"></i>
-              </div>
-              <div class="p-2 bd-highlight">
-                <p style="color: black !important;">{{descriptionStatusAccount}}</p>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-
+  <app-global-loading *ngIf="!loadingSynchronization" [globalLoading]="loading" [globalLoadingDescription]="'Cargango cuentas...'" ></app-global-loading>
 
   <!-- Logout Modal-->
 

@@ -42,3 +42,10 @@ export  class ProductMeliPublished {
 
   public selected = false;
 }
+
+
+export class PageProductMeliPublished {
+  public content: ProductMeliPublished[];
+  public numberOfElements: number;
+  public totalElements: number;
+}

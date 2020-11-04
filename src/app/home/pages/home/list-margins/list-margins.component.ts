@@ -45,9 +45,10 @@ export class ListMarginsComponent implements OnInit {
   }
   // Paginator
   selectChangeHandler(value: number): void {
-    this.loadPaginator = true;
+    this.loading = true;
     this.pageSize = value;
-    this.loadPaginator = false;
+    this.loading = false;
+
   }
 
 
