@@ -25,7 +25,7 @@ import { ParsedPropertyType } from '@angular/compiler';
 export class ProductsStoreComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
   @ViewChild('checkAllP') checkAllP;
-  
+
   public loading = false;
   public loadPaginator = false;
   public loadingClear = false;
@@ -47,7 +47,7 @@ export class ProductsStoreComponent implements OnInit {
   marketplaces: Marketplace[] = [];
   selectedProductR = new SelectedProducResponse();
   productsSelected: string[];
-  
+
   //Para el boton Seleccionar Marketplace
   disabled = true;
 
@@ -55,7 +55,7 @@ export class ProductsStoreComponent implements OnInit {
   idProfile: number;
 
   //Loading Modal
-  loadingModal = false;  
+  loadingModal = false;
 
   // Paginator
   currentPage = 1;
@@ -85,7 +85,7 @@ export class ProductsStoreComponent implements OnInit {
 
 
   constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService,
-     public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router) {
+    public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router) {
     this.getMarketplaces();
   }
 
@@ -107,40 +107,41 @@ export class ProductsStoreComponent implements OnInit {
     this.loadProductsPaginator(1);
   }
 
-  loadProductsPaginator(page?: number): void {   
-    this.loadPaginator = true;
+  loadProductsPaginator(page?: number): void {
+    this.loading = true;
     this.productStoreService.
       getPageProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
-        var countSelected = 0;        
+        let countSelected = 0;
+        this.loading = false;
         this.pageProducts.itemsGrid.forEach(element => {
           this.productsSelected.forEach(select => {
-            if(element.sku === select){
+            if (element.sku === select) {
               element.selected = true;
               countSelected++;
             }
-          });          
-        });    
-        if(countSelected === this.size){
+          });
+        });
+        if (countSelected === this.size) {
           this.checkAll = true;
           this.checkAllP.nativeElement.checked = 1;
         }
-        else{
+        else {
           this.checkAll = false;
           this.checkAllP.nativeElement.checked = 0;
-        } 
-        this.loadPaginator = false; 
+        }
+
       }, error => {
         this.loading = false;
         this.errorProducts = true;
-        this.loadPaginator = false;
-      });      
+        this.loading = false;
+      });
   }
 
   ngOnInit(): void {
-    this.productsSelected = []; 
+    this.productsSelected = [];
     this.disabled = true;
     this.loading = true;
     this.errorProducts = false;
@@ -165,44 +166,44 @@ export class ProductsStoreComponent implements OnInit {
 
     this.pageProducts.itemsGrid.forEach(element => {
       element.selected = this.checkAll;
-      if(element.selected === true) {
+      if (element.selected === true) {
         let position1 = this.productsSelected.indexOf(element.sku);
-        if(position1 === -1){
+        if (position1 === -1) {
           this.productsSelected.push(element.sku);
         }
       }
-      else{
+      else {
         let position = this.productsSelected.indexOf(element.sku);
-        if(position !== -1){
+        if (position !== -1) {
           this.productsSelected.splice(position, 1);
         }
       }
     });
-    if(this.productsSelected.length === 0){
+    if (this.productsSelected.length === 0) {
       this.disabled = true;
-    }else{
+    } else {
       this.disabled = false;
     }
 
   }
 
-  selectProduct(product: ProductStore): void{
+  selectProduct(product: ProductStore): void {
     let position = this.productsSelected.indexOf(product.sku);
-    if(position === -1){
+    if (position === -1) {
       product.selected = !product.selected;
-      if(product.selected === true) { 
-        this.productsSelected.push(product.sku);     
-      } 
+      if (product.selected === true) {
+        this.productsSelected.push(product.sku);
+      }
     }
-    else{
-      product.selected = !product.selected;      
-      if(product.selected === false){
+    else {
+      product.selected = !product.selected;
+      if (product.selected === false) {
         this.productsSelected.splice(position, 1);
       }
     }
-    if(this.productsSelected.length === 0){
-      this.disabled = true;      
-    }else{
+    if (this.productsSelected.length === 0) {
+      this.disabled = true;
+    } else {
       this.disabled = false;
     }
   }
@@ -256,19 +257,18 @@ export class ProductsStoreComponent implements OnInit {
 
   }
   //Cierra un modal
-  close(){
+  close() {
     this.closeModal.nativeElement.click();
   }
 
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
-    this.loadingModal = true;   
-    if(this.authService.isAuthenticated)
-    {
+    this.loadingModal = true;
+    if (this.authService.isAuthenticated) {
       this.idProfile = this.authService.authenticationDataExtrac().profileId;
 
       if (idMarket != null) {
-        let exists_products = "";    
+        let exists_products = "";
         if (this.productsSelected.length != 0) {
           this.productsStorageUserService.storeMyProducts(this.idProfile, idMarket, this.productsSelected).subscribe(resp => {
             this.selectedProductR = resp;
@@ -327,11 +327,11 @@ export class ProductsStoreComponent implements OnInit {
             timer: 5000
           });
         }
-  
+
       }
 
     }
-    else{
+    else {
       this.loadingModal = false;
       this.close();
       Swal.fire({
@@ -343,6 +343,6 @@ export class ProductsStoreComponent implements OnInit {
         timer: 5000
       });
     }
- 
+
   }
 }

@@ -5,7 +5,7 @@ import { PageProductStorage } from '../../../../../models/page.product.store';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { ProductStore } from '../../../../../models/product.store';
 import { ProductsMeliPublishedService } from '../../../../services/products.meli.published.service';
-import { ProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
+import { ProductMeliPublished, PageProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
 
 @Component({
   selector: 'app-published-product',
@@ -20,6 +20,10 @@ export class PublishedProductComponent implements OnInit {
   public loading = true;
   public loadPaginator = false;
   public loadingClear = false;
+  public loadingSearch = false;
+  public emptySearch = false;
+
+
   public idMeliSearch = '';
   public skuSearch = '';
   public meliAccountSearch = '';
@@ -28,12 +32,11 @@ export class PublishedProductComponent implements OnInit {
   public empySearch = false;
 
   // Paginator
-  currentPage = 1;
-  selectedPage = 0;
-  page = 0;
+
+  page = 1;
   size = 5;
   checkAll = false;
-  sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
+
 
   pageProducts = new PageProductStorage();
   productsSelected: ProductStore[];
@@ -41,6 +44,7 @@ export class PublishedProductComponent implements OnInit {
    //Loading Modal
    loadingModal = false;
    productsMeliPublished: ProductMeliPublished[] = [];
+   pagePublised = new PageProductMeliPublished();
   constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService) {
 
     // Test
@@ -49,17 +53,27 @@ export class PublishedProductComponent implements OnInit {
 
   selectChangeHandler(size): void {
     this.size = +size;
-    this.loadProductsPaginator(1);
+    this.loadProductsPaginator();
   }
 
   loadProductsPaginator(page?: number): void {
-    this.loadPaginator = true;
     this.loading = true;
     this.productsMeliPublishedService.
-      getProductsPublished(0, 15).subscribe( (resp: any)  =>  {
-        this.productsMeliPublished = resp;
-        this.loadPaginator = false;
+      getProductsPublished(this.page - 1, this.size).subscribe( (resp: PageProductMeliPublished)  =>  {
+
+        if (this.loadingSearch && resp.numberOfElements === 0) {
+          this.emptySearch = true;
+        } else { this.emptySearch = false; }
+
+        this.pagePublised = resp;
+        this.productsMeliPublished = this.pagePublised.content;
         this.loading = false;
+      }, error => {
+      this.errorProducts = true;
+      this.loadingClear = false;
+      this.loadingSearch = false;
+      this.emptySearch = false;
+      this.loading = false;
       });
 
   }
@@ -128,11 +142,11 @@ export class PublishedProductComponent implements OnInit {
   }
 
   navegateToEdit(product: ProductMeliPublished){
-    let prod = JSON.stringify(product);    
-    this.router.navigate(['edit-products-published', prod]);    
+    let prod = JSON.stringify(product);
+    this.router.navigate(['edit-products-published', prod]);
   }
 
-  cipherContent(content: string){ 
+  cipherContent(content: string){
       let encodeContent = btoa(content);
       let piece = Math.trunc(encodeContent.length / 3);
       let truck = content.substring(piece, piece*2) + content.substring(0, piece) + content.substring(piece*2);

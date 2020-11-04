@@ -134,9 +134,13 @@
                 </td>
                 <td>
                   <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage"
-                    alt="Imagen del producto">
+                    alt="Imagen">
                 </td>
-                <td>{{ product.name}}</td>
+                <td>
+                  <p [ngbTooltip]="product.name">
+                    {{ product.name |slice:0:45}}
+                  </p>
+                </td>
                 <td>{{ product.sku}}</td>
                 <td *ngIf="product.family">{{ product.family.description }}</td>
                 <td *ngIf="!product.family">Sin familia</td>

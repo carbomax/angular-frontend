@@ -1,0 +1,21 @@
+<div class="fondo-modal animated fadeIn fast" [class.oculto]="!globalLoading">
+
+  <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel"
+    aria-hidden="true" style="display: block;">
+    <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+      <div class="modal-content-loading">
+        <div class="modal-body">
+          <div class="d-flex flex-column mb-3">
+            <div class="p-2 bd-highlight text-center"><i *ngIf="globalLoading"
+                class="fas fa-spin fa-3x fa-spinner spinner-color"></i>
+            </div>
+            <div class="p-2 bd-highlight">
+              <p style="color: black !important;">{{ globalLoadingDescription }}</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
