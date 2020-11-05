@@ -18,6 +18,8 @@ export  class ProductMeliPublished {
 
   public pricePublication: string;
 
+  public priceCost: number;
+
   public warrantyType: string;
 
   public warrantyTime: string;
