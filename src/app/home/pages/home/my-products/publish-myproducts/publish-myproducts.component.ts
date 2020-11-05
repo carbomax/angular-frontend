@@ -37,6 +37,7 @@ export class PublishMyproductsComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
   @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('checkAllP') checkAllP;
+  @ViewChild('checkP') checkP;
   @ViewChild('closeMargin') closeMargin;
   @ViewChild('closePublishModal') closePublishModal;
 
@@ -767,13 +768,10 @@ export class PublishMyproductsComponent implements OnInit {
     this.closeMargin.nativeElement.click();
   }
 
-  publishProducts() {
-    this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-      if (element.selected === true) {
-        let pos = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
-        this.pageProductsMeli.itemsMeliGrid.splice(pos, 1);
-      }
-    });
+  publishProducts() {    
+    // llamada al servicio Publicar
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+    this.closeModalPublish();
     Swal.fire({
       position: 'top-end',
       icon: 'info',
@@ -781,11 +779,18 @@ export class PublishMyproductsComponent implements OnInit {
       text: `Los productos están siendo publicados`,
       showConfirmButton: false,
       timer: 5000
-    });
-
-    // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
-    this.closeModalPublish();
+    }).then(() => {  
+      for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
+        if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) { 
+          this.pageProductsMeli.itemsMeliGrid.splice(i, 1); 
+          i--; 
+        }
+      }    
+     this.checkP.nativeElement.checked = 0;      
+        if(this.pageProductsMeli.itemsMeliGrid.length === 0){     
+          this.loadProductsPaginator(1);
+        }   
+      });      
   }
 
 }
