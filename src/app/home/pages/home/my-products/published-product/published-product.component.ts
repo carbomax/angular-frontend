@@ -67,6 +67,7 @@ export class PublishedProductComponent implements OnInit {
 
         this.pagePublised = resp;
         this.productsMeliPublished = this.pagePublised.content;
+        console.log(this.productsMeliPublished)
         this.loading = false;
       }, error => {
       this.errorProducts = true;
