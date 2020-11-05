@@ -44,9 +44,14 @@
                 <div class="row justify-content-center">
 
 
-                  <button placement="bottom" ngbTooltip="Vincular cuenta a Mercado Libre" type="button"
-                    (click)="redirect(account.id)" class="btn btn-sm btn-outline-warning"><i
+                  <button *ngIf="account.status !== 2" placement="bottom" ngbTooltip="Vincular cuenta a Mercado Libre"
+                    type="button" (click)="redirect(account.id)" class="btn btn-sm btn-outline-warning"><i
                       class="far fa-paper-plane"></i> Vincular </button>
+
+                  <button *ngIf="account.status === 2" placement="bottom" ngbTooltip="Vincular cuenta a Mercado Libre"
+                    type="button" (click)="redirect(account.id)" class="btn btn-sm btn-outline-dark"> <i
+                      class="fas fa-sync-alt"></i> Re-Vincular </button>
+
 
                 </div>
               </div>
@@ -110,9 +115,6 @@
       </div>
 
     </div>
-    <!-- <div *ngIf="loading && !loadingSynchronization" class="d-flex justify-content-center">
-      <i class="fas fa-spin fa-spinner fa-2x "></i>
-    </div> -->
     <div class="row justify-content-center">
 
       <div *ngIf="meliAccounts.length <= 0 && !loading" class="alert alert-info col-8 text-center" role="alert">
@@ -123,9 +125,11 @@
   </div>
 
 
-  <app-global-loading [globalLoading]="loadingSynchronization" [globalLoadingDescription]="descriptionStatusAccount" ></app-global-loading>
+  <app-global-loading [globalLoading]="loadingSynchronization" [globalLoadingDescription]="descriptionStatusAccount">
+  </app-global-loading>
 
-  <app-global-loading *ngIf="!loadingSynchronization" [globalLoading]="loading" [globalLoadingDescription]="'Cargango cuentas...'" ></app-global-loading>
+  <app-global-loading *ngIf="!loadingSynchronization" [globalLoading]="loading"
+    [globalLoadingDescription]="'Cargando cuentas...'"></app-global-loading>
 
   <!-- Logout Modal-->
 

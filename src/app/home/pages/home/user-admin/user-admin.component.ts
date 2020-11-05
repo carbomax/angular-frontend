@@ -253,15 +253,14 @@ export class UserAdminComponent implements OnInit {
             this.profiles.push(p);
           }
         })
-      })
-    //  this.profiles = profilesResp.filter(p => p.user.roles.map(r => r.name).includes(RoleEnum.ADMIN || RoleEnum.INVITED));
-      this.loading = false;
+      });
       if (this.profiles.length <= 0) {
         this.errorUsers = true;
       } else{
         this.currentUser = this.authService.authenticationDataExtrac().email;
       }
 
+      this.loading = false;
     },
       (error: any) => {
         this.loading = false;

@@ -6,3 +6,8 @@
 .modal{
   background-color: transparent !important;
 }
+
+
+.spinner-color{
+  color: #0e42df;
+}

@@ -52,12 +52,11 @@ export class MeliAccountsComponent implements OnInit {
 
   routerEvent: Observable<Event>;
   constructor(public authService: AuthService,
-    public meliAccountService: MeliAccountService,
-    public router: Router,
-    public activateRouter: ActivatedRoute) {
+              public meliAccountService: MeliAccountService,
+              public router: Router,
+              public activateRouter: ActivatedRoute) {
 
     this.activateRouter.queryParamMap.subscribe((resp: any) => {
-      console.log(resp.params.code)
       const code = resp.params.code;
 
       if (code && this.meliAccountService.getAccountReference()) {
@@ -68,6 +67,7 @@ export class MeliAccountsComponent implements OnInit {
         this.descriptionStatusAccount = 'Sincronizando cuenta...';
         const reference = this.meliAccountService.getAccountStorageReference();
         this.meliAccountService.clearAccountStorage();
+        console.log('reference', reference)
         this.authorizeAccount(reference, code);
       }
     })
