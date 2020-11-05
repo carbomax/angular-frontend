@@ -45,18 +45,7 @@
                         {{family.description}} </option>
                     </select>
                   </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="inputState">Estado:</label>
-                    <select name="typeStateSearch" [(ngModel)]="typeStateSearch" id="inputState" class="form-control">
-                      <option [value]="typeStateSearchClear">Todas</option>
-                      <option [value]="stateEnum.PUBLISHED">Publicado</option>
-                      <option [value]="stateEnum.NOPUBLISHED">No Publicado</option>
-                      <option [value]="stateEnum.PAUSED">Pausado</option>
-                    </select>
-                  </div>
-                </div>
+                </div>               
               </div>
             </div>
           </div>
@@ -127,7 +116,7 @@
               <tr *ngFor="let product of pageProductsMeli.itemsMeliGrid">
                 <td>
                   <div class="custom-control custom-checkbox small">
-                    <input type="checkbox" [ngModel]="product.selected" (change)="selectProduct(product)"
+                    <input type="checkbox" [ngModel]="product.selected" #checkP (change)="selectProduct(product)"
                       class="custom-control-input" [id]="'check' + product.sku">
                     <label class="custom-control-label" [for]="'check' + product.sku"></label>
                   </div>

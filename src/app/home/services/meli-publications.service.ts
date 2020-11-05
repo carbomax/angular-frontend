@@ -110,14 +110,14 @@ export class MeliPublicationsService {
         responseList.forEach(element => {
           let priceFinal = 0;
           if(relation.idMargin === -1){
-            priceFinal = element.price;
+            priceFinal = Math.ceil(element.price);
           }
           else if(relation.typeMargin === 1/*fijo*/){
-            priceFinal = element.price + relation.valueMargin;
+            priceFinal = Math.ceil(element.price + relation.valueMargin);
           }
           else{
             /*Por Ciento*/
-            priceFinal = (element.price * (relation.valueMargin/100)) + element.price;
+            priceFinal = Math.ceil((element.price * (relation.valueMargin/100)) + element.price);
           }
   
           let imagesList: ItemPictures[] = [];          
@@ -165,14 +165,14 @@ export class MeliPublicationsService {
     
         let priceFinal = 0;
         if(relation.idMargin === -1){
-          priceFinal = productSelected.price;
+          priceFinal = Math.ceil(productSelected.price);
         }
         else if(relation.typeMargin === 1/*fijo*/){
-          priceFinal = productSelected.price + relation.valueMargin;
+          priceFinal = Math.ceil(productSelected.price + relation.valueMargin);
         }
         else{
           /*Por Ciento*/
-          priceFinal = (productSelected.price * (relation.valueMargin/100)) + productSelected.price;
+          priceFinal = Math.ceil((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
         }
 
         let imagesList: ItemPictures[] = [];          
