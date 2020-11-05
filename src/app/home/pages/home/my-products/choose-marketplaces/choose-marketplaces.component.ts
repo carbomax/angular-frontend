@@ -15,23 +15,30 @@ declare function initializePlugin();
   styleUrls: ['./choose-marketplaces.component.css']
 })
 export class ChooseMarketplacesComponent implements OnInit {
-  
+
+  public loading = false;
   marketplaceDetailsList: MarketplaceDetails[];
-  marketplaceType: MarketplaceType; 
+  marketplaceType: MarketplaceType;
   profileId: number;
 
-  constructor(public userService: UserService, public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router ) {  
+  constructor(public userService: UserService, public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router ) {
+
     if(this.authService.isAuthenticated)
-    {  
+    {
+      this.loading = true;
       this.profileId = this.authService.authenticationDataExtrac().profileId;
-      productsStorageUserService.getDetailsMarketplaces(this.profileId).subscribe(resp => this.marketplaceDetailsList = resp); 
+      productsStorageUserService.getDetailsMarketplaces(this.profileId).subscribe(resp => {
+        this.loading = false;
+        this.marketplaceDetailsList = resp;
+      }, error => { console.log(error);  this.loading = false; });
+
     }
     else{
       this.router.navigate(['auth/login']);
-    }  
+    }
   }
 
-  ngOnInit(): void {  
+  ngOnInit(): void {
    initializePlugin();
   }
 

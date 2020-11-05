@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   URI_ROOT: 'http://localhost:9999/pepeganga',
-  URI_MELI: `http://auth.mercadolibre.com.uy/authorization?response_type=code&client_id=5381382874135569&state=${Math.floor(Math.random() * 100) / 100}&redirect_uri=https://localhost:4200/home/meli-accounts`,
+  URI_MELI: `http://auth.mercadolibre.com.uy/authorization?response_type=code&client_id=5381382874135569&state=${Math.floor(Math.random() * 100)}&redirect_uri=https://localhost:4200/home/meli-accounts`,
   URI_MELI_PUBLIC: 'https://api.mercadolibre.com'
 };
 

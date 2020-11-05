@@ -69,21 +69,19 @@ public registerForm: FormGroup;
     if (this.user.email !== '' && this.user.password !== '') {
       console.log('REMEMBER', this.remember.value)
       if(this.remember.value) {
-        console.log('remeber es true')
         localStorage.setItem('rememberEmail', this.email.value as string)
       } else {
         localStorage.removeItem('rememberEmail')
       }
       this.user.email = this.email.value;
       this.user.password = this.password.value;
-      console.log('USER', this.user)
       this.authService.login(this.user).subscribe(authData => {
         this.loading = true;
         console.log(authData);
         this.router.navigate(['/home']);
       }, (error: ErrorRequest) => {
-        console.log(error);
-        if (error.status === 400) {
+        console.log('Login Error: ', error);
+        if (error.status === 400 || error.status === 404 || error.status === 401) {
           this.badCredentials = true;
         } else {
           this.error500 = true;

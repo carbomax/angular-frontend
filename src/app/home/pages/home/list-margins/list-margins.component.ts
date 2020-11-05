@@ -64,7 +64,7 @@ export class ListMarginsComponent implements OnInit {
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: `Margin ${resp.name} ha sido actualizado`,
+          title: `Margen ${resp.name} ha sido actualizado`,
           showConfirmButton: false,
           timer: 2000
 

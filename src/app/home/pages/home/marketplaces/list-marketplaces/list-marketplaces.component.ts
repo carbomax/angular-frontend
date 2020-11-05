@@ -110,7 +110,7 @@ export class ListMarketplacesComponent implements OnInit {
 
       Swal.fire({
       title: 'Está seguro?',
-      text: "Usted no podrá revertir esto!",
+      text: 'Usted no podrá revertir esto!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
