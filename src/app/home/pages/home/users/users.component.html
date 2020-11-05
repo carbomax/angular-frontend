@@ -95,16 +95,12 @@
             </div>
 
             <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-              <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{profiles.length}} registros <i
-                  *ngIf="loadPaginator" class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+              <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{profiles.length}} registros </span>
 
             </div>
           </div>
       </div>
 
-    </div>
-    <div *ngIf="loading" class="d-flex justify-content-center">
-      <i class="fas fa-spin fa-spinner fa-2x "></i>
     </div>
     <div class="row justify-content-center">
 
@@ -231,3 +227,5 @@
 
     </div>
   </div>
+
+  <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando usuarios...'" ></app-global-loading>

@@ -110,9 +110,6 @@
       </div>
 
     </div>
-    <!-- <div *ngIf="loading && !loadingSynchronization" class="d-flex justify-content-center">
-      <i class="fas fa-spin fa-spinner fa-2x "></i>
-    </div> -->
     <div class="row justify-content-center">
 
       <div *ngIf="meliAccounts.length <= 0 && !loading" class="alert alert-info col-8 text-center" role="alert">
@@ -125,7 +122,7 @@
 
   <app-global-loading [globalLoading]="loadingSynchronization" [globalLoadingDescription]="descriptionStatusAccount" ></app-global-loading>
 
-  <app-global-loading *ngIf="!loadingSynchronization" [globalLoading]="loading" [globalLoadingDescription]="'Cargango cuentas...'" ></app-global-loading>
+  <app-global-loading *ngIf="!loadingSynchronization" [globalLoading]="loading" [globalLoadingDescription]="'Cargando cuentas...'" ></app-global-loading>
 
   <!-- Logout Modal-->
 

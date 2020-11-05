@@ -52,7 +52,6 @@ export class AuthService {
   setTokenStorage(data: any): void {
     localStorage.setItem('token', 'Bearer ' + data.access_token);
     const payload = this.jsonParseAtob(data.access_token.split('.')[1]);
-    console.log('payload', payload)
     sessionStorage.setItem('email', payload.user_name);
     sessionStorage.setItem('name', payload.profileName);
 

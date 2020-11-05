@@ -29,7 +29,7 @@ export class MeliAccountService {
 
   public redirectToMeli(id: number): void {
     this.saveAccountStorage(id);
-    window.open(environment.URI_MELI, '_blank');
+    window.open(environment.URI_MELI, '_parent');
   }
 
   public getAccounts(): Observable<MeliAccount[]> {
@@ -55,7 +55,7 @@ export class MeliAccountService {
     return this.http.delete(`${this.URI_MELI_BUSINESS}/${id}`);
   }
 
-  public authorizeAccount(id: any, code: any): Observable<MeliAccount>{
+  public authorizeAccount(id: number, code: any): Observable<MeliAccount>{
     return this.http.get<MeliAccount>(`${this.URI_MELI_API}/${id}/${code}`).pipe( map( (resp: any) => resp.response));
   }
 
@@ -79,7 +79,7 @@ export class MeliAccountService {
   getAccountStorageReference(): number {
     const reference = localStorage.getItem('reference').split(' ');
     if(reference){
-      return (+reference[1] * +reference[2]) / +reference[0];
+      return Math.floor((+reference[1] * +reference[2]) / +reference[0]);
     } else{
       console.log('Reference to account lost', reference);
       return null;
