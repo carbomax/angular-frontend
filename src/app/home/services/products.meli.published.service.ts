@@ -16,6 +16,7 @@ export class ProductsMeliPublishedService {
 
   URI = environment.URI_ROOT;
   URI_PRODUCTS_PUBLISHED_SERVICE = `${this.URI}/products/api/published`;
+  URI_MELI_SERVICE =  `${this.URI}/meli/api/accounts`;
   URI_UPLOAD_ACTIONS = '/upload/api';
   profileId: number;
   constructor(private http: HttpClient, private authService: AuthService) {
@@ -25,6 +26,11 @@ export class ProductsMeliPublishedService {
   public getProductsPublished(page: number, size: number): Observable<PageProductMeliPublished>{
     this.profileId = this.authService.authenticationDataExtrac().profileId;
     return this.http.get<PageProductMeliPublished>(`${this.URI_PRODUCTS_PUBLISHED_SERVICE}/${this.profileId}?page=${page}&size=${size}`);
+  }
+
+
+  public changeStatusPublication(accountId: number, status: number, publicationId: string) {
+    return this.http.post(`${this.URI_MELI_SERVICE}/changeStatusPublication/${accountId}/${publicationId}?status=${status}` , {});
   }
 
 }
