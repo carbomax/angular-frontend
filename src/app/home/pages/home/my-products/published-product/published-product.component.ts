@@ -165,24 +165,52 @@ export class PublishedProductComponent implements OnInit {
   // Change status publications
 
   changeStatusPublication(product: ProductMeliPublished, status: number): void {
+
     console.log('product', product);
     console.log('status', status);
-    this.loading = true;
-    this.productsMeliPublishedService.changeStatusPublication(product.accountMeli, status, product.idPublicationMeli)
-      .subscribe((resp: any) => {
 
-        this.loadProductsPaginator();
-        if(resp.response){
-          this.notificationSuccessChangeStatus(resp.response);
-        } else {
-          this.notificationErrorChangeStatus(resp);
-        }
+    Swal.fire({
+      title: 'Está seguro?',
+      text: 'Confirme la operación!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
 
 
-      }, (error: any) => {
-        console.log(error);
-        this.notificationErrorChangeStatus(error);
-      })
+        this.loading = true;
+        this.productsMeliPublishedService.changeStatusPublication(product.accountMeli, status, product.idPublicationMeli)
+          .subscribe((resp: any) => {
+
+            this.loadProductsPaginator();
+            if (resp.response) {
+              this.notificationSuccessChangeStatus(resp.response);
+            } else {
+              this.notificationErrorChangeStatus(resp);
+            }
+
+
+          }, (error: any) => {
+            console.log(error);
+            this.notificationErrorChangeStatus(error);
+          })
+
+      }
+    })
+
+
+
+
+
+
+
+
+
 
   }
 
@@ -196,6 +224,10 @@ export class PublishedProductComponent implements OnInit {
 
       case 'paused':
         title = `pausada`;
+        break;
+
+      case 'closed':
+        title = `finalizada`;
         break;
 
       default:
@@ -215,7 +247,7 @@ export class PublishedProductComponent implements OnInit {
 
     console.log('Error: ', error);
     let title = 'No se pudo realizar la operación, intente sincronizar su cuenta o consulte al administrador';
-    if(error.error_meli !== undefined){
+    if (error.error_meli !== undefined) {
       title = `${title}, mercadolibre no procesó el cambio`;
     }
     this.loading = false

@@ -143,19 +143,27 @@
             <td><a [href]="product.permalink" target="_blanck">{{product.idPublicationMeli}}</a></td>
             <td>{{ product.sku }}</td>
             <td>
-              <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
-                role="alert" ngbTooltip="Fallada">
-                <i class="far fa-times-circle"></i>
+              <div *ngIf="product.status === 'closed'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-dark mb-0"
+              role="alert" ngbTooltip="Publicación finalizada">
+              <i class="far fa-stop-circle mt-1"></i><span>Finalizada</span>
+            </div>
+
+              <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-danger mb-0"
+                role="alert" ngbTooltip="Publicación fallida">
+                <i class="far fa-times-circle  mt-1"></i><span>Fallida</span>
               </div>
 
               <div *ngIf="product.status === 'active'" style="padding: 0.25rem 1.25rem;"
-                class="alert alert-sm alert-success  mb-0" role="alert" ngbTooltip="Activa">
-                <i class="far fa-check-circle"></i>
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert" ngbTooltip="Publicación activa">
+                <i class="far fa-check-circle  mt-1"></i><span>Activa</span>
               </div>
 
               <div *ngIf="product.status === 'paused'" style="padding: 0.25rem 1.25rem;"
-                class="alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Pausada">
-                <i class="far fa-check-circle"></i>
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación pausada">
+                <i class="far fa-pause-circle mt-1"></i> <span>Pausada</span>
+
               </div>
             </td>
             <td>UYU <strong>{{product.pricePublication }}</strong></td>
@@ -171,15 +179,15 @@
                   aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item pointer" (click)="navegateToEdit(product)"><i
                       class="far fa-eye m-2 text-info"></i> Ver</a>
-                  <a class="dropdown-item pointer"><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
+                  <a  class="dropdown-item pointer"><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
                   <a *ngIf="product.status === 'paused'" class="dropdown-item pointer"
                   (click)="changeStatusPublication(product, 4)"><i
                       class="fas fa-play text-info m-2"></i>
                     Reactivar</a>
                   <a *ngIf="product.status === 'active'" class="dropdown-item pointer"
-                    (click)="changeStatusPublication(product, 3)"><i class="fas fa-pause m-2 text-secondary"></i>
+                    (click)="changeStatusPublication(product, 3)"><i class="far fa-pause-circle m-2 text-secondary"></i>
                     Pausar</a>
-                  <a class="dropdown-item pointer"><i class="fas fa-stop text-secondary m-2"></i> Finalizar</a>
+                  <a *ngIf="product.status !== 'closed'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="fas fa-stop text-secondary m-2"></i> Finalizar</a>
                 </div>
               </div>
             </td>
