@@ -14,5 +14,6 @@ export class ProductCustom {
     family: FamilyProductStorage;
     state: string;
     deleted: number;
+    specialPaused: number;
     selected?: boolean;
   }
