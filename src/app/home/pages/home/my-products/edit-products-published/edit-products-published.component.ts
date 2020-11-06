@@ -47,6 +47,7 @@ export class EditProductsPublishedComponent implements OnInit {
   reloadConfig: boolean = false; // si e habilitó la reconfiguracion
   activeConfig: boolean = false; 
   init: boolean = true;
+  hideCard: boolean = false;
 
   edit = false;  
   message: string;
@@ -587,6 +588,7 @@ export class EditProductsPublishedComponent implements OnInit {
   activeAllCategory(){
     this.withoutPredictor = true;
     this.setHome();
+    this.hideCard = true;
   }
 
 }

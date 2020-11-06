@@ -30,8 +30,8 @@
                   <label for="inputFamily">Cuenta de Mercado Libre:</label>
                   <select name="meliAccountSearch" id="meliAccountSearch" class="form-control">
                     <option [value]="meliAccountSearchClear">Todas</option>
-                    <!-- <option *ngFor="let family of productStoreService.families" [value]="family.id">
-                        {{family.description}} </option>-->
+                     <option *ngFor="let meli of meliAccountsList" [value]="meli.id">
+                        {{meli.businessName}} </option>
                   </select>
                 </div>
               </div>
@@ -39,8 +39,16 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="typeStateSearch">Estado:</label>
-                  <select name="typeStateSearch" id="typeStateSearch" class="form-control">
+                  <select name="typeStateSearch" id="typeStateSearch" [(ngModel)]="typeStateSearch" class="form-control">
                     <option [value]="typeStateSearchClear">Todas</option>
+                    <option [value]="statesOfMeli.ACTIVE">Activo</option>
+                    <option [value]="statesOfMeli.IN_PROCESS">En proceso</option>
+                    <option [value]="statesOfMeli.PAUSED">Pausado</option>
+                    <option [value]="statesOfMeli.CLOSED">Cerrado</option>
+                    <option [value]="statesOfMeli.UNDER_REVIEW">En revisión</option>                    
+                    <option [value]="statesOfMeli.INACTIVE">Inactivo</option>
+                    <option [value]="statesOfMeli.PAYMENT_REQUIRED">Pago requerido</option>
+                    <option [value]="statesOfMeli.FAIL">Fallado</option>                   
                   </select>
                 </div>
               </div>

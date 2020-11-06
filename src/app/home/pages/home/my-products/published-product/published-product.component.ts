@@ -3,10 +3,14 @@ import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PageProductStorage } from '../../../../../models/page.product.store';
 import { ProductsStorageService } from '../../../../services/products-storage.service';
+import { MeliAccountService } from '../../../../services/meli-account.service';
+import { MeliAccount } from 'src/app/models/meli.account';
 import { ProductStore } from '../../../../../models/product.store';
 import { ProductsMeliPublishedService } from '../../../../services/products.meli.published.service';
 import { ProductMeliPublished, PageProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
 import { ChangeStatusPublicationType } from '../../../../../enums/change-status-publication-type';
+import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
+import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -43,12 +47,13 @@ export class PublishedProductComponent implements OnInit {
 
   pageProducts = new PageProductStorage();
   productsSelected: ProductStore[];
+  meliAccountsList: MeliAccount[];
 
   //Loading Modal
   loadingModal = false;
   productsMeliPublished: ProductMeliPublished[] = [];
   pagePublised = new PageProductMeliPublished();
-  constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService) {
+  constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService, public meliAccountService: MeliAccountService) {
     this.loadProductsPaginator();
   }
 
@@ -87,10 +92,28 @@ export class PublishedProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.getAccountMeli();
   }
 
-  searchProductsPublished() { }
+  public get statesOfMeli(): typeof StatesOfMeli {
+    return StatesOfMeli; 
+  }
+
+  getAccountMeli(){
+    this.meliAccountsList = [];    
+    this.meliAccountService.getAccounts().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){          
+          this.meliAccountsList.push(element);
+        }
+      });  
+    })    
+  }
+
+  searchProductsPublished() { 
+    
+   
+  }
 
   // Clear search form
   clearSearch(f: NgForm): void {

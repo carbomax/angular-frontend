@@ -247,7 +247,7 @@
                    <div class="col-md-8"> 
                       <!--  DE AQUI-->                    
                     <!-- Para cuando tiene ya una categoria asociada -->
-                    <div *ngIf="(withoutPredictor === false) && productMeliPublished.status === statesOfMeli.FAIL"></div>
+                    <div *ngIf="hideCard == false">
                       <div class="card border-left-primary shadow h-200 py-2 card-category">        
                         <div class="card-body card-body-category" >
                           <div class="row no-gutters align-items-center">
@@ -286,7 +286,7 @@
                       
                   </div>
                  </div>                  
-  
+                </div>
                 <div class="col-md-6 izq-aling">                
   
   
