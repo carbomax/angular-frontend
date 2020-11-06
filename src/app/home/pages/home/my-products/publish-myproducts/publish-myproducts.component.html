@@ -153,7 +153,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                           aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item pointer" [routerLink]="['../edit-myproducts', product.id]" [disabled]="product.specialPaused === 1"><i class="far fa-eye m-2 text-info"></i>Ver</a>
+                          <a *ngIf="product.specialPaused !== 1 && product.deleted !== 1" class="dropdown-item pointer" [routerLink]="['../edit-myproducts', product.id]"><i class="far fa-eye m-2 text-info"></i>Ver</a>
                           <a class="dropdown-item pointer" href="javascript:void(0);" (click)="deleteOneProduct(product)" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                         </div>
                       </div>
