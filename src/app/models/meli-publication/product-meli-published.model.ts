@@ -42,7 +42,7 @@ export  class ProductMeliPublished {
 
   public currentStock: number;
 
-  public selected = false;
+  public selected? = false;
 }
 
 

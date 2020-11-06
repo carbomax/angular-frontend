@@ -121,7 +121,7 @@ export class EditProductsPublishedComponent implements OnInit {
     let encode = this._router.snapshot.paramMap.get('product');
    // let product = this.decipherContent(encode);
     this.productMeliPublished = JSON.parse(encode);
-    this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);
+    this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);    
   }
 
   getPredictorCategories(){
@@ -147,6 +147,7 @@ export class EditProductsPublishedComponent implements OnInit {
       this.meliPublicationsService.getMeliSubCategories(idCategory).subscribe(category => {
           this.meliCategoryActive = category;
           this.subCategoriesActiveList = this.meliCategoryActive.path_from_root;
+          this.lastCategorySelected = this.meliCategoryActive.id;
           for (let index = 0; index < this.subCategoriesActiveList.length; index++) {
             if(index + 1 === this.subCategoriesActiveList.length){
               this.pathActive = this.pathActive + this.subCategoriesActiveList[index].name;
@@ -415,7 +416,7 @@ export class EditProductsPublishedComponent implements OnInit {
         }).then((result) => {        
             if (result.isConfirmed) {
               this.activeConfig = true;
-              this.reloadConfig = true; // avtivo reconfiguración
+              this.reloadConfig = true; // activo reconfiguración
               this.accountMarginsList.forEach(result => {
                 this.account_margin = result;
                 this.deleteRelationAccountMargin();
@@ -521,12 +522,51 @@ export class EditProductsPublishedComponent implements OnInit {
     })
     .then((result) => {
       this.router.navigate(['/published-products']);
-    });  
-   
+    }); 
+  
+      let editableProduct =  new EditableProductModel();
+      editableProduct.id = this.productMeliPublished.mlPublicationId;
+      editableProduct.currentStock = this.productMeliPublished.currentStock;
+      editableProduct.description = this.productMeliPublished.description;
+      editableProduct.images = this.productMeliPublished.images;
+      editableProduct.price = +this.productMeliPublished.pricePublication;
+      editableProduct.price_cost = this.productMeliPublished.priceCost;
+      editableProduct.productName = this.productMeliPublished.title;
+      editableProduct.sku = this.productMeliPublished.sku;
+      editableProduct.states = 1;    
 
-   // llamada al servicio Publicar
-    //this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct);
-    this.clearAll();
+  // llamada al servicio Publicar
+   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
+   this.clearAll();
+  }
+
+  republishProducts(){   
+    //adicionar loading
+    this.meliPublicationsService.republishedProduct(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
+        if(product){// ver codigo del response
+          this.productMeliPublished = product;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Satisfactorio`,
+            text: `El producto ha sido republicado satisfactoriamente`,
+            showConfirmButton: false,
+            timer: 5000
+          })          
+        }
+    }, (error: any) => {
+        if(error){
+          //ver esto
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `No republicado`,
+            text: `El producto no ha sido republicado. Vuelva a intentarlo`,
+            showConfirmButton: false,
+            timer: 5000
+          })   
+        }
+    })
   }
 
   getPath(pathList: string[]){

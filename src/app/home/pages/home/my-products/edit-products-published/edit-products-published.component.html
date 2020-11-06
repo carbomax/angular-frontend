@@ -245,34 +245,22 @@
                       </div>
                    </div>
                    <div class="col-md-8"> 
-                      <!--  DE AQUI--> 
-                    <div *ngIf="responsePredictor.predictor === true && productMeliPublished.status === statesOfMeli.FAIL">
+                      <!--  DE AQUI-->                    
+                    <!-- Para cuando tiene ya una categoria asociada -->
+                    <div *ngIf="(withoutPredictor === false) && productMeliPublished.status === statesOfMeli.FAIL"></div>
                       <div class="card border-left-primary shadow h-200 py-2 card-category">        
                         <div class="card-body card-body-category" >
                           <div class="row no-gutters align-items-center">
                             <div class="col mr-3">
-                            <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >Mercado Libre</div>
-                            <div class="mb-0 text-gray-300">Productos:</div>
-                          </div>                      
-                          </div>  
-                        </div>
-                      </div> 
-                    </div>
-                    <!-- Para cuando tiene Publicaciones Activas -->
-                    <div *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE">
-                      <div class="card border-left-primary shadow h-200 py-2 card-category">        
-                        <div class="card-body card-body-category" >
-                          <div class="row no-gutters align-items-center">
-                            <div class="col mr-3">
-                            <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >{{meliCategoryActive.name}}</div>
-                            <div class="mb-0 text-gray-500">{{pathActive}}</div>
-                          </div>                      
+                              <div class="h9 text-xs font-weight-category text-gray-700 text-uppercase mb-1" >{{meliCategoryActive.name}}</div>
+                              <div class="mb-0 text-gray-500">{{pathActive}}</div>
+                            </div>                      
                           </div>  
                         </div>
                       </div> 
                     </div>
 
-                      <div class="col-md-8 path-category" *ngIf="(responsePredictor.predictor === false || withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL">
+                      <div class="col-md-8 path-category" *ngIf="( withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL">
                         <nav aria-label="breadcrumb" id="CategoryName">
                           <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>                        
@@ -280,12 +268,12 @@
                           </ol>
                         </nav>                                
                       </div>
-                      <app-meli-category-path *ngIf="(responsePredictor.predictor === false || withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL" [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
+                      <app-meli-category-path *ngIf="( withoutPredictor === true) && productMeliPublished.status === statesOfMeli.FAIL" [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-meli-category-path>                
                   
                     
                       <!-- Hasta aqui  -->
-  
-                      <div class="row" *ngIf="responsePredictor.predictor === true && productMeliPublished.status === statesOfMeli.FAIL">
+                      <div class="col-md-4 izq-aling"></div>
+                      <div class="row" *ngIf="productMeliPublished.status === statesOfMeli.FAIL">
                         <div class="col-md-12">
                           <a class="" href="javascript:void(0);" aria-haspopup="true" aria-expanded="false" (click)="activeAllCategory()">
                             <div class="row">
@@ -297,8 +285,7 @@
                       </div>
                       
                   </div>
-                 </div>  
-                </div> 
+                 </div>                  
   
                 <div class="col-md-6 izq-aling">                
   
@@ -341,29 +328,7 @@
                           name="warrantyTime" id="warrantyTime" [disabled]="!warranty || productMeliPublished.status === statesOfMeli.ACTIVE">
                       <span class="field-validation-valid" data-valmsg-for="warrantyTime" data-valmsg-replace="true"></span>
                     </div>
-                  </div>
-  <!--
-                  <div class="form-group row mb-2" >
-                    <div class="col-md-4 izq-aling">
-                      <div class="row mb-2">
-                        <div class="col-md-9 label-wrapper" ><label class="control-label" for="Currency" title="">Precio a publicar</label></div>
-                        <div class="col-md-1">
-                          <div class="ico-help" title="Precio del producto para mercado libre."><i class="fa fa-question-circle"></i></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-md-8">
-                      <div class="input-group">
-                        <div class="input-group-append">
-                          <span class="input-group-text">UYU</span>
-                        </div>
-                        <input class="form-control text-box single-line" id="Currency" name="Currency" type="number"
-                          step="0.01" min="0" max="10000" value="22.33" disabled>
-                      </div>
-                    </div>
-                  </div>
-  
-            -->
+                  </div>  
   
                   <div class="form-group row mb-2" style="margin-top: 2rem;">
                     <div class="col-md-4 izq-aling">
@@ -411,19 +376,20 @@
                     </div>
                   </div>
                 </div>
+              </div>
              </div>
            </div>
             <div class="modal-footer">        
               <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.FAIL" 
                   [disabled]="lastCategorySelected === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
-              <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE" 
+              <button type="button" class="btn btn-primary" (click)="republishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE" 
                   [disabled]="accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Republicar</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditPublished()">Cerrar</button>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </div> 
+       
   </div>
   
   

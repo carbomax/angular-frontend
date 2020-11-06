@@ -18,6 +18,7 @@ import { MeliPredictorCategory } from '../../models/meli-publication/meli-predic
 import { ProductsStorageUserService } from './products-storage-user.service'; 
 import { EditableProductModel } from 'src/app/models/editable.product.model';
 import { ResponseCategoryPredictor } from 'src/app/models/meli-publication/response-category-predictor.model';
+import { ProductMeliPublished } from 'src/app/models/meli-publication/product-meli-published.model';
 
 
 @Injectable({
@@ -156,15 +157,15 @@ export class MeliPublicationsService {
             
   }
 
-  createPublicationByEditableProduct(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productSelected: EditableProductModel): void{
+  createPublicationByEditableProduct(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productSelected: EditableProductModel, reloadConfig: boolean): void{
     
     let itemCustomList: ItemCustomModel[] = [];  
    
     relationshipList.forEach(relation => {   
          itemCustomList = [];   
-    
-        let priceFinal = 0;
-        if(relation.idMargin === -1){
+         let priceFinal = 0;
+     
+        if(relation.idMargin === -1 || !reloadConfig ){// Para el republicar // Quitar validacion "!reloadConfig" despues de arreglar todo como va 
           priceFinal = Math.ceil(productSelected.price);
         }
         else if(relation.typeMargin === 1/*fijo*/){
@@ -174,7 +175,7 @@ export class MeliPublicationsService {
           /*Por Ciento*/
           priceFinal = Math.ceil((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
         }
-
+     
         let imagesList: ItemPictures[] = [];          
         productSelected.images.forEach(image => {            
           imagesList.push(new ItemPictures(image.photos));            
@@ -208,5 +209,25 @@ export class MeliPublicationsService {
             
   }
 
+  republishedProduct(productPublished: ProductMeliPublished, relationshipList: AccountMarginModel[], reloadConfig: boolean): Observable<ProductMeliPublished> {
+      const params = `${this.URI_MELI_BUSINESS}/republish-product`;
+      let priceFinal = 0;
+      relationshipList.forEach(relation => {
+                  
+            if(relation.idMargin === -1 || !reloadConfig){ // no fue reconfigurado  
+              priceFinal = Math.ceil(+productPublished.pricePublication);
+            }
+            else if(relation.typeMargin === 1/*fijo*/){
+              priceFinal = Math.ceil((+productPublished.pricePublication) + relation.valueMargin);
+            }
+            else{
+              /*Por Ciento*/
+              priceFinal = Math.ceil((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
+            }
+            productPublished.pricePublication = priceFinal.toString();        
+      });
+
+      return this.http.put<any>(params, productPublished);
+  }
 
 }
