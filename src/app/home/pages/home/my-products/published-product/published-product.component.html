@@ -45,10 +45,10 @@
                     <option [value]="statesOfMeli.IN_PROCESS">En proceso</option>
                     <option [value]="statesOfMeli.PAUSED">Pausado</option>
                     <option [value]="statesOfMeli.CLOSED">Cerrado</option>
-                    <option [value]="statesOfMeli.UNDER_REVIEW">En revisión</option>                    
+                    <option [value]="statesOfMeli.UNDER_REVIEW">En revisión</option>
                     <option [value]="statesOfMeli.INACTIVE">Inactivo</option>
                     <option [value]="statesOfMeli.PAYMENT_REQUIRED">Pago requerido</option>
-                    <option [value]="statesOfMeli.FAIL">Fallado</option>                   
+                    <option [value]="statesOfMeli.FAIL">Fallado</option>
                   </select>
                 </div>
               </div>
@@ -141,7 +141,7 @@
             <td>
               <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images[0].photos" alt="Imagen">
             </td>
-            <td>
+            <td  >
               <p [ngbTooltip]="product.title">
                 {{ product.title |slice:0:45}}
               </p>
@@ -154,23 +154,23 @@
               <div *ngIf="product.status === 'closed'" style="padding: 0.25rem 1.25rem;"
               class="d-flex flex-nowrap flex-row alert alert-dark mb-0"
               role="alert" ngbTooltip="Publicación finalizada">
-              <i class="far fa-stop-circle mt-1"></i><span>Finalizada</span>
+              <i class="far fa-stop-circle mt-1 mr-1"></i><span>Finalizada</span>
             </div>
 
               <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;"
               class="d-flex flex-nowrap flex-row alert alert-danger mb-0"
                 role="alert" ngbTooltip="Publicación fallida">
-                <i class="far fa-times-circle  mt-1"></i><span>Fallida</span>
+                <i class="far fa-times-circle mt-1 mr-1"></i><span>Fallida</span>
               </div>
 
               <div *ngIf="product.status === 'active'" style="padding: 0.25rem 1.25rem;"
                 class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert" ngbTooltip="Publicación activa">
-                <i class="far fa-check-circle  mt-1"></i><span>Activa</span>
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Activa</span>
               </div>
 
               <div *ngIf="product.status === 'paused'" style="padding: 0.25rem 1.25rem;"
                 class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación pausada">
-                <i class="far fa-pause-circle mt-1"></i> <span>Pausada</span>
+                <i class="far fa-pause-circle mt-1 mr-1"></i> <span>Pausada</span>
 
               </div>
             </td>
@@ -185,9 +185,9 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                   aria-labelledby="dropdownMenuLink">
-                  <a class="dropdown-item pointer" (click)="navegateToEdit(product)"><i
+                  <a *ngIf="product.status === 'active' || product.status === 'fail'"  class="dropdown-item pointer" (click)="navegateToEdit(product)"><i
                       class="far fa-eye m-2 text-info"></i> Ver</a>
-                  <a  class="dropdown-item pointer"><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
+                  <a *ngIf="product.status === 'closed'"  class="dropdown-item pointer"><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
                   <a *ngIf="product.status === 'paused'" class="dropdown-item pointer"
                   (click)="changeStatusPublication(product, 4)"><i
                       class="fas fa-play text-info m-2"></i>
@@ -195,7 +195,10 @@
                   <a *ngIf="product.status === 'active'" class="dropdown-item pointer"
                     (click)="changeStatusPublication(product, 3)"><i class="far fa-pause-circle m-2 text-secondary"></i>
                     Pausar</a>
-                  <a *ngIf="product.status !== 'closed'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="fas fa-stop text-secondary m-2"></i> Finalizar</a>
+                  <a *ngIf="product.status !== 'closed' && product.status !== 'fail'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="far fa-stop-circle text-secondary m-2"></i> Finalizar</a>
+
+                  <a class="dropdown-item pointer"><i
+                    class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                 </div>
               </div>
             </td>
@@ -267,5 +270,5 @@
 </div>
 
 
-<app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando publicaciones'">
+<app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando publicaciones...'">
 </app-global-loading>

@@ -174,23 +174,28 @@
           </div>
         </div>
 
-
       </div>
 
-      <div class="row justify-content-center" *ngIf="orderPage.totalElements === 0 && !emptySearch">
+      <div class="container" *ngIf="orderPage.totalElements == 0">
 
-        <div class="alert alert-info col-8 text-center" role="alert">
-          <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay órdenes para mostrar
+        <div class="row justify-content-center" *ngIf="emptySearch">
+
+          <div class="alert alert-info col-10 text-center" role="alert">
+            <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron órdenes con los
+            criterios de búsqueda especificados
+          </div>
+
+        </div>
+
+        <div class="row justify-content-center" *ngIf="orderPage.totalElements === 0 && !emptySearch">
+
+          <div class="alert alert-info col-8 text-center" role="alert">
+            <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay órdenes para mostrar
+          </div>
+
         </div>
 
       </div>
 
-      <div class="row justify-content-center" *ngIf="emptySearch">
 
-        <div class="alert alert-info col-10 text-center" role="alert">
-          <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron órdenes con los
-          criterios de búsqueda especificados
-        </div>
-
-      </div>
     </div>

@@ -55,13 +55,13 @@ export class MeliAccountService {
     return this.http.delete(`${this.URI_MELI_BUSINESS}/${id}`);
   }
 
-  public authorizeAccount(id: number, code: any): Observable<MeliAccount>{
-    return this.http.get<MeliAccount>(`${this.URI_MELI_API}/${id}/${code}`).pipe( map( (resp: any) => resp.response));
+  public authorizeAccount(id: number, code: any): Observable<any>{
+    return this.http.get<any>(`${this.URI_MELI_API}/${id}/${code}`);
   }
 
 
-  synchronizeAccount(id): Observable<MeliAccount> {
-    return this.http.get<MeliAccount>(`${this.URI_MELI_API}/synchronize-account/${id}`).pipe( map( (resp: any) => resp.response));
+  synchronizeAccount(id): Observable<any> {
+    return this.http.get<any>(`${this.URI_MELI_API}/synchronize-account/${id}`);
   }
 
   public getUrlMeli(): string{
@@ -69,7 +69,8 @@ export class MeliAccountService {
   }
 
   saveAccountStorage(id: number): void{
-    localStorage.setItem('reference', this.mask(id));
+    localStorage.removeItem('reference');
+    localStorage.setItem('reference', JSON.stringify(id));
   }
 
   clearAccountStorage(): void {
@@ -77,15 +78,10 @@ export class MeliAccountService {
   }
 
   getAccountStorageReference(): number {
-    const reference = localStorage.getItem('reference').split(' ');
-    if(reference){
-      return Math.floor((+reference[1] * +reference[2]) / +reference[0]);
-    } else{
-      console.log('Reference to account lost', reference);
-      return null;
-    }
-
+    return +localStorage.getItem('reference').trim();
   }
+
+
 
   getAccountReference(): string{
     return localStorage.getItem('reference');
@@ -96,4 +92,17 @@ export class MeliAccountService {
     const second = Math.random();
     return  firts + ' ' + (value * firts) / second + ' ' + second;
   }
+
+
+
+   // getAccountStorageReference(): number {
+  //   const reference = localStorage.getItem('reference').split(' ');
+  //   if(reference){
+  //     return Math.floor((+reference[1] * +reference[2]) / +reference[0]);
+  //   } else{
+  //     console.log('Reference to account lost', reference);
+  //     return null;
+  //   }
+
+  // }
 }
