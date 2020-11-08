@@ -55,8 +55,10 @@ export class SellerOrdersComponent implements OnInit {
   searchOrders(): void {
 
     console.log(this.modelFrom)
+    console.log(this.validateDates())
     if (this.validateDates()) {
       this.loadingSearch = true;
+      this.orderStatus = [];
       this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
       this.loadOrders();
     }
