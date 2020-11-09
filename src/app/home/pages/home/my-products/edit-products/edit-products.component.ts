@@ -37,7 +37,7 @@ export class EditProductsComponent implements OnInit {
   imgURL: any;
   file: any;
   titleImage:string;
-  orderImage: number;
+  orderImage: number = 0;
   
   id: number = -1;
   public urlP = "";
@@ -286,7 +286,7 @@ export class EditProductsComponent implements OnInit {
       });
   }
   clearImage(){
-    this.orderImage = null;
+    this.orderImage = 0;
     this.titleImage = "";
     this.message = "";
     this.imagePath = "";

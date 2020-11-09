@@ -16,7 +16,9 @@ export class EditableProductModel{
 	/* **No editable fields** */
 	sku: string;
 	
-	price_cost: number;
+	price_costUYU: number;
+
+	price_costUSD: number;
 	
 	currentStock: number;
 }

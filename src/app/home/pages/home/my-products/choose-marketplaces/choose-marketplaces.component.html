@@ -14,21 +14,19 @@
                   <div class="h9 mb-0 font-weight-bold text-gray-600">Productos:</div>
                   <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
-                            <div class="h9 mb-0 font-weight-bold text-gray-600">Totales:</div>
-                            <div class="h9 mb-0 font-weight-bold text-gray-600">Publicados:</div>
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 width-content-card">Sin Publicar:</div>
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 width-content-card">Publicados:</div>
                       </div>
                       <div class="col mr-2">
-                            <div class="h9 mb-0 font-weight-bold text-gray-600 cardscol1"> {{marketP.prodTotal}}</div>
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 cardscol1"> {{marketP.prodWithoutPublish}}</div>
                             <div class="h9 mb-0 font-weight-bold text-gray-600 cardscol1"> {{marketP.prodPublished}}</div>
                       </div>
-                      <div class="col mr-2">
-                          <div class="row h9 mb-0 font-weight-bold text-gray-600 ">Pausados:</div>
-                          <div class="row h9 mb-0 font-weight-bold text-gray-600 ">Sin Publicar:</div>
-                      </div>
-                      <div class="col mr-2">
-                            <div class="h9 mb-0 font-weight-bold text-gray-600 "> {{marketP.prodPaused}}</div>
-                            <div class="h9 mb-0 font-weight-bold text-gray-600 "> {{marketP.prodWithoutPublish}}</div>
-                      </div>
+                      <div class="col mr-2">                          
+                          <div class="row h9 mb-0 font-weight-bold text-gray-600">Totales:</div>                          
+                      </div>      
+                      <div class="col mr-2">                          
+                          <div class="h9 mb-0 font-weight-bold text-gray-600"> {{marketP.prodTotal}}</div>                         
+                      </div>               
                   </div>
                 </div>
                 <div class="col-auto">

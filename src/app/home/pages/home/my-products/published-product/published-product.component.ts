@@ -71,7 +71,8 @@ export class PublishedProductComponent implements OnInit {
     this.loading = true;
     console.log('page', this.page)
     this.productsMeliPublishedService.
-      getProductsPublished(this.page - 1, this.size).subscribe((resp: PageProductMeliPublished) => {
+      getProductsPublished(this.page - 1, this.size, this.skuSearch, this.idMeliSearch, this.meliAccountSearch === '' ? -1 : +this.meliAccountSearch,
+          this.typeStateSearch === '' ? '' : this.typeStateSearch).subscribe((resp: PageProductMeliPublished) => {
 
         if (this.loadingSearch && resp.numberOfElements === 0) {
           this.emptySearch = true;
@@ -91,6 +92,20 @@ export class PublishedProductComponent implements OnInit {
 
   }
 
+  searchProductsPublished() {     
+      this.loadProductsPaginator();
+  }
+
+  // Clear search form
+  clearSearch(f: NgForm): void {
+
+    this.loadingClear = true;
+    this.idMeliSearch = '';
+    this.skuSearch = '';
+    this.meliAccountSearch = '';
+    this.typeStateSearch = '';
+  }
+
   ngOnInit(): void {
     this.getAccountMeli();
   }
@@ -108,22 +123,7 @@ export class PublishedProductComponent implements OnInit {
         }
       });  
     })    
-  }
-
-  searchProductsPublished() { 
-    
-   
-  }
-
-  // Clear search form
-  clearSearch(f: NgForm): void {
-
-    this.loadingClear = true;
-    this.idMeliSearch = '';
-    this.skuSearch = '';
-    this.meliAccountSearch = '';
-    this.typeStateSearch = '';
-  }
+  }  
 
   selectAllProducts(): void {
     this.checkAll = !this.checkAll;

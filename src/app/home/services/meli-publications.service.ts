@@ -111,14 +111,14 @@ export class MeliPublicationsService {
         responseList.forEach(element => {
           let priceFinal = 0;
           if(relation.idMargin === -1){
-            priceFinal = Math.ceil(element.price);
+            priceFinal = Math.round(element.price);
           }
           else if(relation.typeMargin === 1/*fijo*/){
-            priceFinal = Math.ceil(element.price + relation.valueMargin);
+            priceFinal = Math.round(element.price + relation.valueMargin);
           }
           else{
             /*Por Ciento*/
-            priceFinal = Math.ceil((element.price * (relation.valueMargin/100)) + element.price);
+            priceFinal = Math.round((element.price * (relation.valueMargin/100)) + element.price);
           }
   
           let imagesList: ItemPictures[] = [];          
@@ -146,7 +146,8 @@ export class MeliPublicationsService {
   
           let item = new ItemMeliRequest(element.productName, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
           "bronze", element.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
-          itemCustomList.push(new ItemCustomModel(item, element.id));          
+          itemCustomList.push(new ItemCustomModel(item, element.id, element.sku, element.images, element.price_costUYU,
+            element.price_costUSD, element.price));          
         })
     
         const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
@@ -166,14 +167,14 @@ export class MeliPublicationsService {
          let priceFinal = 0;
      
         if(relation.idMargin === -1 || !reloadConfig ){// Para el republicar // Quitar validacion "!reloadConfig" despues de arreglar todo como va 
-          priceFinal = Math.ceil(productSelected.price);
+          priceFinal = Math.round(productSelected.price);
         }
         else if(relation.typeMargin === 1/*fijo*/){
-          priceFinal = Math.ceil(productSelected.price + relation.valueMargin);
+          priceFinal = Math.round(productSelected.price + relation.valueMargin);
         }
         else{
           /*Por Ciento*/
-          priceFinal = Math.ceil((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
+          priceFinal = Math.round((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
         }
      
         let imagesList: ItemPictures[] = [];          
@@ -200,7 +201,8 @@ export class MeliPublicationsService {
 
         let item = new ItemMeliRequest(productSelected.productName, idCategory, priceFinal, "UYU", productSelected.currentStock.toString(), "buy_it_now", "new",
         "bronze", productSelected.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
-        itemCustomList.push(new ItemCustomModel(item, productSelected.id));          
+        itemCustomList.push(new ItemCustomModel(item, productSelected.id, productSelected.sku, productSelected.images, productSelected.price_costUYU,
+          productSelected.price_costUSD, productSelected.price));          
         
 
         const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
@@ -209,20 +211,20 @@ export class MeliPublicationsService {
             
   }
 
-  republishedProduct(productPublished: ProductMeliPublished, relationshipList: AccountMarginModel[], reloadConfig: boolean): Observable<ProductMeliPublished> {
+  updateProductPublish(productPublished: ProductMeliPublished, relationshipList: AccountMarginModel[], reloadConfig: boolean): Observable<ProductMeliPublished> {
       const params = `${this.URI_MELI_BUSINESS}/republish-product`;
       let priceFinal = 0;
       relationshipList.forEach(relation => {
                   
             if(relation.idMargin === -1 || !reloadConfig){ // no fue reconfigurado  
-              priceFinal = Math.ceil(+productPublished.pricePublication);
+              priceFinal = Math.round(+productPublished.pricePublication);
             }
             else if(relation.typeMargin === 1/*fijo*/){
-              priceFinal = Math.ceil((+productPublished.pricePublication) + relation.valueMargin);
+              priceFinal = Math.round((+productPublished.pricePublication) + relation.valueMargin);
             }
             else{
               /*Por Ciento*/
-              priceFinal = Math.ceil((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
+              priceFinal = Math.round((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
             }
             productPublished.pricePublication = priceFinal.toString();        
       });

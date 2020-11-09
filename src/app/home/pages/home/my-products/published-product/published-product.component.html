@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
               <label for="idMeliSearch">Id Mercado Libre:</label>
-              <input type="text" class="form-control" name="idMeliSearch" id="idMeliSearch"
+              <input type="text" class="form-control" name="idMeliSearch" id="idMeliSearch" [(ngModel)]="idMeliSearch"
                 placeholder="Buscar por id de Mercado Libre...">
             </div>
           </div>
@@ -28,7 +28,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="inputFamily">Cuenta de Mercado Libre:</label>
-                  <select name="meliAccountSearch" id="meliAccountSearch" class="form-control">
+                  <select name="meliAccountSearch" id="meliAccountSearch" class="form-control" [(ngModel)]="meliAccountSearch">
                     <option [value]="meliAccountSearchClear">Todas</option>
                      <option *ngFor="let meli of meliAccountsList" [value]="meli.id">
                         {{meli.businessName}} </option>
