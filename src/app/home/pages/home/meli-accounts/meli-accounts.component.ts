@@ -45,6 +45,9 @@ export class MeliAccountsComponent implements OnInit {
   errorTitleMessageSyncronization = 'Sincronización';
   errorbodyMessageAuthorization = 'Su código de autorización o token de actualización puede estar vencido o ya se usó. Por favor póngase en contacto con el administrador';
   errorbodyMessagePepegangaAuthorization = 'Estamos teniendo problemas al sincronizar su cuenta con mercado libre. Por favor intente de nuevo o póngase en contacto con el administrador';
+  errorbodyMessagePepegangaAuthorization406 = 'La cuenta de mercadolibre que intenta sincronizar no es correcta, intente desloguearse de mercadolibre y pruebe con la cuenta correcta';
+  errorbodyMessagePepegangaAuthorization409 = 'La cuenta de mercadolibre que intenta sincronizar ya existe, intente loguarse en mercadolibre con otra cuenta y vuelva a sincronizar';
+
 
 
 
@@ -52,9 +55,9 @@ export class MeliAccountsComponent implements OnInit {
 
   routerEvent: Observable<Event>;
   constructor(public authService: AuthService,
-              public meliAccountService: MeliAccountService,
-              public router: Router,
-              public activateRouter: ActivatedRoute) {
+    public meliAccountService: MeliAccountService,
+    public router: Router,
+    public activateRouter: ActivatedRoute) {
 
     this.activateRouter.queryParamMap.subscribe((resp: any) => {
       const code = resp.params.code;
@@ -64,7 +67,7 @@ export class MeliAccountsComponent implements OnInit {
         // 0-No vinculada, 1-Autorizada, 2-Vinculada
 
         this.loadingSynchronization = true;
-        this.descriptionStatusAccount = 'Sincronizando cuenta...';
+        this.descriptionStatusAccount = 'Autorizando cuenta...';
         const reference = this.meliAccountService.getAccountStorageReference();
         this.meliAccountService.clearAccountStorage();
         console.log('reference', reference)
@@ -78,32 +81,33 @@ export class MeliAccountsComponent implements OnInit {
   }
 
   public authorizeAccount(accountReference, code): void {
-    this.meliAccountService.authorizeAccount(accountReference, code).subscribe(respAuthorize => {
-      console.log(respAuthorize)
-      console.log('Cuenta autorizada')
+    this.meliAccountService.authorizeAccount(accountReference, code).subscribe((respAuthorize: any) => {
+      console.log(respAuthorize);
       this.loadingSynchronization = true;
-      this.descriptionStatusAccount = 'Autorizando cuenta...';
-      if (respAuthorize.userId) {
-        this.synchronizeAccount(respAuthorize.id);
+      console.log('Cuenta autorizada')
+      if (!this.errorAuthorization(respAuthorize)) {
+        this.descriptionStatusAccount = 'Sincronizando cuenta...';
+        if (respAuthorize.response.userId) {
+          this.synchronizeAccount(respAuthorize.response.id);
+        }
+
+      } else {
+        this.loadingSynchronization = false;
       }
+
+
     }, (error: any) => {
       console.log(error)
       this.loadingSynchronization = false;
       this.meliAccountService.clearAccountStorage();
-
-      if (error.error_meli) {
-        console.log('meli-error', error);
-        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessageAuthorization, 'warning');
-      } else if (error.error) {
-        console.log('pepeganga-error', error);
-        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessagePepegangaAuthorization, 'warning');
-      } else {
-        this.errorMessageNotification('Error', 'Estamos teniendo problemas en el servidor, por favor intente más tarde', 'warning');
-      }
+      console.log('Error server', error)
+      this.errorMessageNotification('Error', 'Estamos teniendo problemas en el servidor, por favor intente más tarde', 'warning');
 
     })
 
   }
+
+
 
   errorMessageNotification(title, body, type): void {
     Swal.fire({
@@ -118,30 +122,70 @@ export class MeliAccountsComponent implements OnInit {
   synchronizeAccount(id): void {
     this.meliAccountService.synchronizeAccount(id).subscribe(resp => {
       console.log(resp)
-      console.log('Cuenta vinculada')
-      this.descriptionStatusAccount = 'Cuenta vinculada satisfactoriamente...';
-      this.meliAccountService.clearAccountStorage();
-      setTimeout(() => {
+
+      if (!this.errorSynchronization(resp)) {
+        console.log('Cuenta vinculada')
+        this.descriptionStatusAccount = 'Cuenta vinculada satisfactoriamente...';
+        this.meliAccountService.clearAccountStorage();
         this.loadAcounts();
+        setTimeout(() => {
+          this.loadingSynchronization = false;
+        }, 3000);
+
+
+      } else {
         this.loadingSynchronization = false;
-      }, 2000);
+      }
+
     }, (error: any) => {
       console.log(error)
       this.loadingSynchronization = false;
       this.meliAccountService.clearAccountStorage();
+      this.errorMessageNotification('Error', 'Estamos teniendo problemas en el servidor, por favor intente más tarde', 'warning');
 
-      if (error.error_meli) {
-        console.log('meli-error', error);
-        this.errorMessageNotification(this.errorTitleMessageSyncronization, this.errorbodyMessageAuthorization, 'warning');
-      } else if (error.error) {
-        console.log('pepeganga-error', error);
-        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessagePepegangaAuthorization, 'warning');
-      } else {
-        this.errorMessageNotification('Error', 'Estamos teniendo problemas en el servidor, por favor intente más tarde', 'warning');
-      }
     });
   }
 
+
+  errorAuthorization(respAuthorize: any): boolean {
+    this.meliAccountService.clearAccountStorage();
+    if (respAuthorize.error_meli) {
+      console.log('meli-error', respAuthorize.error_meli);
+      this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessageAuthorization, 'warning');
+      return true;
+    } else if (respAuthorize.error) {
+      if (respAuthorize.error.code === 406) {
+        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessagePepegangaAuthorization406, 'error')
+        return true;
+      } else if(respAuthorize.error.code === 409){
+        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessagePepegangaAuthorization409, 'error')
+        return true;
+      }
+       else {
+        console.log('pepeganga-error', respAuthorize.error);
+        this.errorMessageNotification(this.errorTitleMessageAuthorization, this.errorbodyMessagePepegangaAuthorization, 'warning');
+        return true;
+      }
+
+    }
+    return false;
+  }
+
+
+  errorSynchronization(respAuthorize: any): boolean {
+    this.meliAccountService.clearAccountStorage();
+    if (respAuthorize.error_meli) {
+      console.log('meli-error', respAuthorize.error_meli);
+      this.errorMessageNotification(this.errorTitleMessageSyncronization, this.errorbodyMessageAuthorization, 'warning');
+      return true;
+    } else if (respAuthorize.error) {
+
+      this.errorMessageNotification(this.errorTitleMessageSyncronization, this.errorbodyMessagePepegangaAuthorization, 'warning');
+      return true;
+
+    }
+    return false;
+  }
   ngOnInit(): void {
 
     this.loadAcounts();
