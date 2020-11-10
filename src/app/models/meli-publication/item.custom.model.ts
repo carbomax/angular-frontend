@@ -4,7 +4,7 @@ import { ItemMeliRequest } from './item.meli.request';
 export class ItemCustomModel {
     constructor(    
         public item: ItemMeliRequest,
-        public idProduct: number,
+        public idPublicationProduct: number,
         public sku: String,
         public images: Image[],
         public priceCostUYU: number,
