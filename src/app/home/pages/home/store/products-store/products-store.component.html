@@ -96,8 +96,7 @@
           aria-labelledby="dropdownMenuLink">
           <div class="dropdown-header">Pre-publicar en:</div>
           <div *ngFor="let market of marketplaces">
-            <a class="dropdown-item pointer" (click)="selectMyProducts(market.id)" data-toggle="modal"
-              data-target="#loadingModal">{{market.name}}</a>
+            <a class="dropdown-item pointer" (click)="selectMyProducts(market.id)">{{market.name}}</a>
           </div>
         </div>
       </div>
@@ -244,22 +243,5 @@
   </div>
 </div>
 
-<!--  Modal para cargando -->
-<div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-    <div class="modal-content modal-content-loading">
-      <div class="modal-header" hidden>
-        <h5 class="modal-title" id="loadingModalLabel">Modal title</h5>
-        <button type="button" class="close" #closeModal data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <i *ngIf="loadingModal" class="fas fa-spin fa-3x fa-spinner"></i>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando productos...'"></app-global-loading>
+<app-global-loading [globalLoading]="loadingStoringModal" [globalLoadingDescription]="'Almacenando productos...'" ></app-global-loading>

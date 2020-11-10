@@ -21,10 +21,11 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 })
 export class EditProductsComponent implements OnInit {  
   @ViewChild('closeModal') closeModal;
-  @ViewChild('closeModalLoading') closeModalLoading;
+  //@ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('closeMargin') closeMargin;
  //Loading Modal
  loadingModal = false; 
+ loadingInitModal = false;
 
   productsDeletedList: number[];
   imagesDeletedList: string[];
@@ -67,7 +68,7 @@ export class EditProductsComponent implements OnInit {
     public marginService: MarginService,public meliPublicationsService: MeliPublicationsService ) { }
 
   ngOnInit(): void {
-    this.loadingModal = false;
+    this.loadingInitModal = true;
     this.account_margin = new AccountMarginModel();
     this.responsePredictor = new ResponseCategoryPredictor();
     this.responsePredictor.predictor = false;
@@ -84,6 +85,7 @@ export class EditProductsComponent implements OnInit {
 
   getCustomProduct(){
     this.productsStorageUserService.getCustomProduct(+this._router.snapshot.paramMap.get('id')).subscribe(item => {
+      this.loadingInitModal = false;
       this.editableProduct = item;
       this.getPredictorCategories();
     });
@@ -296,7 +298,7 @@ export class EditProductsComponent implements OnInit {
 
   close(){
     this.closeModal.nativeElement.click();
-    this.closeModalLoading.nativeElement.click();
+    //this.closeModalLoading.nativeElement.click();
   }
 
   /** Seccion para la vista Publicar */

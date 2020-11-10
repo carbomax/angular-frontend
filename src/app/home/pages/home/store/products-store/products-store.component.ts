@@ -55,7 +55,7 @@ export class ProductsStoreComponent implements OnInit {
   idProfile: number;
 
   //Loading Modal
-  loadingModal = false;
+  loadingStoringModal = false;
 
   // Paginator
   currentPage = 1;
@@ -263,7 +263,7 @@ export class ProductsStoreComponent implements OnInit {
 
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
-    this.loadingModal = true;
+    this.loadingStoringModal = true;
     if (this.authService.isAuthenticated) {
       this.idProfile = this.authService.authenticationDataExtrac().profileId;
 
@@ -274,7 +274,7 @@ export class ProductsStoreComponent implements OnInit {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
-              this.loadingModal = false;
+              this.loadingStoringModal = false;
               this.close();
               Swal.fire({
                 position: 'top-end',
@@ -288,7 +288,7 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = element + ", " + exists_products;
               });
-              this.loadingModal = false;
+              this.loadingStoringModal = false;
               this.close();
               Swal.fire({
                 position: 'top-end',
@@ -303,7 +303,7 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = exists_products + ", " + element;
               });
-              this.loadingModal = false;
+              this.loadingStoringModal = false;
               this.close();
               Swal.fire({
                 position: 'top-end',
@@ -316,7 +316,7 @@ export class ProductsStoreComponent implements OnInit {
             }
           })
         } else {
-          this.loadingModal = false;
+          this.loadingStoringModal = false;
           this.close();
           Swal.fire({
             position: 'top-end',
@@ -332,7 +332,7 @@ export class ProductsStoreComponent implements OnInit {
 
     }
     else {
-      this.loadingModal = false;
+      this.loadingStoringModal = false;
       this.close();
       Swal.fire({
         position: 'top-end',

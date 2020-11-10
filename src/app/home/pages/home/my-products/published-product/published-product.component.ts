@@ -34,8 +34,7 @@ export class PublishedProductComponent implements OnInit {
   public skuSearch = '';
   public meliAccountSearch = '';
   public typeStateSearch = '';
-  public errorProducts = false;
-  public empySearch = false;
+  public errorProducts = false;  
 
   // Paginator
 
@@ -78,11 +77,17 @@ export class PublishedProductComponent implements OnInit {
           this.emptySearch = true;
         } else { this.emptySearch = false; }
 
+        if((this.skuSearch !== '' || this.idMeliSearch !== '' || this.meliAccountSearch !== '' 
+            || this.typeStateSearch !== '') && resp.numberOfElements === 0){
+              this.emptySearch = true;
+            }
+
         this.pagePublised = resp;
         this.productsMeliPublished = this.pagePublised.content;
         console.log(this.productsMeliPublished)
         this.loading = false;
-      }, error => {
+        this.loadingClear = false;
+      }, (error: any) => {
         this.errorProducts = true;
         this.loadingClear = false;
         this.loadingSearch = false;
@@ -104,6 +109,7 @@ export class PublishedProductComponent implements OnInit {
     this.skuSearch = '';
     this.meliAccountSearch = '';
     this.typeStateSearch = '';
+    this.loadProductsPaginator();
   }
 
   ngOnInit(): void {

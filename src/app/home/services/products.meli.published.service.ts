@@ -26,8 +26,8 @@ export class ProductsMeliPublishedService {
   public getProductsPublished(page: number, size: number, skuSearch: string, idMeliSearch: string, meliAccountSearch: number,
       typeStateSearch: string): Observable<PageProductMeliPublished>{
     this.profileId = this.authService.authenticationDataExtrac().profileId;
-    return this.http.get<PageProductMeliPublished>(`${this.URI_PRODUCTS_PUBLISHED_SERVICE}/${this.profileId}?page=${page}&size=${size}&skuSearch=${skuSearch}
-          &idMeliSearch=${idMeliSearch}&meliAccountSearch=${meliAccountSearch}&typeStateSearch=${typeStateSearch}`);
+    return this.http.get<PageProductMeliPublished>(`${this.URI_PRODUCTS_PUBLISHED_SERVICE}/${this.profileId}?page=${page}&size=${size}&sku=${skuSearch}
+          &idMeliPublication=${idMeliSearch}&meliAccount=${meliAccountSearch}&typeStateSearch=${typeStateSearch}`);
   }
 
 
