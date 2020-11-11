@@ -33,6 +33,7 @@ export class PublishedProductComponent implements OnInit {
 
   public idMeliSearch = '';
   public skuSearch = '';
+  public titleSearch = '';
   public meliAccountSearch = '';
   public typeStateSearch = '';
   public errorProducts = false;
@@ -75,7 +76,7 @@ export class PublishedProductComponent implements OnInit {
     console.log('page', this.page)
     this.productsMeliPublishedService.
       getProductsPublished(this.page - 1, this.size, this.skuSearch, this.idMeliSearch, this.meliAccountSearch === '' ? -1 : +this.meliAccountSearch,
-          this.typeStateSearch === '' ? '' : this.typeStateSearch).subscribe((resp: PageProductMeliPublished) => {
+          this.typeStateSearch === '' ? '' : this.typeStateSearch, this.titleSearch).subscribe((resp: PageProductMeliPublished) => {
 
         if (this.loadingSearch && resp.numberOfElements === 0) {
           this.emptySearch = true;
@@ -84,14 +85,9 @@ export class PublishedProductComponent implements OnInit {
           this.emptySearch = false;
           this.loadingSearch = false;
         }
-/*
-        if((this.skuSearch !== '' || this.idMeliSearch !== '' || this.meliAccountSearch !== ''
-            || this.typeStateSearch !== '') && resp.numberOfElements === 0){
-              this.emptySearch = true;
-            }
-*/
+
         if((this.skuSearch === '' && this.idMeliSearch === '' && this.meliAccountSearch === ''
-        && this.typeStateSearch === '') && resp.numberOfElements === 0){
+        && this.typeStateSearch === '' && this.titleSearch === '') && resp.numberOfElements === 0){
           this.errorProducts = true;
           this.emptySearch = false;
         }
@@ -141,6 +137,7 @@ export class PublishedProductComponent implements OnInit {
     this.loadingClear = true;
     this.idMeliSearch = '';
     this.skuSearch = '';
+    this.titleSearch = '';
     this.meliAccountSearch = '';
     this.typeStateSearch = '';
     this.loadProductsPaginator(false);
