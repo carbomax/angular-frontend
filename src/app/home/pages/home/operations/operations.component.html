@@ -1,0 +1,263 @@
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a href="#collapseCardFilterProductStorage" class="d-block card-header py-3" data-toggle="collapse" role="button"
+    aria-expanded="false" aria-controls="collapseCardFilterProductStorage">
+    <h6 class="m-0 font-weight-bold text-primary">Buscar por...</h6>
+  </a>
+  <!-- Card Content - Collapse -->
+  <div class="collapse" id="collapseCardFilterProductStorage">
+    <form #f="ngForm">
+      <div class="card-body container">
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <input type="text" class="form-control" name="clientNameSearch" [(ngModel)]="clientNameSearch"
+                id="idClientName" placeholder="Nombre del cliente...">
+            </div>
+          </div>
+          <div class="col-md-6">
+
+            <div class="input-group mb-3">
+              <select class="custom-select" name="orderStatusSearch" [(ngModel)]="orderStatusSearch"
+                id="inputGroupOrderStatus">
+                <option [value]="orderStatusClear">Todos</option>
+                <option value="paid">Pagada</option>
+                <option value="cancelled">Cancelada</option>
+              </select>
+              <div class="input-group-append">
+                <label class="input-group-text" for="inputGroupOrderStatus">Estado de la órden</label>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" placeholder="Fecha desde: yyyy-mm-dd" name="dp" [(ngModel)]="modelFrom" ngbDatepicker
+                  #dateFrom="ngbDatepicker" [maxDate]=modelTo>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dateFrom.toggle()" type="button"><i
+                      class="fas fa-calendar-alt"></i></button>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="errorDateFrom" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Fecha</strong> con formato incorrecto
+              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+
+            <div class="form-group">
+              <div class="input-group">
+                <input class="form-control" placeholder="Fecha hasta: yyyy-mm-dd" name="dp" [(ngModel)]="modelTo" ngbDatepicker
+                  [minDate]="modelFrom" #dateTo="ngbDatepicker">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dateTo.toggle()" type="button"><i
+                      class="fas fa-calendar-alt    "></i></button>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="errorDateTo" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Fecha</strong> con formato incorrecto
+              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col d-flex justify-content-center">
+            <button class="btn btn-outline-primary mr-1" (click)="searchOrders()">
+              <i *ngIf="!loadingSearch" class="fas fa-search m-1"></i>
+              <i *ngIf="loadingSearch" class="fas fa-spin fa-spinner m-1"></i>
+              Buscar
+            </button>
+            <button (click)="clearOrders()" class="btn btn-outline-secondary ml-1">
+              <i *ngIf="loadingClear" class="fas fa-spin fa-spinner m-1"></i>
+              <i *ngIf="!loadingClear" class="fas fa-broom m-1"></i>
+              Limpiar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+</div>
+
+
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+
+    <div
+      class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <h6 class="m-0 font-weight-bold text-primary">Operaciones</h6>
+    </div>
+  </div>
+
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Seller</th>
+            <th>Nº.Orden</th>
+            <th>Creador</th>
+            <th>Fecha</th>
+            <th>Comprador</th>
+            <th>SKU</th>
+            <th>Cantidad</th>
+            <th>Descripción</th>
+            <th>Observación</th>
+            <th>Estado</th>
+            <th>Etiqueta</th>
+            <th>Envio</th>
+            <th>Nº.Factura</th>
+            <th>Imprimir</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of orderPage.content; let i = index ">
+            <td><label class="w10">{{ item.seller.firstsName }}</label></td>
+            <td>{{ i + 1}}</td>
+            <td>{{'Creador ' + i + 1}}</td>
+            <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
+            <td>{{ item.buyer.firstName }}</td>
+            <td>{{ item.items[0].sellerSku }}</td>
+            <td>{{ item.items[0].quantity }}</td>
+            <td>
+              <div class="input-group">
+                <textarea [ngbTooltip]="item.descriptionBss" [(ngModel)]="item.descriptionBss" name="descriptionBss" (keyup.enter)="updateDescription(item)" rows="1" class="form-control w10" aria-label=">Descripción" placeholder="Descripción...">{{ item.descriptionBss}}</textarea>
+              </div>
+            </td>
+            <td>
+              <div class="input-group ">
+                <textarea [ngbTooltip]="item.observationBss" [(ngModel)]="item.observationBss" name="observationBss" (keyup.enter)="updateObservation(item)"  rows="1" class="form-control w10" aria-label="Observación" placeholder="Observación...">{{ item.observationBss }}</textarea>
+              </div>
+
+             </td>
+
+            <td>
+              <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-sm alert-danger  mb-0" role="alert" ngbTooltip="Órden cancelada">
+              <i class="far fa-times-circle mt-1 mr-1"></i><span> Cancelada</span>
+            </div>
+
+            <div *ngIf="item.status === 'paid'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-success mb-0"
+                role="alert" ngbTooltip="Órden pagada">
+                <i class="far fa-check-circle mt-1 mr-1"></i><span> Pagada</span>
+              </div>
+            </td>
+
+           <td>
+            <select
+            (change)="changeTag(item)"
+            [style]="getCarrierStyleInitialTag(item.tagBss)"
+            class="custom-select w5" name="tagBss"
+            [(ngModel)]="item.tagBss"
+            [id]="i + 'asd'">
+            <option (click)="getCarrierStyleTag(i + 'asd', 0)" value="0">NO</option>
+            <option (click)="getCarrierStyleTag(i + 'asd', 1)" value="1">SI</option>
+          </select>
+           </td>
+
+          <td >
+            <select
+            (change)="changeCarrier(item)"
+            [style]="getCarrierStyleInitial(item.carrier.id)"
+            class="custom-select w8" name="carrier"
+            [(ngModel)]="item.carrier.id"
+            [id]="i">
+            <option (click)="getCarrierStyle(i, 0)" value="0">NINGUNO</option>
+            <option (click)="getCarrierStyle(i, 1)" value="1">UES</option>
+            <option (click)="getCarrierStyle(i, 2)" value="2">DA</option>
+            <option (click)="getCarrierStyle(i, 3)" value="3">MIRTRANS</option>
+            <option (click)="getCarrierStyle(i, 4)" value="4">CERRO</option>
+            <option (click)="getCarrierStyle(i, 5)" value="5">FLEX</option>
+            <option (click)="getCarrierStyle(i, 6)" value="6">AGENCIA</option>
+          </select>
+          </td>
+          <td>
+            <div class="input-group">
+              <input dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w9" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
+            </div>
+          </td>
+          <td class="text-center">
+           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary">
+            <i class="fas fa-print"></i>
+           </button>
+          </td>
+          </tr>
+
+
+        </tbody>
+      </table>
+
+      <div class="container" *ngIf="orderPage.totalElements > 0">
+        <div class="row justify-content-around">
+          <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="orderPage.totalElements"
+            [boundaryLinks]="true" [pageSize]="size" [(page)]="page">
+          </ngb-pagination>
+
+
+          <div class="form-group">
+            <select (change)="selectChangeHandler($event.target.value)" class="form-control">
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+            </select>
+          </div>
+
+          <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
+            <span class="align-middle">Mostrando {{page}} a {{size}} de {{orderPage.totalElements}} registros</span>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="container" *ngIf="orderPage.totalElements == 0">
+
+        <div class="row justify-content-center" *ngIf="emptySearch">
+
+          <div class="alert alert-info col-10 text-center" role="alert">
+            <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron órdenes con los
+            criterios de búsqueda especificados
+          </div>
+
+        </div>
+
+        <div class="row justify-content-center" *ngIf="orderPage.totalElements === 0 && !emptySearch">
+
+          <div class="alert alert-info col-8 text-center" role="alert">
+            <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay órdenes para mostrar
+          </div>
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando operaciones...'">
+    </app-global-loading>

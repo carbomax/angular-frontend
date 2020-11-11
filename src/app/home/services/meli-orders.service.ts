@@ -24,17 +24,17 @@ export class MeliOrdersService {
 
 
 
-  constructor(private http: HttpClient, private authService: AuthService){}
+  constructor(private http: HttpClient, private authService: AuthService) { }
 
   public getAllOrdersByProfile(page: number, size: number, statusFilter: string[], nameClient: string, dateFrom, dateTo): Observable<OrderPage> {
     this.profileId = this.authService.authenticationDataExtrac().profileId;
-    if(statusFilter.length <= 0 ){
+    if (statusFilter.length <= 0) {
       statusFilter = ['paid', 'cancelled'];
     }
-    if(dateFrom == null){
+    if (dateFrom == null) {
       dateFrom = 0;
     }
-    if(dateTo == null){
+    if (dateTo == null) {
       dateTo = 99999999;
     }
 
@@ -43,5 +43,24 @@ export class MeliOrdersService {
     console.log(url)
     return this.http.get<OrderPage>(url);
   }
+
+
+  updateCarrier(orderId: number, carrierId: number): Observable<boolean> {
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-carrier/${orderId}/${carrierId}`,{});
+  }
+
+  updateInvoice(orderId: number, invoice: number): Observable<boolean> {
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-invoice/${orderId}?invoice=${invoice}`,{});
+  }
+
+  updateDescription(orderId: number, description: string): Observable<boolean> {
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-description/${orderId}?description=${description}`,{});
+  }
+
+
+  updateObservation(orderId: number, observation: string): Observable<boolean> {
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-observation/${orderId}?observation=${observation}`,{});
+  }
+
 
 }
