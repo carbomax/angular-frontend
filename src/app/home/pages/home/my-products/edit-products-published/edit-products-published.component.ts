@@ -531,7 +531,8 @@ export class EditProductsPublishedComponent implements OnInit {
       editableProduct.description = this.productMeliPublished.description;
       editableProduct.images = this.productMeliPublished.images;
       editableProduct.price = +this.productMeliPublished.pricePublication;
-      editableProduct.price_cost = this.productMeliPublished.priceCost;
+      editableProduct.price_costUYU = this.productMeliPublished.priceCostUYU;
+      editableProduct.price_costUSD = this.productMeliPublished.priceCostUSD;
       editableProduct.productName = this.productMeliPublished.title;
       editableProduct.sku = this.productMeliPublished.sku;
       editableProduct.states = 1;    
@@ -541,9 +542,9 @@ export class EditProductsPublishedComponent implements OnInit {
    this.clearAll();
   }
 
-  republishProducts(){   
+  updateProductPublish(){   
     //adicionar loading
-    this.meliPublicationsService.republishedProduct(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
+    this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
         if(product){// ver codigo del response
           this.productMeliPublished = product;
           Swal.fire({

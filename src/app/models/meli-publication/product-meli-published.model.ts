@@ -18,7 +18,11 @@ export  class ProductMeliPublished {
 
   public pricePublication: string;
 
-  public priceCost: number;
+  public priceCostUYU: number;
+
+  public priceCostUSD: number;
+
+  public priceEditProduct: number;
 
   public warrantyType: string;
 

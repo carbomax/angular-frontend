@@ -34,8 +34,7 @@ export class PublishedProductComponent implements OnInit {
   public skuSearch = '';
   public meliAccountSearch = '';
   public typeStateSearch = '';
-  public errorProducts = false;
-  public empySearch = false;
+  public errorProducts = false;  
 
   // Paginator
 
@@ -71,17 +70,24 @@ export class PublishedProductComponent implements OnInit {
     this.loading = true;
     console.log('page', this.page)
     this.productsMeliPublishedService.
-      getProductsPublished(this.page - 1, this.size).subscribe((resp: PageProductMeliPublished) => {
+      getProductsPublished(this.page - 1, this.size, this.skuSearch, this.idMeliSearch, this.meliAccountSearch === '' ? -1 : +this.meliAccountSearch,
+          this.typeStateSearch === '' ? '' : this.typeStateSearch).subscribe((resp: PageProductMeliPublished) => {
 
         if (this.loadingSearch && resp.numberOfElements === 0) {
           this.emptySearch = true;
         } else { this.emptySearch = false; }
 
+        if((this.skuSearch !== '' || this.idMeliSearch !== '' || this.meliAccountSearch !== '' 
+            || this.typeStateSearch !== '') && resp.numberOfElements === 0){
+              this.emptySearch = true;
+            }
+
         this.pagePublised = resp;
         this.productsMeliPublished = this.pagePublised.content;
         console.log(this.productsMeliPublished)
         this.loading = false;
-      }, error => {
+        this.loadingClear = false;
+      }, (error: any) => {
         this.errorProducts = true;
         this.loadingClear = false;
         this.loadingSearch = false;
@@ -89,6 +95,21 @@ export class PublishedProductComponent implements OnInit {
         this.loading = false;
       });
 
+  }
+
+  searchProductsPublished() {     
+      this.loadProductsPaginator();
+  }
+
+  // Clear search form
+  clearSearch(f: NgForm): void {
+
+    this.loadingClear = true;
+    this.idMeliSearch = '';
+    this.skuSearch = '';
+    this.meliAccountSearch = '';
+    this.typeStateSearch = '';
+    this.loadProductsPaginator();
   }
 
   ngOnInit(): void {
@@ -108,22 +129,7 @@ export class PublishedProductComponent implements OnInit {
         }
       });  
     })    
-  }
-
-  searchProductsPublished() { 
-    
-   
-  }
-
-  // Clear search form
-  clearSearch(f: NgForm): void {
-
-    this.loadingClear = true;
-    this.idMeliSearch = '';
-    this.skuSearch = '';
-    this.meliAccountSearch = '';
-    this.typeStateSearch = '';
-  }
+  }  
 
   selectAllProducts(): void {
     this.checkAll = !this.checkAll;

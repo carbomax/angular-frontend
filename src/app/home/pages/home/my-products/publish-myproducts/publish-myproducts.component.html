@@ -81,7 +81,7 @@
             aria-labelledby="dropdownMenuLink">
             <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#commonInfoModal"><i class="fas fa-plus m-2 text-info"></i>Agregar Información</a>
             <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#exampleModalCentered"><i class="fas fa-upload m-2 text-primary"></i>Publicar Seleccionados</a>
-            <a class="dropdown-item pointer" href="javascript:void(0);" data-toggle="modal" data-target="#loadingModal" (click)="deleteProducts()"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a>
+            <a class="dropdown-item pointer" href="javascript:void(0);" (click)="deleteProducts()"><i class="fas fa-trash m-2 text-danger"></i>Eliminar Seleccionados</a>
           </div>
         </div>
       </div>
@@ -473,7 +473,7 @@
 
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#loadingModal" (click)="saveCommonInfo()">Guardar</button>
+        <button type="button" class="btn btn-primary" (click)="saveCommonInfo()">Guardar</button>
         <button type="button" class="btn btn-secondary" #closeModal data-dismiss="modal" (click)="clearAllImage()">Cancelar</button>
       </div>
     </div>
@@ -503,22 +503,7 @@
   </div>
 </div>
 
-<!--  Modal para cargando -->
-<div class="modal" id="loadingModal" tabindex="-1" role="dialog"  aria-labelledby="loadingModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-    <div class="modal-content modal-content-loading">
-      <div class="modal-header" hidden>
-        <h5 class="modal-title"  id="loadingModalLabel">Modal title</h5>
-        <button type="button" class="close"  data-dismiss="modal" #closeModalLoading aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>
-      </div>
-
-    </div>
-  </div>
-</div>
+<app-global-loading [globalLoading]="loadingModal" [globalLoadingDescription]="'Guardando información...'" ></app-global-loading>
+<app-global-loading [globalLoading]="loadingModalDelete" [globalLoadingDescription]="'Eliminando productos...'" ></app-global-loading>
 
 

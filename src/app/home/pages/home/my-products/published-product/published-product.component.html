@@ -14,11 +14,11 @@
           <div class="col-md-6">
             <div class="form-group">
               <label for="idSku">SKU:</label>
-              <input type="text" class="form-control" name="skuSearch" id="idSku" placeholder="Buscar por SKU...">
+              <input type="text" class="form-control" name="skuSearch" id="idSku" [(ngModel)]="skuSearch" placeholder="Buscar por SKU...">
             </div>
             <div class="form-group">
               <label for="idMeliSearch">Id Mercado Libre:</label>
-              <input type="text" class="form-control" name="idMeliSearch" id="idMeliSearch"
+              <input type="text" class="form-control" name="idMeliSearch" id="idMeliSearch" [(ngModel)]="idMeliSearch"
                 placeholder="Buscar por id de Mercado Libre...">
             </div>
           </div>
@@ -28,7 +28,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="inputFamily">Cuenta de Mercado Libre:</label>
-                  <select name="meliAccountSearch" id="meliAccountSearch" class="form-control">
+                  <select name="meliAccountSearch" id="meliAccountSearch" class="form-control" [(ngModel)]="meliAccountSearch">
                     <option [value]="meliAccountSearchClear">Todas</option>
                      <option *ngFor="let meli of meliAccountsList" [value]="meli.id">
                         {{meli.businessName}} </option>
@@ -229,7 +229,7 @@
 
     </div>
 
-    <div class="row justify-content-center" *ngIf="errorProducts && !empySearch">
+    <div class="row justify-content-center" *ngIf="errorProducts && !emptySearch">
 
       <div class="alert alert-info col-8 text-center" role="alert">
         <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar
@@ -237,7 +237,7 @@
 
     </div>
 
-    <div class="row justify-content-center" *ngIf="empySearch">
+    <div class="row justify-content-center" *ngIf="emptySearch">
 
       <div class="alert alert-info col-10 text-center" role="alert">
         <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No se encontraron productos con los

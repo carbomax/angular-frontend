@@ -43,6 +43,7 @@ export class PublishMyproductsComponent implements OnInit {
 
   //Loading Modal
   loadingModal = false;
+  loadingModalDelete = false;
 
   public loading = true;
   public loadPaginator = false;
@@ -462,10 +463,21 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   deleteProducts() {
-    this.loadingModal = true;
-    this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "Los productos eliminados los perderás del almacen!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+          this.loadingModalDelete = true;
+          this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
-        this.closeActiveModalLoading();
+        this.loadingModalDelete = false;
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -492,7 +504,7 @@ export class PublishMyproductsComponent implements OnInit {
         }
       }
       else {
-        this.closeActiveModalLoading();
+        this.loadingModalDelete = false;
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -503,7 +515,7 @@ export class PublishMyproductsComponent implements OnInit {
         });
       }
     }, error => {
-      this.closeActiveModalLoading();
+      this.loadingModalDelete = false;
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -514,14 +526,32 @@ export class PublishMyproductsComponent implements OnInit {
       });
     });
 
+      }
+    })
+
+
+    
   }
 
   deleteOneProduct(product: ProductCustom) {
-    this.productToDelete = product;
-    this.loadingDeleteProduct = true;
-    this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
+    Swal.fire({
+      title: '¿Estas seguro?',
+      text: "El producto será eliminado del almacen!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productToDelete = product;
+        this.loadingDeleteProduct = true;
+        //this.loadingModalDelete = true;
+        this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
         this.loadingDeleteProduct = false;
+        this.loadingModalDelete = false;
         this.productToDelete = null;
         Swal.fire({
           position: 'top-end',
@@ -553,6 +583,7 @@ export class PublishMyproductsComponent implements OnInit {
       else {
         this.productToDelete = null;
         this.loadingDeleteProduct = false;
+        this.loadingModalDelete = false;
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -565,6 +596,7 @@ export class PublishMyproductsComponent implements OnInit {
     }, error => {
       this.productToDelete = null;
       this.loadingDeleteProduct = false;
+      this.loadingModalDelete = false;
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -574,6 +606,8 @@ export class PublishMyproductsComponent implements OnInit {
         timer: 5000
       });
     });
+      }
+    });    
   }
 
   /* ************* Modal View Upload Images ********** */
