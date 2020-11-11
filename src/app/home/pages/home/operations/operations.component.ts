@@ -130,7 +130,6 @@ export class OperationsComponent implements OnInit {
   changeCarrier(order: MeliOrders, value): void {
     console.log(order)
     this.loading = true;
-    this.getCarrierStyle(value, order.carrier.id)
     this.meliOrderService.updateCarrier(order.id, order.carrier.id)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {

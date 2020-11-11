@@ -181,7 +181,7 @@
 
           <td >
             <select
-            (change)="changeCarrier(item, 'carrierselect' + i)"
+            (change)="changeCarrier(item)"
             [style]="getCarrierStyleInitial(item.carrier.id)"
             class="custom-select w8" name="carrier"
             [(ngModel)]="item.carrier.id"
