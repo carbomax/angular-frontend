@@ -1,20 +1,94 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
+
 import { SharedModule } from '../shared/shared.module';
-import { HomeComponent } from './pages/home/home.component';
 import { HomeRoutingModule } from './home-routing.module';
+
+
+//Components
 import { SidebardComponent } from './components/sidebard/sidebard.component';
 import { HeaderComponent } from './components/header/header.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { HomeComponent } from './pages/home/home.component';
+import { ProductsStoreComponent } from './pages/home/store/products-store/products-store.component';
+import { ChooseMarketplacesComponent } from './pages/home/my-products/choose-marketplaces/choose-marketplaces.component';
+import { PublishMyproductsComponent } from './pages/home/my-products/publish-myproducts/publish-myproducts.component';
+import { ListMarketplacesComponent } from './pages/home/marketplaces/list-marketplaces/list-marketplaces.component';
+
+
+import { NotImagePipe } from './pipes/not-image.pipe';
+import {MatDialogModule} from '@angular/material/dialog';
+
+
+import { PopupAddcommoninfoComponent } from './components/modals/popup-addcommoninfo/popup-addcommoninfo.component';
+import { EditProductsComponent } from './pages/home/my-products/edit-products/edit-products.component';
+import { UsersComponent } from './pages/home/users/users.component';
+import { NotImageProfilePipe } from './pipes/not-image-profile.pipe';
+import { FilterProductsStoragePipe } from './pipes/filter-products-storage.pipe';
+import { ListMarginsComponent } from './pages/home/list-margins/list-margins.component';
+import { MarginTypesPipe } from './pipes/margin-types.pipe';
+import { UserAdminComponent } from './pages/home/user-admin/user-admin.component';
+import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
+import { PublishedProductComponent } from './pages/home/my-products/published-product/published-product.component';
+import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
+import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
+import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
+import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
+import { OperationsComponent } from './pages/home/operations/operations.component';
+
 
 
 
 @NgModule({
-  declarations: [HomeComponent, SidebardComponent, HeaderComponent, BreadcrumbsComponent],
+  declarations: [
+    HomeComponent,
+    SidebardComponent,
+    HeaderComponent,
+    BreadcrumbsComponent,
+    ProductsStoreComponent,
+    FilterProductsStoragePipe,
+    NotImagePipe,
+    ChooseMarketplacesComponent,
+    PublishMyproductsComponent,
+    ListMarketplacesComponent,
+    PopupAddcommoninfoComponent,
+    EditProductsComponent,
+    UsersComponent,
+    NotImageProfilePipe,
+    ListMarginsComponent,
+    MarginTypesPipe,
+    UserAdminComponent,
+    MeliAccountsComponent,
+    PublishedProductComponent,
+    SellerOrdersComponent,
+    MeliCategoryPathComponent,
+    EditProductsPublishedComponent,
+    GlobalLoadingComponent,
+    OperationsComponent],
+
+  exports: [HomeComponent,
+    SidebardComponent,
+    HeaderComponent,
+    BreadcrumbsComponent,
+    ProductsStoreComponent,
+    ChooseMarketplacesComponent,
+    PublishMyproductsComponent,
+    ListMarketplacesComponent,
+    PopupAddcommoninfoComponent,
+    PublishedProductComponent,
+    UsersComponent,
+    NotImagePipe,
+    NotImageProfilePipe,
+    EditProductsComponent,
+    NotImagePipe,
+    ListMarginsComponent,
+    SellerOrdersComponent,
+    MeliCategoryPathComponent,
+    EditProductsPublishedComponent],
   imports: [
-    CommonModule,
     SharedModule,
-    HomeRoutingModule
+    HomeRoutingModule,
+    MatDialogModule
   ]
 })
 export class HomeModule { }

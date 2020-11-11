@@ -1,0 +1,13 @@
+
+.modal-content-loading{
+  width: auto !important;
+}
+
+.modal{
+  background-color: transparent !important;
+}
+
+
+.spinner-color{
+  color: #0e42df;
+}

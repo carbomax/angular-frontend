@@ -1,0 +1,436 @@
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductsStorageUserService } from '../../../../services/products-storage-user.service';
+import { MeliAccountService } from '../../../../services/meli-account.service';
+import { MarginService } from '../../../../services/margin.service';
+import { MeliPublicationsService } from '../../../../services/meli-publications.service';
+import Swal from 'sweetalert2';
+import { EditableProductModel } from '../../../../../models/editable.product.model';
+import { Image } from '../../../../../models/image.model';
+import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
+import { ResponseCategoryPredictor } from 'src/app/models/meli-publication/response-category-predictor.model';
+import { Margin } from 'src/app/models/margin';
+import { MeliAccount } from 'src/app/models/meli.account';
+import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
+import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
+
+@Component({
+  selector: 'app-edit-products',
+  templateUrl: './edit-products.component.html',
+  styleUrls: ['./edit-products.component.css']
+})
+export class EditProductsComponent implements OnInit {  
+  @ViewChild('closeModal') closeModal;
+  //@ViewChild('closeModalLoading') closeModalLoading;
+  @ViewChild('closeMargin') closeMargin;
+ //Loading Modal
+ loadingModal = false; 
+ loadingInitModal = false;
+
+  productsDeletedList: number[];
+  imagesDeletedList: string[];
+  editableProduct: EditableProductModel; 
+  imageToDelete: Image;  
+
+  edit = false;  
+  message: string;
+  imagePath: string;
+  imgURL: any;
+  file: any;
+  titleImage:string;
+  orderImage: number = 0;
+  
+  id: number = -1;
+  public urlP = "";
+  public titleP: string;
+  public orderP: number = -1;
+
+  /**Seccion para la vista Publicar */
+  meliAccountsList: MeliAccount[]; 
+  accountMarginsList: AccountMarginModel[];
+  initialMeliAccounts: MeliAccount[];
+  account_margin: AccountMarginModel; 
+  marginsList: Margin[];     
+  margin: number = -1;  
+  meliAccount: number = -1;
+  warrantyType: number = -1;
+  warrantyTime: number = 0;
+  warranty: boolean = false; 
+  responsePredictor: ResponseCategoryPredictor;
+  withoutPredictor: boolean = false;
+
+  lastCategorySelected: string = '-1';
+  home: boolean = false;
+  pathList: string[];
+
+
+  constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
+    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService ) { }
+
+  ngOnInit(): void {
+    this.loadingInitModal = true;
+    this.account_margin = new AccountMarginModel();
+    this.responsePredictor = new ResponseCategoryPredictor();
+    this.responsePredictor.predictor = false;
+
+    this.getCustomProduct();
+    this.getAccountMeli();  
+    this.getMargins();
+    //this.getPredictorCategories();
+    this.productsDeletedList = [];    
+    this.imagesDeletedList = [];
+    this.accountMarginsList = [];
+    
+  }
+
+  getCustomProduct(){
+    this.productsStorageUserService.getCustomProduct(+this._router.snapshot.paramMap.get('id')).subscribe(item => {
+      this.loadingInitModal = false;
+      this.editableProduct = item;
+      this.getPredictorCategories();
+    });
+  }
+
+  getPredictorCategories(){
+     this.meliPublicationsService.getCategoryByPredictor(this.editableProduct.productName).subscribe(predictorList => {
+      let p = predictorList;
+      if(predictorList.length !== 0){
+        this.responsePredictor.predictor = true; 
+         this.responsePredictor.meliPredictorCategory = predictorList;
+      }  
+      else{
+         this.responsePredictor.predictor = false; 
+         this.responsePredictor.meliPredictorCategory = [];
+      }      
+     },(error: any) => {
+         this.responsePredictor.predictor = false; 
+         this.responsePredictor.meliPredictorCategory = [];
+    });
+  }
+
+  saveForm(){
+    this.loadingModal = true; 
+    this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
+      this.editableProduct = item;
+      this.productsDeletedList = [];
+      this.loadingModal = false;       
+      this.close();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Actualizado`,
+        text: `Sus productos han sido actualizados correctamente.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+
+      //Elimino las imagenes fisicamente del servidor
+      if(this.imagesDeletedList.length !== 0){
+      this.productsStorageUserService.deleteImages(this.imagesDeletedList).subscribe();
+      this.imagesDeletedList = [];
+    }
+      
+    },(error: any) => {
+      this.loadingModal = false;      
+      this.close();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error`,
+        text: `Error al actualizar. Sincronice sus productos.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      this.imagesDeletedList = [];
+      this.productsDeletedList = [];
+    });  
+   
+  };
+
+  editProduct(image: Image){
+    this.id = +image.id;
+    this.edit = true;
+
+    this.orderP = image.order;;
+    this.titleP = image.title;
+    this.urlP = image.photos   
+  }
+
+  updateProduct(image: Image){
+    if(image.id === this.id){    
+      image.order = this.orderP;
+      image.title = this.titleP;
+      image.photos = this.urlP;
+      this.clear();      
+    }
+    else{
+      this.clear();
+    }
+  }
+
+  cancelProduct(){
+    this.clear();
+  }
+
+  deleteImage(){
+    this.productsDeletedList.push(this.imageToDelete.id); 
+    this.imagesDeletedList.push(this.imageToDelete.photos);
+    let position = this.editableProduct.images.indexOf(this.imageToDelete);
+    this.editableProduct.images.splice(position, 1);
+  }
+
+  previousDelete(image: Image){
+    this.imageToDelete = image;
+  }
+
+  clear(){
+    this.orderP = -1;
+    this.titleP = "";
+    this.urlP = "";
+    this.id = -1;
+    this.edit = false;
+    this.imageToDelete = null;
+  }
+
+  /* ************* Subir Imagenes ********** */
+  preview(files) {
+    if (files.length === 0){
+      this.file = null;
+      this.message = "Archivo inválido";
+      return;
+    }  
+ 
+    var mimeType = files[0].type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.file = null;
+      this.message = "El archivo no es una imagen.";
+      return;
+    }
+ 
+    var reader = new FileReader();
+    this.imagePath = files;
+    reader.readAsDataURL(files[0]); 
+    reader.onload = (_event) => { 
+      this.imgURL = reader.result; 
+      this.message = "";
+      this.file = files[0];
+    }
+  }
+
+  addedImage() {
+    if (!this.file) {  
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Debe seleccionar un archivo`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      return;
+    }
+    if (this.file.type.match(/image\/*/) == null) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Solo imagenes`,
+        text: 'El archivo no es una imagen',
+        showConfirmButton: false,
+        timer: 5000
+      });     
+      return;
+    }
+    const formData: FormData = new FormData();
+    formData.append('image', this.file, this.file.name);
+
+    this.productsStorageUserService.uploadImage(formData)
+      .subscribe(resp => {  
+        if(resp.success === true) {   
+        let image_added = new Image();
+        image_added.order = this.orderImage;
+        image_added.title = this.titleImage;
+        image_added.photos = resp.reason;
+        this.editableProduct.images.push(image_added);
+      
+        this.clearImage();
+        this.close();   
+      }
+      },(error: any) => {
+        if(error.status >= 200 && error.status <= 299)
+        {
+          let image_added = new Image();
+          image_added.order = this.orderImage;
+          image_added.title = this.titleImage;
+          image_added.photos = error.error.text;
+          this.editableProduct.images.push(image_added);
+        }
+        else if(error.error.message.includes('Maximum upload size exceeded')){        
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error`,
+          text: 'Su imagen excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          showConfirmButton: false,
+          timer: 5000
+        });
+        }else{
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error`,
+            text: 'Error almacenando la imagen. Contacte con el administrador',
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }
+        this.clearImage();
+        this.close();
+        
+      });
+  }
+  clearImage(){
+    this.orderImage = 0;
+    this.titleImage = "";
+    this.message = "";
+    this.imagePath = "";
+    this.imgURL = null;
+    this.file = null;    
+  }
+
+  close(){
+    this.closeModal.nativeElement.click();
+    //this.closeModalLoading.nativeElement.click();
+  }
+
+  /** Seccion para la vista Publicar */
+
+  addRelationAccountMargin(){   
+    if(this.meliAccount !== -1){      
+      let accountMargin = new AccountMarginModel();
+
+      var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
+      accountMargin.accountName = account.businessName;
+      accountMargin.idAccount = account.id;
+
+      if(this.margin !== -1){
+        var margin = this.marginsList.find(element => element.id == this.margin);
+        accountMargin.idMargin =  margin.id;
+        accountMargin.nameMargin = margin.name;
+        accountMargin.typeMargin = margin.type;
+        accountMargin.valueMargin = margin.value; 
+      }else{
+        accountMargin.idMargin = -1;
+        accountMargin.nameMargin = "";
+      }
+      this.accountMarginsList.push(accountMargin);
+      let index = this.meliAccountsList.indexOf(account);
+      this.meliAccountsList.splice(index, 1);
+      this.closeModalMargin();      
+    }
+  } 
+
+  getAccountMeli(){
+    this.meliAccountsList = [];
+    this.initialMeliAccounts = [];
+    this.meliAccountService.getAccounts().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.status === AccountMeliStates.SYNCHRONIZED && element.marketplaceId === MarketplaceType.MERCADOLIBRE){          
+          this.meliAccountsList.push(element);
+        }
+      });
+      this.meliAccountsList.forEach(element => { this.initialMeliAccounts.push(element);});
+    })    
+  }
+
+  deleteRelationAccountMargin(){
+    if(this.account_margin != null){
+      let account = this.initialMeliAccounts.find(element => element.id == this.account_margin.idAccount);
+      let position = this.initialMeliAccounts.indexOf(account);
+      this.meliAccountsList.splice(position, 0, account);
+      let position2 = this.accountMarginsList.indexOf(this.account_margin);
+      this.accountMarginsList.splice(position2, 1);      
+    }
+  }
+
+  getMargins(){
+    this.marginsList = [];
+    this.marginService.getMargins().subscribe(resp => {
+      resp.forEach(element => {
+        if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){
+          this.marginsList.push(element);
+        }
+      });
+    })
+  }  
+
+  previewDelete(relationship: AccountMarginModel){
+    this.account_margin = relationship;
+  }
+
+  closeModalMargin(){     
+    this.clearSome();  
+    this.closeMargin.nativeElement.click();         
+  }
+
+  clearSome(){
+    this.account_margin = null; 
+    this.margin = -1; 
+    this.meliAccount = -1;  
+  }
+
+  clearAll(){
+     this.account_margin = null;
+    this.accountMarginsList = [];
+    this.meliAccountsList = [];
+    this.pathList = [];
+    this.home = true;
+    this.warrantyType = -1;
+    this.warrantyTime = -1;
+    this.warranty = false;
+  }
+
+  closeModalPublish(){
+    this.clearAll();
+    //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);}); 
+    this.router.navigate(['/publish-myproducts']);
+  }
+
+  publishProducts(){  
+    Swal.fire({
+      position: 'top-end',
+      icon: 'info',
+      title: `Producto en publicación`,
+      text: `El producto está siendo publicado`,
+      showConfirmButton: false,
+      timer: 5000
+    })
+    .then((result) => {
+      this.router.navigate(['/publish-myproducts']);
+    });  
+   
+
+   // llamada al servicio Publicar
+    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+    this.clearAll();
+  }
+
+  getPath(pathList: string[]){
+    this.pathList = [];
+    this.pathList = pathList;
+    this.home = false;
+  }
+
+  getCategorySelected(idCategory: string){
+    this.lastCategorySelected = idCategory;   
+  }
+
+  setHome(){
+    this.home = true;
+    this.pathList = [];
+  }
+
+  activeAllCategory(){
+    this.withoutPredictor = true;
+    this.setHome();
+  }
+
+}

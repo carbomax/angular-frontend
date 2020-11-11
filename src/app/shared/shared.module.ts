@@ -1,17 +1,40 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 
+
+import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
+import { Ng5SliderModule } from 'ng5-slider';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+// Pagination
+import { NgxPaginationModule } from 'ngx-pagination';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
+// Multiselect
+import { NgSelectModule } from '@ng-select/ng-select';
 
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    NgxBootstrapSliderModule,
+    Ng5SliderModule,
+    NgxPaginationModule,
+    NgbModule,
+    NgSelectModule
   ],
   exports: [
-    FormsModule
+    CommonModule,
+    FormsModule,
+    NgxBootstrapSliderModule,
+    Ng5SliderModule,
+    NgxPaginationModule,
+    NgbModule,
+    NgSelectModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedModule { }

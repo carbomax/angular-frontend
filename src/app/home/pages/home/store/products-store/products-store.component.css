@@ -1,0 +1,11 @@
+.dropdown-item:hover{
+    background-color: #0e41db54;
+  }
+
+  .table td {
+    vertical-align: middle ;
+  }
+
+  .modal-content-loading{
+    width: auto !important;
+  }

@@ -1,1 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "~@ng-select/ng-select/themes/material.theme.css";
+
+.pointer{
+  cursor: pointer;
+}
+
+.custom-ng5-slider.ng5-slider .ng5-slider-pointer {
+
+  background-color: #4e73df;
+
+}
+
+.mat-dialog-container{
+  width: 70em !important;
+}
+
+.oculto {
+  display: none;
+}
+
+.fondo-modal {
+  background-color: rgba(111, 128, 204, 0.4);
+  left: 0px;
+  height: 100%;
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  z-index: 9999;
+}
+
+.modal-opacity-spinner{
+  opacity: 0.3;
+}
+

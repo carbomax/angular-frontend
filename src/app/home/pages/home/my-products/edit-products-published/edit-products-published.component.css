@@ -1,0 +1,64 @@
+.cardpopup{
+    width: 100% !important;
+}
+.actionbox{
+    width: 2em !important;
+    height: 2em !important;
+}
+.actionboxicon{
+    text-align: start !important;
+}
+
+
+.my-custom-scrollbar {
+    position: relative;
+    min-height: 8em !important;
+    max-height: 12em !important;
+    overflow: auto;
+}
+.table-wrapper-scroll-y {
+    display: block;
+}
+.div-table-border{ 
+    border: solid;
+    border-width: thin;
+    border-radius: 10px;
+    border-color: #d1d3e2;     
+}
+
+.modal-content-loading{
+    width: auto !important;
+  }
+
+  .font-weight-category {
+    font-weight: 900 !important;
+}
+
+.card-body-category{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.card-category{
+    min-height: 12% !important;
+}
+
+.path-category{
+    padding: 0 !important;
+    max-width: 100% !important;
+}
+
+.delete-icon:hover{
+    color:#f50303 !important;
+  }
+
+  fieldset {
+    margin: 8px;
+    border: 1px solid silver;
+    padding: 8px;    
+    border-radius: 4px;
+}
+
+legend {
+    padding: 2px;    
+}

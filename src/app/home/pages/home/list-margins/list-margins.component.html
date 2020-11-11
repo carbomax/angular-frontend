@@ -1,0 +1,172 @@
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+  <div class="card-header py-3">
+
+    <div
+      class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+      <h6 class="m-0 font-weight-bold text-primary">Márgenes</h6>
+      <button type="button" class="btn btn-primary btn-sm btn-user" data-toggle="modal" (click)="createModal()"
+        data-target="#marginModal">
+        <i class="fas fa-plus-circle"></i> Crear margen
+      </button>
+    </div>
+
+  </div>
+
+
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Marketplace</th>
+            <th>Tipo</th>
+            <th class="text-right">Valor</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let margin of margins | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+            <td>{{ margin.name }}</td>
+            <td> {{ margin.marketplace.name }} </td>
+            <td> {{ margin.type |marginTypes}} </td>
+            <td class="text-right"> {{ margin.value}} </td>
+            <td class="text-center">
+
+              <div class="dropdown no-arrow">
+                <a class="dropdown-toggle btn btn-sm btn-outline-primary actionbox" href="#" role="button"
+                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                  aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item pointer" data-toggle="modal" (click)="updateModal(margin)"
+                    data-target="#marginModal"><i class="far fa-edit m-2 text-success"></i>Editar</a>
+                  <a class="dropdown-item pointer" (click)="deleteMargin(margin)"><i
+                      class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+
+
+      </table>
+
+      <div class="container" *ngIf="margins.length > 0">
+        <div class="row justify-content-around">
+          <div class="col-md-5 col-sm-12">
+            <ngb-pagination [collectionSize]="margins.length" [boundaryLinks]="true" [pageSize]="pageSize"
+              [(page)]="page">
+            </ngb-pagination>
+          </div>
+
+          <div class="col-md-2 col-sm-12">
+            <div class="form-group">
+              <select (change)="selectChangeHandler($event.target.value)" class="form-control">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="col-md-5 col-sm-12">
+            <div class="dataTables_info py-2 ml-auto" id="dataTable_info" role="status" aria-live="polite">
+              <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{margins.length}} registros
+                </span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row justify-content-center" *ngIf="errorMargins">
+
+      <div class="alert alert-info col-8 text-center" role="alert">
+        <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay márgenes para mostrar
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Logout Modal-->
+
+  <div class="modal fade mt-5" id="marginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-lg modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 *ngIf="register" class="modal-title" id="exampleModalLabel">{{headerCreateModal}}</h5>
+          <h5 *ngIf="!register" class="modal-title" id="exampleModalLabel">{{headerUpdateModal}}</h5>
+          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form ngNativeValidate #f="ngForm">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label for="inputMarginName">Nombre:</label>
+                  <input type="text" class="form-control" name="name" [(ngModel)]="selectedMargin.name"
+                    id="inputMarginName" placeholder="Ejemplo: Ganancia 25%" aria-describedby="Nombre del margen"
+                    required>
+                </div>
+              </div>
+
+              <div class="col md-4">
+                <div class="form-group">
+                  <ng-select class="mt-md-3" [items]="marketplaces" name="selectedMarketplaces" bindLabel="name"
+                    placeholder="Seleccione marketplace"  [multiple]="false"  appendTo="body" required
+                    [(ngModel)]="selectedMarketplaces">
+                  </ng-select>
+                </div>
+               </div>
+
+              <div class="col-md-2">
+                <label for="inputMarginValue">Valor:</label>
+                <input type="number" min="0" class="form-control" name="value" [(ngModel)]="selectedMargin.value"
+                  id="inputMarginValue" aria-describedby="Valor del margen" required>
+              </div>
+
+              <div class="col-md-3">
+                <label for="inputMarginType">Seleccionar:</label>
+                <div id="inputMarginType" class="btn-group btn-group-toggle" ngbRadioGroup name="radioBasic"
+                  [(ngModel)]="selectedMargin.type">
+                  <label ngbButtonLabel class="btn-outline-primary">
+                    <input ngbButton type="radio" [value]="2">Porcentaje
+                  </label>
+                  <label ngbButtonLabel class="btn-outline-primary">
+                    <input ngbButton type="radio" [value]="1">Fijo
+                  </label>
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button *ngIf="register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"
+              (click)="createOrUpdateMargin()">Crear</button>
+            <button *ngIf="!register" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid"
+              (click)="createOrUpdateMargin()">Actualizar</button>
+
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+
+  <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando márgenes...'"></app-global-loading>

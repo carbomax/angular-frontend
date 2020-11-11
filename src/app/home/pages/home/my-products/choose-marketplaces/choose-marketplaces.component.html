@@ -1,0 +1,45 @@
+<div class="container-fluid">
+    <div class="row">
+
+      <!-- Begin Card Details -->
+      <div class="col-xs-6 col-md-6 mb-6" *ngFor="let marketP of marketplaceDetailsList">
+
+        <!-- Mercado Libre Card Details -->
+        <div class="card border-left-warning shadow h-200 py-2" *ngIf="marketP.marketplace === 1" >
+          <a class="nav-link collapsed" routerLink="../publish-myproducts" routerLinkActive="active" data-toggle="collapse" aria-expanded="true" >
+              <div class="card-body" >
+                <div class="row no-gutters align-items-center">
+                  <div class="col mr-3">
+                  <div class="text-xs font-weight-bold text-warning text-uppercase mb-1" *ngIf="marketP.marketplace === 1">Mercado Libre</div>
+                  <div class="h9 mb-0 font-weight-bold text-gray-600">Productos:</div>
+                  <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 width-content-card">Sin Publicar:</div>
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 width-content-card">Publicados:</div>
+                      </div>
+                      <div class="col mr-2">
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 cardscol1"> {{marketP.prodWithoutPublish}}</div>
+                            <div class="h9 mb-0 font-weight-bold text-gray-600 cardscol1"> {{marketP.prodPublished}}</div>
+                      </div>
+                      <div class="col mr-2">                          
+                          <div class="row h9 mb-0 font-weight-bold text-gray-600">Totales:</div>                          
+                      </div>      
+                      <div class="col mr-2">                          
+                          <div class="h9 mb-0 font-weight-bold text-gray-600"> {{marketP.prodTotal}}</div>                         
+                      </div>               
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <i class="fas fa-clipboard-list fa-2x text-warning-300 iconmeli"></i>
+                </div>
+                </div>
+              </div>
+          </a>
+        </div>
+          <!--Other cards in the future -->
+      </div>
+
+    </div>
+</div>
+
+<app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando marketplaces...'" ></app-global-loading>
