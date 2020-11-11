@@ -185,14 +185,14 @@
             [style]="getCarrierStyleInitial(item.carrier.id)"
             class="custom-select w8" name="carrier"
             [(ngModel)]="item.carrier.id"
-            [id]="i">
-            <option (click)="getCarrierStyle(i, 0)" value="0">NINGUNO</option>
-            <option (click)="getCarrierStyle(i, 1)" value="1">UES</option>
-            <option (click)="getCarrierStyle(i, 2)" value="2">DA</option>
-            <option (click)="getCarrierStyle(i, 3)" value="3">MIRTRANS</option>
-            <option (click)="getCarrierStyle(i, 4)" value="4">CERRO</option>
-            <option (click)="getCarrierStyle(i, 5)" value="5">FLEX</option>
-            <option (click)="getCarrierStyle(i, 6)" value="6">AGENCIA</option>
+            [id]="'carrierselect' + i">
+            <option (click)="getCarrierStyle('carrierselect' + i, 0)" value="0">NINGUNO</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 1)" value="1">UES</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 2)" value="2">DA</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 3)" value="3">MIRTRANS</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 4)" value="4">CERRO</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 5)" value="5">FLEX</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 6)" value="6">AGENCIA</option>
           </select>
           </td>
           <td>

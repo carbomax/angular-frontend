@@ -127,7 +127,7 @@ export class OperationsComponent implements OnInit {
   }
 
 
-  changeCarrier(order: MeliOrders): void {
+  changeCarrier(order: MeliOrders, value): void {
     console.log(order)
     this.loading = true;
     this.meliOrderService.updateCarrier(order.id, order.carrier.id)
@@ -219,7 +219,7 @@ export class OperationsComponent implements OnInit {
 
   getCarrierStyleInitial(value): string {
     let initialStyle = '';
-    switch (value) {
+    switch (+value) {
 
       case 0:
         initialStyle = `background-color: gray; color: white`;
@@ -249,9 +249,11 @@ export class OperationsComponent implements OnInit {
 
     return initialStyle;
   }
-  getCarrierStyle(id, value: number): void {
+  getCarrierStyle(id, value): void {
 
-    switch (value) {
+    console.log('Id select', id)
+    console.log('Value carrier', value)
+    switch (+value) {
 
       case 0:
         this.styleCarries = `background-color: gray; color: white`;
