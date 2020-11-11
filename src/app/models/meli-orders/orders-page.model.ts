@@ -11,7 +11,7 @@ export class OrderPage {
     {id: 4, name: 'CERRO'},
     {id: 5, name: 'FLEX'},
     {id: 4, name: 'AGENCIA'}
-  ]
+  ];
 
 }
 
