@@ -4,6 +4,7 @@ import { ProductsStorageUserService } from '../../../../services/products-storag
 import { MeliAccountService } from '../../../../services/meli-account.service';
 import { MarginService } from '../../../../services/margin.service';
 import { MeliPublicationsService } from '../../../../services/meli-publications.service';
+import { ProductsMeliPublishedService } from '../../../../services/products.meli.published.service';
 import Swal from 'sweetalert2';
 import { ProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
 import { Image } from '../../../../../models/image.model';
@@ -82,7 +83,7 @@ export class EditProductsPublishedComponent implements OnInit {
 
 
   constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
-    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService ) { }
+    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService ) { }
 
   ngOnInit(): void {
     this.loadingModal = false;
@@ -161,20 +162,9 @@ export class EditProductsPublishedComponent implements OnInit {
       })
   }
 
-  saveForm(){
-    
-    this.loadingModal = true; 
-    let editableProduct: EditableProductModel = new EditableProductModel();
-    editableProduct.id = this.productMeliPublished.mlPublicationId;
-    editableProduct.currentStock = this.productMeliPublished.currentStock;
-    editableProduct.description = this.productMeliPublished.description;
-    editableProduct.images = this.productMeliPublished.images;
-    editableProduct.price = +this.productMeliPublished.pricePublication;
-    editableProduct.productName = this.productMeliPublished.title;
-    editableProduct.sku = this.productMeliPublished.sku;
-    editableProduct.states = 1;
-    
-    this.productsStorageUserService.updateCustomProduct(editableProduct, this.productsDeletedList).subscribe(item => {  
+  saveForm(){    
+    this.loadingModal = true;   
+    this.productsMeliPublishedService.updateProductsPublished(this.productMeliPublished, this.productsDeletedList).subscribe(item => {  
       this.productsDeletedList = [];
       this.loadingModal = false;       
       this.close();
@@ -186,6 +176,8 @@ export class EditProductsPublishedComponent implements OnInit {
         showConfirmButton: false,
         timer: 5000
       });
+
+      this.productMeliPublished = item;
 
       //Elimino las imagenes fisicamente del servidor
       if(this.imagesDeletedList.length !== 0){
