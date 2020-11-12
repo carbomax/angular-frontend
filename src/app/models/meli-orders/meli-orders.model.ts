@@ -11,6 +11,13 @@ export class MeliOrders {
   public buyer: BuyerOrder;
   public payments: PaymentOrder[];
   public items: ItemOrder[];
+  public invoiceNumberBss?: number;
+  public descriptionBss?: string;
+  public observationBss?: string;
+  public tagBss?: number;
+  public stateBss?: number;
+  public carrier?: Carrier;
+
 }
 
 
@@ -36,7 +43,7 @@ export class BuyerOrder {
   public buyerId: number;
   public nickname: string;
   public email: string;
-  public firstsName: string;
+  public firstName: string;
   public lastName: string;
   public meliOrderBuyerBillingInfo: BuyerBillingInfo;
 }
@@ -57,4 +64,10 @@ export class ItemOrder {
   public quantity: number;
   public unitPrice: number;
   public currencyId: string;
+}
+
+
+export class Carrier {
+  public id: number;
+  public name: string;
 }

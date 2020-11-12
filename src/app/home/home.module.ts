@@ -34,6 +34,7 @@ import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-
 import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
 import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
 import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
+import { OperationsComponent } from './pages/home/operations/operations.component';
 
 
 
@@ -62,7 +63,8 @@ import { GlobalLoadingComponent } from './components/global-loading/global-loadi
     SellerOrdersComponent,
     MeliCategoryPathComponent,
     EditProductsPublishedComponent,
-    GlobalLoadingComponent],
+    GlobalLoadingComponent,
+    OperationsComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
