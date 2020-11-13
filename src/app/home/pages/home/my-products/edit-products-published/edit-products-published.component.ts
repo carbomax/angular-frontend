@@ -29,11 +29,12 @@ import { EditableProductModel } from 'src/app/models/editable.product.model';
 export class EditProductsPublishedComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal;
-  @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('closeMargin') closeMargin;
   @ViewChild('checkConfig') checkConfig;
  //Loading Modal
  loadingModal = false; 
+ loadingPublicationModal = false;
+ textLoading = 'Publicando...';
 
   productsDeletedList: number[];
   imagesDeletedList: string[];
@@ -87,6 +88,7 @@ export class EditProductsPublishedComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadingModal = false;
+    this.loadingPublicationModal = false;
     this.account_margin = new AccountMarginModel();
     this.responsePredictor = new ResponseCategoryPredictor();
     this.responsePredictor.predictor = false;
@@ -166,13 +168,12 @@ export class EditProductsPublishedComponent implements OnInit {
     this.loadingModal = true;   
     this.productsMeliPublishedService.updateProductsPublished(this.productMeliPublished, this.productsDeletedList).subscribe(item => {  
       this.productsDeletedList = [];
-      this.loadingModal = false;       
-      this.close();
+      this.loadingModal = false; 
       Swal.fire({
         position: 'top-end',
         icon: 'success',
         title: `Actualizado`,
-        text: `Sus productos han sido actualizados correctamente.`,
+        text: `Sus cambios han sido actualizados correctamente.`,
         showConfirmButton: false,
         timer: 5000
       });
@@ -353,8 +354,7 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   close(){
-    this.closeModal.nativeElement.click();
-    this.closeModalLoading.nativeElement.click();
+    this.closeModal.nativeElement.click();    
   }
 
   /** Seccion para la vista Publicar */
@@ -504,7 +504,7 @@ export class EditProductsPublishedComponent implements OnInit {
     this.router.navigate(['/published-products']);
   }
 
-  publishProducts(){  
+  publishProducts(){     
     Swal.fire({
       position: 'top-end',
       icon: 'info',
@@ -535,9 +535,11 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   updateProductPublish(){   
-    //adicionar loading
+    this.textLoading = 'Actualizando publicación...';
+    this.loadingPublicationModal = true;
     this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
         if(product){// ver codigo del response
+          this.loadingPublicationModal = false;
           this.productMeliPublished = product;
           Swal.fire({
             position: 'top-end',
@@ -548,14 +550,25 @@ export class EditProductsPublishedComponent implements OnInit {
             timer: 5000
           })          
         }
-    }, (error: any) => {
-        if(error){
-          //ver esto
+        else{
+          this.loadingPublicationModal = false;
           Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: `No republicado`,
-            text: `La publicación no ha sido actualizada. Vuelva a intentarlo`,
+            title: `No actualizado`,
+            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+            showConfirmButton: false,
+            timer: 5000
+          }) 
+        }
+    }, (error: any) => {
+        if(error){
+          this.loadingPublicationModal = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `No actualizado`,
+            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
             showConfirmButton: false,
             timer: 5000
           })   

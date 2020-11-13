@@ -61,4 +61,21 @@ export class ProductsMeliPublishedService {
     return this.http.post(`${this.URI_MELI_SERVICE}/republish-publication/${accountId}/${publicationId}` , {});
   }
 
+  republishMultiplePublication(products: ProductMeliPublished[]){
+    let multiplePublicationsList: ChangeMultipleStatusRequest[] = [];
+    products.forEach(product => {    
+        let position = multiplePublicationsList.findIndex(p => p.accountId === product.accountMeli);
+        if(position !== -1){
+          multiplePublicationsList[position].publicationsIds.push(product.idPublicationMeli);
+        }
+        else{ 
+          multiplePublicationsList.push(new ChangeMultipleStatusRequest(product.accountMeli, [product.idPublicationMeli]));
+        }      
+    })
+    return this.http.post(`${this.URI_MELI_SERVICE}/republish-multiple-publications`, multiplePublicationsList);  
+  }
+
+
+  
+
 }

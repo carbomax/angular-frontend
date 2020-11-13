@@ -357,6 +357,62 @@ export class PublishedProductComponent implements OnInit {
     }
   }
 
+  republishMultiplePublications(): void {
+    /* Validacion de estados*/
+    let isCorrect = true;     
+    this.productsSelected.forEach(prod => {
+      if(prod.status !== 'closed'){
+        Swal.fire({
+          title: 'Parámetros no válidos?',
+          text: 'Para republicar las publicaciones seleccionadas todas deben estar en estado "cerrado"',
+          icon: 'error',                    
+          confirmButtonColor: '#3085d6',                   
+          confirmButtonText: 'Entendido'                                 
+        }) ;
+        isCorrect = false;        
+        }
+      });
+
+    if(isCorrect){    
+      Swal.fire({
+        title: 'Está seguro?',
+        text: 'Confirme la operación!',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'
+      }).then((result) => {
+        if (result.isConfirmed) {
+
+          this.loading = true;
+          this.productsMeliPublishedService.republishMultiplePublication(this.productsSelected)
+            .subscribe((resp: any) => {
+              let withError = false;
+              this.loadProductsPaginator(true);             
+              if (!resp.response) {                
+                withError = true; 
+              }              
+
+            if(withError){
+              this.notificationErrorChangeMultipleStatus(resp); 
+            }
+            else{
+              this.notificationSuccessChangeStatus(resp.response);
+              this.deselectCheckedProducts();
+            }
+
+            }, (error: any) => {
+              console.log(error);
+              this.notificationErrorChangeMultipleStatus(error);
+            })
+
+        }
+      })
+    }
+  }
+
   deletePublication(product: ProductMeliPublished): void{
     Swal.fire({
       title: 'Está seguro?',
