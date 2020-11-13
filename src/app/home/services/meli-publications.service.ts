@@ -212,7 +212,7 @@ export class MeliPublicationsService {
   }
 
   updateProductPublish(productPublished: ProductMeliPublished, relationshipList: AccountMarginModel[], reloadConfig: boolean): Observable<ProductMeliPublished> {
-      const params = `${this.URI_MELI_BUSINESS}/republish-product`;
+      const params = `${this.URI_MELI_BUSINESS}/update-publication`;
       let priceFinal = 0;
       relationshipList.forEach(relation => {
                   
@@ -230,6 +230,6 @@ export class MeliPublicationsService {
       });
 
       return this.http.put<any>(params, productPublished);
-  }
+  }  
 
 }

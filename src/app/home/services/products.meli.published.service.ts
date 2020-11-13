@@ -53,4 +53,12 @@ export class ProductsMeliPublishedService {
     return this.http.post(`${this.URI_MELI_SERVICE}/changeStatusMultiplePublications?status=${status}`, multipleStatusList);
   }
 
+  deletePublication(accountId: number, status: string, publicationId: string) {
+    return this.http.put(`${this.URI_MELI_SERVICE}/delete-publication/${accountId}/${publicationId}?status=${status}` , {});
+  }
+
+  republishPublication(accountId: number, publicationId: string){
+    return this.http.post(`${this.URI_MELI_SERVICE}/republish-publication/${accountId}/${publicationId}` , {});
+  }
+
 }

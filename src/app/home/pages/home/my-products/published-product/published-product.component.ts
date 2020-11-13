@@ -90,6 +90,7 @@ export class PublishedProductComponent implements OnInit {
         this.productsMeliPublished = this.pagePublised.content;
         this.loading = false;
         this.loadingClear = false;
+        this.loadPaginator = false;
 
         let countSelected = 0;        
         this.pagePublised.content.forEach(element => {
@@ -111,6 +112,7 @@ export class PublishedProductComponent implements OnInit {
       }, (error: any) => {
         this.errorProducts = true;
         this.loadingClear = false;
+        this.loadPaginator = false;
         this.loadingSearch = false;
         this.emptySearch = false;
         this.loading = false;
@@ -118,8 +120,9 @@ export class PublishedProductComponent implements OnInit {
 
   }
 
-  searchProductsPublished() {     
-      this.loadProductsPaginator(true);
+  searchProductsPublished() { 
+      this.loadPaginator = true;   
+      this.loadProductsPaginator(false);
   }
 
   // Clear search form
@@ -354,6 +357,75 @@ export class PublishedProductComponent implements OnInit {
     }
   }
 
+  deletePublication(product: ProductMeliPublished): void{
+    Swal.fire({
+      title: 'Está seguro?',
+      text: 'Confirme la operación de eliminar!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.loading = true;
+        this.productsMeliPublishedService.deletePublication(product.accountMeli, product.status, product.idPublicationMeli)
+          .subscribe((resp: any) => {
+
+            this.loadProductsPaginator(true);
+            if (resp.response) {
+              this.notificationSuccessChangeStatus(resp.response);
+            } else {
+              this.notificationErrorChangeStatus(resp);
+            }
+
+
+          }, (error: any) => {
+            console.log(error);
+            this.notificationErrorChangeStatus(error);
+          })
+
+      }
+    })
+  }
+
+  republishPublication(product: ProductMeliPublished): void {  
+
+    Swal.fire({
+      title: 'Está seguro?',
+      text: 'Confirme la operación!',
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.loading = true;
+        this.productsMeliPublishedService.republishPublication(product.accountMeli, product.idPublicationMeli)
+          .subscribe((resp: any) => {
+
+            this.loadProductsPaginator(true);
+            if (resp.response) {
+              this.notificationSuccessChangeStatus(resp.response);
+            } else {
+              this.notificationErrorChangeStatus(resp);
+            }
+
+          }, (error: any) => {
+            console.log(error);
+            this.notificationErrorChangeStatus(error);
+          })
+
+      }
+    })
+  }
 
   notificationSuccessChangeStatus(result: string): void {
     let title = '';
@@ -368,6 +440,10 @@ export class PublishedProductComponent implements OnInit {
 
       case 'closed':
         title = `finalizada`;
+        break;
+
+      case 'deleted':
+        title = `eliminada`;
         break;
 
       default:

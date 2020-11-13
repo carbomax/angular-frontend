@@ -543,7 +543,7 @@ export class EditProductsPublishedComponent implements OnInit {
             position: 'top-end',
             icon: 'success',
             title: `Satisfactorio`,
-            text: `El producto ha sido republicado satisfactoriamente`,
+            text: `La publicación ha sido actualizada satisfactoriamente`,
             showConfirmButton: false,
             timer: 5000
           })          
@@ -555,7 +555,7 @@ export class EditProductsPublishedComponent implements OnInit {
             position: 'top-end',
             icon: 'error',
             title: `No republicado`,
-            text: `El producto no ha sido republicado. Vuelva a intentarlo`,
+            text: `La publicación no ha sido actualizada. Vuelva a intentarlo`,
             showConfirmButton: false,
             timer: 5000
           })   
