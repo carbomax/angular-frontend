@@ -16,9 +16,11 @@ import { ItemMeliRequest } from '../../models/meli-publication/item.meli.request
 import { ItemCustomModel } from '../../models/meli-publication/item.custom.model';
 import { MeliPredictorCategory } from '../../models/meli-publication/meli-predictor-category.model';
 import { ProductsStorageUserService } from './products-storage-user.service'; 
+import { AuthService } from '../../core/services/auth.service';
 import { EditableProductModel } from 'src/app/models/editable.product.model';
 import { ResponseCategoryPredictor } from 'src/app/models/meli-publication/response-category-predictor.model';
 import { ProductMeliPublished } from 'src/app/models/meli-publication/product-meli-published.model';
+
 
 
 @Injectable({
@@ -31,7 +33,7 @@ export class MeliPublicationsService {
 
   responsePublicationList: any[]; 
 
-  constructor(private http: HttpClient, public productsUserService: ProductsStorageUserService) {
+  constructor(private http: HttpClient, public productsUserService: ProductsStorageUserService, private authService: AuthService) {
      this.responsePublicationList = [];
   }
 
@@ -231,5 +233,7 @@ export class MeliPublicationsService {
 
       return this.http.put<any>(params, productPublished);
   }  
+
+  
 
 }

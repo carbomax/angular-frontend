@@ -80,7 +80,7 @@
       <h6 class="m-0 font-weight-bold text-primary">Listado de productos publicados</h6>
       <div class="dropdown no-arrow">
         <div>
-          <button class="btn btn-primary syncUpSelected" id="syncUpSelected" [class.disabled]="disable"><i
+          <button class="btn btn-primary syncUpSelected" id="syncUpSelected" [class.disabled]="disable" (click)="synchronizePublication()"><i
               class="fas fa-sync-alt"></i> Sincronizar seleccionados</button>
           <a class="dropdown-toggle btn btn-primary" href="javascript:void(0);" role="button" id="dropdownMenuLink"
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" [class.disabled]="disable">

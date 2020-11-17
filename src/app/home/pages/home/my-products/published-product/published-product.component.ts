@@ -360,18 +360,40 @@ export class PublishedProductComponent implements OnInit {
   republishMultiplePublications(): void {
     /* Validacion de estados*/
     let isCorrect = true;     
+    let allClosed = true;
+    let allTitle = true;
+
     this.productsSelected.forEach(prod => {
-      if(prod.status !== 'closed'){
-        Swal.fire({
-          title: 'Parámetros no válidos?',
-          text: 'Para republicar las publicaciones seleccionadas todas deben estar en estado "cerrado"',
-          icon: 'error',                    
-          confirmButtonColor: '#3085d6',                   
-          confirmButtonText: 'Entendido'                                 
-        }) ;
+      if(prod.status !== 'closed'){        
+        allClosed = false;
         isCorrect = false;        
+      }
+      else if(prod.title.length > 60){         
+          isCorrect = false; 
+          allTitle = false; 
         }
-      });
+    });
+
+    if(!allClosed){
+      Swal.fire({
+        title: 'Parámetros no válidos?',
+        text: 'Para republicar las publicaciones seleccionadas todas deben estar en estado "cerrado"',
+        icon: 'error',                    
+        confirmButtonColor: '#3085d6',                   
+        confirmButtonText: 'Entendido'                                 
+      }) ;
+    }
+
+    if(!allTitle){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto no válido',
+        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        icon: 'info',
+        showConfirmButton: false,
+        timer: 5000      
+      })
+    }
 
     if(isCorrect){    
       Swal.fire({
@@ -463,24 +485,76 @@ export class PublishedProductComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.loading = true;
-        this.productsMeliPublishedService.republishPublication(product.accountMeli, product.idPublicationMeli)
-          .subscribe((resp: any) => {
-
-            this.loadProductsPaginator(true);
-            if (resp.response) {
-              this.notificationSuccessChangeStatus(resp.response);
-            } else {
-              this.notificationErrorChangeStatus(resp);
-            }
-
-          }, (error: any) => {
-            console.log(error);
-            this.notificationErrorChangeStatus(error);
+        if(product.title.length > 60){
+          Swal.fire({
+            position: 'top-end',
+            title: 'Título o Nombre del producto no válido',
+            text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+            icon: 'info',
+            showConfirmButton: false,
+            timer: 5000      
           })
-
+        }else{
+          this.loading = true;
+          this.productsMeliPublishedService.republishPublication(product.accountMeli, product.idPublicationMeli)
+            .subscribe((resp: any) => {
+  
+              this.loadProductsPaginator(true);
+              if (resp.response) {
+                this.notificationSuccessChangeStatus(resp.response);
+              } else {
+                this.notificationErrorChangeStatus(resp);
+              }
+  
+            }, (error: any) => {
+              console.log(error);
+              this.notificationErrorChangeStatus(error);
+            })
+        }
       }
     })
+  }
+
+  synchronizePublication(){
+    this.loading = true;
+    let publicationList: number[] = [];
+    this.productsSelected.forEach(p => {
+      publicationList.push(p.id); 
+    })    
+
+    this.productsMeliPublishedService.synchronizePublication(publicationList).subscribe(resp => {
+      if(resp.response){
+        Swal.fire({
+          position: 'top-end',
+          title: 'Productos sincronizados',
+          text: 'Los productos han sido sincronizado satisfactoriamente',
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 5000      
+        })
+      }
+      else{
+        Swal.fire({
+          position: 'top-end',
+          title: 'Productos no sincronizados',
+          text: 'Todos los productos no han sido sincronizados. Vuelva a intentarlo.',
+          icon: 'warning',
+          showConfirmButton: false,
+          timer: 5000      
+        })
+      }
+      this.loadProductsPaginator(true);
+    }, error => {
+      Swal.fire({
+        position: 'top-end',
+        title: 'Productos no sincronizados',
+        text: 'Todos los productos no han sido sincronizados. Vuelva a intentarlo.',
+        icon: 'warning',
+        showConfirmButton: false,
+        timer: 5000      
+      });
+      this.loadProductsPaginator(true);
+    });
   }
 
   notificationSuccessChangeStatus(result: string): void {
@@ -547,4 +621,5 @@ export class PublishedProductComponent implements OnInit {
       showConfirmButton: true
     });
   }
+
 }

@@ -3,10 +3,10 @@ export class Shipping {
       public mode: string,
       public localPickUp: boolean,
       public freeShipping: boolean,
-      public methods: string[],
-      public dimensions?: any,
+      public freeMethods: string[],
+     /* public dimensions?: any,
       public tags?: string[],
       public logisticType?: string,
-      public storePickUp?: boolean
+      public storePickUp?: boolean*/
     ){}
   }

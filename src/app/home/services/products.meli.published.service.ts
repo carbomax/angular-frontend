@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { AuthService } from '../../core/services/auth.service';
 import { Observable } from 'rxjs';
 import { PageProductMeliPublished, ProductMeliPublished } from '../../models/meli-publication/product-meli-published.model';
+import { Margin } from 'src/app/models/margin';
 import { ChangeMultipleStatusRequest } from '../../models/meli-publication/change.multiple.status.request';
 
 
@@ -75,7 +76,16 @@ export class ProductsMeliPublishedService {
     return this.http.post(`${this.URI_MELI_SERVICE}/republish-multiple-publications`, multiplePublicationsList);  
   }
 
+  updatePricePublication(margin: Margin): Promise<void>{
+    let idProfile = this.authService.authenticationDataExtrac().profileId;
+    const params = `${this.URI_MELI_SERVICE}/update-price-async?idProfile=${idProfile}`;
+    return this.http.post<void>(params, margin).toPromise();
+  }
 
-  
+  synchronizePublication(idDetailsPublicationsList: number[]): Observable<any>{
+    let idProfile = this.authService.authenticationDataExtrac().profileId;
+    const params = `${this.URI_MELI_SERVICE}/synchronize-publications?idProfile=${idProfile}&idDetailsPublicationsList=${idDetailsPublicationsList}`;
+    return this.http.get<any>(params);
+  }
 
 }
