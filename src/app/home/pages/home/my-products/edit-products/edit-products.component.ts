@@ -395,22 +395,35 @@ export class EditProductsComponent implements OnInit {
   }
 
   publishProducts(){  
-    Swal.fire({
-      position: 'top-end',
-      icon: 'info',
-      title: `Producto en publicación`,
-      text: `El producto está siendo publicado`,
-      showConfirmButton: false,
-      timer: 5000
-    })
-    .then((result) => {
-      this.router.navigate(['/publish-myproducts']);
-    });  
-   
 
-   // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
-    this.clearAll();
+    if(this.editableProduct.productName.length > 60){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto no válido',
+        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        icon: 'info',
+        showConfirmButton: false,
+        timer: 5000      
+      })
+    }
+    else{
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: `Producto en publicación`,
+        text: `El producto está siendo publicado`,
+        showConfirmButton: false,
+        timer: 5000
+      })
+      .then((result) => {
+        this.router.navigate(['/publish-myproducts']);
+      });  
+     
+  
+     // llamada al servicio Publicar
+      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+      this.clearAll();
+    }   
   }
 
   getPath(pathList: string[]){

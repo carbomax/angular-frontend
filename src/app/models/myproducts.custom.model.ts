@@ -5,6 +5,10 @@ export class ProductCustom {
     sku: string;
     name: string;
     priceUYU: number;
+    priceUSD: number;
+    price_costUYU: number;
+    price_costUSD: number;
+    description: string;
     currentStock: number;
     images: any[];
     family: FamilyProductStorage;

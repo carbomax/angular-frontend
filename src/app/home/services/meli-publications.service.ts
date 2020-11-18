@@ -99,64 +99,55 @@ export class MeliPublicationsService {
 
   createPublicationList(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productsSelected: ProductCustom[]): void{
     
-    let itemCustomList: ItemCustomModel[] = [];
-    let productIdList: number[] = [];
-    let responseList: EditableProductModel[] = [];
-    productsSelected.forEach(element => {
-      productIdList.push(element.id);
-    }); 
+    let itemCustomList: ItemCustomModel[] = [];   
 
-    this.productsUserService.getFullProductsById(productIdList).subscribe(response =>{
-      responseList = response;
-      relationshipList.forEach(relation => {   
-        itemCustomList = [];   
-        responseList.forEach(element => {
-          let priceFinal = 0;
-          if(relation.idMargin === -1){
-            priceFinal = Math.round(element.price);
-          }
-          else if(relation.typeMargin === 1/*fijo*/){
-            priceFinal = Math.round(element.price + relation.valueMargin);
-          }
-          else{
-            /*Por Ciento*/
-            priceFinal = Math.round((element.price * (relation.valueMargin/100)) + element.price);
-          }
-  
-          let imagesList: ItemPictures[] = [];          
-          element.images.forEach(image => {            
-            imagesList.push(new ItemPictures(image.photos));            
-          });
-  
-          let shipping: Shipping = new Shipping("me2", false, false, []);
+    relationshipList.forEach(relation => {   
+      itemCustomList = [];   
+      productsSelected.forEach(element => {
+        let priceFinal = 0;
+        if(relation.idMargin === -1){
+          priceFinal = Math.round(element.priceUYU);
+        }
+        else if(relation.typeMargin === 1/*fijo*/){
+          priceFinal = Math.round(element.priceUYU + relation.valueMargin);
+        }
+        else{
+          /*Por Ciento*/
+          priceFinal = Math.round((element.priceUYU * (relation.valueMargin/100)) + element.priceUYU);
+        }
 
-          let saleTerms: SaleTerms[] = [];
-          if(warranty === true)
-          {            
-            if(warrantyType === 2230279){
-                saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía de fábrica"));
-              }
-            else if(warrantyType === 2230280){
-                saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía del vendedor"));
-              } 
-            saleTerms.push(new SaleTerms("WARRANTY_TIME", warrantyTime.toString + " días"));                       
-          }
-         
+        let imagesList: ItemPictures[] = [];          
+        element.images.forEach(image => {            
+          imagesList.push(new ItemPictures(image.photos));            
+        });
+
+        let shipping: Shipping = new Shipping("me2", false, false, []);
+
+        let saleTerms: SaleTerms[] = [];
+        if(warranty === true)
+        {            
+          if(warrantyType === 2230279){
+              saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía de fábrica"));
+            }
+          else if(warrantyType === 2230280){
+              saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía del vendedor"));
+            } 
+          saleTerms.push(new SaleTerms("WARRANTY_TIME", warrantyTime.toString + " días"));                       
+        }
+        
+
+        let attributes: Attributes[] = [];
+        attributes.push(new Attributes("SELLER_SKU", "SKU", element.sku));
+
+        let item = new ItemMeliRequest(element.name, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
+        "bronze", element.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
+        itemCustomList.push(new ItemCustomModel(item, element.id, element.sku, element.images, element.price_costUYU,
+          element.price_costUSD, element.priceUYU));          
+      })
   
-          let attributes: Attributes[] = [];
-          attributes.push(new Attributes("SELLER_SKU", "SKU", element.sku));
-  
-          let item = new ItemMeliRequest(element.productName, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
-          "bronze", element.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
-          itemCustomList.push(new ItemCustomModel(item, element.id, element.sku, element.images, element.price_costUYU,
-            element.price_costUSD, element.price));          
-        })
-    
-        const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
-        this.http.post<any>(params, itemCustomList).subscribe(result =>{});        
-      });
-     
-      });      
+      const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
+      this.http.post<any>(params, itemCustomList).subscribe(result =>{});        
+    });          
             
   }
 
