@@ -11,5 +11,6 @@ export class MeliCategory {
     children_categories: MeliCategory[];
     attribute_types: string;
     attributable: boolean;
+    shipping_modes: string[];
   
   }

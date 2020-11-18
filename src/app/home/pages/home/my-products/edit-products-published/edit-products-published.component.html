@@ -193,7 +193,7 @@
               <div class="form-group row mb-2">
                 <div class="col-md-10"></div>
                 <div class="col-md-2">
-                  <button type="button" class="btn btn-primary" (click)="saveForm()" data-toggle="modal" data-target="#loadingModal">Guardar</button>              
+                  <button type="button" class="btn btn-primary" (click)="saveForm()">Guardar</button>              
                   <a class="btn btn-secondary" routerLink="/published-products" data-toggle="collapse" 
                    style="margin-left: 2%;">Cerrar                  
                   </a>
@@ -382,8 +382,8 @@
             <div class="modal-footer">        
               <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.FAIL" 
                   [disabled]="lastCategorySelected === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
-              <button type="button" class="btn btn-primary" (click)="republishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE" 
-                  [disabled]="accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Republicar</button>
+              <button type="button" class="btn btn-primary" (click)="updateProductPublish()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE" 
+                  [disabled]="accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Actualizar</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditPublished()">Cerrar</button>
             </div>
           </div>
@@ -489,26 +489,7 @@
         </div>
       </div>
     </div>
-  </div>
-  
-  <!--  Modal para cargando -->
-  <div class="modal" id="loadingModal" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
-      <div class="modal-content modal-content-loading">
-        <div class="modal-header" hidden>
-          <h5 class="modal-title"  id="loadingModalLabel">Modal title</h5>
-          <button type="button" class="close" #closeModalLoading data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <i *ngIf="loadingModal"  class="fas fa-spin fa-3x fa-spinner"></i>   
-        </div>
-         
-      </div>
-    </div>
-  </div>
-  
+  </div>  
   <!--Modal to add applied rate and select account-->
   <div class="modal modal-opacity" id="tarifaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenteredLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-publish" role="document">
@@ -595,3 +576,7 @@
     </div>
   </div>
   
+  <app-global-loading [globalLoading]="loadingModal" [globalLoadingDescription]="'Guardando los cambios...'">
+  </app-global-loading>
+  <app-global-loading [globalLoading]="loadingPublicationModal" [globalLoadingDescription]="textLoading">
+  </app-global-loading>

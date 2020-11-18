@@ -22,8 +22,7 @@ import { ParsedPropertyType } from '@angular/compiler';
   templateUrl: './products-store.component.html',
   styleUrls: ['./products-store.component.css']
 })
-export class ProductsStoreComponent implements OnInit {
-  @ViewChild('closeModal') closeModal;
+export class ProductsStoreComponent implements OnInit { 
   @ViewChild('checkAllP') checkAllP;
 
   public loading = false;
@@ -256,11 +255,7 @@ export class ProductsStoreComponent implements OnInit {
       });
 
   }
-  //Cierra un modal
-  close() {
-    this.closeModal.nativeElement.click();
-  }
-
+ 
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
     this.loadingStoringModal = true;
@@ -274,8 +269,7 @@ export class ProductsStoreComponent implements OnInit {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
-              this.loadingStoringModal = false;
-              this.close();
+              this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -288,8 +282,7 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = element + ", " + exists_products;
               });
-              this.loadingStoringModal = false;
-              this.close();
+              this.loadingStoringModal = false;         
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -303,8 +296,7 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = exists_products + ", " + element;
               });
-              this.loadingStoringModal = false;
-              this.close();
+              this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',
                 icon: 'warning',
@@ -316,8 +308,7 @@ export class ProductsStoreComponent implements OnInit {
             }
           })
         } else {
-          this.loadingStoringModal = false;
-          this.close();
+          this.loadingStoringModal = false;          
           Swal.fire({
             position: 'top-end',
             title: 'Error en lista',
@@ -332,8 +323,7 @@ export class ProductsStoreComponent implements OnInit {
 
     }
     else {
-      this.loadingStoringModal = false;
-      this.close();
+      this.loadingStoringModal = false;     
       Swal.fire({
         position: 'top-end',
         icon: 'warning',

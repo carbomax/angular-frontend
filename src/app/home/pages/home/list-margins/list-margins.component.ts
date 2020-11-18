@@ -4,6 +4,9 @@ import { MarginService } from '../../../services/margin.service';
 import Swal from 'sweetalert2';
 import { Marketplace } from '../../../../models/marketplace.model';
 import { MarketplaceService } from '../../../services/marketplace.service';
+import { ProductsMeliPublishedService } from './../../../services/products.meli.published.service';
+import { MeliPublicationsService } from '../../../services/meli-publications.service';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-list-margins',
@@ -13,12 +16,13 @@ import { MarketplaceService } from '../../../services/marketplace.service';
 export class ListMarginsComponent implements OnInit {
 
   public selectedMargin: Margin = new Margin();
+  public originalMargenSelected: Margin = new Margin();
   public margins: Margin[] = [];
   public marketplaces: Marketplace[] = [];
   public selectedMarketplaces: Marketplace = new Marketplace();
   // Modal
   public headerCreateModal = 'Crear margen';
-  public headerUpdateModal = 'Actualizar margen';
+  public headerUpdateModal = 'Actualizar margen';  
   public register = true;
   public loading = true;
   public errorMargins = false;
@@ -28,7 +32,7 @@ export class ListMarginsComponent implements OnInit {
   public page = 1;
   public pageSize = 5;
 
-  constructor(public marginService: MarginService, public marketplaceService: MarketplaceService) {
+  constructor(public marginService: MarginService, public marketplaceService: MarketplaceService, public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService) {
     this.initialize();
   }
 
@@ -52,34 +56,54 @@ export class ListMarginsComponent implements OnInit {
   }
 
 
-  createOrUpdateMargin(): void {
-    this.loading = true;
+  createOrUpdateMargin(): void {   
     this.errorMargins = false;
     console.log(this.selectedMarketplaces)
     if (this.selectedMargin.id) {
-      console.log('update')
-      this.selectedMargin.marketplaceId = this.selectedMarketplaces.id;
-      this.marginService.updateMargin(this.selectedMargin).subscribe(resp => {
-        this.loadMargins();
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: `Margen ${resp.name} ha sido actualizado`,
-          showConfirmButton: false,
-          timer: 2000
-
-        });
-      }, error => {
-        console.log(error)
-        this.loading = false;
-        Swal.fire({
-          position: 'top-end',
-          icon: 'error',
-          title: `Margin no ha sido actualizado`,
-          showConfirmButton: false,
-          timer: 2000
-        })
-      })
+      Swal.fire({
+        title: 'Está seguro?',
+        text: 'Si modifica el margen todas las publicaciones asociadas a dicho margen serán actualizadas en su sistema. Las publicaciones activas en Mercado Libre serán también actualizadas.',
+        icon: 'info',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Aceptar',
+        cancelButtonText: 'Cancelar'  
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.loading = true;
+          console.log('update')
+          this.selectedMargin.marketplaceId = this.selectedMarketplaces.id;
+          this.marginService.updateMargin(this.selectedMargin).subscribe(resp => {
+            this.productsMeliPublishedService.updatePricePublication(this.selectedMargin);
+            this.loadMargins();     
+            this.loading = false;   
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: `Margen ${resp.name} ha sido actualizado`,
+              showConfirmButton: false,
+              timer: 2000    
+            });
+          }, error => {
+            console.log(error)
+            this.loading = false;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: `Margin no ha sido actualizado`,
+              showConfirmButton: false,
+              timer: 2000
+            })
+          });
+        }
+        else{          
+          let position = this.margins.findIndex(m => m.id === this.originalMargenSelected.id);
+          if(position !== -1){
+            this.margins[position] = this.originalMargenSelected;
+          }
+        }    
+      });      
     } else {
 
       if (this.margins.map(m => m.name.toLowerCase()).includes(this.selectedMargin.name.toLowerCase())) {
@@ -177,6 +201,12 @@ export class ListMarginsComponent implements OnInit {
 
   updateModal(margin: Margin): void {
     console.log(margin)
+    this.originalMargenSelected.id = margin.id;
+    this.originalMargenSelected.marketplace = margin.marketplace;
+    this.originalMargenSelected.marketplaceId = margin.marketplaceId;
+    this.originalMargenSelected.name = margin.name;
+    this.originalMargenSelected.type = margin.type;
+    this.originalMargenSelected.value = margin.value;
     this.selectedMargin = margin;
     this.selectedMarketplaces = margin.marketplace;
     console.log(this.selectedMarketplaces)

@@ -4,6 +4,7 @@ import { ProductsStorageUserService } from '../../../../services/products-storag
 import { MeliAccountService } from '../../../../services/meli-account.service';
 import { MarginService } from '../../../../services/margin.service';
 import { MeliPublicationsService } from '../../../../services/meli-publications.service';
+import { ProductsMeliPublishedService } from '../../../../services/products.meli.published.service';
 import Swal from 'sweetalert2';
 import { ProductMeliPublished } from '../../../../../models/meli-publication/product-meli-published.model';
 import { Image } from '../../../../../models/image.model';
@@ -28,11 +29,12 @@ import { EditableProductModel } from 'src/app/models/editable.product.model';
 export class EditProductsPublishedComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal;
-  @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('closeMargin') closeMargin;
   @ViewChild('checkConfig') checkConfig;
  //Loading Modal
  loadingModal = false; 
+ loadingPublicationModal = false;
+ textLoading = 'Publicando...';
 
   productsDeletedList: number[];
   imagesDeletedList: string[];
@@ -82,10 +84,11 @@ export class EditProductsPublishedComponent implements OnInit {
 
 
   constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
-    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService ) { }
+    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService ) { }
 
   ngOnInit(): void {
     this.loadingModal = false;
+    this.loadingPublicationModal = false;
     this.account_margin = new AccountMarginModel();
     this.responsePredictor = new ResponseCategoryPredictor();
     this.responsePredictor.predictor = false;
@@ -161,31 +164,21 @@ export class EditProductsPublishedComponent implements OnInit {
       })
   }
 
-  saveForm(){
-    
-    this.loadingModal = true; 
-    let editableProduct: EditableProductModel = new EditableProductModel();
-    editableProduct.id = this.productMeliPublished.mlPublicationId;
-    editableProduct.currentStock = this.productMeliPublished.currentStock;
-    editableProduct.description = this.productMeliPublished.description;
-    editableProduct.images = this.productMeliPublished.images;
-    editableProduct.price = +this.productMeliPublished.pricePublication;
-    editableProduct.productName = this.productMeliPublished.title;
-    editableProduct.sku = this.productMeliPublished.sku;
-    editableProduct.states = 1;
-    
-    this.productsStorageUserService.updateCustomProduct(editableProduct, this.productsDeletedList).subscribe(item => {  
+  saveForm(){    
+    this.loadingModal = true;   
+    this.productsMeliPublishedService.updateProductsPublished(this.productMeliPublished, this.productsDeletedList).subscribe(item => {  
       this.productsDeletedList = [];
-      this.loadingModal = false;       
-      this.close();
+      this.loadingModal = false; 
       Swal.fire({
         position: 'top-end',
         icon: 'success',
         title: `Actualizado`,
-        text: `Sus productos han sido actualizados correctamente.`,
+        text: `Sus cambios han sido actualizados correctamente.`,
         showConfirmButton: false,
         timer: 5000
       });
+
+      this.productMeliPublished = item;
 
       //Elimino las imagenes fisicamente del servidor
       if(this.imagesDeletedList.length !== 0){
@@ -361,8 +354,7 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   close(){
-    this.closeModal.nativeElement.click();
-    this.closeModalLoading.nativeElement.click();
+    this.closeModal.nativeElement.click();    
   }
 
   /** Seccion para la vista Publicar */
@@ -512,63 +504,99 @@ export class EditProductsPublishedComponent implements OnInit {
     this.router.navigate(['/published-products']);
   }
 
-  publishProducts(){  
-    Swal.fire({
-      position: 'top-end',
-      icon: 'info',
-      title: `Producto en publicación`,
-      text: `El producto está siendo publicado`,
-      showConfirmButton: false,
-      timer: 5000
-    })
-    .then((result) => {
-      this.router.navigate(['/published-products']);
-    }); 
+  publishProducts(){ 
+    
+    if(this.productMeliPublished.title.length > 60){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto no válido',
+        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        icon: 'info',
+        showConfirmButton: false,
+        timer: 5000      
+      })     
+    }else{
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: `Producto en publicación`,
+        text: `El producto está siendo publicado`,
+        showConfirmButton: false,
+        timer: 5000
+      })
+      .then((result) => {
+        this.router.navigate(['/published-products']);
+      }); 
+    
+        let editableProduct =  new EditableProductModel();
+        editableProduct.id = this.productMeliPublished.mlPublicationId;
+        editableProduct.currentStock = this.productMeliPublished.currentStock;
+        editableProduct.description = this.productMeliPublished.description;
+        editableProduct.images = this.productMeliPublished.images;
+        editableProduct.price = +this.productMeliPublished.pricePublication;
+        editableProduct.price_costUYU = this.productMeliPublished.priceCostUYU;
+        editableProduct.price_costUSD = this.productMeliPublished.priceCostUSD;
+        editableProduct.productName = this.productMeliPublished.title;
+        editableProduct.sku = this.productMeliPublished.sku;
+        editableProduct.states = 1;    
   
-      let editableProduct =  new EditableProductModel();
-      editableProduct.id = this.productMeliPublished.mlPublicationId;
-      editableProduct.currentStock = this.productMeliPublished.currentStock;
-      editableProduct.description = this.productMeliPublished.description;
-      editableProduct.images = this.productMeliPublished.images;
-      editableProduct.price = +this.productMeliPublished.pricePublication;
-      editableProduct.price_costUYU = this.productMeliPublished.priceCostUYU;
-      editableProduct.price_costUSD = this.productMeliPublished.priceCostUSD;
-      editableProduct.productName = this.productMeliPublished.title;
-      editableProduct.sku = this.productMeliPublished.sku;
-      editableProduct.states = 1;    
-
-  // llamada al servicio Publicar
-   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
-   this.clearAll();
+    // llamada al servicio Publicar
+     this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
+     this.clearAll();
+    }
   }
 
   updateProductPublish(){   
-    //adicionar loading
-    this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
-        if(product){// ver codigo del response
-          this.productMeliPublished = product;
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: `Satisfactorio`,
-            text: `El producto ha sido republicado satisfactoriamente`,
-            showConfirmButton: false,
-            timer: 5000
-          })          
-        }
-    }, (error: any) => {
-        if(error){
-          //ver esto
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: `No republicado`,
-            text: `El producto no ha sido republicado. Vuelva a intentarlo`,
-            showConfirmButton: false,
-            timer: 5000
-          })   
-        }
-    })
+    if(this.productMeliPublished.title.length > 60){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto no válido',
+        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        icon: 'info',
+        showConfirmButton: false,
+        timer: 5000      
+      })     
+    }else{
+      this.textLoading = 'Actualizando publicación...';
+      this.loadingPublicationModal = true;
+      this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
+          if(product){// ver codigo del response
+            this.loadingPublicationModal = false;
+            this.productMeliPublished = product;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: `Satisfactorio`,
+              text: `La publicación ha sido actualizada satisfactoriamente`,
+              showConfirmButton: false,
+              timer: 5000
+            })          
+          }
+          else{
+            this.loadingPublicationModal = false;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: `No actualizado`,
+              text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+              showConfirmButton: false,
+              timer: 5000
+            }) 
+          }
+      }, (error: any) => {
+          if(error){
+            this.loadingPublicationModal = false;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: `No actualizado`,
+              text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+              showConfirmButton: false,
+              timer: 5000
+            })   
+          }
+      })
+    }    
   }
 
   getPath(pathList: string[]){
