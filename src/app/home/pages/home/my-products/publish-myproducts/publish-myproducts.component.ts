@@ -34,8 +34,7 @@ declare function initializePlugin();
 })
 export class PublishMyproductsComponent implements OnInit {
 
-  @ViewChild('closeModal') closeModal;
-  @ViewChild('closeModalLoading') closeModalLoading;
+  @ViewChild('closeModal') closeModal; 
   @ViewChild('checkAllP') checkAllP;
   @ViewChild('checkP') checkP;
   @ViewChild('closeMargin') closeMargin;
@@ -436,7 +435,7 @@ export class PublishMyproductsComponent implements OnInit {
           timer: 5000
         });
         this.clearAllImage();
-        this.close();
+        this.close();        
       }
       else {
         this.closeActiveModalLoading();
@@ -690,14 +689,11 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   close() {
-    this.closeModal.nativeElement.click();
-    this.closeModalLoading.nativeElement.click();
+    this.closeModal.nativeElement.click();    
   }
 
   closeActiveModalLoading() {
-    this.loadingModal = false;
-    this.closeModalLoading.nativeElement.click();
-    //this.closeModalLoading.nativeElement.modal('hide');
+    this.loadingModal = false;      
   }
 
   getPath(pathList: string[]) {
@@ -803,28 +799,48 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   publishProducts() {    
-    // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
-    this.closeModalPublish();
-    Swal.fire({
-      position: 'top-end',
-      icon: 'info',
-      title: `Productos en publicación`,
-      text: `Los productos están siendo publicados`,
-      showConfirmButton: false,
-      timer: 5000
-    }).then(() => {  
-      for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
-        if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) { 
-          this.pageProductsMeli.itemsMeliGrid.splice(i, 1); 
-          i--; 
+    let allTitle = true;
+
+    this.productsSelected.forEach(prod => {
+       if(prod.name.length > 60){ 
+          allTitle = false;          
         }
-      }    
-     this.checkP.nativeElement.checked = 0;      
-        if(this.pageProductsMeli.itemsMeliGrid.length === 0){     
-          this.loadProductsPaginator(1);
-        }   
-      });      
+    });
+
+    if(!allTitle){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto no válido',
+        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        icon: 'info',
+        showConfirmButton: false,
+        timer: 5000      
+      })
+    }else{
+      // llamada al servicio Publicar
+      this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+      this.closeModalPublish();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: `Productos en publicación`,
+        text: `Los productos están siendo publicados`,
+        showConfirmButton: false,
+        timer: 5000
+      }).then(() => {  
+        for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
+          if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) { 
+            this.pageProductsMeli.itemsMeliGrid.splice(i, 1); 
+            i--; 
+          }
+        }    
+        this.checkP.nativeElement.checked = 0;      
+          if(this.pageProductsMeli.itemsMeliGrid.length === 0){     
+            this.loadProductsPaginator(1);
+          }   
+        });  
+    }
+       
   }
 
 }

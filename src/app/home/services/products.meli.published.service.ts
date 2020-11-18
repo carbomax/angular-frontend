@@ -58,6 +58,10 @@ export class ProductsMeliPublishedService {
     return this.http.put(`${this.URI_MELI_SERVICE}/delete-publication/${accountId}/${publicationId}?status=${status}` , {});
   }
 
+  deletePublicationFailed(idItem: number) {
+    return this.http.delete(`${this.URI_MELI_SERVICE}/delete-publication-failed/${idItem}`);
+  }    
+
   republishPublication(accountId: number, publicationId: string){
     return this.http.post(`${this.URI_MELI_SERVICE}/republish-publication/${accountId}/${publicationId}` , {});
   }

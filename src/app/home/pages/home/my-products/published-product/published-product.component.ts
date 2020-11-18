@@ -450,7 +450,8 @@ export class PublishedProductComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.loading = true;
-        this.productsMeliPublishedService.deletePublication(product.accountMeli, product.status, product.idPublicationMeli)
+        if(product.status === StatesOfMeli.FAIL){
+          this.productsMeliPublishedService.deletePublicationFailed(product.id)
           .subscribe((resp: any) => {
 
             this.loadProductsPaginator(true);
@@ -465,6 +466,24 @@ export class PublishedProductComponent implements OnInit {
             console.log(error);
             this.notificationErrorChangeStatus(error);
           })
+        }
+        else{
+          this.productsMeliPublishedService.deletePublication(product.accountMeli, product.status, product.idPublicationMeli)
+          .subscribe((resp: any) => {
+
+            this.loadProductsPaginator(true);
+            if (resp.response) {
+              this.notificationSuccessChangeStatus(resp.response);
+            } else {
+              this.notificationErrorChangeStatus(resp);
+            }
+
+
+          }, (error: any) => {
+            console.log(error);
+            this.notificationErrorChangeStatus(error);
+          })
+        }        
 
       }
     })
