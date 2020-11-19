@@ -477,6 +477,7 @@ export class PublishMyproductsComponent implements OnInit {
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
         this.loadingModalDelete = false;
+        this.loadProductsPaginator(this.currentPage);        
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -485,6 +486,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
+        /*
         this.productsSelected.forEach(select => {
           this.pageProductsMeli.itemsMeliGrid.forEach(element => {
             if (element.id === select.id) {
@@ -495,6 +497,7 @@ export class PublishMyproductsComponent implements OnInit {
             }
           });
         });
+        */
         this.productsSelected = [];
         if (this.productsSelected.length === 0) {
           this.disable = true;
@@ -545,12 +548,12 @@ export class PublishMyproductsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.productToDelete = product;
-        this.loadingDeleteProduct = true;
-        //this.loadingModalDelete = true;
+        this.loadingDeleteProduct = true;     
         this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
         this.loadingDeleteProduct = false;
-        this.loadingModalDelete = false;
+        //this.loadingModalDelete = false;
+        this.loadProductsPaginator(this.currentPage);  
         this.productToDelete = null;
         Swal.fire({
           position: 'top-end',
@@ -560,7 +563,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
-
+/*
         this.pageProductsMeli.itemsMeliGrid.forEach(element => {
           if (element === product) {
             let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
@@ -569,7 +572,7 @@ export class PublishMyproductsComponent implements OnInit {
             }
           }
         });
-
+*/
         let pos = this.productsSelected.indexOf(product);
         if (pos !== -1)
           this.productsSelected.splice(pos, 1);
