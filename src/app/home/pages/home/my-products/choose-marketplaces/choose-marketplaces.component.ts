@@ -7,7 +7,6 @@ import { ProductsStorageUserService } from '../../../../services/products-storag
 import { MarketplaceType } from '../../../../../enums/marketplacetype.enum';
 import { MarketplaceDetails } from '../../../../../models/marketplace.details';
 
-declare function initializePlugin();
 
 @Component({
   selector: 'app-choose-marketplaces',
@@ -39,7 +38,6 @@ export class ChooseMarketplacesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   initializePlugin();
   }
 
 

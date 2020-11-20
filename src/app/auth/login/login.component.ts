@@ -39,7 +39,7 @@ public registerForm: FormGroup;
   }
 
   ngOnInit(): void {
-
+    initializePlugin();
     this.registerForm = new FormGroup({
       email: new FormControl(localStorage.getItem('rememberEmail') || '', [
         Validators.required,
@@ -52,7 +52,7 @@ public registerForm: FormGroup;
       remember: new FormControl(false)
     });
 
-    initializePlugin();
+
     this.loginIntoText = 'Entrar';
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/home']);
