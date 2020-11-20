@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-declare function initializePlugin();
+
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    initializePlugin();
+
   }
 
 }

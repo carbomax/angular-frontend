@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SidebarService } from '../../services/sidebar.service';
 
+
+declare function initializePlugin();
 @Component({
   selector: 'app-sidebard',
   templateUrl: './sidebard.component.html',
@@ -8,9 +10,17 @@ import { SidebarService } from '../../services/sidebar.service';
 })
 export class SidebardComponent implements OnInit {
 
-  constructor(public sidebarService: SidebarService ) { }
+  toggled: boolean = false;
+
+  constructor(public sidebarService: SidebarService ) {
+
+  }
 
   ngOnInit(): void {
+    initializePlugin();
   }
+
+
+
 
 }
