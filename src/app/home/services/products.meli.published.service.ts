@@ -31,6 +31,11 @@ export class ProductsMeliPublishedService {
           &idMeliPublication=${idMeliSearch}&meliAccount=${meliAccountSearch}&typeStateSearch=${typeStateSearch}`);
   }
 
+  public getOnePublication(id: number): Observable<ProductMeliPublished>{ 
+    const params = `${this.URI_PRODUCTS_PUBLISHED_SERVICE}/publication-info/${id}`;
+    return this.http.get<ProductMeliPublished>(params);
+  }
+
   updateProductsPublished(product: ProductMeliPublished, imageToDelete: number[]): Observable<ProductMeliPublished>{
     const params = `${this.URI_PRODUCTS_PUBLISHED_SERVICE}/edit-publication-info/?imagesToDelete=${imageToDelete}`;
     return this.http.put<ProductMeliPublished>(params, product);

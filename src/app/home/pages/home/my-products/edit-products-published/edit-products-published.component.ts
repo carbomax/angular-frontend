@@ -86,16 +86,14 @@ export class EditProductsPublishedComponent implements OnInit {
   constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
     public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService ) { }
 
-  ngOnInit(): void {
-    this.loadingModal = false;
-    this.loadingPublicationModal = false;
+  ngOnInit(): void {    
     this.account_margin = new AccountMarginModel();
     this.responsePredictor = new ResponseCategoryPredictor();
     this.responsePredictor.predictor = false;
 
     this.getProduct();
-    this.getAccountMeli();  
-    this.getMargins();
+    //this.getAccountMeli();  
+    //this.getMargins();
     //this.loadRelationAccountMargin();
     //this.getPredictorCategories();
     this.productsDeletedList = [];    
@@ -120,12 +118,22 @@ export class EditProductsPublishedComponent implements OnInit {
     let content = atob(truck);
     return content;
   }
-
+/*
   getProduct(){
     let encode = this._router.snapshot.paramMap.get('product');
    // let product = this.decipherContent(encode);
     this.productMeliPublished = JSON.parse(encode);
     this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);    
+  }
+*/
+  getProduct(){    
+    this.productsMeliPublishedService.getOnePublication(+this._router.snapshot.paramMap.get('id')).subscribe(item => {
+      //this.loadingModal = true; 
+      this.productMeliPublished = item;
+      this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);  
+      this.getAccountMeli();  
+    this.getMargins();
+    });
   }
 
   getPredictorCategories(){
@@ -463,8 +471,7 @@ export class EditProductsPublishedComponent implements OnInit {
         if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){
           this.marginsList.push(element);
         }
-      });
-
+      });      
       //Para disparar el metodo loadRelationAccountMargin()
       this.loadedMarginMeli = true;
       if(this.init){

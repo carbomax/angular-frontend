@@ -407,6 +407,10 @@ export class EditProductsComponent implements OnInit {
       })
     }
     else{
+      // llamada al servicio Publicar
+      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+      this.clearAll();
+      
       Swal.fire({
         position: 'top-end',
         icon: 'info',
@@ -417,12 +421,8 @@ export class EditProductsComponent implements OnInit {
       })
       .then((result) => {
         this.router.navigate(['/publish-myproducts']);
-      });  
+      });
      
-  
-     // llamada al servicio Publicar
-      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
-      this.clearAll();
     }   
   }
 

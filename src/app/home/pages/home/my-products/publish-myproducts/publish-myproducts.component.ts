@@ -113,13 +113,14 @@ export class PublishMyproductsComponent implements OnInit {
   initialMeliAccounts: MeliAccount[];
   account_margin: AccountMarginModel;
   accountMarginsList: AccountMarginModel[];
-  marginsList: Margin[];
+  marginsList: Margin[];  
   margin: number = -1;
   meliAccount: number = -1;
   lastCategorySelected: string = '-1';
   warrantyType: number = -1;
   warrantyTime: number = 0;
   warranty: boolean = false;
+
 
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog,
     private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, public meliPublicationsService: MeliPublicationsService, private router: Router) {
@@ -179,7 +180,6 @@ export class PublishMyproductsComponent implements OnInit {
     this.imageStoreList = [];
     this.accountMarginsList = [];
     this.pathList = [];
-
 
     if (this.authService.isAuthenticated) {
       this.profileId = null;
@@ -707,6 +707,13 @@ export class PublishMyproductsComponent implements OnInit {
 
   getCategorySelected(idCategory: string) {
     this.lastCategorySelected = idCategory;
+    //Pendiente para cuando se seleccione los atributos
+   /* if(this.lastCategorySelected !== '-1'){
+      this.attributeRequiredList = [];
+      this.meliPublicationsService.getAttributesRequired(idCategory).subscribe(attr => {
+        this.attributeRequiredList = attr;
+      });
+    }*/
   }
 
   setHome() {

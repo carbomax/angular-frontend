@@ -210,10 +210,14 @@ export class PublishedProductComponent implements OnInit {
     this.productsSelected = [];   
     this.disable = true;   
   }
-
+/*
   navegateToEdit(product: ProductMeliPublished) {
     let prod = JSON.stringify(product);
     this.router.navigate(['edit-products-published', prod]);
+  }*/
+
+  navegateToEdit(product: ProductMeliPublished) {    
+    this.router.navigate(['edit-products-published', product.id]);
   }
 
   cipherContent(content: string) {
