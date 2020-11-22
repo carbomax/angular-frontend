@@ -305,20 +305,19 @@ export class EditProductsComponent implements OnInit {
 
   addRelationAccountMargin(){   
     if(this.meliAccount !== -1){ 
-
       let accountMargin = new AccountMarginModel();
-
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
+
       if(account.me2 !== 1){
         Swal.fire({
           title: 'Cuenta no permitida',
-          text: 'La cuenta seleccionada no tiene mercado envio configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
           icon: 'info',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Aceptar',
-          cancelButtonText: 'Cancelar    
+          cancelButtonText: 'Cancelar'    
         })
       }
       else{
