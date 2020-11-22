@@ -29,7 +29,7 @@ export class SidebarService {
     },
     {
       title: 'Ventas',
-      icon: 'fas fa-dollar-sign fa-4x ml-2',
+      icon: 'fas fa-dollar-sign ml-2',
       subtitle: 'Ventas',
       divider: 'sidebar-divider',
       submenu: [

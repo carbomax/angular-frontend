@@ -48,11 +48,11 @@ export class UserAdminComponent implements OnInit {
 
   constructor(public userService: UserService, public marketplaceService: MarketplaceService,
               public authService: AuthService, public router: Router) {
+
     this.initProfile();
   }
 
   ngOnInit(): void {
-
     this.loadProfiles();
     this.loadRoles();
     this.loadMarketplaces();

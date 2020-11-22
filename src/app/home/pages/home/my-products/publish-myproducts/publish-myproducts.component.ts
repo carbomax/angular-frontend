@@ -25,7 +25,6 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { elementAt } from 'rxjs/operators';
 
-declare function initializePlugin();
 
 @Component({
   selector: 'app-publish-myproducts',
@@ -34,7 +33,7 @@ declare function initializePlugin();
 })
 export class PublishMyproductsComponent implements OnInit {
 
-  @ViewChild('closeModal') closeModal; 
+  @ViewChild('closeModal') closeModal;
   @ViewChild('checkAllP') checkAllP;
   @ViewChild('checkP') checkP;
   @ViewChild('closeMargin') closeMargin;
@@ -435,7 +434,7 @@ export class PublishMyproductsComponent implements OnInit {
           timer: 5000
         });
         this.clearAllImage();
-        this.close();        
+        this.close();
       }
       else {
         this.closeActiveModalLoading();
@@ -532,7 +531,7 @@ export class PublishMyproductsComponent implements OnInit {
     })
 
 
-    
+
   }
 
   deleteOneProduct(product: ProductCustom) {
@@ -609,7 +608,7 @@ export class PublishMyproductsComponent implements OnInit {
       });
     });
       }
-    });    
+    });
   }
 
   /* ************* Modal View Upload Images ********** */
@@ -692,11 +691,11 @@ export class PublishMyproductsComponent implements OnInit {
   }
 
   close() {
-    this.closeModal.nativeElement.click();    
+    this.closeModal.nativeElement.click();
   }
 
   closeActiveModalLoading() {
-    this.loadingModal = false;      
+    this.loadingModal = false;
   }
 
   getPath(pathList: string[]) {
@@ -808,12 +807,12 @@ export class PublishMyproductsComponent implements OnInit {
     this.closeMargin.nativeElement.click();
   }
 
-  publishProducts() {    
+  publishProducts() {
     let allTitle = true;
 
     this.productsSelected.forEach(prod => {
-       if(prod.name.length > 60){ 
-          allTitle = false;          
+       if(prod.name.length > 60){
+          allTitle = false;
         }
     });
 
@@ -824,7 +823,7 @@ export class PublishMyproductsComponent implements OnInit {
         text: 'No se permite publicar produtos con título mayor de 60 caracteres',
         icon: 'info',
         showConfirmButton: false,
-        timer: 5000      
+        timer: 5000
       })
     }else{
       // llamada al servicio Publicar
@@ -837,20 +836,20 @@ export class PublishMyproductsComponent implements OnInit {
         text: `Los productos están siendo publicados`,
         showConfirmButton: false,
         timer: 5000
-      }).then(() => {  
+      }).then(() => {
         for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
-          if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) { 
-            this.pageProductsMeli.itemsMeliGrid.splice(i, 1); 
-            i--; 
+          if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
+            this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
+            i--;
           }
-        }    
-        this.checkP.nativeElement.checked = 0;      
-          if(this.pageProductsMeli.itemsMeliGrid.length === 0){     
+        }
+        this.checkP.nativeElement.checked = 0;
+          if(this.pageProductsMeli.itemsMeliGrid.length === 0){
             this.loadProductsPaginator(1);
-          }   
-        });  
+          }
+        });
     }
-       
+
   }
 
 }
