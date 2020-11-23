@@ -79,12 +79,22 @@ export class PublishedProductComponent implements OnInit {
 
         if (this.loadingSearch && resp.numberOfElements === 0) {
           this.emptySearch = true;
-        } else { this.emptySearch = false; }
-
+          this.errorProducts = false;
+        } else { 
+          this.emptySearch = false;
+          this.loadingSearch = false;
+        }
+/*
         if((this.skuSearch !== '' || this.idMeliSearch !== '' || this.meliAccountSearch !== '' 
             || this.typeStateSearch !== '') && resp.numberOfElements === 0){
               this.emptySearch = true;
             }
+*/
+        if((this.skuSearch === '' && this.idMeliSearch === '' && this.meliAccountSearch === '' 
+        && this.typeStateSearch === '') && resp.numberOfElements === 0){
+          this.errorProducts = true;
+          this.emptySearch = false;
+        }
 
         this.pagePublised = resp;   
         this.productsMeliPublished = this.pagePublised.content;
@@ -112,8 +122,7 @@ export class PublishedProductComponent implements OnInit {
       }, (error: any) => {
         this.errorProducts = true;
         this.loadingClear = false;
-        this.loadPaginator = false;
-        this.loadingSearch = false;
+        this.loadPaginator = false;        
         this.emptySearch = false;
         this.loading = false;
       });
@@ -122,6 +131,7 @@ export class PublishedProductComponent implements OnInit {
 
   searchProductsPublished() { 
       this.loadPaginator = true;   
+      this.loadingSearch = true;
       this.loadProductsPaginator(false);
   }
 
@@ -210,10 +220,14 @@ export class PublishedProductComponent implements OnInit {
     this.productsSelected = [];   
     this.disable = true;   
   }
-
+/*
   navegateToEdit(product: ProductMeliPublished) {
     let prod = JSON.stringify(product);
     this.router.navigate(['edit-products-published', prod]);
+  }*/
+
+  navegateToEdit(product: ProductMeliPublished) {    
+    this.router.navigate(['edit-products-published', product.id]);
   }
 
   cipherContent(content: string) {

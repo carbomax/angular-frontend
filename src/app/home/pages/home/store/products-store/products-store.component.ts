@@ -269,6 +269,12 @@ export class ProductsStoreComponent implements OnInit {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',
@@ -282,6 +288,12 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = element + ", " + exists_products;
               });
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;         
               Swal.fire({
                 position: 'top-end',
@@ -296,6 +308,12 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = exists_products + ", " + element;
               });
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',

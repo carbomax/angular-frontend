@@ -84,12 +84,12 @@ export class ProductsStorageUserService {
   }
 
   uploadImage(formData: FormData): Observable<any>{
-    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     return this.http.post<any>(params, formData);
   }
 
   async uploadImageSyn(fileList: any[]): Promise<any>{
-    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     let resultList: any[] = [];
 
     for(let i=0; i<fileList.length; i++){

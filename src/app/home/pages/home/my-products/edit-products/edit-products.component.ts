@@ -304,27 +304,42 @@ export class EditProductsComponent implements OnInit {
   /** Seccion para la vista Publicar */
 
   addRelationAccountMargin(){   
-    if(this.meliAccount !== -1){      
+    if(this.meliAccount !== -1){ 
       let accountMargin = new AccountMarginModel();
-
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
-      accountMargin.accountName = account.businessName;
-      accountMargin.idAccount = account.id;
 
-      if(this.margin !== -1){
-        var margin = this.marginsList.find(element => element.id == this.margin);
-        accountMargin.idMargin =  margin.id;
-        accountMargin.nameMargin = margin.name;
-        accountMargin.typeMargin = margin.type;
-        accountMargin.valueMargin = margin.value; 
-      }else{
-        accountMargin.idMargin = -1;
-        accountMargin.nameMargin = "";
+      if(account.me2 !== 1){
+        Swal.fire({
+          title: 'Cuenta no permitida',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'    
+        })
       }
-      this.accountMarginsList.push(accountMargin);
-      let index = this.meliAccountsList.indexOf(account);
-      this.meliAccountsList.splice(index, 1);
-      this.closeModalMargin();      
+      else{
+        accountMargin.accountName = account.businessName;
+        accountMargin.idAccount = account.id;
+  
+        if(this.margin !== -1){
+          var margin = this.marginsList.find(element => element.id == this.margin);
+          accountMargin.idMargin =  margin.id;
+          accountMargin.nameMargin = margin.name;
+          accountMargin.typeMargin = margin.type;
+          accountMargin.valueMargin = margin.value; 
+        }else{
+          accountMargin.idMargin = -1;
+          accountMargin.nameMargin = "";
+        }
+        this.accountMarginsList.push(accountMargin);
+        let index = this.meliAccountsList.indexOf(account);
+        this.meliAccountsList.splice(index, 1);
+        this.closeModalMargin();  
+      }
+          
     }
   } 
 
@@ -407,6 +422,10 @@ export class EditProductsComponent implements OnInit {
       })
     }
     else{
+      // llamada al servicio Publicar
+      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+      this.clearAll();
+      
       Swal.fire({
         position: 'top-end',
         icon: 'info',
@@ -417,12 +436,8 @@ export class EditProductsComponent implements OnInit {
       })
       .then((result) => {
         this.router.navigate(['/publish-myproducts']);
-      });  
+      });
      
-  
-     // llamada al servicio Publicar
-      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
-      this.clearAll();
     }   
   }
 

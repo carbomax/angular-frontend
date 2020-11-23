@@ -112,13 +112,14 @@ export class PublishMyproductsComponent implements OnInit {
   initialMeliAccounts: MeliAccount[];
   account_margin: AccountMarginModel;
   accountMarginsList: AccountMarginModel[];
-  marginsList: Margin[];
+  marginsList: Margin[];  
   margin: number = -1;
   meliAccount: number = -1;
   lastCategorySelected: string = '-1';
   warrantyType: number = -1;
   warrantyTime: number = 0;
   warranty: boolean = false;
+
 
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog,
     private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, public meliPublicationsService: MeliPublicationsService, private router: Router) {
@@ -178,7 +179,6 @@ export class PublishMyproductsComponent implements OnInit {
     this.imageStoreList = [];
     this.accountMarginsList = [];
     this.pathList = [];
-
 
     if (this.authService.isAuthenticated) {
       this.profileId = null;
@@ -476,6 +476,7 @@ export class PublishMyproductsComponent implements OnInit {
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
         this.loadingModalDelete = false;
+        this.loadProductsPaginator(this.currentPage);        
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -484,6 +485,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
+        /*
         this.productsSelected.forEach(select => {
           this.pageProductsMeli.itemsMeliGrid.forEach(element => {
             if (element.id === select.id) {
@@ -494,6 +496,7 @@ export class PublishMyproductsComponent implements OnInit {
             }
           });
         });
+        */
         this.productsSelected = [];
         if (this.productsSelected.length === 0) {
           this.disable = true;
@@ -544,12 +547,12 @@ export class PublishMyproductsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.productToDelete = product;
-        this.loadingDeleteProduct = true;
-        //this.loadingModalDelete = true;
+        this.loadingDeleteProduct = true;     
         this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
         this.loadingDeleteProduct = false;
-        this.loadingModalDelete = false;
+        //this.loadingModalDelete = false;
+        this.loadProductsPaginator(this.currentPage);  
         this.productToDelete = null;
         Swal.fire({
           position: 'top-end',
@@ -559,7 +562,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
-
+/*
         this.pageProductsMeli.itemsMeliGrid.forEach(element => {
           if (element === product) {
             let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
@@ -568,7 +571,7 @@ export class PublishMyproductsComponent implements OnInit {
             }
           }
         });
-
+*/
         let pos = this.productsSelected.indexOf(product);
         if (pos !== -1)
           this.productsSelected.splice(pos, 1);
@@ -703,6 +706,13 @@ export class PublishMyproductsComponent implements OnInit {
 
   getCategorySelected(idCategory: string) {
     this.lastCategorySelected = idCategory;
+    //Pendiente para cuando se seleccione los atributos
+   /* if(this.lastCategorySelected !== '-1'){
+      this.attributeRequiredList = [];
+      this.meliPublicationsService.getAttributesRequired(idCategory).subscribe(attr => {
+        this.attributeRequiredList = attr;
+      });
+    }*/
   }
 
   setHome() {
@@ -739,23 +749,36 @@ export class PublishMyproductsComponent implements OnInit {
       let accountMargin = new AccountMarginModel();
 
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
-      accountMargin.accountName = account.businessName;
-      accountMargin.idAccount = account.id;
 
-      if (this.margin !== -1) {
-        var margin = this.marginsList.find(element => element.id == this.margin);
-        accountMargin.idMargin = margin.id;
-        accountMargin.nameMargin = margin.name;
-        accountMargin.typeMargin = margin.type;
-        accountMargin.valueMargin = margin.value;
-      } else {
-        accountMargin.idMargin = -1;
-        accountMargin.nameMargin = "";
+      if(account.me2 !== 1){
+        Swal.fire({
+          title: 'Cuenta no permitida',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',          
+          confirmButtonText: 'Entendido!'              
+        })
+      }else{
+        accountMargin.accountName = account.businessName;
+        accountMargin.idAccount = account.id;
+  
+        if (this.margin !== -1) {
+          var margin = this.marginsList.find(element => element.id == this.margin);
+          accountMargin.idMargin = margin.id;
+          accountMargin.nameMargin = margin.name;
+          accountMargin.typeMargin = margin.type;
+          accountMargin.valueMargin = margin.value;
+        } else {
+          accountMargin.idMargin = -1;
+          accountMargin.nameMargin = "";
+        }
+        this.accountMarginsList.push(accountMargin);
+        let index = this.meliAccountsList.indexOf(account);
+        this.meliAccountsList.splice(index, 1);
+        this.closeModalMargin();
       }
-      this.accountMarginsList.push(accountMargin);
-      let index = this.meliAccountsList.indexOf(account);
-      this.meliAccountsList.splice(index, 1);
-      this.closeModalMargin();
+      
     }
   }
 

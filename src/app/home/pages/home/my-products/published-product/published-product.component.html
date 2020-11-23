@@ -111,7 +111,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()"
                   class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
@@ -241,7 +241,7 @@
 
     </div>
 
-    <div class="row justify-content-center" *ngIf="errorProducts && !emptySearch">
+    <div class="row justify-content-center" *ngIf="errorProducts">
 
       <div class="alert alert-info col-8 text-center" role="alert">
         <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar

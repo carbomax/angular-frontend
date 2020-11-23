@@ -13,5 +13,6 @@ export class ProductCustom {
     images: any[];
     family: FamilyProductStorage;
     state: string;
+    deleted: number;
     selected?: boolean;
   }

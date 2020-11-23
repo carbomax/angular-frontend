@@ -313,8 +313,8 @@
                     <p>Tipo de garantía</p>                  
                     <select class="custom-select" name="warrantyType" id="warrantyType" (change)="warrantyType = $event.target.value" [(ngModel)]="warrantyType" [disabled]="!warranty">
                       <option value="-1" selected> -- Seleccione --</option>
-                        <option value="2230280">Garantía del vendedor</option>
-                        <option value="2230279">Garantía de fábrica</option> 
+                        <option value='2230280'>Garantía del vendedor</option>
+                        <option value='2230279'>Garantía de fábrica</option> 
                     </select>
                     <span class="field-validation-valid" data-valmsg-for="warrantyType" data-valmsg-replace="true"></span>
                   </div>

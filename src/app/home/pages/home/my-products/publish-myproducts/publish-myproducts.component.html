@@ -96,7 +96,7 @@
             <tr>
               <th>
                 <div class="custom-control custom-checkbox ">
-                  <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()" class="custom-control-input"
+                  <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()" class="custom-control-input"
                     id="customCheck">
                   <label class="custom-control-label" for="customCheck"></label>
                 </div>
@@ -183,7 +183,7 @@
 
         <div   class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
-          <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProductsMeli.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+          <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProductsMeli.totalElements}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
 
         </div>
 
@@ -341,6 +341,7 @@
 
             </div>
           </div>
+
         </div>
        </div>
       <div class="modal-footer">

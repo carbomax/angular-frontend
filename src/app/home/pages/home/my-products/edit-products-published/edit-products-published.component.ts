@@ -86,16 +86,14 @@ export class EditProductsPublishedComponent implements OnInit {
   constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
     public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService ) { }
 
-  ngOnInit(): void {
-    this.loadingModal = false;
-    this.loadingPublicationModal = false;
+  ngOnInit(): void {    
     this.account_margin = new AccountMarginModel();
     this.responsePredictor = new ResponseCategoryPredictor();
     this.responsePredictor.predictor = false;
 
     this.getProduct();
-    this.getAccountMeli();  
-    this.getMargins();
+    //this.getAccountMeli();  
+    //this.getMargins();
     //this.loadRelationAccountMargin();
     //this.getPredictorCategories();
     this.productsDeletedList = [];    
@@ -120,12 +118,22 @@ export class EditProductsPublishedComponent implements OnInit {
     let content = atob(truck);
     return content;
   }
-
+/*
   getProduct(){
     let encode = this._router.snapshot.paramMap.get('product');
    // let product = this.decipherContent(encode);
     this.productMeliPublished = JSON.parse(encode);
     this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);    
+  }
+*/
+  getProduct(){    
+    this.productsMeliPublishedService.getOnePublication(+this._router.snapshot.paramMap.get('id')).subscribe(item => {
+      //this.loadingModal = true; 
+      this.productMeliPublished = item;
+      this.getCategoryOfActiveProduct(this.productMeliPublished.categoryMeli);  
+      this.getAccountMeli();  
+    this.getMargins();
+    });
   }
 
   getPredictorCategories(){
@@ -371,25 +379,39 @@ export class EditProductsPublishedComponent implements OnInit {
   addRelationAccountMargin(){   
     if(this.meliAccount !== -1){      
       let accountMargin = new AccountMarginModel();
-
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
-      accountMargin.accountName = account.businessName;
-      accountMargin.idAccount = account.id;
 
-      if(this.margin !== -1){
-        var margin = this.marginsList.find(element => element.id == this.margin);
-        accountMargin.idMargin =  margin.id;
-        accountMargin.nameMargin = margin.name;
-        accountMargin.typeMargin = margin.type;
-        accountMargin.valueMargin = margin.value; 
+      if(account.me2 !== 1){
+        Swal.fire({
+          title: 'Cuenta no permitida',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'    
+        })
       }else{
-        accountMargin.idMargin = -1;
-        accountMargin.nameMargin = "";
+        accountMargin.accountName = account.businessName;
+        accountMargin.idAccount = account.id;
+  
+        if(this.margin !== -1){
+          var margin = this.marginsList.find(element => element.id == this.margin);
+          accountMargin.idMargin =  margin.id;
+          accountMargin.nameMargin = margin.name;
+          accountMargin.typeMargin = margin.type;
+          accountMargin.valueMargin = margin.value; 
+        }else{
+          accountMargin.idMargin = -1;
+          accountMargin.nameMargin = "";
+        }
+        this.accountMarginsList.push(accountMargin);
+        let index = this.meliAccountsList.indexOf(account);
+        this.meliAccountsList.splice(index, 1);
+        this.closeModalMargin(); 
       }
-      this.accountMarginsList.push(accountMargin);
-      let index = this.meliAccountsList.indexOf(account);
-      this.meliAccountsList.splice(index, 1);
-      this.closeModalMargin();      
+           
     }
   } 
 
@@ -463,8 +485,7 @@ export class EditProductsPublishedComponent implements OnInit {
         if(element.marketplaceId === MarketplaceType.MERCADOLIBRE){
           this.marginsList.push(element);
         }
-      });
-
+      });      
       //Para disparar el metodo loadRelationAccountMargin()
       this.loadedMarginMeli = true;
       if(this.init){
