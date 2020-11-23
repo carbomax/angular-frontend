@@ -756,10 +756,8 @@ export class PublishMyproductsComponent implements OnInit {
           text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
           icon: 'info',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Aceptar',
-          cancelButtonText: 'Cancelar'    
+          confirmButtonColor: '#3085d6',          
+          confirmButtonText: 'Entendido!'              
         })
       }else{
         accountMargin.accountName = account.businessName;
