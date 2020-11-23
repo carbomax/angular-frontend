@@ -841,6 +841,12 @@ export class PublishMyproductsComponent implements OnInit {
     }else{
       // llamada al servicio Publicar
       this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+      for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
+        if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
+          this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
+          i--;
+        }
+      }
       this.closeModalPublish();
       Swal.fire({
         position: 'top-end',
@@ -849,14 +855,8 @@ export class PublishMyproductsComponent implements OnInit {
         text: `Los productos están siendo publicados`,
         showConfirmButton: false,
         timer: 5000
-      }).then(() => {
-        for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
-          if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
-            this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
-            i--;
-          }
-        }
-        this.checkP.nativeElement.checked = 0;
+      }).then(() => {        
+        //this.checkP.nativeElement.checked = 0;
           if(this.pageProductsMeli.itemsMeliGrid.length === 0){
             this.loadProductsPaginator(1);
           }
