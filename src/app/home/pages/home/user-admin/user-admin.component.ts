@@ -66,11 +66,12 @@ export class UserAdminComponent implements OnInit {
   }
 
   createOrUpdateUser(): void {
-    this.loading = true;
+
     this.errorUsers = false;
     this.seletedProfile.user.roles = this.selectedRoles;
     this.seletedProfile.marketplaces = this.selectedMarketplaces;
     if (this.seletedProfile.id == null) {
+      this.loading = true;
       console.log('Saving user..')
       this.seletedProfile.marketplaces = this.selectedMarketplaces;
       this.seletedProfile.user.roles = this.selectedRoles;
@@ -117,6 +118,7 @@ export class UserAdminComponent implements OnInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.changeMyself = true;
+            this.loading = true;
             this.updateProfile();
           } else {
             this.loading = false;

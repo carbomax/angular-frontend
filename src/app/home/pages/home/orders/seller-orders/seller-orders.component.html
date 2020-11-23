@@ -40,8 +40,8 @@
 
             <div class="form-group">
               <div class="input-group">
-                <input class="form-control" placeholder="Fecha desde: yyyy-mm-dd" name="dp" [(ngModel)]="modelFrom" ngbDatepicker
-                  #dateFrom="ngbDatepicker" [maxDate]=modelTo>
+                <input class="form-control" placeholder="Fecha desde: yyyy-mm-dd" name="dp" [(ngModel)]="modelFrom"
+                  ngbDatepicker #dateFrom="ngbDatepicker" [maxDate]=modelTo>
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary calendar" (click)="dateFrom.toggle()" type="button"><i
                       class="fas fa-calendar-alt"></i></button>
@@ -49,29 +49,32 @@
               </div>
             </div>
 
-            <div *ngIf="errorDateFrom" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div *ngIf="errorDateFrom" style="padding: 0.25rem 1.25rem;"
+              class="alert alert-danger alert-dismissible fade show" role="alert">
               <strong>Fecha</strong> con formato incorrecto
-              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <button style="padding: 0.25rem 1.25rem;" type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-
             <div class="form-group">
               <div class="input-group">
-                <input class="form-control" placeholder="Fecha hasta: yyyy-mm-dd" name="dp" [(ngModel)]="modelTo" ngbDatepicker
-                  [minDate]="modelFrom" #dateTo="ngbDatepicker">
+                <input class="form-control" placeholder="Fecha hasta: yyyy-mm-dd" name="dp" [(ngModel)]="modelTo"
+                  ngbDatepicker [minDate]="modelFrom" #dateTo="ngbDatepicker">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary calendar" (click)="dateTo.toggle()" type="button"><i
                       class="fas fa-calendar-alt    "></i></button>
                 </div>
               </div>
             </div>
-            <div *ngIf="errorDateTo" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
+            <div *ngIf="errorDateTo" style="padding: 0.25rem 1.25rem;"
+              class="alert alert-danger alert-dismissible fade show" role="alert">
               <strong>Fecha</strong> con formato incorrecto
-              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <button style="padding: 0.25rem 1.25rem;" type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
@@ -118,10 +121,11 @@
           <tr>
             <th>#</th>
             <th>Estado</th>
-            <th>Estado del envío</th>
             <th>Cliente</th>
             <th>Fecha creación</th>
-            <th>Monto total</th>
+            <th>Monto</th>
+            <th>Factura</th>
+            <th>Salida del almacén</th>
             <th>Acciones</th>
           </tr>
         </thead>
@@ -141,10 +145,70 @@
                 <i class="far fa-check-circle"></i> Pagada
               </div>
 
-            <td>{{item.shippingId}}</td>
+            </td>
+
             <td>{{ item.seller.nickname }}</td>
             <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
-            <td>{{ item.totalAmount}}</td>
+            <td>
+              <div  class="dropdown no-arrow">
+                <strong>Total:</strong> {{ item.totalAmount + item.amountTaxes + item.shipment.baseCost }}
+                <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
+                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-eye"
+                  ngbTooltip="Ver más detalles"></i>
+                </span>
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                      <span>Venta:</span> <strong>{{ item.totalAmount }}</strong>
+                    </li>
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                      <span>Taxes:</span> <strong>{{ item.amountTaxes }}</strong>
+                    </li>
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                      <span>Envío:</span> <strong>{{ item.shipment.baseCost }}</strong>
+                    </li>
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                      <strong>Total:</strong> <strong>{{ item.totalAmount + item.amountTaxes + item.shipment.baseCost }}</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </td>
+            <td>
+              <p *ngIf="item.invoiceNumberBss == 0 || item.invoiceNumberBss == null"> Ninguna </p>
+              <p *ngIf="item.invoiceNumberBss !== null && item.invoiceNumberBss > 0"> {{ item.invoiceNumberBss }} </p>
+
+            </td>
+
+            <td>
+
+              <div *ngIf="item.operatorBusinessStatus === 0 || item.operatorBusinessStatus == null" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-info  mb-0" role="alert"
+                ngbTooltip="El producto está en proceso de empaque">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>En proceso</span>
+              </div>
+
+              <div *ngIf="item.operatorBusinessStatus === 1" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-succes  mb-0" role="alert"
+                ngbTooltip="El producto fue entregado al carrier">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Entregada</span>
+              </div>
+
+              <div *ngIf="item.operatorBusinessStatus === 2" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-danger  mb-0" role="alert"
+                ngbTooltip="El producto no fue entregado">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>No entregado</span>
+              </div>
+
+
+            </td>
+
+            <td class="text-center">
+              <button ngbTooltip="Ver detalles" class="btn btn-outline-primary">
+                <i class="far fa-eye"></i>
+              </button>
+             </td>
 
           </tr>
 
@@ -187,7 +251,7 @@
 
         </div>
 
-        <div class="row justify-content-center" *ngIf="orderPage.totalElements === 0 && !emptySearch">
+        <div class="row justify-content-center" *ngIf="(orderPage.totalElements === 0 && !emptySearch) || errorOrders ">
 
           <div class="alert alert-info col-8 text-center" role="alert">
             <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay órdenes para mostrar
@@ -199,3 +263,6 @@
 
 
     </div>
+
+    <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando órdenes...'">
+    </app-global-loading>
