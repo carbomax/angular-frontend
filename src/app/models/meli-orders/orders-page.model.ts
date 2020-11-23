@@ -2,7 +2,7 @@ import { MeliOrders, Carrier } from './meli-orders.model';
 export class OrderPage {
 
   content: MeliOrders [];
-  totalElements: number;
+  totalElements = 0;
   carries: Carrier[] = [
     {id: 0, name: 'NINGUNO'},
     {id: 1, name: 'UES'},
