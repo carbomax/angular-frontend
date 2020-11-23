@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { OrderPage } from '../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDateParserFormatter, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { MeliOrdersService } from '../../../services/meli-orders.service';
 import { MeliOrders, Carrier } from '../../../../models/meli-orders/meli-orders.model';
 import Swal from 'sweetalert2';
+import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
 
 @Component({
   selector: 'app-operations',
@@ -20,13 +20,13 @@ export class OperationsComponent implements OnInit {
 
   hoveredDate: NgbDate | null = null;
 
-  modelFrom: NgbDateStruct;
-  modelTo: NgbDateStruct;
+  modelFrom: NgbDateStruct = { year: 0, month: 0, day: 0 };
+  modelTo: NgbDateStruct = { year: 0, month: 0, day: 0 };
   errorDateFrom = false;
   errorDateTo = false;
   today = this.calendar.getToday();
-  dateFrom = null;
-  dateTo = null;
+  dateFrom = 0;
+  dateTo = 99999999;
 
 
   // Search
@@ -45,19 +45,17 @@ export class OperationsComponent implements OnInit {
   styleCarries = `background-color: #858796; color: white`;
   styleTag = '';
 
-  constructor(public meliOrderService: MeliOrdersService,
+  constructor(public meliOperationOrderService: MeliOrdersOperationService,
     private calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadOrders();
   }
 
 
   searchOrders(): void {
-
-    console.log(this.modelFrom)
-    console.log(this.validateDates())
     if (this.validateDates()) {
       this.loadingSearch = true;
       this.orderStatus = [];
@@ -68,43 +66,56 @@ export class OperationsComponent implements OnInit {
   }
 
   validateDates(): boolean {
-    if (this.modelFrom !== undefined && !this.modelFrom.year) {
-      this.errorDateFrom = true;
-    } else { this.errorDateFrom = false; }
 
-    if (this.modelTo !== undefined && !this.modelTo.year) {
+    console.log(this.modelFrom)
+    if (this.modelFrom === undefined || this.modelFrom === null || isNaN(this.modelFrom.year)) {
+      this.errorDateFrom = true;
+    } else {
+      this.dateFrom = 0;
+      this.errorDateFrom = false;
+    }
+
+    if (this.modelTo === undefined || this.modelTo === null || isNaN(this.modelTo.year)) {
       this.errorDateTo = true;
-    } else { this.errorDateTo = false; }
+    } else {
+      this.dateTo = 99999999;
+      this.errorDateTo = false;
+    }
 
     return !this.errorDateFrom && !this.errorDateTo;
   }
 
+
   clearOrders(): void {
+    this.errorDateFrom = false;
+    this.errorDateTo = false;
     this.loadingClear = true;
     this.orderStatus = [];
     this.orderStatusClear = '';
     this.orderStatusSearch = '';
     this.clientNameSearch = '';
-    this.modelFrom = null;
-    this.modelTo = null;
+    this.modelFrom = { year: 0, month: 0, day: 0 };
+    this.modelTo = { year: 0, month: 0, day: 0 };
+    this.dateFrom = 0;
+    this.dateTo = 99999999;
     this.loadOrders();
   }
 
   selectChangeHandler(size): void {
+    this.loading = true;
     this.size = +size;
-    console.log('size', this.size)
     this.loadOrders();
   }
 
   loadProductsPaginator(page): void {
+    this.loading = true;
     this.page = page;
     this.loadOrders();
   }
 
   loadOrders(): void {
-    this.loading = true;
     this.buildDateFilter();
-    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo).subscribe((resp: OrderPage) => {
+    this.meliOperationOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo).subscribe((resp: OrderPage) => {
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
       } else { this.emptySearch = false; }
@@ -113,24 +124,38 @@ export class OperationsComponent implements OnInit {
       this.loadingSearch = false;
       this.errorOrders = false;
       this.loading = false;
+
     }, (error: any) => {
       this.errorOrders = true;
       this.loadingClear = false;
       this.loadingSearch = false;
       this.emptySearch = false;
       this.loading = false;
+
     });
   }
 
   changeTag(order: MeliOrders): void {
-    console.log(order)
+    if (order.tagBss) {
+      this.meliOperationOrderService.updateTagBss(order.id, order.tagBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo realizar la acción!',
+              position: 'top-end'
+            });
+          });
+    }
   }
 
 
   changeCarrier(order: MeliOrders, value): void {
     console.log(order)
     this.loading = true;
-    this.meliOrderService.updateCarrier(order.id, order.carrier.id)
+    this.meliOperationOrderService.updateCarrier(order.id, order.carrier.id)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {
           this.loadOrders();
@@ -145,9 +170,9 @@ export class OperationsComponent implements OnInit {
 
 
   updateInvoice(order: MeliOrders): void {
-    console.log(order)
+
     this.loading = true;
-    this.meliOrderService.updateInvoice(order.id, order.invoiceNumberBss)
+    this.meliOperationOrderService.updateInvoice(order.id, order.invoiceNumberBss)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {
           this.loadOrders();
@@ -161,27 +186,10 @@ export class OperationsComponent implements OnInit {
   }
 
 
-  updateDescription(order: MeliOrders): void {
-    console.log(order)
-    this.loading = true;
-    this.meliOrderService.updateDescription(order.id, order.descriptionBss)
-      .subscribe(resp => { console.log(resp); this.loading = false; },
-        error => {
-          this.loadOrders();
-          Swal.fire({
-            icon: 'error',
-            title: 'Malas noticias',
-            text: 'No se pudo actualizar la descripción de la órden!',
-            position: 'top-end'
-          });
-        });
-  }
-
 
   updateObservation(order: MeliOrders): void {
-    console.log(order)
     this.loading = true;
-    this.meliOrderService.updateObservation(order.id, order.observationBss)
+    this.meliOperationOrderService.updateObservation(order.id, order.observationBss)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {
           this.loadOrders();
@@ -194,16 +202,47 @@ export class OperationsComponent implements OnInit {
         });
   }
 
+
+  updateOperatorName(order: MeliOrders): void {
+    if (order.operatorNameBss.trim()) {
+      this.loading = true;
+      this.meliOperationOrderService.updateOperatorName(order.id, order.operatorNameBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo actualizar el nombre del operador de la órden!',
+              position: 'top-end'
+            });
+          });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Campos vacíos',
+        text: 'No puede introducir un nombre vacío!',
+        position: 'top-end'
+      });
+    }
+  }
+
+  getInvoice(order: MeliOrders) {
+    this.meliOperationOrderService.getInvoice(order).subscribe( res => {
+      return res;
+    })
+  }
+
   private buildDateFilter(): void {
-    if (this.modelFrom) {
+    if (this.modelFrom.year !== 0) {
 
       this.dateFrom = +`${this.modelFrom.year}${this.modelFrom.month}${this.modelFrom.day}`;
-    } else { this.dateFrom = null; }
+    } else { this.dateFrom = 0 }
 
-    if (this.modelTo) {
+    if (this.modelTo.year !== 0) {
 
       this.dateTo = +`${this.modelTo.year}${this.modelTo.month}${this.modelTo.day}`;
-    } else { this.dateTo = null; }
+    } else { this.dateTo = 99999999 }
 
   }
 
@@ -288,7 +327,7 @@ export class OperationsComponent implements OnInit {
 
   getCarrierStyleInitialTag(value): string {
     let style = '';
-    switch (value) {
+    switch (+value) {
       case 0:
         style = `background-color: #e74a3b;  color: white`;
         break;
@@ -304,7 +343,7 @@ export class OperationsComponent implements OnInit {
   }
   getCarrierStyleTag(id, value): void {
 
-    switch (value) {
+    switch (+value) {
 
       case 0:
         this.styleTag = `background-color: #e74a3b; color: white`;

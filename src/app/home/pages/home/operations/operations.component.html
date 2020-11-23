@@ -135,17 +135,30 @@
 
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
-            <td><label class="w10">{{ item.seller.firstsName }}</label></td>
+            <td><label class="w8">{{ item.seller.firstsName }}</label></td>
             <td>{{ i + 1}}</td>
-            <td>{{'Creador ' + i + 1}}</td>
+            <td>
+              <div class="input-group">
+                <input
+                [(ngModel)]="item.operatorNameBss"
+                (keyup.enter)="updateOperatorName(item)"
+                name="operatorNameBss"
+                type="text"
+                 class="form-control w12"
+                 placeholder="Nombre del operador...."
+                 aria-label="Operador" aria-describedby="basic-addon2">
+              </div>
+            </td>
             <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
-            <td>{{ item.buyer.firstName }}</td>
+            <td><label class="w8">{{ item.buyer.firstName }}</label></td>
             <td>{{ item.items[0].sellerSku }}</td>
             <td>{{ item.items[0].quantity }}</td>
             <td>
-              <div class="input-group">
+              <!-- <div class="input-group">
                 <textarea [ngbTooltip]="item.descriptionBss" [(ngModel)]="item.descriptionBss" name="descriptionBss" (keyup.enter)="updateDescription(item)" rows="1" class="form-control w10" aria-label=">Descripción" placeholder="Descripción...">{{ item.descriptionBss}}</textarea>
-              </div>
+              </div> -->
+              <label  [ngbTooltip]="item.items[0].title" class="w12">{{ item.items[0].title |slice:0:60}}</label>
+
             </td>
             <td>
               <div class="input-group ">
@@ -201,7 +214,7 @@
             </div>
           </td>
           <td class="text-center">
-           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary">
+           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary" >
             <i class="fas fa-print"></i>
            </button>
           </td>
@@ -259,5 +272,5 @@
 
     </div>
 
-    <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando operaciones...'">
+     <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando operaciones...'">
     </app-global-loading>

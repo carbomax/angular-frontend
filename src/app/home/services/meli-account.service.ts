@@ -29,6 +29,7 @@ export class MeliAccountService {
 
   public redirectToMeli(id: number): void {
     this.saveAccountStorage(id);
+    console.log(environment.URI_MELI)
     window.open(environment.URI_MELI, '_parent');
   }
 
