@@ -251,7 +251,9 @@ export class UserAdminComponent implements OnInit {
       this.profiles = [];
       profilesResp.forEach( p => {
         p.user.roles.forEach( r => {
-          if(r.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase() || r.name.toLowerCase() === RoleEnum.INVITED.toLowerCase()){
+          if(r.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase() ||
+          r.name.toLowerCase() === RoleEnum.INVITED.toLowerCase() ||
+          r.name.toLowerCase() === RoleEnum.OPERATOR.toLowerCase()){
             this.profiles.push(p);
           }
         })

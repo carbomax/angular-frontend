@@ -40,48 +40,56 @@
 
             <div class="form-group">
               <div class="input-group">
-                <input class="form-control" placeholder="Fecha desde: yyyy-mm-dd" name="dp" [(ngModel)]="modelFrom" ngbDatepicker
-                  #dateFrom="ngbDatepicker" [maxDate]=modelTo>
+                <input class="form-control"
+                [formControl]="dateFromControl" [class.is-invalid]="dateFromControl.invalid"
+                placeholder="Fecha desde: yyyy-mm-dd" name="dateFrom" readonly
+                (dateSelect)="onDateFromSelection($event)"
+                ngbDatepicker #dateFrom="ngbDatepicker" [maxDate]="dateToControl.value" >
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary calendar" (click)="dateFrom.toggle()" type="button"><i
                       class="fas fa-calendar-alt"></i></button>
                 </div>
               </div>
             </div>
-
-            <div *ngIf="errorDateFrom" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
-              <strong>Fecha</strong> con formato incorrecto
-              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <div *ngIf="dateFromControl.invalid" style="padding: 0.25rem 1.25rem;"
+              class="alert alert-danger alert-dismissible fade show" role="alert">
+              <strong>Fecha</strong> no válida
+              <button style="padding: 0.25rem 1.25rem;" type="button" class="close" data-dismiss="alert"
+                aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
           </div>
 
           <div class="col-md-6">
-
             <div class="form-group">
               <div class="input-group">
-                <input class="form-control" placeholder="Fecha hasta: yyyy-mm-dd" name="dp" [(ngModel)]="modelTo" ngbDatepicker
-                  [minDate]="modelFrom" #dateTo="ngbDatepicker">
+                <input class="form-control" [formControl]="dateToControl" [class.is-invalid]="dateToControl.invalid"
+                  placeholder="Fecha hasta: yyyy-mm-dd" readonly [minDate]="dateFromControl.value" name="dateTo" ngbDatepicker
+                  (dateSelect)="onDateToSelection($event)"#dateTo="ngbDatepicker">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary calendar" (click)="dateTo.toggle()" type="button"><i
                       class="fas fa-calendar-alt    "></i></button>
                 </div>
+
               </div>
             </div>
-            <div *ngIf="errorDateTo" style="padding: 0.25rem 1.25rem;"  class="alert alert-danger alert-dismissible fade show" role="alert">
-              <strong>Fecha</strong> con formato incorrecto
-              <button style="padding: 0.25rem 1.25rem;"  type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
+
+            <div *ngIf="dateToControl.invalid" style="padding: 0.25rem 1.25rem;"
+            class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Fecha</strong> no válida
+            <button style="padding: 0.25rem 1.25rem;" type="button" class="close" data-dismiss="alert"
+              aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
           </div>
         </div>
 
 
         <div class="row">
           <div class="col d-flex justify-content-center">
-            <button class="btn btn-outline-primary mr-1" (click)="searchOrders()">
+            <button [disabled]="dateFromControl.invalid || dateToControl.invalid " class="btn btn-outline-primary mr-1" (click)="searchOrders()">
               <i *ngIf="!loadingSearch" class="fas fa-search m-1"></i>
               <i *ngIf="loadingSearch" class="fas fa-spin fa-spinner m-1"></i>
               Buscar
@@ -151,13 +159,11 @@
               </div>
             </td>
             <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
-            <td><label class="w8">{{ item.buyer.firstName }}</label></td>
+            <td><label class="w10">{{ item.buyer.firstName + ' ' + item.buyer.lastName }}</label></td>
             <td>{{ item.items[0].sellerSku }}</td>
             <td>{{ item.items[0].quantity }}</td>
             <td>
-              <!-- <div class="input-group">
-                <textarea [ngbTooltip]="item.descriptionBss" [(ngModel)]="item.descriptionBss" name="descriptionBss" (keyup.enter)="updateDescription(item)" rows="1" class="form-control w10" aria-label=">Descripción" placeholder="Descripción...">{{ item.descriptionBss}}</textarea>
-              </div> -->
+
               <label  [ngbTooltip]="item.items[0].title" class="w12">{{ item.items[0].title |slice:0:60}}</label>
 
             </td>
@@ -217,7 +223,7 @@
 
           <td>
             <select
-            (change)="changeOperatorBusinessStatus(item)"
+            (change)="updateOperatorBusinessStatus(item)"
             [style]="getOperatorBssToOrderStyleInitial(item.operatorBusinessStatus)"
             class="custom-select w10" name="operatorBusinessStatus"
             [(ngModel)]="item.operatorBusinessStatus"

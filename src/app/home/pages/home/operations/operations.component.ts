@@ -4,6 +4,7 @@ import { NgbCalendar, NgbDateParserFormatter, NgbDate, NgbDateStruct } from '@ng
 import { MeliOrders, Carrier } from '../../../../models/meli-orders/meli-orders.model';
 import Swal from 'sweetalert2';
 import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-operations',
@@ -14,6 +15,8 @@ export class OperationsComponent implements OnInit {
 
   @ViewChild('dateFrom') dateFromCalendar: ElementRef;
   @ViewChild('dateTo') dateToCalendar: ElementRef;
+  public dateFromControl: FormControl = new FormControl(null);
+  public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
   size = 5;
@@ -57,35 +60,26 @@ export class OperationsComponent implements OnInit {
 
 
   searchOrders(): void {
-    if (this.validateDates()) {
+
       this.loadingSearch = true;
       this.orderStatus = [];
       this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
       this.loadOrders();
-    }
 
   }
 
-  validateDates(): boolean {
+  onDateFromSelection(date: NgbDate): void {
 
-    console.log(this.modelFrom)
-    if (this.modelFrom === undefined || this.modelFrom === null || isNaN(this.modelFrom.year)) {
-      this.errorDateFrom = true;
-    } else {
-      this.dateFrom = 0;
-      this.errorDateFrom = false;
+    if (!this.dateToControl.value) {
+      this.dateToControl.setValue({ year: date.year, month: date.month, day: date.day });
     }
-
-    if (this.modelTo === undefined || this.modelTo === null || isNaN(this.modelTo.year)) {
-      this.errorDateTo = true;
-    } else {
-      this.dateTo = 99999999;
-      this.errorDateTo = false;
-    }
-
-    return !this.errorDateFrom && !this.errorDateTo;
   }
 
+  onDateToSelection(date: NgbDate): void {
+    if (!this.dateFromControl.value) {
+      this.dateFromControl.setValue({ year: date.year, month: date.month, day: date.day });
+    }
+  }
 
   clearOrders(): void {
     this.errorDateFrom = false;
@@ -95,8 +89,8 @@ export class OperationsComponent implements OnInit {
     this.orderStatusClear = '';
     this.orderStatusSearch = '';
     this.clientNameSearch = '';
-    this.modelFrom = { year: 0, month: 0, day: 0 };
-    this.modelTo = { year: 0, month: 0, day: 0 };
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
     this.dateFrom = 0;
     this.dateTo = 99999999;
     this.loadOrders();
@@ -185,7 +179,20 @@ export class OperationsComponent implements OnInit {
         });
   }
 
-
+  updateOperatorBusinessStatus(order: MeliOrders): void {
+    this.loading = true;
+    this.meliOperationOrderService.updateOperatorBusinessStatus(order.id, order.operatorBusinessStatus)
+      .subscribe(resp => { console.log(resp); this.loading = false; },
+        error => {
+          this.loadOrders();
+          Swal.fire({
+            icon: 'error',
+            title: 'Malas noticias',
+            text: 'No se pudo actualizar el estado de la órden!',
+            position: 'top-end'
+          });
+        });
+  }
 
   updateObservation(order: MeliOrders): void {
     if (order.observationBss.trim()) {
@@ -267,36 +274,18 @@ export class OperationsComponent implements OnInit {
 
   }
 
-  changeOperatorBusinessStatus(order: MeliOrders){
-    if (order.operatorBusinessStatus) {
-      console.log(order.operatorBusinessStatus)
-     /* this.meliOperationOrderService.updateTagBss(order.id, order.tagBss)
-        .subscribe(resp => { console.log(resp); this.loading = false; },
-          error => {
-            this.loadOrders();
-            Swal.fire({
-              icon: 'error',
-              title: 'Malas noticias',
-              text: 'No se pudo realizar la acción!',
-              position: 'top-end'
-            });
-          });*/
-    }
-  }
-
   private buildDateFilter(): void {
-    if (this.modelFrom.year !== 0) {
 
-      this.dateFrom = +`${this.modelFrom.year}${this.modelFrom.month}${this.modelFrom.day}`;
+    if (this.dateFromControl.value !== null) {
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
     } else { this.dateFrom = 0 }
 
-    if (this.modelTo.year !== 0) {
+    if (this.dateToControl.value !== null) {
 
-      this.dateTo = +`${this.modelTo.year}${this.modelTo.month}${this.modelTo.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
     } else { this.dateTo = 99999999 }
 
   }
-
 
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
