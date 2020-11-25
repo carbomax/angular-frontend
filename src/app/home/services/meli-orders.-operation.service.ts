@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 
 
 // Services
@@ -46,28 +47,28 @@ export class MeliOrdersOperationService {
 
 
   updateTagBss(orderId: number, tagBss: number): Observable<boolean> {
-    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-tag/${orderId}?tagBss=${tagBss}`,{});
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-tag/${orderId}?tagBss=${tagBss}`, {});
   }
 
   updateCarrier(orderId: number, carrierId: number): Observable<boolean> {
-    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-carrier/${orderId}${carrierId}`,{});
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-carrier/${orderId}/${carrierId}`, {});
   }
 
   updateInvoice(orderId: number, invoice: number): Observable<boolean> {
-    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-invoice/${orderId}?invoice=${invoice}`,{});
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-invoice/${orderId}?invoice=${invoice}`, {});
   }
 
   updateOperatorName(orderId: number, name: string): Observable<boolean> {
-    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-operator-name/${orderId}?name=${name}`,{});
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-operator-name/${orderId}?name=${name}`, {});
   }
 
 
   updateObservation(orderId: number, observation: string): Observable<boolean> {
-    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-observation/${orderId}?observation=${observation}`,{});
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-observation/${orderId}?observation=${observation}`, {});
   }
 
-  getInvoice(order: MeliOrders) {
-   return  this.http.get(`https://api.mercadolibre.com/shipment_labels?shipment_ids=40180201945&response_type=pdf&access_token=APP_USR-5381382874135569-112323-1f7592198d14b355c159e8d0bc703565-659608218`)
+  getInvoice(order: MeliOrders): Observable<any> {
+    return this.http.get<any>(`${this.URI_MELI_BUSINESS}/url-invoice/${order.id}`);
   }
 
 

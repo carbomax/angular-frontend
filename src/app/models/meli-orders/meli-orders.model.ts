@@ -6,7 +6,7 @@ export class MeliOrders {
   public dateClosed: string;
   public totalAmount: number;
   public currencyId: string;
-  public shippingId: number;
+  public shippingId: 0;
   public seller: SellerOrder;
   public buyer: BuyerOrder;
   public payments: PaymentOrder[];

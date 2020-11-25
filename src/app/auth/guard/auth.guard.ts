@@ -30,9 +30,6 @@ export class AuthGuard implements CanActivate {
   isTokenExpirated(): boolean {
     const exp = this.authService.authenticationDataExtrac().exp;
     const timeNow = new Date().getTime() / 1000;
-    console.log('Timepo EXP', exp)
-    console.log('Tiempo now', timeNow)
-
     return +exp < +timeNow;
   }
 

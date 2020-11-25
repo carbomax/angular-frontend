@@ -44,6 +44,7 @@ export class OperationsComponent implements OnInit {
 
   styleCarries = `background-color: #858796; color: white`;
   styleTag = '';
+  styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
 
   constructor(public meliOperationOrderService: MeliOrdersOperationService,
     private calendar: NgbCalendar,
@@ -137,6 +138,7 @@ export class OperationsComponent implements OnInit {
 
   changeTag(order: MeliOrders): void {
     if (order.tagBss) {
+      this.loading = true;
       this.meliOperationOrderService.updateTagBss(order.id, order.tagBss)
         .subscribe(resp => { console.log(resp); this.loading = false; },
           error => {
@@ -153,7 +155,6 @@ export class OperationsComponent implements OnInit {
 
 
   changeCarrier(order: MeliOrders, value): void {
-    console.log(order)
     this.loading = true;
     this.meliOperationOrderService.updateCarrier(order.id, order.carrier.id)
       .subscribe(resp => { console.log(resp); this.loading = false; },
@@ -170,7 +171,6 @@ export class OperationsComponent implements OnInit {
 
 
   updateInvoice(order: MeliOrders): void {
-
     this.loading = true;
     this.meliOperationOrderService.updateInvoice(order.id, order.invoiceNumberBss)
       .subscribe(resp => { console.log(resp); this.loading = false; },
@@ -188,18 +188,29 @@ export class OperationsComponent implements OnInit {
 
 
   updateObservation(order: MeliOrders): void {
-    this.loading = true;
-    this.meliOperationOrderService.updateObservation(order.id, order.observationBss)
-      .subscribe(resp => { console.log(resp); this.loading = false; },
-        error => {
-          this.loadOrders();
-          Swal.fire({
-            icon: 'error',
-            title: 'Malas noticias',
-            text: 'No se pudo actualizar la observación de la órden!',
-            position: 'top-end'
+    if (order.observationBss.trim()) {
+      this.loading = true;
+      this.meliOperationOrderService.updateObservation(order.id, order.observationBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo actualizar la observación de la órden!',
+              position: 'top-end'
+            });
           });
-        });
+    } else {
+      this.loadOrders();
+      Swal.fire({
+        icon: 'error',
+        title: 'Campos vacíos',
+        text: 'No puede introducir una observación vacía!',
+        position: 'top-end'
+      });
+    }
+
   }
 
 
@@ -218,6 +229,7 @@ export class OperationsComponent implements OnInit {
             });
           });
     } else {
+      this.loadOrders();
       Swal.fire({
         icon: 'error',
         title: 'Campos vacíos',
@@ -227,10 +239,49 @@ export class OperationsComponent implements OnInit {
     }
   }
 
-  getInvoice(order: MeliOrders) {
-    this.meliOperationOrderService.getInvoice(order).subscribe( res => {
-      return res;
-    })
+  getInvoice(order: MeliOrders): void {
+    console.log('shippindId', order.shippingId)
+    const notificationError = () => Swal.fire({
+      icon: 'error',
+      title: 'Etiqueta',
+      text: 'La etiqueta de esta órden no está disponible en estos momentos!',
+      position: 'top-end'
+    });
+    if (order.shippingId > 0) {
+      this.meliOperationOrderService.getInvoice(order)
+        .subscribe((url: any) => {
+
+          console.log(url.response)
+          if (url.response) {
+            window.open(url.response, '_black');
+          } else {
+            notificationError();
+          }
+        }, error => {
+          console.log(error)
+          notificationError();
+        });
+    } else {
+      notificationError();
+    }
+
+  }
+
+  changeOperatorBusinessStatus(order: MeliOrders){
+    if (order.operatorBusinessStatus) {
+      console.log(order.operatorBusinessStatus)
+     /* this.meliOperationOrderService.updateTagBss(order.id, order.tagBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo realizar la acción!',
+              position: 'top-end'
+            });
+          });*/
+    }
   }
 
   private buildDateFilter(): void {
@@ -253,6 +304,47 @@ export class OperationsComponent implements OnInit {
       return false;
     }
     return true;
+
+  }
+
+  getOperatorBssToOrderStyleInitial(value): string {
+    let initialStyle = '';
+    switch (+value) {
+
+      case 0:
+        initialStyle = `background-color: #36b9cc; color: white`;
+        break;
+      case 1:
+        initialStyle = `background-color: #e74a3b;  color: white`;
+        break;
+      case 2:
+        initialStyle = `background-color: #1cc88a; color: white`;
+        break;
+      default:
+        initialStyle = `background-color: #36b9cc; color: white`;
+        break;
+    }
+
+    return initialStyle;
+  }
+  getOperatorBssToOrderStyle(id, value): void {
+
+    switch (+value) {
+
+      case 0:
+        this.styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
+        break;
+      case 1:
+        this.styleOperatorBssStyle = `background-color: #e74a3b;  color: white`;
+        break;
+      case 2:
+        this.styleOperatorBssStyle = `background-color: #1cc88a; color: white`;
+        break;
+      default:
+        this.styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
+        break;
+    }
+    document.getElementById(`${id}`).setAttribute('style', this.styleOperatorBssStyle);
 
   }
 
@@ -290,8 +382,6 @@ export class OperationsComponent implements OnInit {
   }
   getCarrierStyle(id, value): void {
 
-    console.log('Id select', id)
-    console.log('Value carrier', value)
     switch (+value) {
 
       case 0:
@@ -322,8 +412,6 @@ export class OperationsComponent implements OnInit {
     document.getElementById(`${id}`).setAttribute('style', this.styleCarries);
 
   }
-
-
 
   getCarrierStyleInitialTag(value): string {
     let style = '';
