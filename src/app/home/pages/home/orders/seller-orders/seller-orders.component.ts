@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MeliOrdersService } from '../../../../services/meli-orders.service';
 import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { FormControl } from '@angular/forms';
 
 
 
@@ -15,15 +16,12 @@ export class SellerOrdersComponent implements OnInit {
 
   @ViewChild('dateFrom') dateFromCalendar: ElementRef;
   @ViewChild('dateTo') dateToCalendar: ElementRef;
-
+  public dateFromControl: FormControl = new FormControl(null);
+  public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
   size = 5;
 
-  hoveredDate: NgbDate | null = null;
-
-  modelFrom: NgbDateStruct = { year: 0, month: 0, day: 0};
-  modelTo: NgbDateStruct = { year: 0, month: 0, day: 0};
   errorDateFrom = false;
   errorDateTo = false;
   today = this.calendar.getToday();
@@ -44,7 +42,9 @@ export class SellerOrdersComponent implements OnInit {
 
   constructor(public meliOrderService: MeliOrdersService,
               private calendar: NgbCalendar,
-              public formatter: NgbDateParserFormatter) { }
+              public formatter: NgbDateParserFormatter) {
+
+  }
 
   ngOnInit(): void {
     this.loading = true;
@@ -53,33 +53,28 @@ export class SellerOrdersComponent implements OnInit {
 
 
   searchOrders(): void {
-    if (this.validateDates()) {
-      this.loadingSearch = true;
-      this.orderStatus = [];
-      this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
-      this.loadOrders();
-    }
+
+    this.loadingSearch = true;
+    this.errorDateFrom = false;
+    this.errorDateTo = false;
+    this.orderStatus = [];
+    this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
+    this.loadOrders();
+
 
   }
 
-  validateDates(): boolean {
+  onDateFromSelection(date: NgbDate): void {
 
-    console.log(this.modelFrom)
-    if(this.modelFrom === undefined || this.modelFrom === null || isNaN(this.modelFrom.year)){
-      this.errorDateFrom = true;
-    } else {
-      this.dateFrom = 0;
-      this.errorDateFrom = false;
+    if (!this.dateToControl.value) {
+      this.dateToControl.setValue({ year: date.year, month: date.month, day: date.day });
     }
+  }
 
-    if(this.modelTo === undefined || this.modelTo === null || isNaN(this.modelTo.year)){
-      this.errorDateTo = true;
-    } else {
-      this.dateTo = 99999999;
-      this.errorDateTo = false;
+  onDateToSelection(date: NgbDate): void {
+    if (!this.dateFromControl.value) {
+      this.dateFromControl.setValue({ year: date.year, month: date.month, day: date.day });
     }
-
-    return !this.errorDateFrom && !this.errorDateTo;
   }
 
   clearOrders(): void {
@@ -90,8 +85,8 @@ export class SellerOrdersComponent implements OnInit {
     this.orderStatusClear = '';
     this.orderStatusSearch = '';
     this.clientNameSearch = '';
-    this.modelFrom = { year: 0 , month: 0, day: 0};
-    this.modelTo = { year: 0 , month: 0, day: 0};
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
     this.dateFrom = 0;
     this.dateTo = 99999999;
     this.loadOrders();
@@ -112,8 +107,6 @@ export class SellerOrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.buildDateFilter();
-    console.log(this.dateFrom)
-    console.log(this.dateTo)
     this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo).subscribe((resp: OrderPage) => {
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
@@ -133,16 +126,17 @@ export class SellerOrdersComponent implements OnInit {
   }
 
   private buildDateFilter(): void {
-    if (this.modelFrom.year !== 0 ) {
 
-      this.dateFrom = +`${this.modelFrom.year}${this.modelFrom.month}${this.modelFrom.day}`;
-    } else { this.dateFrom = 0}
+    if (this.dateFromControl.value !== null) {
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+    } else { this.dateFrom = 0 }
 
-    if (this.modelTo.year !== 0) {
+    if (this.dateToControl.value !== null) {
 
-      this.dateTo = +`${this.modelTo.year}${this.modelTo.month}${this.modelTo.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
     } else { this.dateTo = 99999999 }
 
   }
+
 
 }

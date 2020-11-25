@@ -58,6 +58,10 @@ export class MeliOrdersOperationService {
     return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-invoice/${orderId}?invoice=${invoice}`, {});
   }
 
+  updateOperatorBusinessStatus(orderId: number, status: number): Observable<boolean> {
+    return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-operator-business-status/${orderId}?status=${status}`, {});
+  }
+
   updateOperatorName(orderId: number, name: string): Observable<boolean> {
     return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-operator-name/${orderId}?name=${name}`, {});
   }
