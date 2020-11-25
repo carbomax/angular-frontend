@@ -129,6 +129,7 @@
             <th>Etiqueta</th>
             <th>Envio</th>
             <th>Nº.Factura</th>
+            <th>Entregado</th>
             <th>Imprimir</th>
           </tr>
         </thead>
@@ -210,11 +211,25 @@
           </td>
           <td>
             <div class="input-group">
-              <input dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w9" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
+              <input dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w5" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
             </div>
           </td>
+
+          <td>
+            <select
+            (change)="changeOperatorBusinessStatus(item)"
+            [style]="getOperatorBssToOrderStyleInitial(item.operatorBusinessStatus)"
+            class="custom-select w10" name="operatorBusinessStatus"
+            [(ngModel)]="item.operatorBusinessStatus"
+            [id]="i + 'op'">
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 0)" value="0">EN PROCESO</option>
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 1)" value="1">NO ENTREGADO</option>
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 2)" value="2">ENTREGADO</option>
+          </select>
+           </td>
+
           <td class="text-center">
-           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary" >
+           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary" (click)="getInvoice(item)">
             <i class="fas fa-print"></i>
            </button>
           </td>
