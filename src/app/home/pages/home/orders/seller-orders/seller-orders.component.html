@@ -189,24 +189,24 @@
 
             <td>
 
-              <div *ngIf="item.operatorBusinessStatus === 0 || item.operatorBusinessStatus == null"
+              <div *ngIf="item.operatorBusinessStatus === 0"
                 style="padding: 0.25rem 1.25rem;" class="d-flex flex-nowrap flex-row alert alert-sm alert-info  mb-0"
                 role="alert" ngbTooltip="El producto está en proceso de empaque">
                 <i class="far fa-check-circle  mt-1 mr-1"></i><span>En proceso</span>
               </div>
 
-              <div *ngIf="item.operatorBusinessStatus === 1" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert"
-                ngbTooltip="El producto fue entregado al carrier">
-                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Entregada</span>
-              </div>
 
-              <div *ngIf="item.operatorBusinessStatus === 2" style="padding: 0.25rem 1.25rem;"
+              <div *ngIf="item.operatorBusinessStatus === 1" style="padding: 0.25rem 1.25rem;"
                 class="d-flex flex-nowrap flex-row alert alert-sm alert-danger  mb-0" role="alert"
                 ngbTooltip="El producto no fue entregado">
                 <i class="far fa-check-circle  mt-1 mr-1"></i><span>No entregado</span>
               </div>
 
+              <div *ngIf="item.operatorBusinessStatus === 2" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert"
+                ngbTooltip="El producto fue entregado al carrier">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Entregada</span>
+              </div>
 
             </td>
 
