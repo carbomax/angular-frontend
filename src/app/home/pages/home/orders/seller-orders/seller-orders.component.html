@@ -131,7 +131,7 @@
             <th>Monto</th>
             <th>Factura</th>
             <th>Salida del almacén</th>
-            <th>Acciones</th>
+            <!-- <th>Acciones</th> -->
           </tr>
         </thead>
 
@@ -168,7 +168,7 @@
                       <span>Venta:</span> <strong>{{ item.totalAmount }}</strong>
                     </li>
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Taxes:</span> <strong>{{ item.amountTaxes }}</strong>
+                      <span>Impuestos:</span> <strong>{{ item.amountTaxes }}</strong>
                     </li>
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
                       <span>Envío:</span> <strong>{{ item.shipment.baseCost }}</strong>
@@ -210,11 +210,11 @@
 
             </td>
 
-            <td class="text-center">
+            <!-- <td class="text-center">
               <button ngbTooltip="Ver detalles" class="btn btn-outline-primary">
                 <i class="far fa-eye"></i>
               </button>
-            </td>
+            </td> -->
 
           </tr>
 
