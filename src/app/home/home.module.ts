@@ -36,6 +36,7 @@ import { EditProductsPublishedComponent } from './pages/home/my-products/edit-pr
 import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
+import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 
 
 
@@ -66,7 +67,8 @@ import { AttributeRequiredComponent } from './components/modals/attribute-requir
     EditProductsPublishedComponent,
     GlobalLoadingComponent,
     OperationsComponent,
-    AttributeRequiredComponent],
+    AttributeRequiredComponent,
+    HistorialOperationComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

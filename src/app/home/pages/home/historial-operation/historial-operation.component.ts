@@ -1,17 +1,17 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { OrderPage } from '../../../../models/meli-orders/orders-page.model';
-import { NgbCalendar, NgbDateParserFormatter, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { MeliOrders, Carrier } from '../../../../models/meli-orders/meli-orders.model';
+import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { MeliOrders } from '../../../../models/meli-orders/meli-orders.model';
 import Swal from 'sweetalert2';
+import { OrderPage } from '../../../../models/meli-orders/orders-page.model';
+import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
 import { FormControl } from '@angular/forms';
 
 @Component({
-  selector: 'app-operations',
-  templateUrl: './operations.component.html',
-  styleUrls: ['./operations.component.css']
+  selector: 'app-historial-operation',
+  templateUrl: './historial-operation.component.html',
+  styleUrls: ['./historial-operation.component.css']
 })
-export class OperationsComponent implements OnInit {
+export class HistorialOperationComponent implements OnInit {
 
   @ViewChild('dateFrom') dateFromCalendar: ElementRef;
   @ViewChild('dateTo') dateToCalendar: ElementRef;
@@ -42,7 +42,7 @@ export class OperationsComponent implements OnInit {
   orderStatusSearch = '';
   clientNameSearch = '';
   orderStatus = [];
-  operatorBusinesStatus: string[] = [];
+  operatorBusinesStatus: string [] = ['delivered'];
 
   carrier = 1;
 
@@ -62,10 +62,10 @@ export class OperationsComponent implements OnInit {
 
   searchOrders(): void {
 
-    this.loadingSearch = true;
-    this.orderStatus = [];
-    this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
-    this.loadOrders();
+      this.loadingSearch = true;
+      this.orderStatus = [];
+      this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
+      this.loadOrders();
 
   }
 
