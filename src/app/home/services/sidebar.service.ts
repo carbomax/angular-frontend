@@ -34,7 +34,8 @@ export class SidebarService {
       divider: 'sidebar-divider',
       submenu: [
         { title: 'Órdenes', url: '/home/seller-orders' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]},
-        { title: 'Operaciones', url: '/home/operations' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER, RoleEnum.OPERATOR]}
+        { title: 'Operaciones', url: '/home/operations' , roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR]},
+        { title: 'Histórico-Operaciones', url: '/home/historial-operations' , roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR]}
       ],
     },
     {

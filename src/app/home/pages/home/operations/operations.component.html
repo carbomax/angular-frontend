@@ -145,7 +145,7 @@
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
             <td><label class="w8">{{ item.seller.firstsName }}</label></td>
-            <td>{{ i + 1}}</td>
+            <td class="text-right">{{ item.id }}</td>
             <td>
               <div class="input-group">
                 <input
@@ -159,9 +159,9 @@
               </div>
             </td>
             <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
-            <td><label class="w10">{{ item.buyer.firstName + ' ' + item.buyer.lastName }}</label></td>
+            <td><label class="w10">{{ item.buyer.firstName }}</label></td>
             <td>{{ item.items[0].sellerSku }}</td>
-            <td>{{ item.items[0].quantity }}</td>
+            <td class="text-right">{{ item.items[0].quantity }}</td>
             <td>
 
               <label  [ngbTooltip]="item.items[0].title" class="w12">{{ item.items[0].title |slice:0:60}}</label>
