@@ -20,6 +20,7 @@ import { RoleEnum } from '../enums/role.enum';
 import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.component';
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
+import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 
 
 const routes: Routes = [
@@ -42,6 +43,7 @@ const routes: Routes = [
       { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard], data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Cuentas Mercado Libre' } },
       { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Órdenes' }},
       { path: 'operations', component: OperationsComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Operaciones' }},
+      { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Historico-Operaciones' }},
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }

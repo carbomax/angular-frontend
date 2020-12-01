@@ -54,18 +54,18 @@
                     </div>
                     <div class="form-group">
                       <input [class.is-invalid]="fieldNotValid('password')" type="password" formControlName="password" class="form-control form-control-user" id="exampleInputPassword"
-                        placeholder="Contraseña..." required minlength="4">
+                        placeholder="Contraseña..." required>
 
                         <div *ngIf="fieldNotValid('password') && password.errors.required" class="invalid-feedback">
                           <strong class="ml-3">
                             Este campo es obligatorio.
                           </strong>
                         </div>
-                        <div *ngIf="fieldNotValid('password') && password.errors.minlength" class="invalid-feedback">
+                        <!-- <div *ngIf="fieldNotValid('password') && password.errors.minlength" class="invalid-feedback">
                           <strong class="ml-3">
                             Su contraseña debe tener al menos 4 caracteres.
                           </strong>
-                        </div>
+                        </div> -->
                     </div>
 
 

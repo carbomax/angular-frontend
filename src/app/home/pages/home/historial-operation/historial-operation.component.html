@@ -19,17 +19,6 @@
           </div>
           <div class="col-md-6">
 
-            <div class="input-group mb-3">
-              <select class="custom-select" name="orderStatusSearch" [(ngModel)]="orderStatusSearch"
-                id="inputGroupOrderStatus">
-                <option [value]="orderStatusClear">Todos</option>
-                <option value="paid">Pagada</option>
-                <option value="cancelled">Cancelada</option>
-              </select>
-              <div class="input-group-append">
-                <label class="input-group-text" for="inputGroupOrderStatus">Estado de la órden</label>
-              </div>
-            </div>
 
 
           </div>
@@ -42,7 +31,7 @@
               <div class="input-group">
                 <input class="form-control"
                 [formControl]="dateFromControl" [class.is-invalid]="dateFromControl.invalid"
-                placeholder="Fecha desde: yyyy-mm-dd" readonly  name="dp"
+                placeholder="Fecha desde: yyyy-mm-dd" name="dateFrom" readonly
                 (dateSelect)="onDateFromSelection($event)"
                 ngbDatepicker #dateFrom="ngbDatepicker" [maxDate]="dateToControl.value" >
                 <div class="input-group-append">
@@ -114,7 +103,7 @@
 
     <div
       class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
-      <h6 class="m-0 font-weight-bold text-primary">Órdenes</h6>
+      <h6 class="m-0 font-weight-bold text-primary">Operaciones</h6>
     </div>
   </div>
 
@@ -124,98 +113,103 @@
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>#</th>
+            <th>Seller</th>
+            <th>Nº.Orden</th>
+            <th>Creador</th>
+            <th>Fecha</th>
+            <th>Comprador</th>
+            <th>SKU</th>
+            <th>Cantidad</th>
+            <th>Descripción</th>
+            <th>Observación</th>
             <th>Estado</th>
-            <th>Cliente</th>
-            <th>Fecha creación</th>
-            <th>Monto</th>
-            <th>Factura</th>
-            <th>Salida del almacén</th>
-            <!-- <th>Acciones</th> -->
+            <th>Etiqueta</th>
+            <th>Envio</th>
+            <th>Nº.Factura</th>
+            <th>Entregado</th>
+            <th>Imprimir</th>
           </tr>
         </thead>
 
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
-            <td class="text-right">{{ orderByDesc(i, orderPage.content.length )}}</td>
-            <td>
-
-              <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
-                role="alert">
-                <i class="far fa-times-circle"></i> Cancelada
-              </div>
-
-              <div *ngIf="item.status === 'paid'" style="padding: 0.25rem 1.25rem;"
-                class="alert alert-sm alert-success  mb-0" role="alert">
-                <i class="far fa-check-circle"></i> Pagada
-              </div>
-
-            </td>
-
+            <td><label class="w8">{{ item.seller.firstsName }}</label></td>
+            <td class="text-right">{{ item.id }}</td>
+            <td><label class="w8">{{ item.operatorNameBss }}</label></td>
+            <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
             <td><label class="w10">{{ item.buyer.firstName }}</label></td>
-            <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
+            <td>{{ item.items[0].sellerSku }}</td>
+            <td class="text-right">{{ item.items[0].quantity }}</td>
             <td>
-              <div class="dropdown no-arrow">
-                <strong>Total:</strong> {{ item.totalAmount + item.amountTaxes + item.shipment.baseCost }}
-                <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
-                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                    class="fas fa-eye" ngbTooltip="Ver más detalles"></i>
-                </span>
-                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                  aria-labelledby="dropdownMenuLink">
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Venta:</span> <strong>{{ item.totalAmount }}</strong>
-                    </li>
-                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Impuestos:</span> <strong>{{ item.amountTaxes }}</strong>
-                    </li>
-                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Envío:</span> <strong>{{ item.shipment.baseCost }}</strong>
-                    </li>
-                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <strong>Total:</strong>
-                      <strong>{{ item.totalAmount + item.amountTaxes + item.shipment.baseCost }}</strong>
-                    </li>
-                  </ul>
-                </div>
-              </div>
+              <label  [ngbTooltip]="item.items[0].title" class="w12">{{ item.items[0].title |slice:0:60}}</label>
             </td>
-            <td>
-              <p *ngIf="item.invoiceNumberBss == 0 || item.invoiceNumberBss == null"> Ninguna </p>
-              <p *ngIf="item.invoiceNumberBss !== null && item.invoiceNumberBss > 0"> {{ item.invoiceNumberBss }} </p>
-
-            </td>
+            <td><label class="w8">{{ item.observationBss }}</label></td>
 
             <td>
+              <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-sm alert-danger  mb-0" role="alert" ngbTooltip="Órden cancelada">
+              <i class="far fa-times-circle mt-1 mr-1"></i><span> Cancelada</span>
+            </div>
 
-              <div *ngIf="item.operatorBusinessStatus === 0"
-                style="padding: 0.25rem 1.25rem;" class="d-flex flex-nowrap flex-row alert alert-sm alert-info  mb-0"
-                role="alert" ngbTooltip="El producto está en proceso de empaque">
-                <i class="far fa-check-circle  mt-1 mr-1"></i><span>En proceso</span>
+            <div *ngIf="item.status === 'paid'" style="padding: 0.25rem 1.25rem;"
+              class="d-flex flex-nowrap flex-row alert alert-success mb-0"
+                role="alert" ngbTooltip="Órden pagada">
+                <i class="far fa-check-circle mt-1 mr-1"></i><span> Pagada</span>
               </div>
-
-
-              <div *ngIf="item.operatorBusinessStatus === 1" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-danger  mb-0" role="alert"
-                ngbTooltip="El producto no fue entregado">
-                <i class="far fa-check-circle  mt-1 mr-1"></i><span>No entregado</span>
-              </div>
-
-              <div *ngIf="item.operatorBusinessStatus === 2" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert"
-                ngbTooltip="El producto fue entregado al carrier">
-                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Entregada</span>
-              </div>
-
             </td>
 
-            <!-- <td class="text-center">
-              <button ngbTooltip="Ver detalles" class="btn btn-outline-primary">
-                <i class="far fa-eye"></i>
-              </button>
-            </td> -->
+           <td>
+            <select disabled
+            (change)="changeTag(item)"
+            [style]="getCarrierStyleInitialTag(item.tagBss)"
+            class="custom-select w5" name="tagBss"
+            [(ngModel)]="item.tagBss"
+            [id]="i + 'asd'">
+            <option (click)="getCarrierStyleTag(i + 'asd', 0)" value="0">NO</option>
+            <option (click)="getCarrierStyleTag(i + 'asd', 1)" value="1">SI</option>
+          </select>
+           </td>
 
+          <td >
+            <select disabled
+            (change)="changeCarrier(item)"
+            [style]="getCarrierStyleInitial(item.carrier.id)"
+            class="custom-select w8" name="carrier"
+            [(ngModel)]="item.carrier.id"
+            [id]="'carrierselect' + i">
+            <option (click)="getCarrierStyle('carrierselect' + i, 0)" value="0">NINGUNO</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 1)" value="1">UES</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 2)" value="2">DA</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 3)" value="3">MIRTRANS</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 4)" value="4">CERRO</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 5)" value="5">FLEX</option>
+            <option (click)="getCarrierStyle('carrierselect' + i, 6)" value="6">AGENCIA</option>
+          </select>
+          </td>
+          <td>
+            <div class="input-group">
+              <input disabled dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w5" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
+            </div>
+          </td>
+
+          <td>
+            <select
+            (change)="updateOperatorBusinessStatus(item)"
+            [style]="getOperatorBssToOrderStyleInitial(item.operatorBusinessStatus)"
+            class="custom-select w10" name="operatorBusinessStatus"
+            [(ngModel)]="item.operatorBusinessStatus"
+            [id]="i + 'op'">
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 0)" value="0">EN PROCESO</option>
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 1)" value="1">NO ENTREGADO</option>
+            <option (click)="getOperatorBssToOrderStyle(i + 'op', 2)" value="2">ENTREGADO</option>
+          </select>
+           </td>
+
+          <td class="text-center">
+           <button ngbTooltip="Imprimir órder" class="btn btn-outline-primary" (click)="getInvoice(item)">
+            <i class="fas fa-print"></i>
+           </button>
+          </td>
           </tr>
 
 
@@ -257,7 +251,7 @@
 
         </div>
 
-        <div class="row justify-content-center" *ngIf="(orderPage.totalElements === 0 && !emptySearch) || errorOrders ">
+        <div class="row justify-content-center" *ngIf="orderPage.totalElements === 0 && !emptySearch">
 
           <div class="alert alert-info col-8 text-center" role="alert">
             <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay órdenes para mostrar
@@ -270,5 +264,5 @@
 
     </div>
 
-    <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando órdenes...'">
+     <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando operaciones...'">
     </app-global-loading>

@@ -46,8 +46,7 @@ public registerForm: FormGroup;
         Validators.email
       ]),
       password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
+        Validators.required
       ]),
       remember: new FormControl(false)
     });
