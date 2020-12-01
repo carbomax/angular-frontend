@@ -46,10 +46,12 @@ export class MeliPublicationsService {
 
     return this.http.get<any[]>(params).pipe(map((resp: any[]) => {  
       resp.forEach(element => {
-        let meliCategory = new MeliCategory();
-        meliCategory.id = element.id;
-        meliCategory.name = element.name;
-        meliCategoryList.push(meliCategory);
+          if(element.id !== "MLU1953") { // MLU1953 = "Otras categorias"
+          let meliCategory = new MeliCategory();
+          meliCategory.id = element.id;
+          meliCategory.name = element.name;
+          meliCategoryList.push(meliCategory);
+        }
       });   
       return meliCategoryList;
     }));     
@@ -149,8 +151,8 @@ export class MeliPublicationsService {
         if(attributesRequired.length !== 0){
           attributesRequired.forEach( f => { attributes.push(new Attributes( f.id, null, "N/A"));});
       }
-
-        let item = new ItemMeliRequest(element.name, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
+        let tittle = element.name.length > 60 ? element.name.substring(0,60) : element.name; 
+        let item = new ItemMeliRequest(tittle, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
         "gold_premium", element.description, imagesList, attributes, null, shipping, warranty ? saleTerms : null, ["immediate_payment"]);        
         itemCustomList.push(new ItemCustomModel(item, element.id, element.sku, element.images, element.price_costUYU,
           element.price_costUSD, element.priceUYU));  
@@ -211,7 +213,8 @@ export class MeliPublicationsService {
             attributesRequired.forEach( f => { attributes.push(new Attributes( f.id, null, "N/A"));});
         }
 
-        let item = new ItemMeliRequest(productSelected.productName, idCategory, priceFinal, "UYU", productSelected.currentStock.toString(), "buy_it_now", "new",
+        let tittle = productSelected.productName.length > 60 ? productSelected.productName.substring(0,60) : productSelected.productName; 
+        let item = new ItemMeliRequest(tittle, idCategory, priceFinal, "UYU", productSelected.currentStock.toString(), "buy_it_now", "new",
         "gold_premium", productSelected.description, imagesList, attributes, null, shipping, warranty ? saleTerms : null, ["immediate_payment"]);        
         itemCustomList.push(new ItemCustomModel(item, productSelected.id, productSelected.sku, productSelected.images, productSelected.price_costUYU,
           productSelected.price_costUSD, productSelected.price));          
@@ -240,7 +243,10 @@ export class MeliPublicationsService {
               /*Por Ciento*/
               priceFinal = Math.round((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
             }
-            productPublished.pricePublication = priceFinal.toString();        
+            productPublished.pricePublication = priceFinal.toString(); 
+            
+            let tittle = productPublished.title.length > 60 ? productPublished.title.substring(0,60) : productPublished.title; 
+            productPublished.title = tittle;
       });
 
       return this.http.put<any>(params, productPublished);

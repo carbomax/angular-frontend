@@ -832,15 +832,29 @@ export class PublishMyproductsComponent implements OnInit {
     if(!allTitle){
       Swal.fire({
         position: 'top-end',
-        title: 'Título o Nombre del producto no válido',
-        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        title: 'Título o Nombre del producto demasiado extenso',
+        text: 'Mercado Libre no permite publicar produtos con título mayor de 60 caracteres, de no editarse, la aplicación acortará el título al tamaño permitido',
         icon: 'info',
-        showConfirmButton: false,
-        timer: 5000
+        showConfirmButton: true,
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#28a745',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',        
+        cancelButtonColor: '#d33'        
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.callPublishProductsService();
+        }
       })
     }else{
-      // llamada al servicio Publicar
-      this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+      this.callPublishProductsService();
+    }
+
+  }
+
+  callPublishProductsService(){
+    // llamada al servicio Publicar
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
       for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
         if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
           this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
@@ -862,7 +876,5 @@ export class PublishMyproductsComponent implements OnInit {
           }
         });
     }
-
-  }
 
 }
