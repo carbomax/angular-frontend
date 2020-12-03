@@ -526,98 +526,122 @@ export class EditProductsPublishedComponent implements OnInit {
   }
 
   publishProducts(){ 
-    
     if(this.productMeliPublished.title.length > 60){
       Swal.fire({
         position: 'top-end',
-        title: 'Título o Nombre del producto no válido',
-        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        title: 'Título o Nombre del producto demasiado extenso',
+        text: 'Mercado Libre no permite publicar produtos con título mayor de 60 caracteres, de no editarse, la aplicación acortará el título al tamaño permitido',
         icon: 'info',
-        showConfirmButton: false,
-        timer: 5000      
-      })     
-    }else{
-      Swal.fire({
-        position: 'top-end',
-        icon: 'info',
-        title: `Producto en publicación`,
-        text: `El producto está siendo publicado`,
-        showConfirmButton: false,
-        timer: 5000
+        showConfirmButton: true,
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#28a745',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',        
+        cancelButtonColor: '#d33'        
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.callPublishProductsService();
+        }
       })
-      .then((result) => {
-        this.router.navigate(['/published-products']);
-      }); 
-    
-        let editableProduct =  new EditableProductModel();
-        editableProduct.id = this.productMeliPublished.mlPublicationId;
-        editableProduct.currentStock = this.productMeliPublished.currentStock;
-        editableProduct.description = this.productMeliPublished.description;
-        editableProduct.images = this.productMeliPublished.images;
-        editableProduct.price = +this.productMeliPublished.pricePublication;
-        editableProduct.price_costUYU = this.productMeliPublished.priceCostUYU;
-        editableProduct.price_costUSD = this.productMeliPublished.priceCostUSD;
-        editableProduct.productName = this.productMeliPublished.title;
-        editableProduct.sku = this.productMeliPublished.sku;
-        editableProduct.states = 1;    
-  
-    // llamada al servicio Publicar
-     this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
-     this.clearAll();
+    }else{
+      this.callPublishProductsService();
     }
   }
 
-  updateProductPublish(){   
+  callPublishProductsService(){
+    Swal.fire({
+      position: 'top-end',
+      icon: 'info',
+      title: `Producto en publicación`,
+      text: `El producto está siendo publicado`,
+      showConfirmButton: false,
+      timer: 5000
+    })
+    .then((result) => {
+      this.router.navigate(['/published-products']);
+    }); 
+  
+      let editableProduct =  new EditableProductModel();
+      editableProduct.id = this.productMeliPublished.mlPublicationId;
+      editableProduct.currentStock = this.productMeliPublished.currentStock;
+      editableProduct.description = this.productMeliPublished.description;
+      editableProduct.images = this.productMeliPublished.images;
+      editableProduct.price = +this.productMeliPublished.pricePublication;
+      editableProduct.price_costUYU = this.productMeliPublished.priceCostUYU;
+      editableProduct.price_costUSD = this.productMeliPublished.priceCostUSD;
+      editableProduct.productName = this.productMeliPublished.title;
+      editableProduct.sku = this.productMeliPublished.sku;
+      editableProduct.states = 1;    
+
+  // llamada al servicio Publicar
+   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
+   this.clearAll();
+  }
+
+  updateProductPublish(){     
     if(this.productMeliPublished.title.length > 60){
       Swal.fire({
         position: 'top-end',
-        title: 'Título o Nombre del producto no válido',
-        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        title: 'Título o Nombre del producto demasiado extenso',
+        text: 'Mercado Libre no permite publicar produtos con título mayor de 60 caracteres, de no editarse, la aplicación acortará el título al tamaño permitido',
         icon: 'info',
-        showConfirmButton: false,
-        timer: 5000      
-      })     
-    }else{
-      this.textLoading = 'Actualizando publicación...';
-      this.loadingPublicationModal = true;
-      this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
-          if(product){// ver codigo del response
-            this.loadingPublicationModal = false;
-            this.productMeliPublished = product;
-            Swal.fire({
-              position: 'top-end',
-              icon: 'success',
-              title: `Satisfactorio`,
-              text: `La publicación ha sido actualizada satisfactoriamente`,
-              showConfirmButton: false,
-              timer: 5000
-            })          
-          }
-          else{
-            this.loadingPublicationModal = false;
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: `No actualizado`,
-              text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
-              showConfirmButton: false,
-              timer: 5000
-            }) 
-          }
-      }, (error: any) => {
-          if(error){
-            this.loadingPublicationModal = false;
-            Swal.fire({
-              position: 'top-end',
-              icon: 'error',
-              title: `No actualizado`,
-              text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
-              showConfirmButton: false,
-              timer: 5000
-            })   
-          }
+        showConfirmButton: true,
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#28a745',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',        
+        cancelButtonColor: '#d33'        
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.callUpdateProductPublishService();
+        }
       })
-    }    
+    }else{
+      this.callUpdateProductPublishService();
+    }
+
+  }
+
+  callUpdateProductPublishService(){
+    this.textLoading = 'Actualizando publicación...';
+    this.loadingPublicationModal = true;
+    this.meliPublicationsService.updateProductPublish(this.productMeliPublished, this.accountMarginsList, this.reloadConfig).subscribe(product => {
+        if(product){// ver codigo del response
+          this.loadingPublicationModal = false;
+          this.productMeliPublished = product;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `Satisfactorio`,
+            text: `La publicación ha sido actualizada satisfactoriamente`,
+            showConfirmButton: false,
+            timer: 5000
+          })          
+        }
+        else{
+          this.loadingPublicationModal = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `No actualizado`,
+            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+            showConfirmButton: false,
+            timer: 5000
+          }) 
+        }
+    }, (error: any) => {
+        if(error){
+          this.loadingPublicationModal = false;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `No actualizado`,
+            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+            showConfirmButton: false,
+            timer: 5000
+          })   
+        }
+    })
   }
 
   getPath(pathList: string[]){
