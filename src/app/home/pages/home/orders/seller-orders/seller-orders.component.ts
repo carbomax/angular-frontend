@@ -3,6 +3,7 @@ import { MeliOrdersService } from '../../../../services/meli-orders.service';
 import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
+import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
 
 
 
@@ -51,6 +52,24 @@ export class SellerOrdersComponent implements OnInit {
     this.loadOrders();
   }
 
+
+  getTotal(item: MeliOrders): number{
+
+    let totalAmount = 0;
+    let amountTaxes = 0;
+    let baseCost = 0;
+
+    if(item){
+       totalAmount = item.totalAmount;
+       amountTaxes = item.amountTaxes;
+       if(item.shipment){
+         baseCost = item.shipment.baseCost;
+       }
+    }
+
+    return totalAmount + amountTaxes + baseCost;
+
+  }
   orderByDesc(i, size): number{
     return size - i;
   }
