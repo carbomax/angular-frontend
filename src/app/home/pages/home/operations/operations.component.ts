@@ -112,6 +112,7 @@ export class OperationsComponent implements OnInit {
   loadOrders(): void {
     this.buildDateFilter();
     this.meliOperationOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo, this.operatorBusinesStatus).subscribe((resp: OrderPage) => {
+      console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
       } else { this.emptySearch = false; }
@@ -258,6 +259,19 @@ export class OperationsComponent implements OnInit {
       text: 'La etiqueta de esta órden no está disponible en estos momentos!',
       position: 'top-end'
     });
+
+    const notificationInfo = () => Swal.fire({
+      icon: 'info',
+      title: 'Etiqueta',
+      text: 'Esta órden no contiene etiqueta porque el producto no fue vendido por mercado envío!',
+      position: 'top-end'
+    });
+
+    if(!order.shipment){
+      notificationInfo();
+      return;
+    }
+
     if (order.shippingId > 0) {
       this.meliOperationOrderService.getInvoice(order)
         .subscribe((url: any) => {

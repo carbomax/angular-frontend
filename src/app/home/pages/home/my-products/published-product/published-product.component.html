@@ -139,7 +139,7 @@
               </div>
             </td>
             <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images[0].photos" alt="Imagen">
+              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage" alt="Imagen">
             </td>
             <td  >
               <p [ngbTooltip]="product.title">
@@ -182,7 +182,7 @@
             <div *ngIf="product.status === 'under_review'" style="padding: 0.25rem 1.25rem;"
                 class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación bajo revisión">
                 <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>En revisión</span>
-                
+
               </div>
 
             </td>

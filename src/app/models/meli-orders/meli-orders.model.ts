@@ -4,15 +4,15 @@ export class MeliOrders {
   public status: string;
   public dateCreated: string;
   public dateClosed: string;
-  public totalAmount: number;
+  public totalAmount = 0;
   public currencyId: string;
-  public shippingId: 0;
   public seller: SellerOrder;
   public buyer: BuyerOrder;
   public payments: PaymentOrder[];
   public items: ItemOrder[];
   public amountTaxes = 0;
   public operatorBusinessStatus = 0;
+  public shippingId?: number;
   public invoiceNumberBss?: number;
   public operatorNameBss?: string;
   public descriptionBss?: string;
