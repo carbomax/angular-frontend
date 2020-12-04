@@ -305,7 +305,9 @@ export class EditProductsPublishedComponent implements OnInit {
       return;
     }
     const formData: FormData = new FormData();
-    formData.append('image', this.file, this.file.name);
+    let filename = 'IMG';   
+    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;        
+    formData.append('image', this.file, filename.trim());    
 
     this.productsStorageUserService.uploadImage(formData)
       .subscribe(resp => {  

@@ -58,8 +58,7 @@ export class PublishMyproductsComponent implements OnInit {
   public typeFamilySearch = '';
   public minValue = 0;
   public maxValue = 20000;
-
-  productsStorage: ProductCustom[];
+  
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
@@ -140,7 +139,7 @@ export class PublishMyproductsComponent implements OnInit {
       getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;       
         let countSelected = 0;
         console.log('result', this.pageProductsMeli)
         this.pageProductsMeli.itemsMeliGrid.forEach(element => {
@@ -148,6 +147,8 @@ export class PublishMyproductsComponent implements OnInit {
             if (element.id === select.id) {
               element.selected = true;
               countSelected++;
+              select.description = element.description;
+              select.images = element.images;
             }
           });
         });
@@ -347,8 +348,8 @@ export class PublishMyproductsComponent implements OnInit {
       })
     }
 
-    if (this.fileList.length !== 0) {
-      this.productStoreUserService.uploadImageSyn(this.fileList).then(data => {
+    if (this.fileList.length !== 0) {      
+      this.productStoreUserService.uploadImageSyn(this.fileList, this.productsSelected).then(data => {
         let resultList = data;
         resultList.forEach(element => {
           if (element.success === true) {
@@ -424,6 +425,18 @@ export class PublishMyproductsComponent implements OnInit {
 
     this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
       if (result.success === true) {
+        this.loadProductsPaginator(this.currentPage);
+       /* this.productsSelected.forEach(p => {
+          let exit: boolean = false;
+          let count = 0;
+          while(!exit && count < this.pageProductsMeli.itemsMeliGrid.length){
+              if(this.pageProductsMeli.itemsMeliGrid[count].sku === p.sku) {
+                  p = this.pageProductsMeli.itemsMeliGrid[count];                
+                  exit = true;
+              }
+              count++;
+          }
+        });*/
         this.closeActiveModalLoading();
         Swal.fire({
           position: 'top-end',

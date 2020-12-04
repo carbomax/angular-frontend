@@ -151,7 +151,7 @@ export class EditProductsComponent implements OnInit {
     this.id = +image.id;
     this.edit = true;
 
-    this.orderP = image.order;;
+    this.orderP = image.order;
     this.titleP = image.title;
     this.urlP = image.photos   
   }
@@ -239,9 +239,11 @@ export class EditProductsComponent implements OnInit {
       });     
       return;
     }
-    const formData: FormData = new FormData();
-    formData.append('image', this.file, this.file.name);
-
+    const formData: FormData = new FormData(); 
+    let filename = 'IMG';   
+    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;        
+    formData.append('image', this.file, filename.trim());
+    
     this.productsStorageUserService.uploadImage(formData)
       .subscribe(resp => {  
         if(resp.success === true) {   
