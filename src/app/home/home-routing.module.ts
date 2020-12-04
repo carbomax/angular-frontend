@@ -43,7 +43,7 @@ const routes: Routes = [
       { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard], data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Cuentas Mercado Libre' } },
       { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Órdenes' }},
       { path: 'operations', component: OperationsComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Operaciones' }},
-      { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Historico-Operaciones' }},
+      { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Histórico-Operaciones' }},
       { path: '', redirectTo: 'home', pathMatch: 'full' }
     ]
   }
