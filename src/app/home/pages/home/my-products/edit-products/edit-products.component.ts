@@ -240,7 +240,7 @@ export class EditProductsComponent implements OnInit {
       return;
     }
     const formData: FormData = new FormData(); 
-    let filename = 'IMG';   
+    let filename = this.editableProduct.sku + "_";   
     filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;        
     formData.append('image', this.file, filename.trim());
     
