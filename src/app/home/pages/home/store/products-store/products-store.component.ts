@@ -60,9 +60,9 @@ export class ProductsStoreComponent implements OnInit {
   currentPage = 1;
   selectedPage = 0;
   page = 0;
-  size = 5;
+  size = 15;
   checkAll = false;
-  sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
+  sizes: [{ numer: 15 }, { numer: 30 }, { numer: 50 }, { numer: 75 }, { numer: 100 }];
 
   // Range price filter
   options: Options = {

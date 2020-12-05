@@ -74,7 +74,7 @@ export class PublishMyproductsComponent implements OnInit {
   currentPage: number = 1;
   selectedPage = 0;
   page = 0;
-  size: number = 5;
+  size: number = 15;
   checkAll = false;
 
   // Range price filter

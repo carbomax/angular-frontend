@@ -40,7 +40,7 @@ export class PublishedProductComponent implements OnInit {
   // Paginator
 
   page = 1;
-  size = 5;
+  size = 15;
   checkAll = false;
   public changeStatusPublishType: ChangeStatusPublicationType;
 

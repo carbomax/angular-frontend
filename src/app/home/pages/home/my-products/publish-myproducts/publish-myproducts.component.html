@@ -170,14 +170,15 @@
       </div>
 
       <div class="row justify-content-around" *ngIf="pageProductsMeli.totalElements > 0">
-        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalElements" [(page)]="currentPage" [pageSize]="size"  [boundaryLinks]="true"></ngb-pagination>
+        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalElements" [(page)]="currentPage" [pageSize]="size" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
 
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="15">15</option>
             <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
         </select>
         </div>
 
