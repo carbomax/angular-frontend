@@ -626,7 +626,7 @@ export class EditProductsPublishedComponent implements OnInit {
             position: 'top-end',
             icon: 'error',
             title: `No actualizado`,
-            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+            text: `La publicación no ha sido actualizada. Sincronice el producto con Mercado Libre y vuelva a intentarlo`,
             showConfirmButton: false,
             timer: 5000
           }) 
@@ -638,7 +638,7 @@ export class EditProductsPublishedComponent implements OnInit {
             position: 'top-end',
             icon: 'error',
             title: `No actualizado`,
-            text: `La publicación no ha sido actualizada. Vuelva a intentarlo o contacte con el administrador`,
+            text: `La publicación no ha sido actualizada. Sincronice el producto con Mercado Libre y vuelva a intentarlo`,
             showConfirmButton: false,
             timer: 5000
           })   
