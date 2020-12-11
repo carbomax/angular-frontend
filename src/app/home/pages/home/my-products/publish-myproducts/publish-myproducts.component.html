@@ -45,7 +45,7 @@
                         {{family.description}} </option>
                     </select>
                   </div>
-                </div>               
+                </div>
               </div>
             </div>
           </div>
@@ -113,7 +113,7 @@
           </thead>
 
           <tbody *ngIf="!loading">
-              <tr *ngFor="let product of pageProductsMeli.itemsMeliGrid">
+              <tr *ngFor="let product of pageProductsMeli.itemsMeliGrid" [ngClass]="{'special-paused': product.specialPaused === 1}">
                 <td>
                   <div class="custom-control custom-checkbox small">
                     <input type="checkbox" [ngModel]="product.selected" #checkP (change)="selectProduct(product)"
@@ -159,7 +159,6 @@
                       </div>
                 </td>
               </tr>
-
           </tbody>
         </table>
 
