@@ -58,7 +58,7 @@ export class PublishMyproductsComponent implements OnInit {
   public typeFamilySearch = '';
   public minValue = 0;
   public maxValue = 20000;
-  
+
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
@@ -111,7 +111,7 @@ export class PublishMyproductsComponent implements OnInit {
   initialMeliAccounts: MeliAccount[];
   account_margin: AccountMarginModel;
   accountMarginsList: AccountMarginModel[];
-  marginsList: Margin[];  
+  marginsList: Margin[];
   margin: number = -1;
   meliAccount: number = -1;
   lastCategorySelected: string = '-1';
@@ -139,7 +139,7 @@ export class PublishMyproductsComponent implements OnInit {
       getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
       .subscribe(pageItemCustomGrid => {
-        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;       
+        this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         let countSelected = 0;
         console.log('result', this.pageProductsMeli)
         this.pageProductsMeli.itemsMeliGrid.forEach(element => {
@@ -208,19 +208,21 @@ export class PublishMyproductsComponent implements OnInit {
     this.checkAll = !this.checkAll;
 
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-      element.selected = this.checkAll;
-      if (element.selected === true) {
-        let position1 = -1;
-        this.productsSelected.forEach(pro => { if (pro.id === element.id) { position1 = this.productsSelected.indexOf(pro); } });
-        if (position1 === -1) {
-          this.productsSelected.push(element);
+      if(element.specialPaused !== 1){
+        element.selected = this.checkAll;
+        if (element.selected === true) {
+          let position1 = -1;
+          this.productsSelected.forEach(pro => { if (pro.id === element.id) { position1 = this.productsSelected.indexOf(pro); } });
+          if (position1 === -1) {
+            this.productsSelected.push(element);
+          }
         }
-      }
-      else {
-        let position = -1;
-        this.productsSelected.forEach(pro => { if (pro.id === element.id) { position = this.productsSelected.indexOf(pro); } });
-        if (position !== -1) {
-          this.productsSelected.splice(position, 1);
+        else {
+          let position = -1;
+          this.productsSelected.forEach(pro => { if (pro.id === element.id) { position = this.productsSelected.indexOf(pro); } });
+          if (position !== -1) {
+            this.productsSelected.splice(position, 1);
+          }
         }
       }
     });
@@ -348,7 +350,7 @@ export class PublishMyproductsComponent implements OnInit {
       })
     }
 
-    if (this.fileList.length !== 0) {      
+    if (this.fileList.length !== 0) {
       this.productStoreUserService.uploadImageSyn(this.fileList, this.productsSelected).then(data => {
         let resultList = data;
         resultList.forEach(element => {
@@ -431,7 +433,7 @@ export class PublishMyproductsComponent implements OnInit {
           let count = 0;
           while(!exit && count < this.pageProductsMeli.itemsMeliGrid.length){
               if(this.pageProductsMeli.itemsMeliGrid[count].sku === p.sku) {
-                  p = this.pageProductsMeli.itemsMeliGrid[count];                
+                  p = this.pageProductsMeli.itemsMeliGrid[count];
                   exit = true;
               }
               count++;
@@ -489,7 +491,7 @@ export class PublishMyproductsComponent implements OnInit {
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
         this.loadingModalDelete = false;
-        this.loadProductsPaginator(this.currentPage);        
+        this.loadProductsPaginator(this.currentPage);
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -560,12 +562,12 @@ export class PublishMyproductsComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.productToDelete = product;
-        this.loadingDeleteProduct = true;     
+        this.loadingDeleteProduct = true;
         this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
         this.loadingDeleteProduct = false;
         //this.loadingModalDelete = false;
-        this.loadProductsPaginator(this.currentPage);  
+        this.loadProductsPaginator(this.currentPage);
         this.productToDelete = null;
         Swal.fire({
           position: 'top-end',
@@ -769,13 +771,13 @@ export class PublishMyproductsComponent implements OnInit {
           text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
           icon: 'info',
           showCancelButton: true,
-          confirmButtonColor: '#3085d6',          
-          confirmButtonText: 'Entendido!'              
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
         })
       }else{
         accountMargin.accountName = account.businessName;
         accountMargin.idAccount = account.id;
-  
+
         if (this.margin !== -1) {
           var margin = this.marginsList.find(element => element.id == this.margin);
           accountMargin.idMargin = margin.id;
@@ -791,7 +793,7 @@ export class PublishMyproductsComponent implements OnInit {
         this.meliAccountsList.splice(index, 1);
         this.closeModalMargin();
       }
-      
+
     }
   }
 
@@ -852,8 +854,8 @@ export class PublishMyproductsComponent implements OnInit {
         confirmButtonText: 'Continuar',
         confirmButtonColor: '#28a745',
         showCancelButton: true,
-        cancelButtonText: 'Cancelar',        
-        cancelButtonColor: '#d33'        
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#d33'
       }).then((result) => {
         if (result.isConfirmed) {
           this.callPublishProductsService();
@@ -882,7 +884,7 @@ export class PublishMyproductsComponent implements OnInit {
         text: `Los productos están siendo publicados`,
         showConfirmButton: false,
         timer: 5000
-      }).then(() => {        
+      }).then(() => {
         //this.checkP.nativeElement.checked = 0;
           if(this.pageProductsMeli.itemsMeliGrid.length === 0){
             this.loadProductsPaginator(1);

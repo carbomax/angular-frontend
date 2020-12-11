@@ -182,8 +182,17 @@
               <div *ngIf="product.status === 'under_review'" style="padding: 0.25rem 1.25rem;"
                   class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación bajo revisión">
                   <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>En revisión</span>
-
                 </div>
+
+              <div *ngIf="product.status === 'inactive'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación inactiva">
+                <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>Inactivo</span>
+              </div>
+
+              <div *ngIf="product.status === 'payment required'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación requerida de pago">
+                <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>requerido de pago</span>
+              </div>
 
               </td>
               <td>UYU <strong>{{product.pricePublication }}</strong></td>
