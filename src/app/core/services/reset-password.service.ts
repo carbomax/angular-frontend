@@ -22,4 +22,13 @@ export class ResetPasswordService {
     return this.http.get<Boolean>( `${this.URL_USER}/reset/valid-token-by-reset-password?token=${token}`);
   }
 
+  isUserEnabledByToken(token: string): Observable<Boolean>{
+    return this.http.get<Boolean>( `${this.URL_USER}/reset/user-enabled-by-token?token=${token}`);
+  }
+
+  changePassword(token: string, newPassword: string){
+    const resetPassword = { token, newPassword };
+    return this.http.post( `${this.URL_USER}/reset/change-password`, resetPassword);
+  }
+
 }
