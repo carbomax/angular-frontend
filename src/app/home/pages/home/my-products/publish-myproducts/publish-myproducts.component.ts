@@ -38,6 +38,7 @@ export class PublishMyproductsComponent implements OnInit {
   @ViewChild('checkP') checkP;
   @ViewChild('closeMargin') closeMargin;
   @ViewChild('closePublishModal') closePublishModal;
+  @ViewChild('file') file;
 
   //Loading Modal
   loadingModal = false;
@@ -95,7 +96,6 @@ export class PublishMyproductsComponent implements OnInit {
 
   //Variables from Add Common Data Modal
   message: string;
-  file: any;
   fileList: any[];
   imagePath: string;
   imgURL: any;
@@ -629,14 +629,14 @@ export class PublishMyproductsComponent implements OnInit {
   /* ************* Modal View Upload Images ********** */
   preview(files) {
     if (files.length === 0) {
-      this.file = null;
+      this.file.nativeElement.value = "";
       this.message = "Archivo inválido";
       return;
     }
 
     var mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      this.file = null;
+      this.file.nativeElement.value = "";
       this.message = "El archivo no es una imagen.";
       return;
     }
@@ -699,6 +699,7 @@ export class PublishMyproductsComponent implements OnInit {
 
   clearAllImage() {
     this.message = "";
+    this.file.nativeElement.value = "";
     this.fileList = [];
     this.imagesList = [];
     this.imageStoreList = [];
@@ -876,6 +877,7 @@ export class PublishMyproductsComponent implements OnInit {
           i--;
         }
       }
+      this.productsSelected = [];
       this.closeModalPublish();
       Swal.fire({
         position: 'top-end',
