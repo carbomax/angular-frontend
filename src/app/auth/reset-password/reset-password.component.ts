@@ -15,16 +15,13 @@ declare function initializePlugin();
 })
 export class ResetPasswordComponent implements OnInit {
 
-  public user: User;
-  public badCredentials = false;
-  public error500 = false;
-
   public loading = false;
   public loginIntoText = 'Entrar';
 
   public userEnabled = true;
 
   public resultChangePassword = '';
+  public loadingButton = false;
 
 
 
@@ -35,7 +32,6 @@ export class ResetPasswordComponent implements OnInit {
   public registerForm: FormGroup;
   constructor(public router: Router, public activateRouter: ActivatedRoute,
     public authService: AuthService, public resetPasswordService: ResetPasswordService) {
-    this.initialize();
     this.activateRouter.queryParamMap.subscribe((resp: any) => {
       this.userEnabled = true;
       if (resp.params.token) {
@@ -81,6 +77,7 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   changePassword() {
+    this.loadingButton = true;
     this.resetPasswordService.changePassword(localStorage.getItem('resetToken'), this.registerForm.get('password').value)
       .subscribe((resp: any) => {
         console.log(resp)
@@ -90,6 +87,7 @@ export class ResetPasswordComponent implements OnInit {
         }
         if (resp.userNotEnabled) {
           this.userEnabled = false;
+          this.loadingButton = false;
           return;
         }
 
@@ -100,7 +98,10 @@ export class ResetPasswordComponent implements OnInit {
         if (resp.invalidToken) {
           this.notificationChangePassword('Su tiempo para cambiar la contraseña ha expirado!', 'warning');
         }
+        this.loadingButton = false;
 
+      }, error => {
+        this.notificationChangePassword('Malas noticias: Ha ocurrido un error, por favor contacte con el administrador!!', 'error');
       })
   }
 
@@ -138,9 +139,6 @@ export class ResetPasswordComponent implements OnInit {
     this.changePassword();
   }
 
-  initialize(): void {
-    this.user = new User();
-  }
 
   fieldNotValid(field: string): boolean {
     return (this.registerForm.get(field).invalid

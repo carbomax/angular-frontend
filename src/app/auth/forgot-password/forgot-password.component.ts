@@ -18,6 +18,8 @@ export class ForgotPasswordComponent implements OnInit {
 
   public sendEmailResponse = '';
 
+  public loadingButton = false;
+
   constructor(public resetPasswordService: ResetPasswordService) { }
 
   ngOnInit(): void {
@@ -28,6 +30,7 @@ export class ForgotPasswordComponent implements OnInit {
   }
 
   sendEmail(): void {
+    this.loadingButton = true;
     this.sendEmailResponse = '';
     console.log(this.forgotForm.get('email').value);
     const email = this.forgotForm.get('email').value;
@@ -36,29 +39,36 @@ export class ForgotPasswordComponent implements OnInit {
       console.log(resp)
       if(resp.sent){
         this.sendEmailResponse = 'sent';
+        this.loadingButton = false;
         return;
       }
       if(resp.userNotFound){
         this.sendEmailResponse = 'userNotFound';
+        this.loadingButton = false;
         return;
       }
 
       if(resp.userNotEnabled){
         this.sendEmailResponse = 'userNotEnabled';
+        this.loadingButton = false;
         return;
       }
       if(resp.tokenNotSaved){
         this.sendEmailResponse = 'tokenNotSaved';
+        this.loadingButton = false;
         return;
       }
       if(resp.error){
         this.sendEmailResponse = 'error';
+        this.loadingButton = false;
         return;
       }
+
 
     }, error => {
       console.log(error);
       this.sendEmailResponse = 'error';
+      this.loadingButton = false;
     })
   }
 
