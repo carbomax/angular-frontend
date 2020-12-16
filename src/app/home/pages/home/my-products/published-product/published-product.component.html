@@ -223,7 +223,7 @@
                     <a *ngIf="product.status === 'active' && product.specialPaused !== 1" class="dropdown-item pointer"
                       (click)="changeStatusPublication(product, 3)"><i class="far fa-pause-circle m-2 text-secondary"></i>
                       Pausar</a>
-                    <a *ngIf="product.status !== 'closed' && product.status !== 'fail'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="far fa-stop-circle text-secondary m-2"></i> Finalizar</a>
+                    <a *ngIf="product.status !== 'closed' && product.status !== 'fail' && product.status !== 'inactive'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="far fa-stop-circle text-secondary m-2"></i> Finalizar</a>
 
                     <a class="dropdown-item pointer" (click)="deletePublication(product)"><i
                       class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
