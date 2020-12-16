@@ -19,17 +19,6 @@
           </div>
           <div class="col-md-6">
 
-            <div class="input-group mb-3">
-              <select class="custom-select" name="orderStatusSearch" [(ngModel)]="orderStatusSearch"
-                id="inputGroupOrderStatus">
-                <option [value]="orderStatusClear">Todos</option>
-                <option value="paid">Pagada</option>
-                <option value="cancelled">Cancelada</option>
-              </select>
-              <div class="input-group-append">
-                <label class="input-group-text" for="inputGroupOrderStatus">Estado de la órden</label>
-              </div>
-            </div>
 
 
           </div>
@@ -146,33 +135,15 @@
           <tr *ngFor="let item of orderPage.content; let i = index ">
             <td><label class="w8">{{ item.seller.firstsName }}</label></td>
             <td class="text-right">{{ item.id }}</td>
-            <td>
-              <div class="input-group">
-                <input
-                [(ngModel)]="item.operatorNameBss"
-                (keyup.enter)="updateOperatorName(item)"
-                name="operatorNameBss"
-                type="text"
-                 class="form-control w12"
-                 placeholder="Nombre del operador...."
-                 aria-label="Operador" aria-describedby="basic-addon2">
-              </div>
-            </td>
+            <td><label class="w8">{{ item.operatorNameBss }}</label></td>
             <td>{{ item.dateCreated |date:'dd/MM/yyyy' }}</td>
             <td><label class="w10">{{ item.buyer.firstName }}</label></td>
             <td>{{ item.items[0].sellerSku }}</td>
             <td class="text-right">{{ item.items[0].quantity }}</td>
             <td>
-
               <label  [ngbTooltip]="item.items[0].title" class="w12">{{ item.items[0].title |slice:0:60}}</label>
-
             </td>
-            <td>
-              <div class="input-group ">
-                <textarea [ngbTooltip]="item.observationBss" [(ngModel)]="item.observationBss" name="observationBss" (keyup.enter)="updateObservation(item)"  rows="1" class="form-control w10" aria-label="Observación" placeholder="Observación...">{{ item.observationBss }}</textarea>
-              </div>
-
-             </td>
+            <td><label class="w8">{{ item.observationBss }}</label></td>
 
             <td>
               <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;"
@@ -188,7 +159,7 @@
             </td>
 
            <td>
-            <select
+            <select disabled
             (change)="changeTag(item)"
             [style]="getCarrierStyleInitialTag(item.tagBss)"
             class="custom-select w5" name="tagBss"
@@ -200,7 +171,7 @@
            </td>
 
           <td >
-            <select
+            <select disabled
             (change)="changeCarrier(item)"
             [style]="getCarrierStyleInitial(item.carrier.id)"
             class="custom-select w8" name="carrier"
@@ -217,7 +188,7 @@
           </td>
           <td>
             <div class="input-group">
-              <input dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w5" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
+              <input disabled dir="rtl" (keypress)="numberOnly($event)" type="text" (keyup.enter)="updateInvoice(item)" name="invoiceNumberBss"  [(ngModel)]="item.invoiceNumberBss" class="form-control w5" placeholder="Nº.Factura" aria-label="Nº.Factura" aria-describedby="basic-addon2">
             </div>
           </td>
 

@@ -60,9 +60,9 @@ export class ProductsStoreComponent implements OnInit {
   currentPage = 1;
   selectedPage = 0;
   page = 0;
-  size = 5;
+  size = 15;
   checkAll = false;
-  sizes: [{ numer: 5 }, { numer: 10 }, { numer: 20 }, { numer: 30 }];
+  sizes: [{ numer: 15 }, { numer: 30 }, { numer: 50 }, { numer: 75 }, { numer: 100 }];
 
   // Range price filter
   options: Options = {
@@ -269,6 +269,12 @@ export class ProductsStoreComponent implements OnInit {
             this.selectedProductR = resp;
             let p = this.selectedProductR.codeResult;
             if (this.selectedProductR.codeResult === ActionResult.DONE) {
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',
@@ -282,6 +288,12 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = element + ", " + exists_products;
               });
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;         
               Swal.fire({
                 position: 'top-end',
@@ -296,6 +308,12 @@ export class ProductsStoreComponent implements OnInit {
               this.selectedProductR.existingProducts.forEach(element => {
                 exists_products = exists_products + ", " + element;
               });
+              this.productsSelected = [];
+              this.pageProducts.itemsGrid.forEach(element => {
+                if(element.selected){element.selected = false;}
+              });
+              this.checkAll = false;
+              this.checkAllP.nativeElement.checked = 0;
               this.loadingStoringModal = false;            
               Swal.fire({
                 position: 'top-end',

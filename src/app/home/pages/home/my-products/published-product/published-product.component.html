@@ -16,14 +16,21 @@
               <label for="idSku">SKU:</label>
               <input type="text" class="form-control" name="skuSearch" id="idSku" [(ngModel)]="skuSearch" placeholder="Buscar por SKU...">
             </div>
+
+            <div class="form-group">
+              <label for="idTitle">Título:</label>
+              <input type="text" class="form-control" name="titleSearch" [(ngModel)]="titleSearch" id="idTitle"
+                placeholder="Buscar por título...">
+            </div>
+          </div>
+
+          <div class="col-md-6">
             <div class="form-group">
               <label for="idMeliSearch">Id Mercado Libre:</label>
               <input type="text" class="form-control" name="idMeliSearch" id="idMeliSearch" [(ngModel)]="idMeliSearch"
                 placeholder="Buscar por id de Mercado Libre...">
             </div>
-          </div>
 
-          <div class="col-md-6">
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -111,7 +118,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()"
                   class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
@@ -130,92 +137,100 @@
         </thead>
 
         <tbody *ngIf="pagePublised.totalElements > 0">
-          <tr *ngFor="let product of productsMeliPublished">
-            <td>
-              <div class="custom-control custom-checkbox small">
-                <input type="checkbox" [ngModel]="product.selected" (change)="selectProduct(product)"
-                  class="custom-control-input" [id]="'check' + product.id">
-                <label class="custom-control-label" [for]="'check' + product.id"></label>
-              </div>
-            </td>
-            <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images[0].photos" alt="Imagen">
-            </td>
-            <td  >
-              <p [ngbTooltip]="product.title">
-                {{ product.title |slice:0:45}}
-              </p>
-
-            </td>
-            <td>{{ product.lastUpgrade |date:'dd/MM/yyyy'}}</td>
-            <td><a [href]="product.permalink" target="_blanck">{{product.idPublicationMeli}}</a></td>
-            <td>{{ product.sku }}</td>
-            <td>
-              <div *ngIf="product.status === 'closed'" style="padding: 0.25rem 1.25rem;"
-              class="d-flex flex-nowrap flex-row alert alert-dark mb-0"
-              role="alert" ngbTooltip="Publicación finalizada">
-              <i class="far fa-stop-circle mt-1 mr-1"></i><span>Finalizada</span>
-            </div>
-
-              <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;"
-              class="d-flex flex-nowrap flex-row alert alert-danger mb-0"
-                role="alert" ngbTooltip="Publicación fallida">
-                <i class="far fa-times-circle mt-1 mr-1"></i><span>Fallida</span>
-              </div>
-
-              <div *ngIf="product.status === 'active'" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert" ngbTooltip="Publicación activa">
-                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Activa</span>
-              </div>
-
-              <div *ngIf="product.status === 'paused'" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación pausada">
-                <i class="far fa-pause-circle mt-1 mr-1"></i> <span>Pausada</span>
-
-              </div>
-
-              <div *ngIf="product.status === 'in process'" style="padding: 0.25rem 1.25rem;"
-              class="d-flex flex-nowrap flex-row alert alert-sm alert-info  mb-0" role="alert" ngbTooltip="Publicación en proceso">
-              <i class="far fa-play-circle mt-1 mr-1"></i> <span>En proceso</span>
-            </div>
-
-            <div *ngIf="product.status === 'under_review'" style="padding: 0.25rem 1.25rem;"
-                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación bajo revisión">
-                <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>En revisión</span>
-                
-              </div>
-
-            </td>
-            <td>UYU <strong>{{product.pricePublication }}</strong></td>
-            <td class="text-right"> {{ product.currentStock }} </td>
-            <td>{{ product.accountName }}</td>
-            <td class="text-right">
-              <div class="dropdown no-arrow">
-                <a class="dropdown-toggle btn btn-outline-primary actionbox" href="#" role="button"
-                  id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
-                </a>
-                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
-                  aria-labelledby="dropdownMenuLink">
-                  <a *ngIf="product.status === 'active' || product.status === 'fail'"  class="dropdown-item pointer" (click)="navegateToEdit(product)"><i
-                      class="far fa-eye m-2 text-info"></i> Ver</a>
-                  <a *ngIf="product.status === 'closed'"  class="dropdown-item pointer" (click)= "republishPublication(product)"><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
-                  <a *ngIf="product.status === 'paused'" class="dropdown-item pointer"
-                  (click)="changeStatusPublication(product, 4)"><i
-                      class="fas fa-play text-info m-2"></i>
-                    Reactivar</a>
-                  <a *ngIf="product.status === 'active'" class="dropdown-item pointer"
-                    (click)="changeStatusPublication(product, 3)"><i class="far fa-pause-circle m-2 text-secondary"></i>
-                    Pausar</a>
-                  <a *ngIf="product.status !== 'closed' && product.status !== 'fail'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="far fa-stop-circle text-secondary m-2"></i> Finalizar</a>
-
-                  <a class="dropdown-item pointer" (click)="deletePublication(product)"><i
-                    class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+            <tr *ngFor="let product of productsMeliPublished" [ngClass]="{'special-paused': product.specialPaused === 1}" >
+              <td>
+                <div class="custom-control custom-checkbox small">
+                  <input type="checkbox" [ngModel]="product.selected" (change)="selectProduct(product)"
+                    class="custom-control-input" [id]="'check' + product.id" [disabled]="product.specialPaused === 1">
+                  <label class="custom-control-label" [for]="'check' + product.id"></label>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+              <td>
+                <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage" alt="Imagen">
+              </td>
+              <td  >
+                <p [ngbTooltip]="product.title">
+                  {{ product.title |slice:0:45}}
+                </p>
 
+              </td>
+              <td>{{ product.lastUpgrade |date:'dd/MM/yyyy'}}</td>
+              <td><a [href]="product.permalink" target="_blanck">{{product.idPublicationMeli}}</a></td>
+              <td>{{ product.sku }}</td>
+              <td>
+                <div *ngIf="product.status === 'closed'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-dark mb-0"
+                role="alert" ngbTooltip="Publicación finalizada">
+                <i class="far fa-stop-circle mt-1 mr-1"></i><span>Finalizada</span>
+              </div>
+
+                <div *ngIf="product.status === 'fail'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-danger mb-0"
+                  role="alert" ngbTooltip="Publicación fallida">
+                  <i class="far fa-times-circle mt-1 mr-1"></i><span>Fallida</span>
+                </div>
+
+                <div *ngIf="product.status === 'active'" style="padding: 0.25rem 1.25rem;"
+                  class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert" ngbTooltip="Publicación activa">
+                  <i class="far fa-check-circle  mt-1 mr-1"></i><span>Activa</span>
+                </div>
+
+                <div *ngIf="product.status === 'paused'" style="padding: 0.25rem 1.25rem;"
+                  class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación pausada">
+                  <i class="far fa-pause-circle mt-1 mr-1"></i> <span>Pausada</span>
+
+                </div>
+
+                <div *ngIf="product.status === 'in process'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-info  mb-0" role="alert" ngbTooltip="Publicación en proceso">
+                <i class="far fa-play-circle mt-1 mr-1"></i> <span>En proceso</span>
+              </div>
+
+              <div *ngIf="product.status === 'under_review'" style="padding: 0.25rem 1.25rem;"
+                  class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación bajo revisión">
+                  <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>En revisión</span>
+                </div>
+
+              <div *ngIf="product.status === 'inactive'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación inactiva">
+                <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>Inactivo</span>
+              </div>
+
+              <div *ngIf="product.status === 'payment required'" style="padding: 0.25rem 1.25rem;"
+                class="d-flex flex-nowrap flex-row alert alert-sm alert-dark  mb-0" role="alert" ngbTooltip="Publicación requerida de pago">
+                <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>requerido de pago</span>
+              </div>
+
+              </td>
+              <td>UYU <strong>{{product.pricePublication }}</strong></td>
+              <td class="text-right"> {{ product.currentStock }} </td>
+              <td>{{ product.accountName }}</td>
+              <td class="text-right">
+                <div class="dropdown no-arrow">
+                  <a class="dropdown-toggle btn btn-outline-primary actionbox" href="#" role="button"
+                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v fa-sm fa-fw actionboxicon"></i>
+                  </a>
+                  <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+                    aria-labelledby="dropdownMenuLink">
+                    <a *ngIf="(product.status === 'active' || product.status === 'fail') && product.specialPaused !== 1"  class="dropdown-item pointer" (click)="navegateToEdit(product)"><i
+                        class="far fa-eye m-2 text-info"></i> Ver</a>
+                    <a *ngIf="product.status === 'closed' && product.specialPaused !== 1"  class="dropdown-item pointer" (click)= "republishPublication(product)" ><i class="fas fa-redo-alt text-primary m-2"></i> Republicar</a>
+                    <a *ngIf="product.status === 'paused' && product.specialPaused !== 1" class="dropdown-item pointer"
+                    (click)="changeStatusPublication(product, 4)"><i
+                        class="fas fa-play text-info m-2"></i>
+                      Reactivar</a>
+                    <a *ngIf="product.status === 'active' && product.specialPaused !== 1" class="dropdown-item pointer"
+                      (click)="changeStatusPublication(product, 3)"><i class="far fa-pause-circle m-2 text-secondary"></i>
+                      Pausar</a>
+                    <a *ngIf="product.status !== 'closed' && product.status !== 'fail' && product.status !== 'inactive'" class="dropdown-item pointer" (click)="changeStatusPublication(product, 5)" ><i class="far fa-stop-circle text-secondary m-2"></i> Finalizar</a>
+
+                    <a class="dropdown-item pointer" (click)="deletePublication(product)"><i
+                      class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
+                  </div>
+                </div>
+              </td>
+            </tr>
         </tbody>
       </table>
 
@@ -227,10 +242,11 @@
 
       <div class="form-group">
         <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
+          <option value="15">15</option>
           <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
         </select>
       </div>
 
@@ -241,7 +257,7 @@
 
     </div>
 
-    <div class="row justify-content-center" *ngIf="errorProducts && !emptySearch">
+    <div class="row justify-content-center" *ngIf="errorProducts">
 
       <div class="alert alert-info col-8 text-center" role="alert">
         <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay productos para mostrar

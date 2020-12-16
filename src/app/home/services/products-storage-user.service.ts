@@ -84,19 +84,23 @@ export class ProductsStorageUserService {
   }
 
   uploadImage(formData: FormData): Observable<any>{
-    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     return this.http.post<any>(params, formData);
   }
 
-  async uploadImageSyn(fileList: any[]): Promise<any>{
-    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file`;
+  async uploadImageSyn(fileList: any[], productsList: ProductCustom[]): Promise<any>{
+    const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     let resultList: any[] = [];
 
     for(let i=0; i<fileList.length; i++){
-      let formData: FormData = new FormData(); 
-      formData.append('image', fileList[i], fileList[i].name);
-      let result = await this.http.post<any>(params, formData).toPromise();
-      resultList.push(result); 
+     for(let j=0; j<productsList.length; j++){
+        let formData: FormData = new FormData(); 
+        let filename = productsList[j].sku + '_';   
+        filename = filename + this.getRandomInt(1,1000000) + "_" + fileList[i].name; 
+        formData.append('image', fileList[i], filename.trim());
+        let result = await this.http.post<any>(params, formData).toPromise();
+        resultList.push(result); 
+     } 
     }
     return resultList;
   }
@@ -153,4 +157,16 @@ export class ProductsStorageUserService {
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/delete-product/${product.id}`;
     return this.http.delete<boolean>(params);
   }
+
+  // Retorna un número aleatorio entre min (incluido) y max (excluido)
+  getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  // Retorna un entero aleatorio entre min (incluido) y max (excluido)
+  //¡Usando Math.round() te dará una distribución no-uniforme!
+  getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min)) + min;    
+  }
+
 }

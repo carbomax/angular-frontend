@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { MeliOrdersService } from '../../../../services/meli-orders.service';
-import { OrdersStatusEnum } from '../../../../../enums/orders.status.enum';
 import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { renderFlagCheckIfStmt } from '@angular/compiler/src/render3/view/template';
-import { ThrowStmt } from '@angular/compiler';
+import { FormControl } from '@angular/forms';
+import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
+
+
 
 
 @Component({
@@ -17,23 +17,21 @@ export class SellerOrdersComponent implements OnInit {
 
   @ViewChild('dateFrom') dateFromCalendar: ElementRef;
   @ViewChild('dateTo') dateToCalendar: ElementRef;
-
+  public dateFromControl: FormControl = new FormControl(null);
+  public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
   size = 5;
 
-  hoveredDate: NgbDate | null = null;
-
-  modelFrom: NgbDateStruct;
-  modelTo: NgbDateStruct;
   errorDateFrom = false;
   errorDateTo = false;
   today = this.calendar.getToday();
-  dateFrom = null;
-  dateTo = null;
+  dateFrom = 0;
+  dateTo = 99999999;
 
 
   // Search
+  loading = false;
   loadingSearch = false;
   loadingClear = false;
   emptySearch = false;
@@ -44,67 +42,99 @@ export class SellerOrdersComponent implements OnInit {
   orderStatus = [];
 
   constructor(public meliOrderService: MeliOrdersService,
-    private calendar: NgbCalendar,
-    public formatter: NgbDateParserFormatter) { }
+              private calendar: NgbCalendar,
+              public formatter: NgbDateParserFormatter) {
+
+  }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadOrders();
   }
 
 
+  getTotal(item: MeliOrders): number{
+
+    let totalAmount = 0;
+    let amountTaxes = 0;
+    let baseCost = 0;
+
+    if(item){
+       totalAmount = item.totalAmount;
+       amountTaxes = item.amountTaxes;
+       if(item.shipment){
+         baseCost = item.shipment.baseCost;
+       }
+    }
+
+    return totalAmount + amountTaxes + baseCost;
+
+  }
+  orderByDesc(i, size): number{
+    return size - i;
+  }
+
   searchOrders(): void {
 
-    console.log(this.modelFrom)
-    console.log(this.validateDates())
-    if (this.validateDates()) {
-      this.loadingSearch = true;
-      this.orderStatus = [];
-      this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
-      this.loadOrders();
-    }
+    this.loadingSearch = true;
+    this.errorDateFrom = false;
+    this.errorDateTo = false;
+    this.orderStatus = [];
+    this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
+    this.loadOrders();
+
 
   }
 
-  validateDates(): boolean {
-    if (this.modelFrom !== undefined && !this.modelFrom.year) {
-      this.errorDateFrom = true;
-    } else { this.errorDateFrom = false; }
+  onDateFromSelection(date: NgbDate): void {
 
-    if (this.modelTo !== undefined && !this.modelTo.year) {
-      this.errorDateTo = true;
-    } else { this.errorDateTo = false; }
+    if (!this.dateToControl.value) {
+      this.dateToControl.setValue({ year: date.year, month: date.month, day: date.day });
+    }
+  }
 
-    return !this.errorDateFrom && !this.errorDateTo;
+  onDateToSelection(date: NgbDate): void {
+    if (!this.dateFromControl.value) {
+      this.dateFromControl.setValue({ year: date.year, month: date.month, day: date.day });
+    }
   }
 
   clearOrders(): void {
+    this.errorDateFrom = false;
+    this.errorDateTo = false;
     this.loadingClear = true;
     this.orderStatus = [];
     this.orderStatusClear = '';
     this.orderStatusSearch = '';
     this.clientNameSearch = '';
-    this.modelFrom = null;
-    this.modelTo = null;
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
+    this.dateFrom = 0;
+    this.dateTo = 99999999;
     this.loadOrders();
   }
 
   selectChangeHandler(size): void {
+    this.loading = true;
     this.size = +size;
     console.log('size', this.size)
     this.loadOrders();
   }
 
   loadProductsPaginator(page): void {
+    this.loading = true;
     this.page = page;
     this.loadOrders();
   }
 
   loadOrders(): void {
     this.buildDateFilter();
-    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo).subscribe((resp: OrderPage) => {
+    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo, []).subscribe((resp: OrderPage) => {
+      console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
       } else { this.emptySearch = false; }
+      this.loading = false;
       this.orderPage = resp;
       this.loadingClear = false;
       this.loadingSearch = false;
@@ -114,20 +144,22 @@ export class SellerOrdersComponent implements OnInit {
       this.loadingClear = false;
       this.loadingSearch = false;
       this.emptySearch = false;
+      this.loading = false;
     });
   }
 
-  private buildDateFilter(): void{
-    if (this.modelFrom) {
+  private buildDateFilter(): void {
 
-      this.dateFrom = +`${this.modelFrom.year}${this.modelFrom.month}${this.modelFrom.day}`;
-    } else { this.dateFrom = null; }
+    if (this.dateFromControl.value !== null) {
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+    } else { this.dateFrom = 0 }
 
-    if (this.modelTo) {
+    if (this.dateToControl.value !== null) {
 
-      this.dateTo = +`${this.modelTo.year}${this.modelTo.month}${this.modelTo.day}`;
-    } else { this.dateTo = null; }
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+    } else { this.dateTo = 99999999 }
 
   }
+
 
 }

@@ -45,7 +45,7 @@
                         {{family.description}} </option>
                     </select>
                   </div>
-                </div>               
+                </div>
               </div>
             </div>
           </div>
@@ -96,7 +96,7 @@
             <tr>
               <th>
                 <div class="custom-control custom-checkbox ">
-                  <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()" class="custom-control-input"
+                  <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()" class="custom-control-input"
                     id="customCheck">
                   <label class="custom-control-label" for="customCheck"></label>
                 </div>
@@ -113,11 +113,11 @@
           </thead>
 
           <tbody *ngIf="!loading">
-              <tr *ngFor="let product of pageProductsMeli.itemsMeliGrid">
+              <tr *ngFor="let product of pageProductsMeli.itemsMeliGrid" [ngClass]="{'special-paused': product.specialPaused === 1}">
                 <td>
                   <div class="custom-control custom-checkbox small">
                     <input type="checkbox" [ngModel]="product.selected" #checkP (change)="selectProduct(product)"
-                      class="custom-control-input" [id]="'check' + product.sku">
+                      class="custom-control-input" [id]="'check' + product.sku" [disabled]="product.specialPaused === 1">
                     <label class="custom-control-label" [for]="'check' + product.sku"></label>
                   </div>
                 </td>
@@ -153,13 +153,12 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
                           aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item pointer" [routerLink]="['../edit-myproducts', product.id]"><i class="far fa-eye m-2 text-info"></i>Ver</a>
+                          <a *ngIf="product.specialPaused !== 1 && product.deleted !== 1" class="dropdown-item pointer" [routerLink]="['../edit-myproducts', product.id]"><i class="far fa-eye m-2 text-info"></i>Ver</a>
                           <a class="dropdown-item pointer" href="javascript:void(0);" (click)="deleteOneProduct(product)" ><i class="fas fa-trash m-2 text-danger"></i>Eliminar</a>
                         </div>
                       </div>
                 </td>
               </tr>
-
           </tbody>
         </table>
 
@@ -170,20 +169,21 @@
       </div>
 
       <div class="row justify-content-around" *ngIf="pageProductsMeli.totalElements > 0">
-        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalElements" [(page)]="currentPage" [pageSize]="size"  [boundaryLinks]="true"></ngb-pagination>
+        <ngb-pagination id="1" (pageChange)="loadProductsPaginator($event)"  [collectionSize]="pageProductsMeli.totalElements" [(page)]="currentPage" [pageSize]="size" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
 
         <div class="form-group">
           <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-            <option value="5">5</option>
-            <option value="10">10</option>
-            <option value="20">20</option>
+            <option value="15">15</option>
             <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="75">75</option>
+            <option value="100">100</option>
         </select>
         </div>
 
         <div   class="dataTables_info py-2 " id="dataTable_info" role="status"
           aria-live="polite">
-          <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProductsMeli.totalProducts}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
+          <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProductsMeli.totalElements}} registros <i *ngIf="loadPaginator"  class="fas fa-spin fa-spinner fa-2x ml-2"></i> </span>
 
         </div>
 
@@ -341,6 +341,7 @@
 
             </div>
           </div>
+
         </div>
        </div>
       <div class="modal-footer">

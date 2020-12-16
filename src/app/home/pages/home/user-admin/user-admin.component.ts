@@ -48,11 +48,11 @@ export class UserAdminComponent implements OnInit {
 
   constructor(public userService: UserService, public marketplaceService: MarketplaceService,
               public authService: AuthService, public router: Router) {
+
     this.initProfile();
   }
 
   ngOnInit(): void {
-
     this.loadProfiles();
     this.loadRoles();
     this.loadMarketplaces();
@@ -66,11 +66,12 @@ export class UserAdminComponent implements OnInit {
   }
 
   createOrUpdateUser(): void {
-    this.loading = true;
+
     this.errorUsers = false;
     this.seletedProfile.user.roles = this.selectedRoles;
     this.seletedProfile.marketplaces = this.selectedMarketplaces;
     if (this.seletedProfile.id == null) {
+      this.loading = true;
       console.log('Saving user..')
       this.seletedProfile.marketplaces = this.selectedMarketplaces;
       this.seletedProfile.user.roles = this.selectedRoles;
@@ -117,6 +118,7 @@ export class UserAdminComponent implements OnInit {
         }).then((result) => {
           if (result.isConfirmed) {
             this.changeMyself = true;
+            this.loading = true;
             this.updateProfile();
           } else {
             this.loading = false;
@@ -249,7 +251,9 @@ export class UserAdminComponent implements OnInit {
       this.profiles = [];
       profilesResp.forEach( p => {
         p.user.roles.forEach( r => {
-          if(r.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase() || r.name.toLowerCase() === RoleEnum.INVITED.toLowerCase()){
+          if(r.name.toLowerCase() === RoleEnum.ADMIN.toLowerCase() ||
+          r.name.toLowerCase() === RoleEnum.INVITED.toLowerCase() ||
+          r.name.toLowerCase() === RoleEnum.OPERATOR.toLowerCase()){
             this.profiles.push(p);
           }
         })

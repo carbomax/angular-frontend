@@ -112,7 +112,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()"
                   class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
@@ -182,20 +182,21 @@
     </div> -->
 
     <div class="row justify-content-around" *ngIf="pageProducts?.itemsGrid">
-      <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="pageProducts.totalPages"
-        [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
+      <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="pageProducts.totalElements"
+        [(page)]="currentPage" [maxSize]="3" [pageSize]="size" [boundaryLinks]="true"></ngb-pagination>
 
       <div class="form-group">
         <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
+          <option value="15">15</option>
           <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
         </select>
       </div>
 
       <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-        <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalProducts}} registros
+        <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalElements}} registros
         </span>
 
       </div>

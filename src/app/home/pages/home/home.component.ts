@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-declare function initializePlugin();
+
 
 @Component({
   selector: 'app-home',
@@ -9,10 +9,11 @@ declare function initializePlugin();
 })
 export class HomeComponent implements OnInit {
 
+  year = new Date().getFullYear();
   constructor() { }
 
   ngOnInit(): void {
-    initializePlugin();
+
   }
 
 }

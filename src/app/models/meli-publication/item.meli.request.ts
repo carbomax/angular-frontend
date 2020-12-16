@@ -19,7 +19,8 @@ export class ItemMeliRequest {
     public attributes?: Attributes[],
     public videoId?: string,
     public shipping?: Shipping,
-    public saleTerms?: SaleTerms[]
+    public saleTerms?: SaleTerms[],
+    public tags?: string[]
   ){
 
   }

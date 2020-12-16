@@ -151,7 +151,7 @@ export class EditProductsComponent implements OnInit {
     this.id = +image.id;
     this.edit = true;
 
-    this.orderP = image.order;;
+    this.orderP = image.order;
     this.titleP = image.title;
     this.urlP = image.photos   
   }
@@ -239,9 +239,11 @@ export class EditProductsComponent implements OnInit {
       });     
       return;
     }
-    const formData: FormData = new FormData();
-    formData.append('image', this.file, this.file.name);
-
+    const formData: FormData = new FormData(); 
+    let filename = this.editableProduct.sku + "_";   
+    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;        
+    formData.append('image', this.file, filename.trim());
+    
     this.productsStorageUserService.uploadImage(formData)
       .subscribe(resp => {  
         if(resp.success === true) {   
@@ -304,27 +306,42 @@ export class EditProductsComponent implements OnInit {
   /** Seccion para la vista Publicar */
 
   addRelationAccountMargin(){   
-    if(this.meliAccount !== -1){      
+    if(this.meliAccount !== -1){ 
       let accountMargin = new AccountMarginModel();
-
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
-      accountMargin.accountName = account.businessName;
-      accountMargin.idAccount = account.id;
 
-      if(this.margin !== -1){
-        var margin = this.marginsList.find(element => element.id == this.margin);
-        accountMargin.idMargin =  margin.id;
-        accountMargin.nameMargin = margin.name;
-        accountMargin.typeMargin = margin.type;
-        accountMargin.valueMargin = margin.value; 
-      }else{
-        accountMargin.idMargin = -1;
-        accountMargin.nameMargin = "";
+      if(account.me2 !== 1){
+        Swal.fire({
+          title: 'Cuenta no permitida',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Aceptar',
+          cancelButtonText: 'Cancelar'    
+        })
       }
-      this.accountMarginsList.push(accountMargin);
-      let index = this.meliAccountsList.indexOf(account);
-      this.meliAccountsList.splice(index, 1);
-      this.closeModalMargin();      
+      else{
+        accountMargin.accountName = account.businessName;
+        accountMargin.idAccount = account.id;
+  
+        if(this.margin !== -1){
+          var margin = this.marginsList.find(element => element.id == this.margin);
+          accountMargin.idMargin =  margin.id;
+          accountMargin.nameMargin = margin.name;
+          accountMargin.typeMargin = margin.type;
+          accountMargin.valueMargin = margin.value; 
+        }else{
+          accountMargin.idMargin = -1;
+          accountMargin.nameMargin = "";
+        }
+        this.accountMarginsList.push(accountMargin);
+        let index = this.meliAccountsList.indexOf(account);
+        this.meliAccountsList.splice(index, 1);
+        this.closeModalMargin();  
+      }
+          
     }
   } 
 
@@ -394,36 +411,47 @@ export class EditProductsComponent implements OnInit {
     this.router.navigate(['/publish-myproducts']);
   }
 
-  publishProducts(){  
-
+  publishProducts(){     
     if(this.editableProduct.productName.length > 60){
       Swal.fire({
         position: 'top-end',
-        title: 'Título o Nombre del producto no válido',
-        text: 'No se permite publicar produtos con título mayor de 60 caracteres',
+        title: 'Título o Nombre del producto demasiado extenso',
+        text: 'Mercado Libre no permite publicar produtos con título mayor de 60 caracteres, de no editarse, la aplicación acortará el título al tamaño permitido',
         icon: 'info',
-        showConfirmButton: false,
-        timer: 5000      
+        showConfirmButton: true,
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#28a745',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',        
+        cancelButtonColor: '#d33'        
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.callPublishProductsService();
+        }
       })
+    }else{
+      this.callPublishProductsService();
     }
-    else{
-      Swal.fire({
-        position: 'top-end',
-        icon: 'info',
-        title: `Producto en publicación`,
-        text: `El producto está siendo publicado`,
-        showConfirmButton: false,
-        timer: 5000
-      })
-      .then((result) => {
-        this.router.navigate(['/publish-myproducts']);
-      });  
-     
-  
-     // llamada al servicio Publicar
-      this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
-      this.clearAll();
-    }   
+
+
+  }
+
+  callPublishProductsService(){
+    // llamada al servicio Publicar
+    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+    this.clearAll();
+    
+    Swal.fire({
+      position: 'top-end',
+      icon: 'info',
+      title: `Producto en publicación`,
+      text: `El producto está siendo publicado`,
+      showConfirmButton: false,
+      timer: 5000
+    })
+    .then((result) => {
+      this.router.navigate(['/publish-myproducts']);
+    });
   }
 
   getPath(pathList: string[]){

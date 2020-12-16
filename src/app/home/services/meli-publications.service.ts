@@ -20,6 +20,7 @@ import { AuthService } from '../../core/services/auth.service';
 import { EditableProductModel } from 'src/app/models/editable.product.model';
 import { ResponseCategoryPredictor } from 'src/app/models/meli-publication/response-category-predictor.model';
 import { ProductMeliPublished } from 'src/app/models/meli-publication/product-meli-published.model';
+import { AttributesRequiredModel } from 'src/app/models/meli-publication/meli-attributes-required.model';
 
 
 
@@ -32,9 +33,11 @@ export class MeliPublicationsService {
   URI = environment.URI_MELI_PUBLIC;
 
   responsePublicationList: any[]; 
+  attributesList: AttributesRequiredModel[];
 
   constructor(private http: HttpClient, public productsUserService: ProductsStorageUserService, private authService: AuthService) {
      this.responsePublicationList = [];
+     this.attributesList = [];
   }
 
   getMeliCategories(): Observable<MeliCategory[]>{   
@@ -43,10 +46,12 @@ export class MeliPublicationsService {
 
     return this.http.get<any[]>(params).pipe(map((resp: any[]) => {  
       resp.forEach(element => {
-        let meliCategory = new MeliCategory();
-        meliCategory.id = element.id;
-        meliCategory.name = element.name;
-        meliCategoryList.push(meliCategory);
+          if(element.id !== "MLU1953") { // MLU1953 = "Otras categorias"
+          let meliCategory = new MeliCategory();
+          meliCategory.id = element.id;
+          meliCategory.name = element.name;
+          meliCategoryList.push(meliCategory);
+        }
       });   
       return meliCategoryList;
     }));     
@@ -101,6 +106,9 @@ export class MeliPublicationsService {
     
     let itemCustomList: ItemCustomModel[] = [];   
 
+    this.getAttributesRequired(idCategory).subscribe(attr => {
+    let attributesRequired = attr;  
+
     relationshipList.forEach(relation => {   
       itemCustomList = [];   
       productsSelected.forEach(element => {
@@ -124,6 +132,7 @@ export class MeliPublicationsService {
         let shipping: Shipping = new Shipping("me2", false, false, []);
 
         let saleTerms: SaleTerms[] = [];
+        warrantyType = +warrantyType; 
         if(warranty === true)
         {            
           if(warrantyType === 2230279){
@@ -132,33 +141,40 @@ export class MeliPublicationsService {
           else if(warrantyType === 2230280){
               saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía del vendedor"));
             } 
-          saleTerms.push(new SaleTerms("WARRANTY_TIME", warrantyTime.toString + " días"));                       
+          let days_warranty = warrantyTime.toString() + " días"; 
+          saleTerms.push(new SaleTerms("WARRANTY_TIME", days_warranty));                         
         }
         
 
         let attributes: Attributes[] = [];
         attributes.push(new Attributes("SELLER_SKU", "SKU", element.sku));
-
-        let item = new ItemMeliRequest(element.name, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
-        "bronze", element.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
+        if(attributesRequired.length !== 0){
+          attributesRequired.forEach( f => { attributes.push(new Attributes( f.id, null, "N/A"));});
+      }
+        let tittle = element.name.length > 60 ? element.name.substring(0,60) : element.name; 
+        let item = new ItemMeliRequest(tittle, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
+        "gold_premium", element.description, imagesList, attributes, null, shipping, warranty ? saleTerms : null, ["immediate_payment"]);        
         itemCustomList.push(new ItemCustomModel(item, element.id, element.sku, element.images, element.price_costUYU,
-          element.price_costUSD, element.priceUYU));          
+          element.price_costUSD, element.priceUYU));  
+
       })
   
       const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
       this.http.post<any>(params, itemCustomList).subscribe(result =>{});        
     });          
-            
+  }, error => {});  
   }
 
   createPublicationByEditableProduct(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productSelected: EditableProductModel, reloadConfig: boolean): void{
     
     let itemCustomList: ItemCustomModel[] = [];  
-   
-    relationshipList.forEach(relation => {   
-         itemCustomList = [];   
-         let priceFinal = 0;
-     
+
+    this.getAttributesRequired(idCategory).subscribe(attr => { 
+        let attributesRequired = attr;
+        relationshipList.forEach(relation => {   
+          itemCustomList = [];   
+          let priceFinal = 0;
+      
         if(relation.idMargin === -1 || !reloadConfig ){// Para el republicar // Quitar validacion "!reloadConfig" despues de arreglar todo como va 
           priceFinal = Math.round(productSelected.price);
         }
@@ -169,7 +185,7 @@ export class MeliPublicationsService {
           /*Por Ciento*/
           priceFinal = Math.round((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
         }
-     
+      
         let imagesList: ItemPictures[] = [];          
         productSelected.images.forEach(image => {            
           imagesList.push(new ItemPictures(image.photos));            
@@ -178,6 +194,7 @@ export class MeliPublicationsService {
         let shipping: Shipping = new Shipping("me2", false, false, []);
 
         let saleTerms: SaleTerms[] = [];
+        warrantyType = +warrantyType; 
         if(warranty === true)
         {            
           if(warrantyType === 2230279){
@@ -186,21 +203,28 @@ export class MeliPublicationsService {
           else if(warrantyType === 2230280){
               saleTerms.push(new SaleTerms("WARRANTY_TYPE", "Garantía del vendedor"));
             } 
-          saleTerms.push(new SaleTerms("WARRANTY_TIME", warrantyTime.toString + " días"));                       
+          let days_warranty = warrantyTime.toString() + " días"; 
+          saleTerms.push(new SaleTerms("WARRANTY_TIME", days_warranty));                       
         }        
 
         let attributes: Attributes[] = [];
         attributes.push(new Attributes("SELLER_SKU", "SKU", productSelected.sku));
+        if(attributesRequired.length !== 0){
+            attributesRequired.forEach( f => { attributes.push(new Attributes( f.id, null, "N/A"));});
+        }
 
-        let item = new ItemMeliRequest(productSelected.productName, idCategory, priceFinal, "UYU", productSelected.currentStock.toString(), "buy_it_now", "new",
-        "bronze", productSelected.description, imagesList, attributes, null, null, warranty ? saleTerms : null);        
+        let tittle = productSelected.productName.length > 60 ? productSelected.productName.substring(0,60) : productSelected.productName; 
+        let item = new ItemMeliRequest(tittle, idCategory, priceFinal, "UYU", productSelected.currentStock.toString(), "buy_it_now", "new",
+        "gold_premium", productSelected.description, imagesList, attributes, null, shipping, warranty ? saleTerms : null, ["immediate_payment"]);        
         itemCustomList.push(new ItemCustomModel(item, productSelected.id, productSelected.sku, productSelected.images, productSelected.price_costUYU,
           productSelected.price_costUSD, productSelected.price));          
         
 
         const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
         this.http.post<any>(params, itemCustomList).subscribe(result =>{});        
-    });   
+      });    
+    }, error => {});    
+   
             
   }
 
@@ -219,11 +243,31 @@ export class MeliPublicationsService {
               /*Por Ciento*/
               priceFinal = Math.round((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
             }
-            productPublished.pricePublication = priceFinal.toString();        
+            productPublished.pricePublication = priceFinal.toString(); 
+            
+            let tittle = productPublished.title.length > 60 ? productPublished.title.substring(0,60) : productPublished.title; 
+            productPublished.title = tittle;
       });
 
       return this.http.put<any>(params, productPublished);
   }  
+
+  getAttributesRequired(categoryId: string): Observable<AttributesRequiredModel[]>{   
+    this.attributesList = [];   
+    const params = `${this.URI}/categories/${categoryId}/attributes`;    
+
+    return this.http.get<AttributesRequiredModel[]>(params).pipe(map((resp: any[]) => {  
+      resp.forEach(element => {
+        if(element.tags.required){
+          let attributeRequired = new AttributesRequiredModel(element.id, element.name, element.tags, element.value_type, element.value_max_length,
+            element.values, element.allowed_units, element.attribute_group_id, element.attribute_group_name);
+          this.attributesList.push(attributeRequired);   
+        }       
+      }); 
+      return this.attributesList;         
+    })); 
+       
+  }
 
   
 

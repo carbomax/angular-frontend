@@ -25,10 +25,15 @@ export class ProductsMeliPublishedService {
 
 
   public getProductsPublished(page: number, size: number, skuSearch: string, idMeliSearch: string, meliAccountSearch: number,
-      typeStateSearch: string): Observable<PageProductMeliPublished>{
+      typeStateSearch: string, title: string): Observable<PageProductMeliPublished>{
     this.profileId = this.authService.authenticationDataExtrac().profileId;
     return this.http.get<PageProductMeliPublished>(`${this.URI_PRODUCTS_PUBLISHED_SERVICE}/${this.profileId}?page=${page}&size=${size}&sku=${skuSearch}
-          &idMeliPublication=${idMeliSearch}&meliAccount=${meliAccountSearch}&typeStateSearch=${typeStateSearch}`);
+          &idMeliPublication=${idMeliSearch}&meliAccount=${meliAccountSearch}&typeStateSearch=${typeStateSearch}&title=${title}`);
+  }
+
+  public getOnePublication(id: number): Observable<ProductMeliPublished>{
+    const params = `${this.URI_PRODUCTS_PUBLISHED_SERVICE}/publication-info/${id}`;
+    return this.http.get<ProductMeliPublished>(params);
   }
 
   updateProductsPublished(product: ProductMeliPublished, imageToDelete: number[]): Observable<ProductMeliPublished>{
@@ -40,16 +45,16 @@ export class ProductsMeliPublishedService {
     return this.http.post(`${this.URI_MELI_SERVICE}/changeStatusPublication/${accountId}/${publicationId}?status=${status}` , {});
   }
 
-  public changeStatusMultiplePublications(products: ProductMeliPublished[], status: number) {    
+  public changeStatusMultiplePublications(products: ProductMeliPublished[], status: number) {
     let multipleStatusList: ChangeMultipleStatusRequest[] = [];
-    products.forEach(product => {    
+    products.forEach(product => {
         let position = multipleStatusList.findIndex(p => p.accountId === product.accountMeli);
         if(position !== -1){
           multipleStatusList[position].publicationsIds.push(product.idPublicationMeli);
         }
-        else{ 
+        else{
           multipleStatusList.push(new ChangeMultipleStatusRequest(product.accountMeli, [product.idPublicationMeli]));
-        }      
+        }
     })
     return this.http.post(`${this.URI_MELI_SERVICE}/changeStatusMultiplePublications?status=${status}`, multipleStatusList);
   }
@@ -60,7 +65,7 @@ export class ProductsMeliPublishedService {
 
   deletePublicationFailed(idItem: number) {
     return this.http.delete(`${this.URI_MELI_SERVICE}/delete-publication-failed/${idItem}`);
-  }    
+  }
 
   republishPublication(accountId: number, publicationId: string){
     return this.http.post(`${this.URI_MELI_SERVICE}/republish-publication/${accountId}/${publicationId}` , {});
@@ -68,16 +73,16 @@ export class ProductsMeliPublishedService {
 
   republishMultiplePublication(products: ProductMeliPublished[]){
     let multiplePublicationsList: ChangeMultipleStatusRequest[] = [];
-    products.forEach(product => {    
+    products.forEach(product => {
         let position = multiplePublicationsList.findIndex(p => p.accountId === product.accountMeli);
         if(position !== -1){
           multiplePublicationsList[position].publicationsIds.push(product.idPublicationMeli);
         }
-        else{ 
+        else{
           multiplePublicationsList.push(new ChangeMultipleStatusRequest(product.accountMeli, [product.idPublicationMeli]));
-        }      
+        }
     })
-    return this.http.post(`${this.URI_MELI_SERVICE}/republish-multiple-publications`, multiplePublicationsList);  
+    return this.http.post(`${this.URI_MELI_SERVICE}/republish-multiple-publications`, multiplePublicationsList);
   }
 
   updatePricePublication(margin: Margin): Promise<void>{

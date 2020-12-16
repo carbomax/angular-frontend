@@ -4,19 +4,24 @@ export class MeliOrders {
   public status: string;
   public dateCreated: string;
   public dateClosed: string;
-  public totalAmount: number;
+  public totalAmount = 0;
   public currencyId: string;
-  public shippingId: number;
   public seller: SellerOrder;
   public buyer: BuyerOrder;
   public payments: PaymentOrder[];
   public items: ItemOrder[];
+  public amountTaxes = 0;
+  public operatorBusinessStatus = 0;
+  public shippingId?: number;
   public invoiceNumberBss?: number;
+  public operatorNameBss?: string;
   public descriptionBss?: string;
   public observationBss?: string;
   public tagBss?: number;
   public stateBss?: number;
   public carrier?: Carrier;
+  public currencyIdTaxes?: string;
+  public shipment?: OrderShipment;
 
 }
 
@@ -70,4 +75,42 @@ export class ItemOrder {
 export class Carrier {
   public id: number;
   public name: string;
+}
+
+
+export class OrderShipment {
+
+  public id: number;
+
+  public mode: string;
+
+  public createBy: string;
+
+  public orderId: number;
+
+  public orderCost: number;
+
+  public baseCost: number;
+
+  public siteId: string;
+
+  public status: string;
+
+  public dateCreated: string;
+
+  public lastUpdated: string;
+
+  public shipmentCostComponent?: OrderShipmentCostComponent;
+}
+
+
+export class OrderShipmentCostComponent {
+
+  public id = 0;
+  public especialDiscount = 0;
+  public loyalDiscount = 0;
+  public compensation = 0;
+  public gapDiscount = 0;
+  public ratio = .0;
+
 }
