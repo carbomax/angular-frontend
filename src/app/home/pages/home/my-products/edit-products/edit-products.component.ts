@@ -19,43 +19,44 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
   templateUrl: './edit-products.component.html',
   styleUrls: ['./edit-products.component.css']
 })
-export class EditProductsComponent implements OnInit {  
+export class EditProductsComponent implements OnInit {
   @ViewChild('closeModal') closeModal;
   //@ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('closeMargin') closeMargin;
+  @ViewChild('file') myfile;
  //Loading Modal
- loadingModal = false; 
+ loadingModal = false;
  loadingInitModal = false;
 
   productsDeletedList: number[];
   imagesDeletedList: string[];
-  editableProduct: EditableProductModel; 
-  imageToDelete: Image;  
+  editableProduct: EditableProductModel;
+  imageToDelete: Image;
 
-  edit = false;  
+  edit = false;
   message: string;
   imagePath: string;
   imgURL: any;
   file: any;
   titleImage:string;
   orderImage: number = 0;
-  
+
   id: number = -1;
   public urlP = "";
   public titleP: string;
   public orderP: number = -1;
 
   /**Seccion para la vista Publicar */
-  meliAccountsList: MeliAccount[]; 
+  meliAccountsList: MeliAccount[];
   accountMarginsList: AccountMarginModel[];
   initialMeliAccounts: MeliAccount[];
-  account_margin: AccountMarginModel; 
-  marginsList: Margin[];     
-  margin: number = -1;  
+  account_margin: AccountMarginModel;
+  marginsList: Margin[];
+  margin: number = -1;
   meliAccount: number = -1;
   warrantyType: number = -1;
   warrantyTime: number = 0;
-  warranty: boolean = false; 
+  warranty: boolean = false;
   responsePredictor: ResponseCategoryPredictor;
   withoutPredictor: boolean = false;
 
@@ -74,13 +75,13 @@ export class EditProductsComponent implements OnInit {
     this.responsePredictor.predictor = false;
 
     this.getCustomProduct();
-    this.getAccountMeli();  
+    this.getAccountMeli();
     this.getMargins();
     //this.getPredictorCategories();
-    this.productsDeletedList = [];    
+    this.productsDeletedList = [];
     this.imagesDeletedList = [];
     this.accountMarginsList = [];
-    
+
   }
 
   getCustomProduct(){
@@ -95,25 +96,25 @@ export class EditProductsComponent implements OnInit {
      this.meliPublicationsService.getCategoryByPredictor(this.editableProduct.productName).subscribe(predictorList => {
       let p = predictorList;
       if(predictorList.length !== 0){
-        this.responsePredictor.predictor = true; 
+        this.responsePredictor.predictor = true;
          this.responsePredictor.meliPredictorCategory = predictorList;
-      }  
+      }
       else{
-         this.responsePredictor.predictor = false; 
+         this.responsePredictor.predictor = false;
          this.responsePredictor.meliPredictorCategory = [];
-      }      
+      }
      },(error: any) => {
-         this.responsePredictor.predictor = false; 
+         this.responsePredictor.predictor = false;
          this.responsePredictor.meliPredictorCategory = [];
     });
   }
 
   saveForm(){
-    this.loadingModal = true; 
-    this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {      
+    this.loadingModal = true;
+    this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {
       this.editableProduct = item;
       this.productsDeletedList = [];
-      this.loadingModal = false;       
+      this.loadingModal = false;
       this.close();
       Swal.fire({
         position: 'top-end',
@@ -129,9 +130,9 @@ export class EditProductsComponent implements OnInit {
       this.productsStorageUserService.deleteImages(this.imagesDeletedList).subscribe();
       this.imagesDeletedList = [];
     }
-      
+
     },(error: any) => {
-      this.loadingModal = false;      
+      this.loadingModal = false;
       this.close();
       Swal.fire({
         position: 'top-end',
@@ -143,8 +144,8 @@ export class EditProductsComponent implements OnInit {
       });
       this.imagesDeletedList = [];
       this.productsDeletedList = [];
-    });  
-   
+    });
+
   };
 
   editProduct(image: Image){
@@ -153,15 +154,15 @@ export class EditProductsComponent implements OnInit {
 
     this.orderP = image.order;
     this.titleP = image.title;
-    this.urlP = image.photos   
+    this.urlP = image.photos
   }
 
   updateProduct(image: Image){
-    if(image.id === this.id){    
+    if(image.id === this.id){
       image.order = this.orderP;
       image.title = this.titleP;
       image.photos = this.urlP;
-      this.clear();      
+      this.clear();
     }
     else{
       this.clear();
@@ -173,7 +174,7 @@ export class EditProductsComponent implements OnInit {
   }
 
   deleteImage(){
-    this.productsDeletedList.push(this.imageToDelete.id); 
+    this.productsDeletedList.push(this.imageToDelete.id);
     this.imagesDeletedList.push(this.imageToDelete.photos);
     let position = this.editableProduct.images.indexOf(this.imageToDelete);
     this.editableProduct.images.splice(position, 1);
@@ -196,29 +197,31 @@ export class EditProductsComponent implements OnInit {
   preview(files) {
     if (files.length === 0){
       this.file = null;
+      this.myfile.nativeElement.value = "";
       this.message = "Archivo inválido";
       return;
-    }  
- 
+    }
+
     var mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
       this.file = null;
+      this.myfile.nativeElement.value = "";
       this.message = "El archivo no es una imagen.";
       return;
     }
- 
+
     var reader = new FileReader();
     this.imagePath = files;
-    reader.readAsDataURL(files[0]); 
-    reader.onload = (_event) => { 
-      this.imgURL = reader.result; 
+    reader.readAsDataURL(files[0]);
+    reader.onload = (_event) => {
+      this.imgURL = reader.result;
       this.message = "";
       this.file = files[0];
     }
   }
 
   addedImage() {
-    if (!this.file) {  
+    if (!this.file) {
       Swal.fire({
         position: 'top-end',
         icon: 'error',
@@ -236,25 +239,25 @@ export class EditProductsComponent implements OnInit {
         text: 'El archivo no es una imagen',
         showConfirmButton: false,
         timer: 5000
-      });     
+      });
       return;
     }
-    const formData: FormData = new FormData(); 
-    let filename = this.editableProduct.sku + "_";   
-    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;        
+    const formData: FormData = new FormData();
+    let filename = this.editableProduct.sku + "_";
+    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;
     formData.append('image', this.file, filename.trim());
-    
+
     this.productsStorageUserService.uploadImage(formData)
-      .subscribe(resp => {  
-        if(resp.success === true) {   
+      .subscribe(resp => {
+        if(resp.success === true) {
         let image_added = new Image();
         image_added.order = this.orderImage;
         image_added.title = this.titleImage;
         image_added.photos = resp.reason;
         this.editableProduct.images.push(image_added);
-      
+        this.myfile.nativeElement.value = "";
         this.clearImage();
-        this.close();   
+        this.close();
       }
       },(error: any) => {
         if(error.status >= 200 && error.status <= 299)
@@ -265,7 +268,7 @@ export class EditProductsComponent implements OnInit {
           image_added.photos = error.error.text;
           this.editableProduct.images.push(image_added);
         }
-        else if(error.error.message.includes('Maximum upload size exceeded')){        
+        else if(error.error.message.includes('Maximum upload size exceeded')){
         Swal.fire({
           position: 'top-end',
           icon: 'error',
@@ -284,9 +287,10 @@ export class EditProductsComponent implements OnInit {
             timer: 5000
           });
         }
+        this.myfile.nativeElement.value = "";
         this.clearImage();
         this.close();
-        
+
       });
   }
   clearImage(){
@@ -295,7 +299,8 @@ export class EditProductsComponent implements OnInit {
     this.message = "";
     this.imagePath = "";
     this.imgURL = null;
-    this.file = null;    
+    this.file = null;
+    this.myfile.nativeElement.value = "";
   }
 
   close(){
@@ -305,8 +310,8 @@ export class EditProductsComponent implements OnInit {
 
   /** Seccion para la vista Publicar */
 
-  addRelationAccountMargin(){   
-    if(this.meliAccount !== -1){ 
+  addRelationAccountMargin(){
+    if(this.meliAccount !== -1){
       let accountMargin = new AccountMarginModel();
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
 
@@ -319,19 +324,19 @@ export class EditProductsComponent implements OnInit {
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Aceptar',
-          cancelButtonText: 'Cancelar'    
+          cancelButtonText: 'Cancelar'
         })
       }
       else{
         accountMargin.accountName = account.businessName;
         accountMargin.idAccount = account.id;
-  
+
         if(this.margin !== -1){
           var margin = this.marginsList.find(element => element.id == this.margin);
           accountMargin.idMargin =  margin.id;
           accountMargin.nameMargin = margin.name;
           accountMargin.typeMargin = margin.type;
-          accountMargin.valueMargin = margin.value; 
+          accountMargin.valueMargin = margin.value;
         }else{
           accountMargin.idMargin = -1;
           accountMargin.nameMargin = "";
@@ -339,23 +344,23 @@ export class EditProductsComponent implements OnInit {
         this.accountMarginsList.push(accountMargin);
         let index = this.meliAccountsList.indexOf(account);
         this.meliAccountsList.splice(index, 1);
-        this.closeModalMargin();  
+        this.closeModalMargin();
       }
-          
+
     }
-  } 
+  }
 
   getAccountMeli(){
     this.meliAccountsList = [];
     this.initialMeliAccounts = [];
     this.meliAccountService.getAccounts().subscribe(resp => {
       resp.forEach(element => {
-        if(element.status === AccountMeliStates.SYNCHRONIZED && element.marketplaceId === MarketplaceType.MERCADOLIBRE){          
+        if(element.status === AccountMeliStates.SYNCHRONIZED && element.marketplaceId === MarketplaceType.MERCADOLIBRE){
           this.meliAccountsList.push(element);
         }
       });
       this.meliAccountsList.forEach(element => { this.initialMeliAccounts.push(element);});
-    })    
+    })
   }
 
   deleteRelationAccountMargin(){
@@ -364,7 +369,7 @@ export class EditProductsComponent implements OnInit {
       let position = this.initialMeliAccounts.indexOf(account);
       this.meliAccountsList.splice(position, 0, account);
       let position2 = this.accountMarginsList.indexOf(this.account_margin);
-      this.accountMarginsList.splice(position2, 1);      
+      this.accountMarginsList.splice(position2, 1);
     }
   }
 
@@ -377,21 +382,21 @@ export class EditProductsComponent implements OnInit {
         }
       });
     })
-  }  
+  }
 
   previewDelete(relationship: AccountMarginModel){
     this.account_margin = relationship;
   }
 
-  closeModalMargin(){     
-    this.clearSome();  
-    this.closeMargin.nativeElement.click();         
+  closeModalMargin(){
+    this.clearSome();
+    this.closeMargin.nativeElement.click();
   }
 
   clearSome(){
-    this.account_margin = null; 
-    this.margin = -1; 
-    this.meliAccount = -1;  
+    this.account_margin = null;
+    this.margin = -1;
+    this.meliAccount = -1;
   }
 
   clearAll(){
@@ -407,11 +412,11 @@ export class EditProductsComponent implements OnInit {
 
   closeModalPublish(){
     this.clearAll();
-    //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);}); 
+    //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
     this.router.navigate(['/publish-myproducts']);
   }
 
-  publishProducts(){     
+  publishProducts(){
     if(this.editableProduct.productName.length > 60){
       Swal.fire({
         position: 'top-end',
@@ -422,8 +427,8 @@ export class EditProductsComponent implements OnInit {
         confirmButtonText: 'Continuar',
         confirmButtonColor: '#28a745',
         showCancelButton: true,
-        cancelButtonText: 'Cancelar',        
-        cancelButtonColor: '#d33'        
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#d33'
       }).then((result) => {
         if (result.isConfirmed) {
           this.callPublishProductsService();
@@ -440,7 +445,7 @@ export class EditProductsComponent implements OnInit {
     // llamada al servicio Publicar
     this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
     this.clearAll();
-    
+
     Swal.fire({
       position: 'top-end',
       icon: 'info',
@@ -461,7 +466,7 @@ export class EditProductsComponent implements OnInit {
   }
 
   getCategorySelected(idCategory: string){
-    this.lastCategorySelected = idCategory;   
+    this.lastCategorySelected = idCategory;
   }
 
   setHome(){
