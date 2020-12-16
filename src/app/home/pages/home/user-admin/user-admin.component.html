@@ -154,7 +154,8 @@
               <div class="col-md-6 col-sm-12">
                 <div class="form-group">
                   <input type="text" class="form-control" id="inputPassword" placeholder="Contraseña del usuario"
-                    aria-describedby="Contraseña del usuario" name="password" [(ngModel)]="seletedProfile.user.password">
+                    aria-describedby="Contraseña del usuario" name="password" [(ngModel)]="seletedProfile.user.password"
+                    [required]="seletedProfile.id == null ? 'requered' : null">
                 </div>
               </div>
             </div>
