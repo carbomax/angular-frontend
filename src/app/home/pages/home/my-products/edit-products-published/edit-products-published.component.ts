@@ -310,7 +310,7 @@ export class EditProductsPublishedComponent implements OnInit {
     }
     const formData: FormData = new FormData();
     let filename = this.productMeliPublished.sku + "_";
-    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name;
+    filename = filename + this.productsStorageUserService.getRandomInt(1,1000000) + "_" + this.file.name.replace(/ /g, "");
     formData.append('image', this.file, filename.trim());
 
     this.productsStorageUserService.uploadImage(formData)

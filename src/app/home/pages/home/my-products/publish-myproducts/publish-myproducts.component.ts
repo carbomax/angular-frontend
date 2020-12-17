@@ -147,8 +147,7 @@ export class PublishMyproductsComponent implements OnInit {
             if (element.id === select.id) {
               element.selected = true;
               countSelected++;
-              select.description = element.description;
-              select.images = element.images;
+              this.updateElementOfProduct(element, select);
             }
           });
         });
@@ -265,6 +264,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.loadPaginator = true;
       this.empySearch = false;
       this.loadingClear = false;
+      this.productsSelected = [];
       this.productStoreUserService.
         getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
           this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
@@ -297,6 +297,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.typeProductSearch = '';
     this.typeStateSearch = '';
     this.typeFamilySearch = '';
+    this.productsSelected = [];
     this.minValue = 0;
     this.maxValue = 20000;
     this.productStoreUserService.
@@ -428,17 +429,6 @@ export class PublishMyproductsComponent implements OnInit {
     this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
       if (result.success === true) {
         this.loadProductsPaginator(this.currentPage);
-       /* this.productsSelected.forEach(p => {
-          let exit: boolean = false;
-          let count = 0;
-          while(!exit && count < this.pageProductsMeli.itemsMeliGrid.length){
-              if(this.pageProductsMeli.itemsMeliGrid[count].sku === p.sku) {
-                  p = this.pageProductsMeli.itemsMeliGrid[count];
-                  exit = true;
-              }
-              count++;
-          }
-        });*/
         this.closeActiveModalLoading();
         Swal.fire({
           position: 'top-end',
@@ -491,6 +481,7 @@ export class PublishMyproductsComponent implements OnInit {
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
         this.loadingModalDelete = false;
+        this.productsSelected = [];
         this.loadProductsPaginator(this.currentPage);
         Swal.fire({
           position: 'top-end',
@@ -500,19 +491,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
-        /*
-        this.productsSelected.forEach(select => {
-          this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-            if (element.id === select.id) {
-              let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
-              if (position >= 0) {
-                this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
-              }
-            }
-          });
-        });
-        */
-        this.productsSelected = [];
+
         if (this.productsSelected.length === 0) {
           this.disable = true;
         } else {
@@ -577,16 +556,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
-/*
-        this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-          if (element === product) {
-            let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
-            if (position >= 0) {
-              this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
-            }
-          }
-        });
-*/
+
         let pos = this.productsSelected.indexOf(product);
         if (pos !== -1)
           this.productsSelected.splice(pos, 1);
@@ -892,6 +862,22 @@ export class PublishMyproductsComponent implements OnInit {
             this.loadProductsPaginator(1);
           }
         });
+    }
+
+    updateElementOfProduct(originP: ProductCustom, copyP: ProductCustom) {
+      copyP.currentStock = originP.currentStock;
+      copyP.deleted = originP.deleted;
+      copyP.description = originP.description;
+      copyP.images = originP.images;
+      copyP.sku = originP.sku;
+      copyP.specialPaused = originP.specialPaused;
+      copyP.name = originP.name;
+      copyP.priceUSD = originP.priceUSD;
+      copyP.priceUYU = originP.priceUYU;
+      copyP.price_costUSD = originP.price_costUSD;
+      copyP.price_costUYU = originP.price_costUYU;
+      copyP.selected = originP.selected;
+      copyP.state = originP.state;
     }
 
 }
