@@ -261,7 +261,7 @@ export class MeliAccountsComponent implements OnInit {
 
     Swal.fire({
       title: 'Está seguro?',
-      text: 'Tenga en cuenta que el sistema no procesará ventas ni información con mercadolibre!',
+      text: 'Tenga en cuenta que el sistema no procesará ninguna venta, ni información con mercadolibre!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -275,13 +275,14 @@ export class MeliAccountsComponent implements OnInit {
         console.log('delete')
         this.meliAccountService.deleteAccount(account.id).subscribe((resp: any) => {
           console.log(resp)
-          if(resp.status == 226){
-            Swal.fire({
-              position: 'top-end',
-              icon: 'warning',
-              title: `La cuenta ${account.businessName} no ha sido desvinculada ya que cuenta con publicaciones, por favor elimine todas sus publicaciones y trate de nuevo`,
-              showConfirmButton: true
-            })
+          if(resp){
+           if(resp.status === 226)
+           Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: `La cuenta ${account.businessName} no ha sido desvinculada ya que cuenta con publicaciones, por favor elimine todas sus publicaciones e intente de nuevo`,
+            showConfirmButton: true
+          })
             this.loading = false;
             return;
           }
@@ -293,6 +294,7 @@ export class MeliAccountsComponent implements OnInit {
             showConfirmButton: false,
             timer: 2000
           })
+
         }, (error: any) => {
           console.log('Error desvinculando la cuenta:', error);
           this.loading = false;

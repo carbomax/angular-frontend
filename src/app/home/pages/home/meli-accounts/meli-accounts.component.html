@@ -81,8 +81,7 @@
                   aria-labelledby="dropdownMenuLink">
                   <a class="dropdown-item pointer" role="button" data-toggle="modal" data-target="#marketplaceModal"
                     (click)="updateModal(account)"> <i class="far fa-edit m-2 text-success"></i>Editar</a>
-                  <a class="dropdown-item pointer" (click)="deleteAccount(account)"><i
-                      class="fas fa-trash m-2 text-danger"></i>Desvincular</a>
+                  <a *ngIf="account.status === 2" class="dropdown-item pointer" (click)="deleteAccount(account)"><i class="far fa-times-circle m-2"></i>Desvincular</a>
                 </div>
               </div>
             </td>
