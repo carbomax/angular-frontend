@@ -103,6 +103,7 @@ export class PublishedProductComponent implements OnInit {
           this.productsSelected.forEach(select => {
             if (element.id === select.id) {
               element.selected = true;
+              this.updateElementOfProduct(element, select);
               countSelected++;
             }
           });
@@ -128,6 +129,7 @@ export class PublishedProductComponent implements OnInit {
   searchProductsPublished() {
       this.loadPaginator = true;
       this.loadingSearch = true;
+      this.productsSelected = [];
       this.loadProductsPaginator(false);
   }
 
@@ -140,6 +142,7 @@ export class PublishedProductComponent implements OnInit {
     this.titleSearch = '';
     this.meliAccountSearch = '';
     this.typeStateSearch = '';
+    this.productsSelected = [];
     this.loadProductsPaginator(false);
   }
 
@@ -469,6 +472,12 @@ export class PublishedProductComponent implements OnInit {
 
             this.loadProductsPaginator(true);
             if (resp.response) {
+              for( var i = 0; i < this.productsSelected.length; i++) {
+                if ( this.productsSelected[i].id === product.id) {
+                  this.productsSelected.splice(i, 1);
+                  i--;
+                }
+              }
               this.notificationSuccessChangeStatus(resp.response);
             } else {
               this.notificationErrorChangeStatus(resp);
@@ -486,6 +495,12 @@ export class PublishedProductComponent implements OnInit {
 
             this.loadProductsPaginator(true);
             if (resp.response) {
+              for( var i = 0; i < this.productsSelected.length; i++) {
+                if ( this.productsSelected[i].id === product.id) {
+                  this.productsSelected.splice(i, 1);
+                  i--;
+                }
+              }
               this.notificationSuccessChangeStatus(resp.response);
             } else {
               this.notificationErrorChangeStatus(resp);
@@ -652,6 +667,32 @@ export class PublishedProductComponent implements OnInit {
       title: `${title}`,
       showConfirmButton: true
     });
+  }
+
+  updateElementOfProduct(originP: ProductMeliPublished, copyP: ProductMeliPublished) {
+    copyP.categoryMeli = originP.categoryMeli;
+    copyP.currentStock = originP.currentStock;
+    copyP.deleted = originP.deleted;
+    copyP.description = originP.description;
+    copyP.idPublicationMeli = originP.idPublicationMeli;
+    copyP.images = originP.images;
+    copyP.lastUpgrade = originP.lastUpgrade;
+    copyP.margin = originP.margin;
+    copyP.mlPublicationId = originP.mlPublicationId;
+    copyP.permalink = originP.permalink;
+    copyP.priceCostUSD = originP.priceCostUSD;
+    copyP.priceCostUYU = originP.priceCostUYU;
+    copyP.priceEditProduct = originP.priceEditProduct;
+    copyP.pricePublication = originP.pricePublication;
+    copyP.saleStatus = originP.saleStatus;
+    copyP.sku = originP.sku;
+    copyP.specialPaused = originP.specialPaused;
+    copyP.status = originP.status;
+    copyP.title = originP.title;
+    copyP.warrantyTime = originP.warrantyTime;
+    copyP.warrantyType = originP.warrantyType;
+    copyP.accountName = originP.accountName;
+    copyP.accountMeli = originP.accountMeli;
   }
 
 }
