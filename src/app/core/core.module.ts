@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { AuthInterceptorHttpService } from './services/auth.interceptor.http.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 
 export const httpInterceptorProviders = [
@@ -13,6 +14,7 @@ export const httpInterceptorProviders = [
   imports: [
     CommonModule,
     BrowserModule,
+    BrowserAnimationsModule,
     HttpClientModule
 
   ],
