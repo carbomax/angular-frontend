@@ -261,7 +261,7 @@ export class MeliAccountsComponent implements OnInit {
 
     Swal.fire({
       title: 'Está seguro?',
-      text: 'Usted no podrá revertir esto!',
+      text: 'Tenga en cuenta que el sistema no procesará ninguna venta, ni información con mercadolibre!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -273,26 +273,41 @@ export class MeliAccountsComponent implements OnInit {
       if (result.isConfirmed) {
         this.loading = true;
         console.log('delete')
-        this.meliAccountService.deleteAccount(account.id).subscribe(resp => {
+        this.meliAccountService.deleteAccount(account.id).subscribe((resp: any) => {
           console.log(resp)
+          if(resp){
+           if(resp.status === 226)
+           Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: `La cuenta ${account.businessName} no ha sido desvinculada ya que cuenta con publicaciones, por favor elimine todas sus publicaciones e intente de nuevo`,
+            showConfirmButton: true
+          })
+            this.loading = false;
+            return;
+          }
           this.loadAcounts();
           Swal.fire({
             position: 'top-end',
             icon: 'success',
-            title: `La cuenta ${account.businessName} ha sido eliminada`,
+            title: `La cuenta ${account.businessName} ha sido desvinculada`,
             showConfirmButton: false,
             timer: 2000
           })
-        }, error => {
-          console.log('Error eliminando la cuenta:', error);
+
+        }, (error: any) => {
+          console.log('Error desvinculando la cuenta:', error);
           this.loading = false;
-          Swal.fire({
-            position: 'top-end',
-            icon: 'error',
-            title: `La cuenta no ha sido eliminada`,
-            showConfirmButton: false,
-            timer: 2000
-          })
+
+            Swal.fire({
+              position: 'top-end',
+              icon: 'error',
+              title: `La cuenta no ha sido desvinculada`,
+              showConfirmButton: false,
+              timer: 5000
+            })
+
+
         })
       }
     })

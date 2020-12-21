@@ -20,49 +20,49 @@ import { AuthService } from 'src/app/core/services/auth.service'
 export class ProductsStorageUserService {
 
   URI = environment.URI_ROOT;
-  URI_PRODUCTS_ACTIONS = '/products/api'; 
-  URI_UPLOAD_ACTIONS = '/upload/api';  
+  URI_PRODUCTS_ACTIONS = '/products/api';
+  URI_UPLOAD_ACTIONS = '/upload/api';
   pageProductsMeli: PageProductMeliStorage;
   list: any[];
   profileId: number;
 
-  constructor(private http: HttpClient, private authService: AuthService) { 
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.pageProductsMeli = new PageProductMeliStorage();
     this.list = [];
     this.profileId = this.authService.authenticationDataExtrac().profileId;
   }
 
-  storeMyProducts(idProfile: number, marketplace: Number, products: any[]): Observable<SelectedProducResponse>{    
+  storeMyProducts(idProfile: number, marketplace: Number, products: any[]): Observable<SelectedProducResponse>{
     let string_profile = idProfile.toString();
     let encodeProfile = btoa(string_profile);
-    
+
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/select-myproducts/${encodeProfile}?marketplace=${marketplace}
     &products=${products}`;
 
-    return this.http.get<SelectedProducResponse>(params);     
+    return this.http.get<SelectedProducResponse>(params);
   }
 
-  getDetailsMarketplaces(idProfile: number): Observable<MarketplaceDetails[]>{     
+  getDetailsMarketplaces(idProfile: number): Observable<MarketplaceDetails[]>{
     let string_profile = idProfile.toString();
     let encodeProfile = btoa(string_profile);
 
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/marketplaces-details/${encodeProfile}`;
-    return this.http.get<MarketplaceDetails[]>(params);   
+    return this.http.get<MarketplaceDetails[]>(params);
   }
 
   getPageMyCustomProducts(idProfile: number, page: number, size: number, sku: string, nameProduct: string,
     state: number, familyId: number, minPrice: number, maxPrice: number): Observable<PageProductMeliStorage> {
-    
+
       let string_profile = idProfile.toString();
       let encodeProfile = btoa(string_profile);
 
     const uri = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/items-meli-filters/${page}/${size}/${encodeProfile}
     ?sku=${sku}&nameProduct=${nameProduct}&state=${state}&familyId=${familyId}
     &minPrice=${minPrice}&maxPrice=${maxPrice}`;
-  
-    return this.http.get<PageProductMeliStorage>(uri).pipe(map((resp: any) => {     
+
+    return this.http.get<PageProductMeliStorage>(uri).pipe(map((resp: any) => {
       this.pageProductsMeli.itemsMeliGrid = resp.itemsMeliGridList;
-      this.pageProductsMeli.totalElements = resp.totalElements;      
+      this.pageProductsMeli.totalElements = resp.totalElements;
       this.pageProductsMeli.size = resp.size;
       this.pageProductsMeli.totalPages = resp.totalPages;
       this.pageProductsMeli.last = resp.last;
@@ -94,17 +94,17 @@ export class ProductsStorageUserService {
 
     for(let i=0; i<fileList.length; i++){
      for(let j=0; j<productsList.length; j++){
-        let formData: FormData = new FormData(); 
-        let filename = productsList[j].sku + '_';   
-        filename = filename + this.getRandomInt(1,1000000) + "_" + fileList[i].name; 
+        let formData: FormData = new FormData();
+        let filename = productsList[j].sku + '_';
+        filename = filename + this.getRandomInt(1,1000000) + "_" + fileList[i].name.replace(/ /g, "");
         formData.append('image', fileList[i], filename.trim());
         let result = await this.http.post<any>(params, formData).toPromise();
-        resultList.push(result); 
-     } 
+        resultList.push(result);
+     }
     }
     return resultList;
   }
- 
+
   deleteImages(imageToDelete: string[]): Observable<any>{
     let finalImageList = [];
     imageToDelete.forEach(element => {
@@ -132,13 +132,13 @@ export class ProductsStorageUserService {
     productList.forEach(element => {
       skuList.push(element.sku);
     });
-    
+
 
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${skuList}`;
     return this.http.put<any>(params, imageListToSend);
   }
 
-  getFullProductsById(idProductsList: number[]): Observable<any>{ 
+  getFullProductsById(idProductsList: number[]): Observable<any>{
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/full-product-id/?ids=${idProductsList}`;
     return this.http.get<any>(params);
   }
@@ -166,7 +166,7 @@ export class ProductsStorageUserService {
   // Retorna un entero aleatorio entre min (incluido) y max (excluido)
   //¡Usando Math.round() te dará una distribución no-uniforme!
   getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;    
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 
 }
