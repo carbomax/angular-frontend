@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MeliCategoryPathComponent } from './meli-category-path.component';
 
@@ -6,7 +6,7 @@ describe('MeliCategoryPathComponent', () => {
   let component: MeliCategoryPathComponent;
   let fixture: ComponentFixture<MeliCategoryPathComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MeliCategoryPathComponent ]
     })
