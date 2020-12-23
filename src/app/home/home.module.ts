@@ -37,6 +37,7 @@ import { GlobalLoadingComponent } from './components/global-loading/global-loadi
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
+import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
 
 
 
@@ -68,7 +69,8 @@ import { HistorialOperationComponent } from './pages/home/historial-operation/hi
     GlobalLoadingComponent,
     OperationsComponent,
     AttributeRequiredComponent,
-    HistorialOperationComponent],
+    HistorialOperationComponent,
+    DashboardAdminComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

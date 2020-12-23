@@ -10,6 +10,9 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 // Multiselect
 import { NgSelectModule } from '@ng-select/ng-select';
 
+// Charts
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
 
 @NgModule({
   declarations: [],
@@ -19,7 +22,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     ReactiveFormsModule,
     NgxPaginationModule,
     NgbModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxChartsModule
   ],
   exports: [
     CommonModule,
@@ -27,7 +31,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxChartsModule
   ]
 })
 export class SharedModule { }

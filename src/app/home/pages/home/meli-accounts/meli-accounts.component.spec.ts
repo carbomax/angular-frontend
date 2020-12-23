@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 import { MeliAccountsComponent } from './meli-accounts.component';
 
@@ -6,7 +6,7 @@ describe('MeliAccountsComponent', () => {
   let component: MeliAccountsComponent;
   let fixture: ComponentFixture<MeliAccountsComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ MeliAccountsComponent ]
     })

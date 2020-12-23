@@ -1,0 +1,27 @@
+<div class="col-xl-7 col-lg-6">
+
+  <!-- Area Chart -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary"> <i class="fas fa-shopping-cart"></i> Ventas</h6>
+    </div>
+    <div class="card-body">
+      <div class="chart-area">
+        <ngx-charts-line-chart
+        [scheme]="colorScheme"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [timeline]="timeline"
+        [results]="multi"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+        >
+      </ngx-charts-line-chart>
+      </div>
+    </div>
+  </div>
+
+</div>
