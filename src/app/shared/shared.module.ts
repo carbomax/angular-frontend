@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
-import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
-import { Ng5SliderModule } from 'ng5-slider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Pagination
@@ -20,8 +17,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule
@@ -29,8 +24,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
   exports: [
     CommonModule,
     FormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,
