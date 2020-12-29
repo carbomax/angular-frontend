@@ -38,6 +38,7 @@ import { OperationsComponent } from './pages/home/operations/operations.componen
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
 
 
 
@@ -70,7 +71,8 @@ import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-
     OperationsComponent,
     AttributeRequiredComponent,
     HistorialOperationComponent,
-    DashboardAdminComponent],
+    DashboardAdminComponent,
+    ChartLineOrdersComponent],
 
   exports: [HomeComponent,
     SidebardComponent,

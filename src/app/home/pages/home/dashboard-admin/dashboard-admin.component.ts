@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { StatisticService } from '../../../services/statistic.service';
+import { StockVsTotalItemDto } from '../../../../models/statistics/stock.vs.total.item.model';
+
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -6,85 +11,75 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard-admin.component.css']
 })
 export class DashboardAdminComponent implements OnInit {
-  multi: any[];
-  view: any[] = [undefined, 400];
 
-  // options
-  gradient: boolean = true;
-  legend: boolean = false;
-  showLabels: boolean = true;
-  animations: boolean = true;
-  xAxis: boolean = true;
-  yAxis: boolean = true;
-  showYAxisLabel: boolean = true;
-  showXAxisLabel: boolean = true;
- // xAxisLabel: string = 'Años';
-  //yAxisLabel: string = 'Population';
-  timeline: boolean = true;
+  countAllSales = 0;
+  countActivePublications = 0;
+  betterSku = '';
+  stockVsTotal = new StockVsTotalItemDto();
 
-  colorScheme = {
-    domain: ['#5AA454']
-  };
+  constructor(public statisticService: StatisticService){
 
-  constructor() {
-    Object.assign(this, { multi });
   }
-
-  onSelect(data): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  onActivate(data): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  onDeactivate(data): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
-  }
-
   ngOnInit(): void {
+    this.getCountAllSales();
+    this.getCountActivePublications();
+    this.getBetterSku();
+    this.getStockVsTotalOfItems();
   }
 
+  getCountAllSales(): void{
+
+    this.statisticService.getCountAllSales().subscribe( count => {
+      console.log(count)
+        this.countAllSales = count as number;
+    }, error => {
+      console.log('Error in getCountAllSales(): ', error);
+      this.countAllSales = 0;
+    })
+  }
+
+  getCountActivePublications(): void{
+
+    this.statisticService.getCountActivePublications().subscribe( count => {
+      console.log(count)
+        this.countActivePublications = count as number;
+    }, error => {
+      console.log('Error in getCountActivePublications(): ', error);
+      this.countActivePublications = 0;
+    })
+  }
+
+  getBetterSku(): void{
+
+    this.statisticService.getBetterSku().subscribe( (resp: any) => {
+      console.log('Better sku', resp)
+        if(resp.sku !== undefined && resp.sku !== null){
+          this.betterSku = `${resp.sku} : ${resp.count}`;
+        } else {
+          this.betterSku = '';
+        }
+    }, error => {
+      console.log('Error in getBetterSku(): ', error);
+      this.betterSku = '';
+    })
+  }
+
+  getStockVsTotalOfItems(): void{
+    this.statisticService.getStockVsTotalOfItems().subscribe( dto => {
+        this.stockVsTotal = dto;
+    }, error => {
+      console.log('Error in getStockVsTotalOfItems(): ', error);
+      this.stockVsTotal.total = 0;
+      this.stockVsTotal.withStock = 0;
+    })
+  }
+
+
+  get percent(): string{
+    return `${this.getPercent(this.stockVsTotal.withStock, this.stockVsTotal.total)}%`
+  }
+  getPercent(number1: number, number2: number): number{
+      return number1 && number2 ? Math.round((number1/number2)*100) : 0;
+  }
 }
 
-export var multi = [
-
-
-  {
-    "name": "Ventas",
-    "series": [
-      {
-        "name": "1990",
-        "value": 20
-      },
-      {
-        "name": "1991",
-        "value": 20
-      },
-      {
-        "name": "1992",
-        "value": 33
-      },
-      {
-        "name": "1995",
-        "value": 33
-      },
-      {
-        "name": "2000",
-        "value": 90
-      },
-      {
-        "name": "2010",
-        "value": 30
-      },
-      {
-        "name": "2015",
-        "value": 90
-      },
-      {
-        "name": "2016",
-        "value": 30
-      }
-    ]
-  }
-];

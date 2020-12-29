@@ -21,7 +21,7 @@ export class SellerOrdersComponent implements OnInit {
   public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   errorDateFrom = false;
   errorDateTo = false;
