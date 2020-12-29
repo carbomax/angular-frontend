@@ -25,15 +25,8 @@
                 placeholder="Buscar por SKU...">
             </div>
 
-
           </div>
           <div class="col-md-6">
-
-            <div class="form-group mb-md-0">
-              <label for="idPriceSearch">Precio:</label>
-              <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
-                [options]="options"></ng5-slider>
-            </div>
 
             <div class="row">
               <div class="col-md-6">
@@ -59,6 +52,22 @@
                 </div>
               </div>
             </div>
+
+            <div class="form-group mb-md-0">
+              <div class="row" style="margin-bottom: 1rem">
+                <div class="col-sm-3">
+                  <label for="idMinPriceSearch">Precio mín:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000" [(ngModel)]="minValue"
+                  name="idMinPriceSearch" id="idMinPriceSearch">
+                </div>
+                <div class="col-sm-3">
+                  <label for="idMaxPriceSearch">Precio máx:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000" [(ngModel)]="maxValue"
+                  name="idMaxPriceSearch" id="idMaxPriceSearch">
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="row">

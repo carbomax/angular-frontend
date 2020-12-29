@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
-import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
-import { Ng5SliderModule } from 'ng5-slider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Pagination
@@ -22,8 +19,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,
@@ -32,8 +27,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   exports: [
     CommonModule,
     FormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,

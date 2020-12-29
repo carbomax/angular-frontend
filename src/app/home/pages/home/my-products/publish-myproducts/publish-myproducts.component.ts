@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Options, LabelType } from 'ng5-slider';
 
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
 import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
@@ -78,22 +77,6 @@ export class PublishMyproductsComponent implements OnInit {
   size: number = 15;
   checkAll = false;
 
-  // Range price filter
-  options: Options = {
-    floor: 0,
-    ceil: this.maxValue,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return '<b>Mínimo:</b> ' + value;
-        case LabelType.High:
-          return '<b>Máximo:</b> ' + value;
-        default:
-          return '' + value;
-      }
-    }
-  };
-
   //Variables from Add Common Data Modal
   message: string;
   fileList: any[];
@@ -137,7 +120,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadPaginator = true;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemCustomGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         let countSelected = 0;
@@ -185,7 +168,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.profileId = this.authService.authenticationDataExtrac().profileId;
       this.loading = true;
       this.errorProducts = false;
-      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -267,7 +250,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.productsSelected = [];
       this.productStoreUserService.
         getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -302,7 +285,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.maxValue = 20000;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         this.totalPages = +this.pageProductsMeli.totalPages;

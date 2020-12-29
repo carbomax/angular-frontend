@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductStore } from '../../../../../models/product.store';
-import { Options, LabelType } from 'ng5-slider';
 
 import { ProductsStorageService } from '../../../../services/products-storage.service';
 import { PageProductStorage } from '../../../../../models/page.product.store';
@@ -22,7 +21,7 @@ import { ParsedPropertyType } from '@angular/compiler';
   templateUrl: './products-store.component.html',
   styleUrls: ['./products-store.component.css']
 })
-export class ProductsStoreComponent implements OnInit { 
+export class ProductsStoreComponent implements OnInit {
   @ViewChild('checkAllP') checkAllP;
 
   public loading = false;
@@ -64,24 +63,6 @@ export class ProductsStoreComponent implements OnInit {
   checkAll = false;
   sizes: [{ numer: 15 }, { numer: 30 }, { numer: 50 }, { numer: 75 }, { numer: 100 }];
 
-  // Range price filter
-  options: Options = {
-    floor: 0,
-    ceil: this.maxValue,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return '<b>Mínimo:</b> ' + value;
-        case LabelType.High:
-          return '<b>Máximo:</b> ' + value;
-        default:
-          return '' + value;
-      }
-    }
-  };
-
-
-
 
   constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService,
     public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router) {
@@ -110,7 +91,7 @@ export class ProductsStoreComponent implements OnInit {
     this.loading = true;
     this.productStoreService.
       getPageProducts(this.currentPage = +page - 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
         let countSelected = 0;
@@ -144,7 +125,7 @@ export class ProductsStoreComponent implements OnInit {
     this.disabled = true;
     this.loading = true;
     this.errorProducts = false;
-    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+    this.productStoreService.getPageProducts(0, this.size, this.skuSearch, this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
 
@@ -213,7 +194,7 @@ export class ProductsStoreComponent implements OnInit {
     this.loadingClear = false;
     this.productStoreService.
       getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
         this.loadPaginator = false;
@@ -242,7 +223,7 @@ export class ProductsStoreComponent implements OnInit {
     this.maxValue = 20000;
     this.productStoreService.
       getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
         if (this.pageProducts.itemsGrid.length > 0) {
@@ -255,7 +236,7 @@ export class ProductsStoreComponent implements OnInit {
       });
 
   }
- 
+
   // To send the selected products to custom store
   selectMyProducts(idMarket: any): void {
     this.loadingStoringModal = true;
@@ -275,7 +256,7 @@ export class ProductsStoreComponent implements OnInit {
               });
               this.checkAll = false;
               this.checkAllP.nativeElement.checked = 0;
-              this.loadingStoringModal = false;            
+              this.loadingStoringModal = false;
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -294,7 +275,7 @@ export class ProductsStoreComponent implements OnInit {
               });
               this.checkAll = false;
               this.checkAllP.nativeElement.checked = 0;
-              this.loadingStoringModal = false;         
+              this.loadingStoringModal = false;
               Swal.fire({
                 position: 'top-end',
                 icon: 'success',
@@ -314,7 +295,7 @@ export class ProductsStoreComponent implements OnInit {
               });
               this.checkAll = false;
               this.checkAllP.nativeElement.checked = 0;
-              this.loadingStoringModal = false;            
+              this.loadingStoringModal = false;
               Swal.fire({
                 position: 'top-end',
                 icon: 'warning',
@@ -326,7 +307,7 @@ export class ProductsStoreComponent implements OnInit {
             }
           })
         } else {
-          this.loadingStoringModal = false;          
+          this.loadingStoringModal = false;
           Swal.fire({
             position: 'top-end',
             title: 'Error en lista',
@@ -341,7 +322,7 @@ export class ProductsStoreComponent implements OnInit {
 
     }
     else {
-      this.loadingStoringModal = false;     
+      this.loadingStoringModal = false;
       Swal.fire({
         position: 'top-end',
         icon: 'warning',
