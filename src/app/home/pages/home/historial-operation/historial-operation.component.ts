@@ -19,7 +19,7 @@ export class HistorialOperationComponent implements OnInit {
   public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   hoveredDate: NgbDate | null = null;
 

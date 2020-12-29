@@ -12,7 +12,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "~11.0.5",
-    "@angular/cdk": "^10.2.2",
+    "@angular/cdk": "^11.0.3",
     "@angular/common": "~11.0.5",
     "@angular/compiler": "~11.0.5",
     "@angular/core": "~11.0.5",
@@ -25,6 +25,7 @@
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ng-select/ng-select": "^5.0.3",
     "@swimlane/ngx-charts": "^16.0.0",
+    "moment": "^2.29.1",
     "ng5-slider": "^1.2.4",
     "ngx-bootstrap-slider": "^1.9.0",
     "ngx-pagination": "^5.0.0",

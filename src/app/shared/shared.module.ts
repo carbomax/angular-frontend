@@ -16,7 +16,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
 // Charts
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-
 @NgModule({
   declarations: [],
   imports: [
