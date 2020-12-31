@@ -5,6 +5,7 @@ import { Serie } from '../../models/serie.model';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { StockVsTotalItemDto } from '../../models/statistics/stock.vs.total.item.model';
+import { BetterSkuDto } from '../../models/statistics/better.sku.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,15 @@ export class StatisticService {
 
   public getBetterSku(): Observable<any>{
     return this.http.get<any>(`${this.URI_MELI_STATISTICS}/better-sku`);
+  }
+
+  public getBettersSku(size: number): Observable<BetterSkuDto[]>{
+    return this.http.get<BetterSkuDto[]>(`${this.URI_MELI_STATISTICS}/better-sku/${size}`)
+                    .pipe(map( (resp:BetterSkuDto[])  => {
+                      let count = 0;
+                      resp.forEach( element => element.ranking = count = count + 1)
+                      return resp;
+                    }))
   }
 
   public getStockVsTotalOfItems(): Observable<StockVsTotalItemDto>{

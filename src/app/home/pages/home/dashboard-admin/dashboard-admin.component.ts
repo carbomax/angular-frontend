@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { StatisticService } from '../../../services/statistic.service';
 import { StockVsTotalItemDto } from '../../../../models/statistics/stock.vs.total.item.model';
+import { BetterSkuDto } from '../../../../models/statistics/better.sku.model';
 
 
 @Component({
@@ -12,10 +11,17 @@ import { StockVsTotalItemDto } from '../../../../models/statistics/stock.vs.tota
 })
 export class DashboardAdminComponent implements OnInit {
 
+  collapse = false;
   countAllSales = 0;
   countActivePublications = 0;
   betterSku = '';
   stockVsTotal = new StockVsTotalItemDto();
+  bettersSku: BetterSkuDto[] = [];
+  loadingBettersSku = false;
+
+  // paginator
+  page     = 1;
+  pageSize = 2;
 
   constructor(public statisticService: StatisticService){
 
@@ -61,6 +67,23 @@ export class DashboardAdminComponent implements OnInit {
     }, error => {
       console.log('Error in getBetterSku(): ', error);
       this.betterSku = '';
+    })
+  }
+
+  openBetterSkuModal(){
+    this.getBettersSku();
+  }
+
+  getBettersSku(): void{
+    this.loadingBettersSku = true;
+    this.statisticService.getBettersSku(100).subscribe( (resp: BetterSkuDto[]) => {
+      console.log('Betters sku', resp)
+       this.bettersSku = resp;
+       this.loadingBettersSku = false;
+    }, error => {
+      console.log('Error in getBetterSku(): ', error);
+      this.bettersSku = [];
+      this.loadingBettersSku = false;
     })
   }
 
