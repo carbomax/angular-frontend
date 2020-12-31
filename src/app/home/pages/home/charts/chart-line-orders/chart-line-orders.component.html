@@ -1,43 +1,15 @@
 <!-- Area Chart -->
 <div class="card shadow">
-  <div class="card-header py-3">
+  <!-- <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
       <i class="fas fa-shopping-cart"></i> Ventas
     </h6>
-  </div>
+  </div> -->
   <div class="card-body">
     <div class="row">
-      <div class="col-md-4"></div>
-      <div class="col-md-8">
-        <div class="row">
-          <div class="col-xl-3 col-md-6">
-            <div class="form-group">
-              <div class="input-group">
-                <input
-                  class="form-control"
-                  [formControl]="dateFromControl"
-                  [class.is-invalid]="dateFromControl.invalid"
-                  placeholder="Fecha desde: yyyy-mm-dd"
-                  readonly
-                  name="dp"
-                  (dateSelect)="onDateFromSelection($event)"
-                  ngbDatepicker
-                  #dateFrom="ngbDatepicker"
-                  [maxDate]="dateToControl.value"
-                />
-                <div class="input-group-append">
-                  <button
-                    class="btn btn-outline-secondary calendar"
-                    (click)="dateFrom.toggle()"
-                    type="button"
-                  >
-                    <i class="fas fa-calendar-alt"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-xl-3 col-md-6">
+      <div class="col">
+        <div class="row d-flex flex-row-reverse">
+          <div class="col-xl-3 col-md-3">
             <div class="form-group">
               <div class="input-group">
                 <input
@@ -56,6 +28,34 @@
                   <button
                     class="btn btn-outline-secondary calendar"
                     (click)="dateTo.toggle()"
+                    type="button"
+                  >
+                    <i class="fas fa-calendar-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-xl-3 col-md-3">
+            <div class="form-group">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [formControl]="dateFromControl"
+                  [class.is-invalid]="dateFromControl.invalid"
+                  placeholder="Fecha desde: yyyy-mm-dd"
+                  readonly
+                  name="dp"
+                  (dateSelect)="onDateFromSelection($event)"
+                  ngbDatepicker
+                  #dateFrom="ngbDatepicker"
+                  [maxDate]="dateToControl.value"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="dateFrom.toggle()"
                     type="button"
                   >
                     <i class="fas fa-calendar-alt"></i>
