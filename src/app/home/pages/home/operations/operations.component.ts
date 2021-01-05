@@ -19,7 +19,7 @@ export class OperationsComponent implements OnInit {
   public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   hoveredDate: NgbDate | null = null;
 
@@ -295,14 +295,21 @@ export class OperationsComponent implements OnInit {
   private buildDateFilter(): void {
 
     if (this.dateFromControl.value !== null) {
-      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+      this.dateFrom = +`${this.dateFromControl.value.year}
+      ${this.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}
+      ${this.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
     } else { this.dateFrom = 0 }
 
     if (this.dateToControl.value !== null) {
-
-      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}
+      ${this.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}
+      ${this.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
     } else { this.dateTo = 99999999 }
 
+  }
+
+  helperZeroBeforeMonthOrDay(dayOrMonth: number): string{
+    return (dayOrMonth / 10) >= 1 ? `${dayOrMonth}` : `0${dayOrMonth}`;
   }
 
   numberOnly(event): boolean {

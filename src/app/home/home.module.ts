@@ -39,6 +39,7 @@ import { AttributeRequiredComponent } from './components/modals/attribute-requir
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
 import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
+import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
 
 
 
@@ -72,6 +73,7 @@ import { SystemConfigurationComponent } from './pages/home/system-configuration/
     AttributeRequiredComponent,
     HistorialOperationComponent,
     DashboardAdminComponent,
+    ChartLineOrdersComponent,
     SystemConfigurationComponent],
 
   exports: [HomeComponent,
