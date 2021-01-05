@@ -38,6 +38,7 @@ import { OperationsComponent } from './pages/home/operations/operations.componen
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
 
 
 
@@ -70,7 +71,8 @@ import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-
     OperationsComponent,
     AttributeRequiredComponent,
     HistorialOperationComponent,
-    DashboardAdminComponent],
+    DashboardAdminComponent,
+    SystemConfigurationComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -90,7 +92,8 @@ import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-
     ListMarginsComponent,
     SellerOrdersComponent,
     MeliCategoryPathComponent,
-    EditProductsPublishedComponent],
+    EditProductsPublishedComponent,
+    SystemConfigurationComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,
