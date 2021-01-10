@@ -37,9 +37,10 @@ import { GlobalLoadingComponent } from './components/global-loading/global-loadi
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
 import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
 
 
 
@@ -75,7 +76,8 @@ import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
     DashboardAdminComponent,
     ChartLineOrdersComponent,
     DashboardAdminComponent,
-    DashboardComponent],
+    DashboardComponent,
+    SystemConfigurationComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -97,7 +99,8 @@ import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
     MeliCategoryPathComponent,
     EditProductsPublishedComponent,
     DashboardAdminComponent,
-    DashboardComponent],
+    DashboardComponent,
+    SystemConfigurationComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,
