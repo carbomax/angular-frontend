@@ -37,8 +37,9 @@ import { GlobalLoadingComponent } from './components/global-loading/global-loadi
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
 import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
+import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
 
 
 
@@ -72,7 +73,9 @@ import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/
     AttributeRequiredComponent,
     HistorialOperationComponent,
     DashboardAdminComponent,
-    ChartLineOrdersComponent],
+    ChartLineOrdersComponent,
+    DashboardAdminComponent,
+    DashboardComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -92,7 +95,9 @@ import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/
     ListMarginsComponent,
     SellerOrdersComponent,
     MeliCategoryPathComponent,
-    EditProductsPublishedComponent],
+    EditProductsPublishedComponent,
+    DashboardAdminComponent,
+    DashboardComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,

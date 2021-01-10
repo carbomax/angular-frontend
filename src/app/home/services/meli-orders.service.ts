@@ -43,7 +43,7 @@ export class MeliOrdersService {
     }
 
 
-    const url = `${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&&statusFilter=${statusFilter}&nameClient=${nameClient}&dateFrom=${dateFrom}&dateTo=${dateTo}&operatorBusinessStatus=${operatorBusinesStatus}`
+    const url = `${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&statusFilter=${statusFilter}&nameClient=${nameClient}&dateFrom=${dateFrom}&dateTo=${dateTo}&operatorBusinessStatus=${operatorBusinesStatus}`
     console.log(url)
     return this.http.get<OrderPage>(url);
   }
