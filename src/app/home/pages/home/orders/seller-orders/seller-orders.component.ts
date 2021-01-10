@@ -4,6 +4,7 @@ import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
 import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
+import { AuthService } from '../../../../../core/services/auth.service';
 
 
 
@@ -43,7 +44,8 @@ export class SellerOrdersComponent implements OnInit {
 
   constructor(public meliOrderService: MeliOrdersService,
               private calendar: NgbCalendar,
-              public formatter: NgbDateParserFormatter) {
+              public formatter: NgbDateParserFormatter,
+              private authService: AuthService) {
 
   }
 
@@ -70,8 +72,8 @@ export class SellerOrdersComponent implements OnInit {
     return totalAmount + amountTaxes + baseCost;
 
   }
-  orderByDesc(i, size): number{
-    return size - i;
+  orderByDesc(i, orderPage: OrderPage): number{
+    return orderPage.totalElements - i;
   }
 
   searchOrders(): void {

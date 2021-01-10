@@ -1,3 +1,4 @@
+
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './pages/home/home.component';
@@ -21,14 +22,15 @@ import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
 import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
 
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
-    path: '', component: HomeComponent, data: {title: 'Inicio'},
+    path: '', component: HomeComponent, data: {title: 'Inicio' },
     children: [
       { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] , data: {title: 'Productos-Almacén'}},
       { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] ,  data: {title: 'Marketplaces'}},
@@ -46,6 +48,7 @@ const routes: Routes = [
       { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Órdenes' }},
       { path: 'operations', component: OperationsComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Operaciones' }},
       { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Histórico-Operaciones' }},
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Tablero de control' }},
       { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Tablero de control' }},
       { path: 'system-config-admin', component: SystemConfigurationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Configuraciones del sistema' }},
       { path: '', redirectTo: 'home', pathMatch: 'full' }

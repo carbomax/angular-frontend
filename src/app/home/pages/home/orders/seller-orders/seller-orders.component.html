@@ -137,7 +137,7 @@
 
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
-            <td class="text-right">{{ orderByDesc(i, orderPage.content.length )}}</td>
+            <td class="text-right">{{ orderByDesc(i, orderPage )}}</td>
             <td>
 
               <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"

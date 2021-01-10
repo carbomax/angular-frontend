@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { StockVsTotalItemDto } from '../../models/statistics/stock.vs.total.item.model';
 import { BetterSkuDto } from '../../models/statistics/better.sku.model';
+import { AnalysisDrop } from '../../models/statistics/analysis.model';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,9 @@ export class StatisticService {
 
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.getAnalysisDrop(['2020-12','2020-11']);
+  }
 
 
   public getSalesByBusinessDateCreated(dateFrom: number, dateTo: number): Observable<Serie[]>{
@@ -62,5 +65,9 @@ export class StatisticService {
   public getStockVsTotalOfItems(): Observable<StockVsTotalItemDto>{
      return this.http.get<StockVsTotalItemDto>(`${this.URI_MELI_STATISTICS}/stock-vs-total-items`);
   }
+
+  public getAnalysisDrop(dates: string[]): Observable<AnalysisDrop[]>{
+    return this.http.get<AnalysisDrop[]>(`${this.URI_MELI_STATISTICS}/analysis-drop?dates=${dates}`);
+ }
 
 }
