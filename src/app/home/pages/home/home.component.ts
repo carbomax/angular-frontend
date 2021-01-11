@@ -12,9 +12,8 @@ import { AuthService } from '../../../core/services/auth.service';
 export class HomeComponent implements OnInit {
 
   year = new Date().getFullYear();
-  constructor(private router: Router) {
+  constructor() {
 
-    this.router.navigate(['home/dashboard']);
    }
 
   ngOnInit(): void {
