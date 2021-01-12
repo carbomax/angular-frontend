@@ -15,9 +15,9 @@
   <!-- Nav Item - Dashboard -->
   <li class="nav-item active">
     <a class="nav-link"
-    routerLink="/home/dashboard-admin"
+    routerLink="/home/dashboard"
     routerLinkActive="active"
-    *ngIf="sidebarService.hashRoles(['ROLE_ADMIN'])"
+    *ngIf="sidebarService.hashRoles(['ROLE_ADMIN', 'ROLE_SELLER'])"
     >
       <i class="fas fa-fw fa-tachometer-alt"></i>
       <span [hidden]="toggled" class="ml-2">Tablero de control</span></a>

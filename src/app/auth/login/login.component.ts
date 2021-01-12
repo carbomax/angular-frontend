@@ -54,7 +54,7 @@ public registerForm: FormGroup;
 
     this.loginIntoText = 'Entrar';
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home/dashboard']);
     }
 
   }

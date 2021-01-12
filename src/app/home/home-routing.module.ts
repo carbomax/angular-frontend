@@ -28,7 +28,8 @@ import { SystemConfigurationComponent } from './pages/home/system-configuration/
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'home/dashboard', pathMatch: 'full' },
+  { path: 'home', redirectTo: 'home/dashboard', pathMatch: 'full' },
   {
     path: '', component: HomeComponent, data: {title: 'Inicio' },
     children: [
@@ -51,7 +52,7 @@ const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Tablero de control' }},
       { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Tablero de control' }},
       { path: 'system-config-admin', component: SystemConfigurationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Configuraciones del sistema' }},
-      { path: '', redirectTo: 'home', pathMatch: 'full' }
+      { path: '', redirectTo: 'home/dashboard', pathMatch: 'full' }
     ]
   }
 
