@@ -131,7 +131,7 @@ export class SellerOrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.buildDateFilter();
-    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo, []).subscribe((resp: OrderPage) => {
+    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch,'', this.dateFrom, this.dateTo, []).subscribe((resp: OrderPage) => {
       console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
