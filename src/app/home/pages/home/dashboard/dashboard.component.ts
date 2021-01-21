@@ -11,16 +11,16 @@ export class DashboardComponent implements OnInit {
 
   toAdmin = false;
   constructor( private authService: AuthService) {
-
-     console.log('pasando c el router', this.authService.authenticationDataExtrac())
-     if(this.authService.authenticationDataExtrac().roles.includes( 'ROLE_ADMIN' )){
-        this.toAdmin = true;
-     } else {
-      this.toAdmin = false;
-     }
-   }
+    console.log('pasando c el router', this.authService.authenticationDataExtrac())
+    if(this.authService.authenticationDataExtrac().roles.includes( 'ROLE_ADMIN' )){
+       this.toAdmin = true;
+    } else {
+     this.toAdmin = false;
+    }
+  }
 
   ngOnInit(): void {
+
   }
 
 }

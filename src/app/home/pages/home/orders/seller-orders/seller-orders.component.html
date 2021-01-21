@@ -124,7 +124,7 @@
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>#</th>
+            <th class="text-right">ID</th>
             <th>Estado</th>
             <th>Cliente</th>
             <th>Fecha creación</th>
@@ -137,9 +137,8 @@
 
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
-            <td class="text-right">{{ orderByDesc(i, orderPage )}}</td>
+            <td class="text-right"> {{ item.id }} </td>
             <td>
-
               <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
                 role="alert">
                 <i class="far fa-times-circle"></i> Cancelada

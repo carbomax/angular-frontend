@@ -1,116 +1,38 @@
 <div class="row">
-  <!-- Earnings (Monthly) Card Example -->
+  <!-- Total sales: Paid and Cancelled -->
   <div class="col-xl-3 col-md-6 mb-4 pointer"
   (click)="hiddenSellChart = !hiddenSellChart">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2 animated--grow-in">
-            <div
-              class="text-xs font-weight-bold text-primary text-uppercase mb-1"
-            >
-              Total de ventas
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">
-              {{ countAllSales }}
-            </div>
-          </div>
-          <div class="col-auto">
-            <i [ngClass]="{'text-primary': !hiddenSellChart, 'text-gray-300': hiddenSellChart}" class="fas fa-chart-line fa-2x"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+   <app-total-sales
+   [hiddenSellChart]="hiddenSellChart"
+   [countAllSalesPaid]="countAllSalesPaid"
+   [countAllSalesCancelled]="countAllSalesCancelled"
+   ></app-total-sales>
   </div>
 
-  <!-- Earnings (Monthly) Card Example -->
+  <!-- Better SKU -->
   <div
     class="col-xl-3 col-md-6 mb-4 pointer"
     (click)="openBetterSkuModal()"
     data-toggle="modal"
     data-target="#rankingModal"
   >
-    <div class="card border-left-success shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2 animated--grow-in">
-            <div
-              class="text-xs font-weight-bold text-success text-uppercase mb-1"
-            >
-              Producto más vendido
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">
-              {{ betterSku }}
-            </div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-shipping-fast fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+    <app-better-sku [betterSku]="betterSku"></app-better-sku>
   </div>
 
-  <!-- Earnings (Monthly) Card Example -->
+  <!-- Item with stock vs total in storage -->
   <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-info shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2 animated--grow-in">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-              Productos stock vs total
-            </div>
-            <div class="row no-gutters align-items-center">
-              <div class="col-auto">
-                <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                  {{ stockVsTotal.withStock + "-" + stockVsTotal.total }}
-                </div>
-              </div>
-              <div class="col">
-                <div class="progress progress-sm mr-2">
-                  <div
-                    class="progress-bar bg-info"
-                    role="progressbar"
-                    [style.width]="percent"
-                    aria-valuenow="40"
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-auto">
-            <div class="h5 mb-0 mt-3 mr-1 font-weight-bold text-gray-800">
-              {{ percent }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+   <app-stock-vs-total
+   [withStock]="stockVsTotal.withStock"
+   [total]="stockVsTotal.total"
+   [percent]="percent"
+   ></app-stock-vs-total>
   </div>
 
-  <!-- Pending Requests Card Example -->
+  <!-- Active publications -->
   <div class="col-xl-3 col-md-6 mb-4">
-    <div class="card border-left-warning shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2 animated--grow-in">
-            <div
-              class="text-xs font-weight-bold text-warning text-uppercase mb-1"
-            >
-              Publicaciones activas
-            </div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">
-              {{ countActivePublications }}
-            </div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-chevron-circle-down fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
+   <app-active-publications
+   [actives]="countActivePublications">
+  </app-active-publications>
   </div>
 </div>
 

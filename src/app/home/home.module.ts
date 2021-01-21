@@ -41,6 +41,11 @@ import { SystemConfigurationComponent } from './pages/home/system-configuration/
 import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
 import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
+import { TotalSalesComponent } from './pages/home/dashboard/components/total-sales/total-sales.component';
+import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku/better-sku.component';
+import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
+import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
 
 
 
@@ -77,7 +82,12 @@ import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/
     ChartLineOrdersComponent,
     DashboardAdminComponent,
     DashboardComponent,
-    SystemConfigurationComponent],
+    SystemConfigurationComponent,
+    DashboardSellerComponent,
+    TotalSalesComponent,
+    BetterSkuComponent,
+    StockVsTotalComponent,
+    ActivePublicationsComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -100,7 +110,8 @@ import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/
     EditProductsPublishedComponent,
     DashboardAdminComponent,
     DashboardComponent,
-    SystemConfigurationComponent],
+    SystemConfigurationComponent,
+    TotalSalesComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,

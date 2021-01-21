@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import { StockVsTotalItemDto } from '../../models/statistics/stock.vs.total.item.model';
 import { BetterSkuDto } from '../../models/statistics/better.sku.model';
 import { AnalysisDrop } from '../../models/statistics/analysis.model';
+import { CountPaidAndCancellerSalesDto } from '../../models/statistics/count.all.sales.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,20 +42,22 @@ export class StatisticService {
     }))
   }
 
-  public getCountAllSales(): Observable<Number>{
-    return this.http.get<Number>(`${this.URI_MELI_STATISTICS}/count-all-sales`);
+  public getCountAllSales(sellerId?: number): Observable<CountPaidAndCancellerSalesDto>{
+
+    return this.http.get<CountPaidAndCancellerSalesDto>(`${this.URI_MELI_STATISTICS}/count-all-sales${this.getSellerParameter(sellerId)}`);
   }
 
-  public getCountActivePublications(): Observable<Number>{
-    return this.http.get<Number>(`${this.URI_MELI_STATISTICS}/count-active-publications`);
+  public getCountActivePublications(sellerId?: number): Observable<Number>{
+    return this.http.get<Number>(`${this.URI_MELI_STATISTICS}/count-active-publications${this.getSellerParameter(sellerId)}`);
   }
 
-  public getBetterSku(): Observable<any>{
-    return this.http.get<any>(`${this.URI_MELI_STATISTICS}/better-sku`);
+  public getBetterSku(sellerId?: number): Observable<any>{
+    return this.http.get<any>(`${this.URI_MELI_STATISTICS}/better-sku${this.getSellerParameter(sellerId)}`);
   }
 
-  public getBettersSku(size: number): Observable<BetterSkuDto[]>{
-    return this.http.get<BetterSkuDto[]>(`${this.URI_MELI_STATISTICS}/better-sku/${size}`)
+  public getBettersSku(size: number, sellerId?: number): Observable<BetterSkuDto[]>{
+    return this.http.get<BetterSkuDto[]>(`${this.URI_MELI_STATISTICS}/better-sku/${size}
+    ${this.getSellerParameter(sellerId)}`)
                     .pipe(map( (resp:BetterSkuDto[])  => {
                       let count = 0;
                       resp.forEach( element => element.ranking = count = count + 1)
@@ -70,4 +73,7 @@ export class StatisticService {
     return this.http.get<AnalysisDrop[]>(`${this.URI_MELI_STATISTICS}/analysis-drop?dates=${dates}`);
  }
 
+ private getSellerParameter(sellerId){
+    return sellerId ? `?sellerId=${sellerId}` : '';
+ }
 }

@@ -4,6 +4,7 @@ import { StockVsTotalItemDto } from '../../../../../models/statistics/stock.vs.t
 import { BetterSkuDto } from '../../../../../models/statistics/better.sku.model';
 import { AnalysisDrop } from '../../../../../models/statistics/analysis.model';
 import { DateTimeMomentService } from '../../../../../core/services/date-time-moment.service';
+import { CountPaidAndCancellerSalesDto } from '../../../../../models/statistics/count.all.sales.model';
 
 
 
@@ -15,7 +16,8 @@ import { DateTimeMomentService } from '../../../../../core/services/date-time-mo
 export class DashboardAdminComponent implements OnInit {
 
   collapse = false;
-  countAllSales = 0;
+  countAllSalesPaid = 0;
+  countAllSalesCancelled = 0;
   countActivePublications = 0;
   betterSku = '';
   stockVsTotal = new StockVsTotalItemDto();
@@ -80,12 +82,14 @@ export class DashboardAdminComponent implements OnInit {
 
   getCountAllSales(): void {
 
-    this.statisticService.getCountAllSales().subscribe(count => {
+    this.statisticService.getCountAllSales().subscribe((count: CountPaidAndCancellerSalesDto) => {
       console.log(count)
-      this.countAllSales = count as number;
+      this.countAllSalesPaid = count.paid;
+      this.countAllSalesCancelled = count.cancelled;
     }, error => {
       console.log('Error in getCountAllSales(): ', error);
-      this.countAllSales = 0;
+      this.countAllSalesPaid = 0;
+      this.countAllSalesCancelled = 0;
     })
   }
 

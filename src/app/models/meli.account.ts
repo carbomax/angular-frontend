@@ -8,6 +8,7 @@ export class MeliAccount {
   code?: string;
   token?: string;
   userId?: string;
+  userIdBss?: number;
   accessToken?: string;
   expiresIn?: number;
   scope?: string;
@@ -17,6 +18,6 @@ export class MeliAccount {
   userType?: string;
   points?: number;
   siteId?: string;
-  marketplaceId?: number; 
-  me2?: number;  
+  marketplaceId?: number;
+  me2?: number;
 }

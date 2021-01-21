@@ -25,6 +25,7 @@ import { HistorialOperationComponent } from './pages/home/historial-operation/hi
 import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
 import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
+import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
 
 
 const routes: Routes = [
@@ -51,6 +52,7 @@ const routes: Routes = [
       { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Histórico-Operaciones' }},
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Tablero de control' }},
       { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Tablero de control' }},
+      { path: 'dashboard-seller', component: DashboardSellerComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.SELLER], title: 'Tablero de control' }},
       { path: 'system-config-admin', component: SystemConfigurationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Configuraciones del sistema' }},
       { path: '', redirectTo: 'home/dashboard', pathMatch: 'full' }
     ]
