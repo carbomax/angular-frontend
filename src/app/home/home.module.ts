@@ -46,6 +46,7 @@ import { TotalSalesComponent } from './pages/home/dashboard/components/total-sal
 import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku/better-sku.component';
 import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
 import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
+import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
 
 
 
@@ -87,7 +88,8 @@ import { ActivePublicationsComponent } from './pages/home/dashboard/components/a
     TotalSalesComponent,
     BetterSkuComponent,
     StockVsTotalComponent,
-    ActivePublicationsComponent],
+    ActivePublicationsComponent,
+    ChartLineOrdersSellersComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
