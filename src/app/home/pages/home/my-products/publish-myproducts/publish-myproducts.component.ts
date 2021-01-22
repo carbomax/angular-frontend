@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Options, LabelType } from 'ng5-slider';
 
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
 import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
@@ -25,7 +24,6 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { elementAt } from 'rxjs/operators';
 
-declare function initializePlugin();
 
 @Component({
   selector: 'app-publish-myproducts',
@@ -35,11 +33,11 @@ declare function initializePlugin();
 export class PublishMyproductsComponent implements OnInit {
 
   @ViewChild('closeModal') closeModal;
-  @ViewChild('closeModalLoading') closeModalLoading;
   @ViewChild('checkAllP') checkAllP;
   @ViewChild('checkP') checkP;
   @ViewChild('closeMargin') closeMargin;
   @ViewChild('closePublishModal') closePublishModal;
+  @ViewChild('file') file;
 
   //Loading Modal
   loadingModal = false;
@@ -61,7 +59,6 @@ export class PublishMyproductsComponent implements OnInit {
   public minValue = 0;
   public maxValue = 20000;
 
-  productsStorage: ProductCustom[];
   pageProductsMeli = new PageProductMeliStorage();
   stateEnum = States;
   productsSelected: ProductCustom[];
@@ -77,28 +74,11 @@ export class PublishMyproductsComponent implements OnInit {
   currentPage: number = 1;
   selectedPage = 0;
   page = 0;
-  size: number = 5;
+  size: number = 15;
   checkAll = false;
-
-  // Range price filter
-  options: Options = {
-    floor: 0,
-    ceil: this.maxValue,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return '<b>Mínimo:</b> ' + value;
-        case LabelType.High:
-          return '<b>Máximo:</b> ' + value;
-        default:
-          return '' + value;
-      }
-    }
-  };
 
   //Variables from Add Common Data Modal
   message: string;
-  file: any;
   fileList: any[];
   imagePath: string;
   imgURL: any;
@@ -122,6 +102,7 @@ export class PublishMyproductsComponent implements OnInit {
   warrantyTime: number = 0;
   warranty: boolean = false;
 
+
   constructor(public productStoreService: ProductsStorageService, public productStoreUserService: ProductsStorageUserService, public dialog: MatDialog,
     private authService: AuthService, public meliAccountService: MeliAccountService, public marginService: MarginService, public meliPublicationsService: MeliPublicationsService, private router: Router) {
 
@@ -139,7 +120,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadPaginator = true;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemCustomGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         let countSelected = 0;
@@ -149,6 +130,7 @@ export class PublishMyproductsComponent implements OnInit {
             if (element.id === select.id) {
               element.selected = true;
               countSelected++;
+              this.updateElementOfProduct(element, select);
             }
           });
         });
@@ -181,13 +163,12 @@ export class PublishMyproductsComponent implements OnInit {
     this.accountMarginsList = [];
     this.pathList = [];
 
-
     if (this.authService.isAuthenticated) {
       this.profileId = null;
       this.profileId = this.authService.authenticationDataExtrac().profileId;
       this.loading = true;
       this.errorProducts = false;
-      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -209,19 +190,21 @@ export class PublishMyproductsComponent implements OnInit {
     this.checkAll = !this.checkAll;
 
     this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-      element.selected = this.checkAll;
-      if (element.selected === true) {
-        let position1 = -1;
-        this.productsSelected.forEach(pro => { if (pro.id === element.id) { position1 = this.productsSelected.indexOf(pro); } });
-        if (position1 === -1) {
-          this.productsSelected.push(element);
+      if(element.specialPaused !== 1){
+        element.selected = this.checkAll;
+        if (element.selected === true) {
+          let position1 = -1;
+          this.productsSelected.forEach(pro => { if (pro.id === element.id) { position1 = this.productsSelected.indexOf(pro); } });
+          if (position1 === -1) {
+            this.productsSelected.push(element);
+          }
         }
-      }
-      else {
-        let position = -1;
-        this.productsSelected.forEach(pro => { if (pro.id === element.id) { position = this.productsSelected.indexOf(pro); } });
-        if (position !== -1) {
-          this.productsSelected.splice(position, 1);
+        else {
+          let position = -1;
+          this.productsSelected.forEach(pro => { if (pro.id === element.id) { position = this.productsSelected.indexOf(pro); } });
+          if (position !== -1) {
+            this.productsSelected.splice(position, 1);
+          }
         }
       }
     });
@@ -264,9 +247,10 @@ export class PublishMyproductsComponent implements OnInit {
       this.loadPaginator = true;
       this.empySearch = false;
       this.loadingClear = false;
+      this.productsSelected = [];
       this.productStoreUserService.
         getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -296,11 +280,12 @@ export class PublishMyproductsComponent implements OnInit {
     this.typeProductSearch = '';
     this.typeStateSearch = '';
     this.typeFamilySearch = '';
+    this.productsSelected = [];
     this.minValue = 0;
     this.maxValue = 20000;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         this.totalPages = +this.pageProductsMeli.totalPages;
@@ -350,7 +335,7 @@ export class PublishMyproductsComponent implements OnInit {
     }
 
     if (this.fileList.length !== 0) {
-      this.productStoreUserService.uploadImageSyn(this.fileList).then(data => {
+      this.productStoreUserService.uploadImageSyn(this.fileList, this.productsSelected).then(data => {
         let resultList = data;
         resultList.forEach(element => {
           if (element.success === true) {
@@ -426,6 +411,7 @@ export class PublishMyproductsComponent implements OnInit {
 
     this.productStoreUserService.updateCommonInfo(this.profileId, this.description, this.productsSelected, this.imageStoreList).subscribe(result => {
       if (result.success === true) {
+        this.loadProductsPaginator(this.currentPage);
         this.closeActiveModalLoading();
         Swal.fire({
           position: 'top-end',
@@ -478,6 +464,8 @@ export class PublishMyproductsComponent implements OnInit {
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
         this.loadingModalDelete = false;
+        this.productsSelected = [];
+        this.loadProductsPaginator(this.currentPage);
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -486,17 +474,7 @@ export class PublishMyproductsComponent implements OnInit {
           showConfirmButton: false,
           timer: 5000
         });
-        this.productsSelected.forEach(select => {
-          this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-            if (element.id === select.id) {
-              let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
-              if (position >= 0) {
-                this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
-              }
-            }
-          });
-        });
-        this.productsSelected = [];
+
         if (this.productsSelected.length === 0) {
           this.disable = true;
         } else {
@@ -530,7 +508,7 @@ export class PublishMyproductsComponent implements OnInit {
     })
 
 
-    
+
   }
 
   deleteOneProduct(product: ProductCustom) {
@@ -547,11 +525,11 @@ export class PublishMyproductsComponent implements OnInit {
       if (result.isConfirmed) {
         this.productToDelete = product;
         this.loadingDeleteProduct = true;
-        //this.loadingModalDelete = true;
         this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
         this.loadingDeleteProduct = false;
-        this.loadingModalDelete = false;
+        //this.loadingModalDelete = false;
+        this.loadProductsPaginator(this.currentPage);
         this.productToDelete = null;
         Swal.fire({
           position: 'top-end',
@@ -560,15 +538,6 @@ export class PublishMyproductsComponent implements OnInit {
           text: `Producto eliminados satisfactoriamente.`,
           showConfirmButton: false,
           timer: 5000
-        });
-
-        this.pageProductsMeli.itemsMeliGrid.forEach(element => {
-          if (element === product) {
-            let position = this.pageProductsMeli.itemsMeliGrid.indexOf(element);
-            if (position >= 0) {
-              this.pageProductsMeli.itemsMeliGrid.splice(position, 1);
-            }
-          }
         });
 
         let pos = this.productsSelected.indexOf(product);
@@ -607,20 +576,20 @@ export class PublishMyproductsComponent implements OnInit {
       });
     });
       }
-    });    
+    });
   }
 
   /* ************* Modal View Upload Images ********** */
   preview(files) {
     if (files.length === 0) {
-      this.file = null;
+      this.file.nativeElement.value = "";
       this.message = "Archivo inválido";
       return;
     }
 
     var mimeType = files[0].type;
     if (mimeType.match(/image\/*/) == null) {
-      this.file = null;
+      this.file.nativeElement.value = "";
       this.message = "El archivo no es una imagen.";
       return;
     }
@@ -683,6 +652,7 @@ export class PublishMyproductsComponent implements OnInit {
 
   clearAllImage() {
     this.message = "";
+    this.file.nativeElement.value = "";
     this.fileList = [];
     this.imagesList = [];
     this.imageStoreList = [];
@@ -691,13 +661,10 @@ export class PublishMyproductsComponent implements OnInit {
 
   close() {
     this.closeModal.nativeElement.click();
-    this.closeModalLoading.nativeElement.click();
   }
 
   closeActiveModalLoading() {
     this.loadingModal = false;
-    this.closeModalLoading.nativeElement.click();
-    //this.closeModalLoading.nativeElement.modal('hide');
   }
 
   getPath(pathList: string[]) {
@@ -708,6 +675,13 @@ export class PublishMyproductsComponent implements OnInit {
 
   getCategorySelected(idCategory: string) {
     this.lastCategorySelected = idCategory;
+    //Pendiente para cuando se seleccione los atributos
+   /* if(this.lastCategorySelected !== '-1'){
+      this.attributeRequiredList = [];
+      this.meliPublicationsService.getAttributesRequired(idCategory).subscribe(attr => {
+        this.attributeRequiredList = attr;
+      });
+    }*/
   }
 
   setHome() {
@@ -744,23 +718,36 @@ export class PublishMyproductsComponent implements OnInit {
       let accountMargin = new AccountMarginModel();
 
       var account = this.meliAccountsList.find(element => element.id == this.meliAccount);
-      accountMargin.accountName = account.businessName;
-      accountMargin.idAccount = account.id;
 
-      if (this.margin !== -1) {
-        var margin = this.marginsList.find(element => element.id == this.margin);
-        accountMargin.idMargin = margin.id;
-        accountMargin.nameMargin = margin.name;
-        accountMargin.typeMargin = margin.type;
-        accountMargin.valueMargin = margin.value;
-      } else {
-        accountMargin.idMargin = -1;
-        accountMargin.nameMargin = "";
+      if(account.me2 !== 1){
+        Swal.fire({
+          title: 'Cuenta no permitida',
+          text: 'La cuenta seleccionada no tiene mercado envío configurado. Configure su cuenta en Mercado Libre y vuelva a re-vincular su cuenta.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }else{
+        accountMargin.accountName = account.businessName;
+        accountMargin.idAccount = account.id;
+
+        if (this.margin !== -1) {
+          var margin = this.marginsList.find(element => element.id == this.margin);
+          accountMargin.idMargin = margin.id;
+          accountMargin.nameMargin = margin.name;
+          accountMargin.typeMargin = margin.type;
+          accountMargin.valueMargin = margin.value;
+        } else {
+          accountMargin.idMargin = -1;
+          accountMargin.nameMargin = "";
+        }
+        this.accountMarginsList.push(accountMargin);
+        let index = this.meliAccountsList.indexOf(account);
+        this.meliAccountsList.splice(index, 1);
+        this.closeModalMargin();
       }
-      this.accountMarginsList.push(accountMargin);
-      let index = this.meliAccountsList.indexOf(account);
-      this.meliAccountsList.splice(index, 1);
-      this.closeModalMargin();
+
     }
   }
 
@@ -802,29 +789,78 @@ export class PublishMyproductsComponent implements OnInit {
     this.closeMargin.nativeElement.click();
   }
 
-  publishProducts() {    
+  publishProducts() {
+    let allTitle = true;
+
+    this.productsSelected.forEach(prod => {
+       if(prod.name.length > 60){
+          allTitle = false;
+        }
+    });
+
+    if(!allTitle){
+      Swal.fire({
+        position: 'top-end',
+        title: 'Título o Nombre del producto demasiado extenso',
+        text: 'Mercado Libre no permite publicar produtos con título mayor de 60 caracteres, de no editarse, la aplicación acortará el título al tamaño permitido',
+        icon: 'info',
+        showConfirmButton: true,
+        confirmButtonText: 'Continuar',
+        confirmButtonColor: '#28a745',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        cancelButtonColor: '#d33'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.callPublishProductsService();
+        }
+      })
+    }else{
+      this.callPublishProductsService();
+    }
+
+  }
+
+  callPublishProductsService(){
     // llamada al servicio Publicar
     this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
-    this.closeModalPublish();
-    Swal.fire({
-      position: 'top-end',
-      icon: 'info',
-      title: `Productos en publicación`,
-      text: `Los productos están siendo publicados`,
-      showConfirmButton: false,
-      timer: 5000
-    }).then(() => {  
       for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
-        if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) { 
-          this.pageProductsMeli.itemsMeliGrid.splice(i, 1); 
-          i--; 
+        if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
+          this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
+          i--;
         }
-      }    
-     this.checkP.nativeElement.checked = 0;      
-        if(this.pageProductsMeli.itemsMeliGrid.length === 0){     
-          this.loadProductsPaginator(1);
-        }   
-      });      
-  }
+      }
+      this.productsSelected = [];
+      this.closeModalPublish();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: `Productos en publicación`,
+        text: `Los productos están siendo publicados`,
+        showConfirmButton: false,
+        timer: 5000
+      }).then(() => {
+        //this.checkP.nativeElement.checked = 0;
+          if(this.pageProductsMeli.itemsMeliGrid.length === 0){
+            this.loadProductsPaginator(1);
+          }
+        });
+    }
+
+    updateElementOfProduct(originP: ProductCustom, copyP: ProductCustom) {
+      copyP.currentStock = originP.currentStock;
+      copyP.deleted = originP.deleted;
+      copyP.description = originP.description;
+      copyP.images = originP.images;
+      copyP.sku = originP.sku;
+      copyP.specialPaused = originP.specialPaused;
+      copyP.name = originP.name;
+      copyP.priceUSD = originP.priceUSD;
+      copyP.priceUYU = originP.priceUYU;
+      copyP.price_costUSD = originP.price_costUSD;
+      copyP.price_costUYU = originP.price_costUYU;
+      copyP.selected = originP.selected;
+      copyP.state = originP.state;
+    }
 
 }

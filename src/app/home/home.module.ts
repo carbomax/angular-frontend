@@ -35,6 +35,18 @@ import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/
 import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
 import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
+import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
+import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
+import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
+import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
+import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
+import { TotalSalesComponent } from './pages/home/dashboard/components/total-sales/total-sales.component';
+import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku/better-sku.component';
+import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
+import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
+import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
 
 
 
@@ -64,7 +76,20 @@ import { OperationsComponent } from './pages/home/operations/operations.componen
     MeliCategoryPathComponent,
     EditProductsPublishedComponent,
     GlobalLoadingComponent,
-    OperationsComponent],
+    OperationsComponent,
+    AttributeRequiredComponent,
+    HistorialOperationComponent,
+    DashboardAdminComponent,
+    ChartLineOrdersComponent,
+    DashboardAdminComponent,
+    DashboardComponent,
+    SystemConfigurationComponent,
+    DashboardSellerComponent,
+    TotalSalesComponent,
+    BetterSkuComponent,
+    StockVsTotalComponent,
+    ActivePublicationsComponent,
+    ChartLineOrdersSellersComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -84,7 +109,11 @@ import { OperationsComponent } from './pages/home/operations/operations.componen
     ListMarginsComponent,
     SellerOrdersComponent,
     MeliCategoryPathComponent,
-    EditProductsPublishedComponent],
+    EditProductsPublishedComponent,
+    DashboardAdminComponent,
+    DashboardComponent,
+    SystemConfigurationComponent,
+    TotalSalesComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,

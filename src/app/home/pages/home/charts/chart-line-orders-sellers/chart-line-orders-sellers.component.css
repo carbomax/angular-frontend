@@ -1,0 +1,11 @@
+.chart-line {
+    display: grid;
+    height: 10rem;
+    position: relative;
+  }
+  
+  @media (min-width: 768px) {
+    .chart-line {
+      height: 20rem;
+    }
+  }

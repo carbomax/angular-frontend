@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 // Services
 import { AuthService } from '../../core/services/auth.service';
@@ -29,6 +29,7 @@ export class MeliAccountService {
 
   public redirectToMeli(id: number): void {
     this.saveAccountStorage(id);
+    console.log(environment.URI_MELI)
     window.open(environment.URI_MELI, '_parent');
   }
 

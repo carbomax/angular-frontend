@@ -25,15 +25,8 @@
                 placeholder="Buscar por SKU...">
             </div>
 
-
           </div>
           <div class="col-md-6">
-
-            <div class="form-group mb-md-0">
-              <label for="idPriceSearch">Precio:</label>
-              <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
-                [options]="options"></ng5-slider>
-            </div>
 
             <div class="row">
               <div class="col-md-6">
@@ -59,6 +52,22 @@
                 </div>
               </div>
             </div>
+
+            <div class="form-group mb-md-0">
+              <div class="row" style="margin-bottom: 1rem">
+                <div class="col-sm-3">
+                  <label for="idMinPriceSearch">Precio mín:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000" [(ngModel)]="minValue"
+                  name="idMinPriceSearch" id="idMinPriceSearch">
+                </div>
+                <div class="col-sm-3">
+                  <label for="idMaxPriceSearch">Precio máx:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000" [(ngModel)]="maxValue"
+                  name="idMaxPriceSearch" id="idMaxPriceSearch">
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="row">
@@ -112,7 +121,7 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" *ngIf="!loading" (click)="selectAllProducts()"
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()"
                   class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
@@ -182,20 +191,21 @@
     </div> -->
 
     <div class="row justify-content-around" *ngIf="pageProducts?.itemsGrid">
-      <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="pageProducts.totalPages"
-        [(page)]="currentPage" [maxSize]="3" [boundaryLinks]="true"></ngb-pagination>
+      <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="pageProducts.totalElements"
+        [(page)]="currentPage" [maxSize]="3" [pageSize]="size" [boundaryLinks]="true"></ngb-pagination>
 
       <div class="form-group">
         <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-          <option value="5">5</option>
-          <option value="10">10</option>
-          <option value="20">20</option>
+          <option value="15">15</option>
           <option value="30">30</option>
+          <option value="50">50</option>
+          <option value="75">75</option>
+          <option value="100">100</option>
         </select>
       </div>
 
       <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-        <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalProducts}} registros
+        <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalElements}} registros
         </span>
 
       </div>

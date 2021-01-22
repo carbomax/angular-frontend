@@ -1,5 +1,5 @@
  <!-- Sidebar -->
- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+ <ul #sidebarItem class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
   <!-- Sidebar - Brand -->
   <a class="sidebar-brand d-flex align-items-center justify-content-center" routerLink="/home">
@@ -14,9 +14,13 @@
 
   <!-- Nav Item - Dashboard -->
   <li class="nav-item active">
-    <a class="nav-link" href="#" routerLinkActive="active">
+    <a class="nav-link"
+    routerLink="/home/dashboard"
+    routerLinkActive="active"
+    *ngIf="sidebarService.hashRoles(['ROLE_ADMIN', 'ROLE_SELLER'])"
+    >
       <i class="fas fa-fw fa-tachometer-alt"></i>
-      <span class="ml-2">Tablero de control</span></a>
+      <span [hidden]="toggled" class="ml-2">Tablero de control</span></a>
   </li>
 
   <!-- Divider -->
@@ -30,11 +34,11 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
   <li class="nav-item" *ngFor="let item of sidebarService.storeMenu; let i=index">
-    <a class="nav-link collapsed" href="#" routerLinkActive="active" data-toggle="collapse" [attr.data-target]="'#test'+i" aria-expanded="true" [attr.aria-controls]="'test'+i">
+    <a routerLinkActive="active" class="nav-link collapsed" href="#"  data-toggle="collapse" [attr.data-target]="'#test'+i" aria-expanded="true" [attr.aria-controls]="'test'+i">
       <i [class]="item.icon"></i>
-      <span class="ml-2">{{ item.title }}</span>
+      <span [hidden]="toggled" class="ml-2">{{ item.title }}</span>
     </a>
-    <div  [id]="'test'+i" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+    <div  [id]="'test'+i" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar" >
       <div class="bg-white py-2 collapse-inner rounded">
         <h6  class="collapse-header">{{ item.subtitle }}</h6>
         <div *ngFor="let subitem of item.submenu" >
@@ -51,8 +55,8 @@
  </li>
 
   <!-- Sidebar Toggler (Sidebar) -->
-  <div class="text-center d-none d-md-inline">
-    <button class="rounded-circle border-0" id="sidebarToggle"></button>
+  <div  class="text-center d-none d-md-inline">
+    <button class="rounded-circle border-0" id="sidebarToggle" (click)="toggled=!toggled"></button>
   </div>
 
 </ul>

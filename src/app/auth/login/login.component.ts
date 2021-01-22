@@ -39,23 +39,22 @@ public registerForm: FormGroup;
   }
 
   ngOnInit(): void {
-
+    initializePlugin();
     this.registerForm = new FormGroup({
       email: new FormControl(localStorage.getItem('rememberEmail') || '', [
         Validators.required,
         Validators.email
       ]),
       password: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
+        Validators.required
       ]),
       remember: new FormControl(false)
     });
 
-    initializePlugin();
+
     this.loginIntoText = 'Entrar';
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/home']);
+      this.router.navigate(['/home/dashboard']);
     }
 
   }

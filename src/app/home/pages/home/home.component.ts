@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
-declare function initializePlugin();
+
 
 @Component({
   selector: 'app-home',
@@ -9,10 +11,13 @@ declare function initializePlugin();
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  year = new Date().getFullYear();
+  constructor() {
+
+   }
 
   ngOnInit(): void {
-    initializePlugin();
+
   }
 
 }

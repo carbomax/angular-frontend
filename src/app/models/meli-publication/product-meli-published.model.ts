@@ -46,6 +46,10 @@ export  class ProductMeliPublished {
 
   public currentStock: number;
 
+  public deleted: number;
+
+  public specialPaused: number;
+
   public selected? = false;
 }
 

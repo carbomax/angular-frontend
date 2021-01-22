@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
   <!-- Sidebar Toggle (Topbar) -->
-  <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+  <button id="sidebarToggleTop"  class="btn btn-link d-md-none rounded-circle mr-3">
     <i class="fa fa-bars"></i>
   </button>
 
@@ -11,7 +11,7 @@
   <ul class="navbar-nav ml-auto">
 
     <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-    <li class="nav-item dropdown no-arrow d-sm-none">
+    <li *ngIf="false" class="nav-item dropdown no-arrow d-sm-none">
       <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-search fa-fw"></i>
@@ -33,7 +33,7 @@
     </li>
 
     <!-- Nav Item - Alerts -->
-    <li class="nav-item dropdown no-arrow mx-1">
+    <li  *ngIf="false" class="nav-item dropdown no-arrow mx-1">
       <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-bell fa-fw"></i>
@@ -84,7 +84,7 @@
     </li>
 
     <!-- Nav Item - Messages -->
-    <li class="nav-item dropdown no-arrow mx-1">
+    <li *ngIf="false" class="nav-item dropdown no-arrow mx-1">
       <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-envelope fa-fw"></i>
@@ -145,26 +145,26 @@
       </div>
     </li>
 
-    <div class="topbar-divider d-none d-sm-block"></div>
+    <div *ngIf="false" class="topbar-divider d-none d-sm-block"></div>
 
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false">
         <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ authService.authenticationData.profileName}}</span>
-        <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+        <img class="img-profile rounded-circle" src="assets/img/pepepaganga_ico.png">
       </a>
       <!-- Dropdown - User Information -->
       <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-        <a class="dropdown-item" href="#">
+        <a *ngIf="false" class="dropdown-item" href="#">
           <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
           Perfil
         </a>
-        <a class="dropdown-item" href="#">
+        <a *ngIf="isAdmin()" class="dropdown-item" routerLink="/system-config-admin">
           <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
           Configuraciones
         </a>
-        <div class="dropdown-divider"></div>
+        <div *ngIf="false" class="dropdown-divider"></div>
         <a class="dropdown-item pointer" (click)="logout()" >
           <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" ></i>
           Salir

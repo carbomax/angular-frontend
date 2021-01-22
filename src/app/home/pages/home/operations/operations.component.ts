@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { OrderPage } from '../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDateParserFormatter, NgbDate, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { MeliOrdersService } from '../../../services/meli-orders.service';
 import { MeliOrders, Carrier } from '../../../../models/meli-orders/meli-orders.model';
 import Swal from 'sweetalert2';
+import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
+import { FormControl } from '@angular/forms';
+import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 
 @Component({
   selector: 'app-operations',
@@ -14,19 +16,21 @@ export class OperationsComponent implements OnInit {
 
   @ViewChild('dateFrom') dateFromCalendar: ElementRef;
   @ViewChild('dateTo') dateToCalendar: ElementRef;
+  public dateFromControl: FormControl = new FormControl(null);
+  public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   hoveredDate: NgbDate | null = null;
 
-  modelFrom: NgbDateStruct;
-  modelTo: NgbDateStruct;
+  modelFrom: NgbDateStruct = { year: 0, month: 0, day: 0 };
+  modelTo: NgbDateStruct = { year: 0, month: 0, day: 0 };
   errorDateFrom = false;
   errorDateTo = false;
   today = this.calendar.getToday();
-  dateFrom = null;
-  dateTo = null;
+  dateFrom = 0;
+  dateTo = 99999999;
 
 
   // Search
@@ -39,72 +43,81 @@ export class OperationsComponent implements OnInit {
   orderStatusSearch = '';
   clientNameSearch = '';
   orderStatus = [];
+  operatorBusinesStatus: string[] = [];
 
   carrier = 1;
 
   styleCarries = `background-color: #858796; color: white`;
   styleTag = '';
+  styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
 
-  constructor(public meliOrderService: MeliOrdersService,
+  constructor(
+    public meliOperationOrderService: MeliOrdersOperationService,
+    private dateTimeService: DateTimeMomentService,
     private calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter) { }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadOrders();
   }
 
 
   searchOrders(): void {
-
-    console.log(this.modelFrom)
-    console.log(this.validateDates())
-    if (this.validateDates()) {
-      this.loadingSearch = true;
-      this.orderStatus = [];
-      this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
-      this.loadOrders();
-    }
+    this.loadingSearch = true;
+    this.orderStatus = [];
+    this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
+    this.loadOrders();
 
   }
 
-  validateDates(): boolean {
-    if (this.modelFrom !== undefined && !this.modelFrom.year) {
-      this.errorDateFrom = true;
-    } else { this.errorDateFrom = false; }
+  onDateFromSelection(date: NgbDate): void {
 
-    if (this.modelTo !== undefined && !this.modelTo.year) {
-      this.errorDateTo = true;
-    } else { this.errorDateTo = false; }
+    if (!this.dateToControl.value) {
+      this.dateToControl.setValue({ year: date.year, month: date.month, day: date.day });
+    }
+  }
 
-    return !this.errorDateFrom && !this.errorDateTo;
+  onDateToSelection(date: NgbDate): void {
+    if (!this.dateFromControl.value) {
+      this.dateFromControl.setValue({ year: date.year, month: date.month, day: date.day });
+    }
   }
 
   clearOrders(): void {
+    this.errorDateFrom = false;
+    this.errorDateTo = false;
     this.loadingClear = true;
     this.orderStatus = [];
     this.orderStatusClear = '';
     this.orderStatusSearch = '';
     this.clientNameSearch = '';
-    this.modelFrom = null;
-    this.modelTo = null;
+    this.dateFromControl.setValue(null);
+    this.dateToControl.setValue(null);
+    this.dateFrom = 0;
+    this.dateTo = 99999999;
     this.loadOrders();
   }
 
   selectChangeHandler(size): void {
+    this.loading = true;
     this.size = +size;
-    console.log('size', this.size)
     this.loadOrders();
   }
 
   loadProductsPaginator(page): void {
+    this.loading = true;
     this.page = page;
     this.loadOrders();
   }
 
   loadOrders(): void {
-    this.loading = true;
     this.buildDateFilter();
-    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo).subscribe((resp: OrderPage) => {
+    console.log('date FROM', this.dateFrom);
+    console.log('date TO', this.dateTo);
+    
+    this.meliOperationOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus,'', this.clientNameSearch, this.dateFrom, this.dateTo, this.operatorBusinesStatus).subscribe((resp: OrderPage) => {
+      console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
       } else { this.emptySearch = false; }
@@ -113,24 +126,38 @@ export class OperationsComponent implements OnInit {
       this.loadingSearch = false;
       this.errorOrders = false;
       this.loading = false;
+
     }, (error: any) => {
       this.errorOrders = true;
       this.loadingClear = false;
       this.loadingSearch = false;
       this.emptySearch = false;
       this.loading = false;
+
     });
   }
 
   changeTag(order: MeliOrders): void {
-    console.log(order)
+    if (order.tagBss) {
+      this.loading = true;
+      this.meliOperationOrderService.updateTagBss(order.id, order.tagBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo realizar la acción!',
+              position: 'top-end'
+            });
+          });
+    }
   }
 
 
   changeCarrier(order: MeliOrders, value): void {
-    console.log(order)
     this.loading = true;
-    this.meliOrderService.updateCarrier(order.id, order.carrier.id)
+    this.meliOperationOrderService.updateCarrier(order.id, order.carrier.id)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {
           this.loadOrders();
@@ -145,9 +172,8 @@ export class OperationsComponent implements OnInit {
 
 
   updateInvoice(order: MeliOrders): void {
-    console.log(order)
     this.loading = true;
-    this.meliOrderService.updateInvoice(order.id, order.invoiceNumberBss)
+    this.meliOperationOrderService.updateInvoice(order.id, order.invoiceNumberBss)
       .subscribe(resp => { console.log(resp); this.loading = false; },
         error => {
           this.loadOrders();
@@ -160,53 +186,132 @@ export class OperationsComponent implements OnInit {
         });
   }
 
-
-  updateDescription(order: MeliOrders): void {
-    console.log(order)
+  updateOperatorBusinessStatus(order: MeliOrders): void {
     this.loading = true;
-    this.meliOrderService.updateDescription(order.id, order.descriptionBss)
-      .subscribe(resp => { console.log(resp); this.loading = false; },
+    this.meliOperationOrderService.updateOperatorBusinessStatus(order.id, order.operatorBusinessStatus)
+      .subscribe(resp => {
+        console.log(resp);
+        this.loadOrders();
+      },
         error => {
           this.loadOrders();
           Swal.fire({
             icon: 'error',
             title: 'Malas noticias',
-            text: 'No se pudo actualizar la descripción de la órden!',
+            text: 'No se pudo actualizar el estado de la órden!',
             position: 'top-end'
           });
         });
   }
 
-
   updateObservation(order: MeliOrders): void {
-    console.log(order)
-    this.loading = true;
-    this.meliOrderService.updateObservation(order.id, order.observationBss)
-      .subscribe(resp => { console.log(resp); this.loading = false; },
-        error => {
-          this.loadOrders();
-          Swal.fire({
-            icon: 'error',
-            title: 'Malas noticias',
-            text: 'No se pudo actualizar la observación de la órden!',
-            position: 'top-end'
+    if (order.observationBss.trim()) {
+      this.loading = true;
+      this.meliOperationOrderService.updateObservation(order.id, order.observationBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo actualizar la observación de la órden!',
+              position: 'top-end'
+            });
           });
+    } else {
+      this.loadOrders();
+      Swal.fire({
+        icon: 'error',
+        title: 'Campos vacíos',
+        text: 'No puede introducir una observación vacía!',
+        position: 'top-end'
+      });
+    }
+
+  }
+
+
+  updateOperatorName(order: MeliOrders): void {
+    if (order.operatorNameBss.trim()) {
+      this.loading = true;
+      this.meliOperationOrderService.updateOperatorName(order.id, order.operatorNameBss)
+        .subscribe(resp => { console.log(resp); this.loading = false; },
+          error => {
+            this.loadOrders();
+            Swal.fire({
+              icon: 'error',
+              title: 'Malas noticias',
+              text: 'No se pudo actualizar el nombre del operador de la órden!',
+              position: 'top-end'
+            });
+          });
+    } else {
+      this.loadOrders();
+      Swal.fire({
+        icon: 'error',
+        title: 'Campos vacíos',
+        text: 'No puede introducir un nombre vacío!',
+        position: 'top-end'
+      });
+    }
+  }
+
+  getInvoice(order: MeliOrders): void {
+    console.log('shippindId', order.shippingId)
+    const notificationError = () => Swal.fire({
+      icon: 'error',
+      title: 'Etiqueta',
+      text: 'La etiqueta de esta órden no está disponible en estos momentos!',
+      position: 'top-end'
+    });
+
+    const notificationInfo = () => Swal.fire({
+      icon: 'info',
+      title: 'Etiqueta',
+      text: 'Esta órden no contiene etiqueta porque el producto no fue vendido por mercado envío!',
+      position: 'top-end'
+    });
+
+    if(!order.shipment){
+      notificationInfo();
+      return;
+    }
+
+    if (order.shippingId > 0) {
+      this.meliOperationOrderService.getInvoice(order)
+        .subscribe((url: any) => {
+
+          console.log(url.response)
+          if (url.response) {
+            window.open(url.response, '_black');
+          } else {
+            notificationError();
+          }
+        }, error => {
+          console.log(error)
+          notificationError();
         });
+    } else {
+      notificationError();
+    }
+
   }
 
   private buildDateFilter(): void {
-    if (this.modelFrom) {
 
-      this.dateFrom = +`${this.modelFrom.year}${this.modelFrom.month}${this.modelFrom.day}`;
-    } else { this.dateFrom = null; }
+    if (this.dateFromControl.value !== null) {
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
+    } else { this.dateFrom = 0 }
 
-    if (this.modelTo) {
-
-      this.dateTo = +`${this.modelTo.year}${this.modelTo.month}${this.modelTo.day}`;
-    } else { this.dateTo = null; }
+    if (this.dateToControl.value !== null) {
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
+    } else { this.dateTo = 99999999 }
 
   }
 
+  helperZeroBeforeMonthOrDay(dayOrMonth: number): string{
+    return (dayOrMonth / 10) >= 1 ? `${dayOrMonth}` : `0${dayOrMonth}`;
+  }
 
   numberOnly(event): boolean {
     const charCode = (event.which) ? event.which : event.keyCode;
@@ -214,6 +319,47 @@ export class OperationsComponent implements OnInit {
       return false;
     }
     return true;
+
+  }
+
+  getOperatorBssToOrderStyleInitial(value): string {
+    let initialStyle = '';
+    switch (+value) {
+
+      case 0:
+        initialStyle = `background-color: #36b9cc; color: white`;
+        break;
+      case 1:
+        initialStyle = `background-color: #e74a3b;  color: white`;
+        break;
+      case 2:
+        initialStyle = `background-color: #1cc88a; color: white`;
+        break;
+      default:
+        initialStyle = `background-color: #36b9cc; color: white`;
+        break;
+    }
+
+    return initialStyle;
+  }
+  getOperatorBssToOrderStyle(id, value): void {
+
+    switch (+value) {
+
+      case 0:
+        this.styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
+        break;
+      case 1:
+        this.styleOperatorBssStyle = `background-color: #e74a3b;  color: white`;
+        break;
+      case 2:
+        this.styleOperatorBssStyle = `background-color: #1cc88a; color: white`;
+        break;
+      default:
+        this.styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
+        break;
+    }
+    document.getElementById(`${id}`).setAttribute('style', this.styleOperatorBssStyle);
 
   }
 
@@ -251,8 +397,6 @@ export class OperationsComponent implements OnInit {
   }
   getCarrierStyle(id, value): void {
 
-    console.log('Id select', id)
-    console.log('Value carrier', value)
     switch (+value) {
 
       case 0:
@@ -284,11 +428,9 @@ export class OperationsComponent implements OnInit {
 
   }
 
-
-
   getCarrierStyleInitialTag(value): string {
     let style = '';
-    switch (value) {
+    switch (+value) {
       case 0:
         style = `background-color: #e74a3b;  color: white`;
         break;
@@ -304,7 +446,7 @@ export class OperationsComponent implements OnInit {
   }
   getCarrierStyleTag(id, value): void {
 
-    switch (value) {
+    switch (+value) {
 
       case 0:
         this.styleTag = `background-color: #e74a3b; color: white`;

@@ -1,0 +1,284 @@
+<div class="row">
+  <!-- Total sales: Paid and Cancelled -->
+  <div class="col-xl-3 col-md-6 mb-4 pointer"
+  (click)="hiddenSellChart = !hiddenSellChart">
+   <app-total-sales
+   [hiddenSellChart]="hiddenSellChart"
+   [countAllSalesPaid]="countAllSalesPaid"
+   [countAllSalesCancelled]="countAllSalesCancelled"
+   ></app-total-sales>
+  </div>
+
+  <!-- Better SKU -->
+  <div
+    class="col-xl-3 col-md-6 mb-4 pointer"
+    (click)="openBetterSkuModal()"
+    data-toggle="modal"
+    data-target="#rankingModal"
+  >
+    <app-better-sku [betterSku]="validateBetterSku()"></app-better-sku>
+  </div>
+
+  <!-- Item with stock vs total in storage -->
+  <div class="col-xl-3 col-md-6 mb-4">
+   <app-stock-vs-total
+   [withStock]="stockVsTotal.withStock"
+   [total]="stockVsTotal.total"
+   [percent]="percent"
+   ></app-stock-vs-total>
+  </div>
+
+  <!-- Active publications -->
+  <div class="col-xl-3 col-md-6 mb-4">
+   <app-active-publications
+   [actives]="countActivePublications">
+  </app-active-publications>
+  </div>
+</div>
+
+<!-- Collapsable Card Example -->
+<div *ngIf="hiddenSellChart" class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a
+    href="#collapseCardFilterProductStorage"
+    class="d-block card-header py-3"
+    data-toggle="collapse"
+    role="button"
+    aria-expanded="true"
+    aria-controls="collapseCardFilterProductStorage"
+  >
+    <h6 class="m-0 font-weight-bold text-primary">Ventas</h6>
+  </a>
+
+  <div class="collapse show" id="collapseCardFilterProductStorage">
+    <app-chart-line-orders></app-chart-line-orders>
+  </div>
+</div>
+
+<!-- Collapsable Card Example -->
+<div class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a
+    href="#collapseCardAnalysisDrop"
+    class="d-block card-header py-3"
+    data-toggle="collapse"
+    role="button"
+    aria-expanded="true"
+    aria-controls="collapseCardAnalysisDrop"
+  >
+    <h6 class="m-0 font-weight-bold text-primary">Análisis Drop</h6>
+  </a>
+
+  <div class="collapse show" id="collapseCardAnalysisDrop">
+    <div class="card-body">
+      <div class="row mb-2">
+        <div class="col-md-2 col-sm-12">
+          <div class="form-group">
+            <select
+              (change)="selectChangeHandlerYear($event.target.value)"
+              class="custom-select"
+              id="inputGroupYears"
+              [(ngModel)]="initYear"
+            >
+              <option [value]="year" *ngFor="let year of years">
+                {{ year }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="col-md-8 col-sm-12">
+          <div class="form-group">
+            <ng-select
+              id="wer"
+              [items]="months"
+              name="selectedRoles"
+              bindLabel="name"
+              bindValue="id"
+              placeholder="Seleccione meses..."
+              appendTo="body"
+              multiple="true"
+              [searchable]="true"
+              [selectableGroup]="true"
+              [closeOnSelect]="false"
+              [(ngModel)]="selectMonths"
+            >
+              <ng-template
+                ng-optgroup-tmp
+                let-item="item"
+                let-item$="item$"
+                let-index="index"
+              >
+                <input
+                  id="item-{{ index }}"
+                  type="checkbox"
+                  [ngModel]="item$.selected"
+                />
+                {{ item.name | uppercase }}
+              </ng-template>
+              <ng-template
+                ng-option-tmp
+                let-item="item"
+                let-item$="item$"
+                let-index="index"
+              >
+                <input
+                  id="item-{{ index }}"
+                  type="checkbox"
+                  [ngModel]="item$.selected"
+                />
+                {{ item.name }}
+              </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-sm-12">
+          <button
+            [disabled]="disbleSearchAnalysisDrop()"
+            class="btn btn-outline-primary btn-block mr-1"
+            (click)="searchAnalysisDrop()" >
+            <i *ngIf="!loadingSearch" class="fas fa-search m-1"></i>
+            <i *ngIf="loadingSearch" class="fas fa-spin fa-spinner m-1"></i>
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table
+          class="table table-hover"
+          id="dataTable"
+          width="100%"
+          cellspacing="0"
+        >
+          <thead>
+            <tr>
+              <th rowspan="2"></th>
+              <th class="text-center"
+                colspan="2"
+                scope="colgroup"
+                *ngFor="let mainColum of mainColumns"
+              >
+                {{ mainColum }}
+              </th>
+            </tr>
+            <tr>
+              <th scope="col" *ngFor="let colum of subColumns">{{ colum }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let analysis of analysisDropTrHelper">
+              <td>{{ analysis.name }}</td>
+              <td  *ngFor="let value of analysis.values">{{ value }}</td>
+              <td >{{ analysis.totalSell }}</td>
+              <td >{{ analysis.totalAmount }}</td>
+            </tr>
+            <tr *ngFor="let analysis of analysisDropTrHelperTotals">
+              <th>{{ analysis.name }}</th>
+              <th *ngFor="let value of analysis.values">{{ value }}</th>
+            </tr>
+
+          </tbody>
+
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade mt-5"
+  id="rankingModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createModalLabel">
+          Ranking de los <strong>100</strong> productos más vendidos
+        </h5>
+        <button
+          class="close"
+          type="button"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="row justify-content-center">
+          <div
+            *ngIf="bettersSku.length <= 0 && !loadingBettersSku"
+            class="alert alert-info col-8 text-center"
+            role="alert"
+          >
+            <strong
+              ><i class="fas fa-info-circle" aria-hidden="true"></i
+            ></strong>
+            No hay sku para mostrar
+          </div>
+
+          <div
+            *ngIf="loadingBettersSku"
+            class="spinner-border"
+            role="status"
+          ></div>
+        </div>
+        <div
+          *ngIf="bettersSku.length > 0 && !loadingBettersSku"
+          class="table-responsive"
+        >
+          <table
+            class="table table-hover"
+            id="dataTable"
+            width="100%"
+            cellspacing="0"
+          >
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>SKU</th>
+                <th class="text-right">Nº.Ventas</th>
+                <th>Descripción</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr
+                *ngFor="
+                  let item of bettersSku
+                    | slice
+                      : (page - 1) * pageSize
+                      : (page - 1) * pageSize + pageSize;
+                  let i = index
+                "
+              >
+                <td>{{ item.ranking }}</td>
+                <td>{{ item.sku }}</td>
+                <td class="text-right">{{ item.count }}</td>
+                <td>{{ item.name | slice: 0:60 }}...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div
+          class="row justify-content-center"
+          *ngIf="bettersSku.length > 0 && !loadingBettersSku"
+        >
+          <ngb-pagination
+            [collectionSize]="bettersSku.length"
+            [pageSize]="pageSize"
+            [(page)]="page"
+          >
+          </ngb-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
