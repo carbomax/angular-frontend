@@ -70,6 +70,7 @@ export class MeliPublicationsService {
       meliCategory.path_from_root = resp.path_from_root;
       meliCategory.children_categories = resp.children_categories;
       meliCategory.attribute_types = resp.attribute_types;
+      meliCategory.shipping_modes = resp.settings.shipping_modes;
       return meliCategory;
     }));
   }

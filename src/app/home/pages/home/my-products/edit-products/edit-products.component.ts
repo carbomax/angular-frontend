@@ -13,6 +13,7 @@ import { Margin } from 'src/app/models/margin';
 import { MeliAccount } from 'src/app/models/meli.account';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
+import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
 
 @Component({
   selector: 'app-edit-products',
@@ -60,7 +61,7 @@ export class EditProductsComponent implements OnInit {
   responsePredictor: ResponseCategoryPredictor;
   withoutPredictor: boolean = false;
 
-  lastCategorySelected: string = '-1';
+  lastCategorySelected = new MeliME2Category('-1');
   home: boolean = false;
   pathList: string[];
 
@@ -443,7 +444,7 @@ export class EditProductsComponent implements OnInit {
 
   callPublishProductsService(){
     // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
     this.clearAll();
 
     Swal.fire({
@@ -465,8 +466,20 @@ export class EditProductsComponent implements OnInit {
     this.home = false;
   }
 
-  getCategorySelected(idCategory: string){
-    this.lastCategorySelected = idCategory;
+  getCategorySelected(category: MeliME2Category){
+    this.lastCategorySelected = category;
+    if(this.lastCategorySelected.idLastCategory !== '-1'){
+      if(this.lastCategorySelected.isME2 === false ){
+        Swal.fire({
+          title: 'IMPORTANTE!!!',
+          text: 'La categoria seleccionada le habilitará varios modos de envío, no permite sólo Mercado Envío como modo de envío. Si publica en esta categoria será bajo su responsabilidad.',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }
+    }
   }
 
   setHome(){
