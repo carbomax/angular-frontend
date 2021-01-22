@@ -5,6 +5,7 @@ import { OrderPage } from '../../../../models/meli-orders/orders-page.model';
 import { NgbDate, NgbCalendar, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
 import { FormControl } from '@angular/forms';
+import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 
 @Component({
   selector: 'app-historial-operation',
@@ -50,7 +51,9 @@ export class HistorialOperationComponent implements OnInit {
   styleTag = '';
   styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
 
-  constructor(public meliOperationOrderService: MeliOrdersOperationService,
+  constructor(
+    private dateTimeService: DateTimeMomentService,
+    public meliOperationOrderService: MeliOrdersOperationService,
     private calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter) { }
 
@@ -280,14 +283,12 @@ export class HistorialOperationComponent implements OnInit {
   }
 
   private buildDateFilter(): void {
-
     if (this.dateFromControl.value !== null) {
-      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
     } else { this.dateFrom = 0 }
 
     if (this.dateToControl.value !== null) {
-
-      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
     } else { this.dateTo = 99999999 }
 
   }
