@@ -21,6 +21,7 @@ export class DashboardSellerComponent implements OnInit {
   countAllSalesPaid = 0;
   countAllSalesCancelled = 0;
 
+
   // Better and Betters sku
   betterSku = '';
   bettersSku: BetterSkuDto[] = [];
@@ -44,7 +45,8 @@ export class DashboardSellerComponent implements OnInit {
     .then( accounts => {
       this.currentAccount = accounts[0];
       if(this.currentAccount.userIdBss){
-        console.log('userId Bss', this.currentAccount.userIdBss)
+        console.log('Temporal loggin', this.currentAccount.userIdBss)
+        
         this.getCountAllSales();
         this.getBetterSku();
         this.getCountActivePublications();
@@ -129,6 +131,7 @@ export class DashboardSellerComponent implements OnInit {
   get percent(): string {
     return `${this.getPercent(this.stockVsTotal.withStock, this.stockVsTotal.total)}%`
   }
+  
   getPercent(number1: number, number2: number): number {
     return number1 && number2 ? Math.round((number1 / number2) * 100) : 0;
   }
@@ -146,6 +149,9 @@ export class DashboardSellerComponent implements OnInit {
     })
   }
 
+  validateBetterSku(){
+    return this.betterSku ? this.betterSku : 'NINGUNO'
+  }
   private reset(): void {
     this.hiddenSellChart = true;
     this.countAllSalesPaid = 0;
