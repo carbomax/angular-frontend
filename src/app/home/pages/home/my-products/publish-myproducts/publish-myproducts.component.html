@@ -355,7 +355,7 @@
         </div>
        </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary" (click)="publishProducts()" [disabled]="lastCategorySelected.idLastCategory === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
+        <button type="button" class="btn btn-primary" (click)="publishProducts()" [disabled]="lastCategorySelected.idLastCategory === '-1' || lastCategorySelected.isME2 === false || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
         <button type="button" class="btn btn-secondary" (click)="closeModalPublish()" #closePublishModal data-dismiss="modal">Cancelar</button>
       </div>
     </div>

@@ -681,7 +681,7 @@ export class PublishMyproductsComponent implements OnInit {
       if(this.lastCategorySelected.isME2 === false ){
         Swal.fire({
           title: 'IMPORTANTE!!!',
-          text: 'La categoria seleccionada le habilitará varios modos de envío, no permite sólo Mercado Envío como modo de envío. Si publica en esta categoria será bajo su responsabilidad.',
+          text: 'La categoría seleccionada no permite Mercado Envío como único modo. Seleccione otra categoría que sea mercado enviable.',
           icon: 'warning',
           showCancelButton: false,
           confirmButtonColor: '#3085d6',

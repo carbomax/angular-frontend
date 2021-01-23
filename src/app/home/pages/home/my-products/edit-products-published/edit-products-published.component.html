@@ -381,7 +381,7 @@
            </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-primary" (click)="publishProducts()" *ngIf="productMeliPublished.status === statesOfMeli.FAIL"
-                  [disabled]="lastCategorySelected.idLastCategory === '-1' || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
+                  [disabled]="lastCategorySelected.idLastCategory === '-1' || lastCategorySelected.isME2 === false || accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Publicar</button>
               <button type="button" class="btn btn-primary" (click)="updateProductPublish()" *ngIf="productMeliPublished.status === statesOfMeli.ACTIVE"
                   [disabled]="accountMarginsList.length === 0 || home === true || (warranty === true && warrantyType === -1)" >Actualizar</button>
               <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="closeEditPublished()">Cerrar</button>
