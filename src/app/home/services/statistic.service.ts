@@ -19,16 +19,15 @@ export class StatisticService {
 
 
 
-  constructor(private http: HttpClient) {
-    this.getAnalysisDrop(['2020-12','2020-11']);
-  }
+  constructor(private http: HttpClient) {}
 
 
-  public getSalesByBusinessDateCreated(dateFrom: number, dateTo: number): Observable<Serie[]>{
+  public getSalesByBusinessDateCreated(dateFrom: number, dateTo: number, sellerId?: number): Observable<Serie[]>{
 
-    let url = `${this.URI_MELI_STATISTICS}/all-sales-by-date-and-count?dateFrom=${dateFrom}&dateTo=${dateTo}`;
+    let url = `${this.URI_MELI_STATISTICS}/all-sales-by-date-and-count${this.getSellerParameter(sellerId)}&dateFrom=${dateFrom}&dateTo=${dateTo}`;
     let series : Serie[] = [];
 
+    console.log(url)
     return this.http.get<Serie[]>(url).pipe(map(( result: any[]) => {
 
       result.forEach( (element: any) => {
@@ -69,11 +68,15 @@ export class StatisticService {
      return this.http.get<StockVsTotalItemDto>(`${this.URI_MELI_STATISTICS}/stock-vs-total-items`);
   }
 
-  public getAnalysisDrop(dates: string[]): Observable<AnalysisDrop[]>{
-    return this.http.get<AnalysisDrop[]>(`${this.URI_MELI_STATISTICS}/analysis-drop?dates=${dates}`);
+  public getAnalysisDrop(dates: string[], sellerId?: number): Observable<AnalysisDrop[]>{
+    return this.http.get<AnalysisDrop[]>(`${this.URI_MELI_STATISTICS}/analysis-drop${this.getSellerParameter(sellerId)}&dates=${dates}`);
  }
 
  private getSellerParameter(sellerId){
-    return sellerId ? `?sellerId=${sellerId}` : '';
- }
+
+  console.log('User id', sellerId)
+    return sellerId ? `?sellerId=${sellerId}` : '?sellerId=';
+
+}
+
 }

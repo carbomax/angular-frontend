@@ -270,6 +270,10 @@ export class DashboardAdminComponent implements OnInit {
     return analysis;
   }
 
+  validateBetterSku(){
+    return this.betterSku ? this.betterSku : 'NINGUNO'
+  }
+
 
 }
 

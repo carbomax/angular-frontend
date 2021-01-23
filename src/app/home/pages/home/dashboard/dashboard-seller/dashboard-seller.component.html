@@ -16,7 +16,7 @@
     data-toggle="modal"
     data-target="#rankingModal"
   >
-    <app-better-sku [betterSku]="betterSku"></app-better-sku>
+    <app-better-sku [betterSku]="validateBetterSku()"></app-better-sku>
   </div>
 
   <!-- Item with stock vs total in storage -->
@@ -35,6 +35,25 @@
    </app-active-publications>
    </div>
 
+</div>
+
+<!-- Collapsable Card Example -->
+<div *ngIf="hiddenSellChart" class="card shadow mb-4">
+  <!-- Card Header - Accordion -->
+  <a
+    href="#collapseCardFilterProductStorage"
+    class="d-block card-header py-3"
+    data-toggle="collapse"
+    role="button"
+    aria-expanded="true"
+    aria-controls="collapseCardFilterProductStorage"
+  >
+    <h6 class="m-0 font-weight-bold text-primary">Ventas</h6>
+  </a>
+
+  <div class="collapse show" id="collapseCardFilterProductStorage">
+    <app-chart-line-orders-sellers [sellerReference]="currentAccount.userIdBss"></app-chart-line-orders-sellers>
+  </div>
 </div>
 
 <div

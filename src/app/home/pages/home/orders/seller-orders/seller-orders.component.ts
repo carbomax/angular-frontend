@@ -5,6 +5,7 @@ import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng
 import { FormControl } from '@angular/forms';
 import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
 import { AuthService } from '../../../../../core/services/auth.service';
+import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 
 
 
@@ -45,7 +46,7 @@ export class SellerOrdersComponent implements OnInit {
   constructor(public meliOrderService: MeliOrdersService,
               private calendar: NgbCalendar,
               public formatter: NgbDateParserFormatter,
-              private authService: AuthService) {
+              private dateTimeService: DateTimeMomentService) {
 
   }
 
@@ -153,15 +154,13 @@ export class SellerOrdersComponent implements OnInit {
   private buildDateFilter(): void {
 
     if (this.dateFromControl.value !== null) {
-      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
     } else { this.dateFrom = 0 }
 
     if (this.dateToControl.value !== null) {
-
-      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
     } else { this.dateTo = 99999999 }
 
   }
-
 
 }
