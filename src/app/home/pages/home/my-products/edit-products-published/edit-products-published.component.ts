@@ -18,6 +18,7 @@ import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
 import { EditableProductModel } from 'src/app/models/editable.product.model';
+import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
 
 
 @Component({
@@ -80,7 +81,7 @@ export class EditProductsPublishedComponent implements OnInit {
   responsePredictor: ResponseCategoryPredictor;
   withoutPredictor: boolean = false;
 
-  lastCategorySelected: string = '-1';
+  lastCategorySelected = new MeliME2Category('-1');
   home: boolean = false;
   pathList: string[];
 
@@ -161,7 +162,8 @@ export class EditProductsPublishedComponent implements OnInit {
       this.meliPublicationsService.getMeliSubCategories(idCategory).subscribe(category => {
           this.meliCategoryActive = category;
           this.subCategoriesActiveList = this.meliCategoryActive.path_from_root;
-          this.lastCategorySelected = this.meliCategoryActive.id;
+          this.lastCategorySelected.idLastCategory = this.meliCategoryActive.id;
+          this.lastCategorySelected.isME2 = this.meliCategoryActive.shipping_modes.includes('me2');
           for (let index = 0; index < this.subCategoriesActiveList.length; index++) {
             if(index + 1 === this.subCategoriesActiveList.length){
               this.pathActive = this.pathActive + this.subCategoriesActiveList[index].name;
@@ -581,7 +583,7 @@ export class EditProductsPublishedComponent implements OnInit {
       editableProduct.states = 1;
 
   // llamada al servicio Publicar
-   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
+   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
    this.clearAll();
   }
 
@@ -657,8 +659,20 @@ export class EditProductsPublishedComponent implements OnInit {
     this.home = false;
   }
 
-  getCategorySelected(idCategory: string){
-    this.lastCategorySelected = idCategory;
+  getCategorySelected(category: MeliME2Category){
+    this.lastCategorySelected = category;
+    if(this.lastCategorySelected.idLastCategory !== '-1'){
+      if(this.lastCategorySelected.isME2 === false ){
+        Swal.fire({
+          title: 'IMPORTANTE!!!',
+          text: 'La categoría seleccionada no permite Mercado Envío como único modo. Seleccione otra categoría que sea mercado enviable.',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }
+    }
   }
 
   setHome(){

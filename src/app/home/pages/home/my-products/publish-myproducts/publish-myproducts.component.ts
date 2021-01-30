@@ -23,6 +23,7 @@ import { States } from 'src/app/enums/states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { elementAt } from 'rxjs/operators';
+import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
 
 
 @Component({
@@ -97,7 +98,8 @@ export class PublishMyproductsComponent implements OnInit {
   marginsList: Margin[];
   margin: number = -1;
   meliAccount: number = -1;
-  lastCategorySelected: string = '-1';
+  lastCategorySelected = new MeliME2Category('-1');
+  isME2
   warrantyType: number = -1;
   warrantyTime: number = 0;
   warranty: boolean = false;
@@ -673,8 +675,21 @@ export class PublishMyproductsComponent implements OnInit {
     this.home = false;
   }
 
-  getCategorySelected(idCategory: string) {
-    this.lastCategorySelected = idCategory;
+  getCategorySelected(category: MeliME2Category) {
+    this.lastCategorySelected = category;
+    if(this.lastCategorySelected.idLastCategory !== '-1'){
+      if(this.lastCategorySelected.isME2 === false ){
+        Swal.fire({
+          title: 'IMPORTANTE!!!',
+          text: 'La categoría seleccionada no permite Mercado Envío como único modo. Seleccione otra categoría que sea mercado enviable.',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }
+    }
+
     //Pendiente para cuando se seleccione los atributos
    /* if(this.lastCategorySelected !== '-1'){
       this.attributeRequiredList = [];
@@ -823,7 +838,7 @@ export class PublishMyproductsComponent implements OnInit {
 
   callPublishProductsService(){
     // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
       for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
         if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
           this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
