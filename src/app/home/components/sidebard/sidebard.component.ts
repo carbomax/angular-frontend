@@ -11,6 +11,7 @@ declare function initializePlugin();
 export class SidebardComponent implements OnInit {
 
   toggled: boolean = false;
+  logoSrc: string  = 'assets/img/pepepaganga_ico.png';
 
   constructor(public sidebarService: SidebarService ) {
 

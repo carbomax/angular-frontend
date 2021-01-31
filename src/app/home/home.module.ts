@@ -37,7 +37,6 @@ import { GlobalLoadingComponent } from './components/global-loading/global-loadi
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { SystemConfigurationComponent } from './pages/home/system-configuration/system-configuration.component';
 import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
 import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
@@ -47,6 +46,7 @@ import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku
 import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
 import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
 import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
+import { MeliConfigurationModule } from './pages/home/meli-configuration/meli-configuration.module';
 
 
 
@@ -83,7 +83,6 @@ import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-
     ChartLineOrdersComponent,
     DashboardAdminComponent,
     DashboardComponent,
-    SystemConfigurationComponent,
     DashboardSellerComponent,
     TotalSalesComponent,
     BetterSkuComponent,
@@ -112,7 +111,6 @@ import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-
     EditProductsPublishedComponent,
     DashboardAdminComponent,
     DashboardComponent,
-    SystemConfigurationComponent,
     TotalSalesComponent],
   imports: [
     SharedModule,
