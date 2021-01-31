@@ -67,6 +67,10 @@ export class ProductsMeliPublishedService {
     return this.http.delete(`${this.URI_MELI_SERVICE}/delete-publication-failed/${idItem}`);
   }
 
+  deleteSetPublication(accountId: number, idpublicationList: number[]): Promise<any>{
+    return this.http.post(`${this.URI_MELI_SERVICE}/delete-set-publication/${accountId}`, idpublicationList).toPromise();
+  }
+
   republishPublication(accountId: number, publicationId: string){
     return this.http.post(`${this.URI_MELI_SERVICE}/republish-publication/${accountId}/${publicationId}` , {});
   }
