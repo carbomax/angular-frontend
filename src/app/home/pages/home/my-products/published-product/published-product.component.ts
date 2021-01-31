@@ -11,7 +11,6 @@ import { ChangeStatusPublicationType } from '../../../../../enums/change-status-
 import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import Swal from 'sweetalert2';
-import { time } from 'console';
 
 @Component({
   selector: 'app-published-product',
