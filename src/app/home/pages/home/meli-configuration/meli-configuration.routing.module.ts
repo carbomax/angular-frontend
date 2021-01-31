@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
-import { SystemConfigurationComponent } from './system-configuration/system-configuration.component';
+import { SystemConfigurationComponent } from './pages/system-configuration/system-configuration.component';
 import { AuthGuard } from 'src/app/auth/guard/auth.guard';
 import { RoleEnum } from 'src/app/enums/role.enum';
 
