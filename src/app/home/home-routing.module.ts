@@ -24,7 +24,7 @@ import { OperationsComponent } from './pages/home/operations/operations.componen
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
 import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
 import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
-import { SystemConfigurationComponent } from './pages/home/meli-configuration/system-configuration/system-configuration.component';
+import { SystemConfigurationComponent } from './pages/home/meli-configuration/pages/system-configuration/system-configuration.component';
 import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
 
 

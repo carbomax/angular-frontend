@@ -7,6 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountProfileComponent implements OnInit {
 
+  typePublications: any[] = [];
+  selectedtypePublications: any[] = [];
+
+  categories: any[] = [];
+  selectedCategories: any[] = [];
   constructor() { }
 
   ngOnInit(): void {
