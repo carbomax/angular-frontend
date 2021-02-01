@@ -41,6 +41,7 @@ export class DashboardSellerComponent implements OnInit {
 
   ngOnInit(): void {
 
+    this.getStockVsTotalOfItems();
     this.currentAccountPromise()
     .then( accounts => {
       this.currentAccount = accounts[0];
@@ -49,8 +50,7 @@ export class DashboardSellerComponent implements OnInit {
         
         this.getCountAllSales();
         this.getBetterSku();
-        this.getCountActivePublications();
-        this.getStockVsTotalOfItems();
+        this.getCountActivePublications();       
       } else {
         this.reset();
       }
@@ -79,7 +79,7 @@ export class DashboardSellerComponent implements OnInit {
 
     this.statisticService.getBetterSku(this.currentAccount.userIdBss).subscribe((resp: any) => {
       console.log('Better sku', resp)
-      if (resp.sku !== undefined && resp.sku !== null) {
+      if (resp?.sku) {
         this.betterSku = `${resp.sku} : ${resp.count}`;
       } else {
         this.betterSku = '';
@@ -91,7 +91,8 @@ export class DashboardSellerComponent implements OnInit {
   }
 
   openBetterSkuModal() {
-    this.getBettersSku();
+    this.currentAccount?.userIdBss ? this.getBettersSku() : null;
+   
   }
 
   getBettersSku(): void {
@@ -108,6 +109,8 @@ export class DashboardSellerComponent implements OnInit {
   }
 
   getStockVsTotalOfItems(): void {
+    console.log('PASANDO  X VSSS');
+    
     this.statisticService.getStockVsTotalOfItems().subscribe(dto => {
       this.stockVsTotal = dto;
     }, error => {

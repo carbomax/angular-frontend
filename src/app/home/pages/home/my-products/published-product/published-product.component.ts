@@ -238,7 +238,7 @@ export class PublishedProductComponent implements OnInit {
   }*/
 
   navegateToEdit(product: ProductMeliPublished) {
-    this.router.navigate(['edit-products-published', product.id]);
+    this.router.navigate(['/home/edit-products-published', product.id]);
   }
 
   cipherContent(content: string) {

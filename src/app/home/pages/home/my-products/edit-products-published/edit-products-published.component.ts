@@ -531,7 +531,7 @@ export class EditProductsPublishedComponent implements OnInit {
 
   closeEditPublished(){
     this.clearAll();
-    this.router.navigate(['/published-products']);
+    this.router.navigate(['/home/published-products']);
   }
 
   publishProducts(){
