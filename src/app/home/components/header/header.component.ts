@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit {
   }
 
   public isAdmin(): boolean {
-    return this.authService.authenticationDataExtrac().roles.includes(RoleEnum.ADMIN);
+    return this.authService.authenticationDataExtrac()?.roles.includes(RoleEnum.ADMIN);
   }
 
 

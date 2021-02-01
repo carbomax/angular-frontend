@@ -52,7 +52,7 @@
   </a>
 
   <div class="collapse show" id="collapseCardFilterProductStorage">
-    <app-chart-line-orders-sellers [sellerReference]="currentAccount.userIdBss"></app-chart-line-orders-sellers>
+    <app-chart-line-orders-sellers [sellerReference]="currentAccount?.userIdBss"></app-chart-line-orders-sellers>
   </div>
 </div>
 
@@ -128,7 +128,7 @@
                 "
               >
                 <td>{{ item.ranking }}</td>
-                <td>{{ item.sku }}</td>
+                <td>{{ item?.sku }}</td>
                 <td class="text-right">{{ item.count }}</td>
                 <td>{{ item.name | slice: 0:60 }}...</td>
               </tr>

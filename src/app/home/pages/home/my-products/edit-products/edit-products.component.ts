@@ -414,7 +414,7 @@ export class EditProductsComponent implements OnInit {
   closeModalPublish(){
     this.clearAll();
     //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
-    this.router.navigate(['/publish-myproducts']);
+    this.router.navigate(['/home/publish-myproducts']);
   }
 
   publishProducts(){
@@ -456,7 +456,7 @@ export class EditProductsComponent implements OnInit {
       timer: 5000
     })
     .then((result) => {
-      this.router.navigate(['/publish-myproducts']);
+      this.router.navigate(['/home/publish-myproducts']);
     });
   }
 
