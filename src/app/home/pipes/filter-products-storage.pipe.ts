@@ -6,26 +6,35 @@ import { ProductStore } from '../../models/product.store';
 })
 export class FilterProductsStoragePipe implements PipeTransform {
 
-  transform(value: ProductStore[], searchName: string, searchSKU: string): ProductStore[] {
+  transform(value: ProductStore[], searchNotExistMarketplace: boolean, searchExistMeliMarketplace: boolean): ProductStore[] {
 
-    const products: ProductStore[] = [];
+    let products: ProductStore[] = [];
 
-    if (searchName === '' && searchSKU === '') {
-      return value;
-    }
+   if(!searchExistMeliMarketplace && !searchNotExistMarketplace){
+     return value;
+   }
 
-    console.log('searchName', searchName);
-    console.log('searchSKU', searchSKU);
-    console.log('value', value);
-    console.log('evaluando', value[0].sku.toLowerCase().indexOf(searchSKU.toLowerCase()))
-
-    for (const product of value) {
-      if (product.name.toLowerCase().indexOf(searchName.toLowerCase()) > -1 &&
-      product.sku.toLowerCase().indexOf(searchSKU.toLowerCase()) > -1) {
+   if(searchExistMeliMarketplace && searchNotExistMarketplace){
+    return value;
+  }
+   // Search exist in Meli Marketplace
+   if(searchExistMeliMarketplace) {
+    value.forEach( product => {
+      if( product.existInMeliStore){
         products.push(product);
       }
+    })
+   } 
 
-    }
+    // Search exist in Meli Marketplace
+    if(searchNotExistMarketplace) {
+      value.forEach( product => {
+        if(!product.existInMeliStore){
+          products.push(product);
+        }
+      })
+     } 
+
     console.log('product', products);
 
     return products;

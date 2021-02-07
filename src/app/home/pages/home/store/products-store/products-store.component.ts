@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductStore } from '../../../../../models/product.store';
 
@@ -24,6 +24,8 @@ import { ParsedPropertyType } from '@angular/compiler';
 export class ProductsStoreComponent implements OnInit {
   @ViewChild('checkAllP') checkAllP;
 
+
+  public toolTipMeli = 'Ya este producto se encuentra en su almacén de Mercado Libre';
   public loading = false;
   public loadPaginator = false;
   public loadingClear = false;
@@ -64,9 +66,33 @@ export class ProductsStoreComponent implements OnInit {
   sizes: [{ numer: 15 }, { numer: 30 }, { numer: 50 }, { numer: 75 }, { numer: 100 }];
 
 
+  dropDownForm: FormGroup = this.fb.group({
+    notExistInMarketplaceCheckboxSearch  : [false],
+    existInMeliMarketplaceCheckboxSearch : [false]
+  });
+
   constructor(public productStoreService: ProductsStorageService, public marketplaceService: MarketplaceService,
-    public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, private router: Router) {
+              public productsStorageUserService: ProductsStorageUserService, private authService: AuthService, 
+              private router: Router, private fb: FormBuilder) {
     this.getMarketplaces();
+    
+  }
+
+  dropDownFormByFiel(field: string): any{
+      return this.dropDownForm.controls[field].value;
+  }
+
+  inactiveSearchByMarketplace(){
+    if(this.dropDownFormByFiel('notExistInMarketplaceCheckboxSearch')){
+      this.dropDownForm.controls.existInMeliMarketplaceCheckboxSearch.setValue({existInMeliMarketplaceCheckboxSearch: false})
+    }
+    
+  }
+
+  activeSearchByMarketplace(){
+    if(this.dropDownFormByFiel('existInMeliMarketplaceCheckboxSearch')){
+      this.dropDownForm.controls.notExistInMarketplaceCheckboxSearch.setValue({notExistInMarketplaceCheckboxSearch: false})
+    }
   }
 
   getMarketplaces(): void {

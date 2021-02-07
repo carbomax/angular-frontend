@@ -46,7 +46,6 @@ import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku
 import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
 import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
 import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
-import { MeliConfigurationModule } from './pages/home/meli-configuration/meli-configuration.module';
 
 
 
