@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { CategoryProductStoraje } from '../../models/category.product.storaje';
 import { FamilyProductStorage } from '../../models/family.product.store';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ProductsStorageService {
   categories: CategoryProductStoraje[] = [];
   families: FamilyProductStorage[] = [];
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     this.pageProducts = new PageProductStorage();
     this.getCategories();
     this.getFamiles();
@@ -30,7 +31,7 @@ export class ProductsStorageService {
 
     const uri = `${this.URI}${this.URI_SERVICE_PRODUCTS}/items-by-filters/${page}/${size}
     ?sku=${sku}&nameProduct=${nameProduct}&categoryId=${categoryId}&familyId=${familyId}
-    &minPrice=${minPrice}&maxPrice=${maxPrice}`;
+    &minPrice=${minPrice}&maxPrice=${maxPrice}&profileId=${this.authService.authenticationDataExtrac()?.profileId}`;
 
     console.log(uri)
     return this.http.get<PageProductStorage>(uri).pipe(map((resp: any) => {
@@ -53,6 +54,13 @@ export class ProductsStorageService {
 
   getFamiles(): void {
     this.http.get<FamilyProductStorage[]>(`${this.URI}${this.URI_SERVICE_PRODUCTS}/families`).subscribe(resp => this.families = resp);
+  }
+
+  existInStorage(sku: string): boolean {
+     this.http.get<Boolean>(`${this.URI}${this.URI_SERVICE_PRODUCTS}/exist-in-storage/${this.authService.authenticationDataExtrac()?.profileId}?sku=${sku}`)
+                .subscribe( resp => console.log('RESP:' , resp) );
+                return true;
+          
   }
 
 }
