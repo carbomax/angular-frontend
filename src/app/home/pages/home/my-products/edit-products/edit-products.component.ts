@@ -274,7 +274,7 @@ export class EditProductsComponent implements OnInit {
           position: 'top-end',
           icon: 'error',
           title: `Error`,
-          text: 'Su imagen excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          text: 'Su imagen excede el tamaño máximo permitido, lea la ayuda para mas información',
           showConfirmButton: false,
           timer: 5000
         });
