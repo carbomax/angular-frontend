@@ -33,7 +33,6 @@ import { PublishedProductComponent } from './pages/home/my-products/published-pr
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
 import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
-import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
@@ -74,7 +73,6 @@ import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-
     SellerOrdersComponent,
     MeliCategoryPathComponent,
     EditProductsPublishedComponent,
-    GlobalLoadingComponent,
     OperationsComponent,
     AttributeRequiredComponent,
     HistorialOperationComponent,

@@ -290,7 +290,7 @@ export class UserAdminComponent implements OnInit {
 
   enabledOrDisabled(user: User): void {
     Swal.fire({
-      title: 'Habilitar usuario',
+      title: user.enabled ? 'Habilitar usuario' : 'Deshabilitar usuario',
       text: 'Confirma la operación?',
       icon: 'warning',
       showCancelButton: true,
@@ -324,7 +324,7 @@ export class UserAdminComponent implements OnInit {
           Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: `El usuario no ha sido habilitado`,
+            title: `No se pudo completar la acción, por favor intente más tarde'`,
             showConfirmButton: false,
             timer: 2000
           })
