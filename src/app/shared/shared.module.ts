@@ -12,9 +12,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 // Charts
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { GlobalLoadingComponent } from '../home/components/global-loading/global-loading.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    GlobalLoadingComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
@@ -31,7 +34,8 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     NgbModule,
     NgSelectModule,
     ReactiveFormsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    GlobalLoadingComponent
   ]
 })
 export class SharedModule { }

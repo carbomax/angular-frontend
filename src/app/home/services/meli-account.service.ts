@@ -8,6 +8,7 @@ import { map, catchError } from 'rxjs/operators';
 import { AuthService } from '../../core/services/auth.service';
 import { MeliAccount } from '../../models/meli.account';
 import { Observable } from 'rxjs';
+import { MeliSellerAccountFlexDto } from '../pages/home/meli-configuration/models/meli-seller-account-flex.model';
 
 
 
@@ -21,11 +22,11 @@ export class MeliAccountService {
   URI_MELI_API = `${environment.URI_ROOT}/meli/api/auth`;
   profileId: number;
 
-  meliAccounts: MeliAccount [] = [];
+  meliAccounts: MeliAccount[] = [];
 
   constructor(public authService: AuthService, public http: HttpClient) {
 
-   }
+  }
 
   public redirectToMeli(id: number): void {
     this.saveAccountStorage(id);
@@ -36,15 +37,15 @@ export class MeliAccountService {
   public getAccounts(): Observable<MeliAccount[]> {
     this.profileId = this.authService.authenticationDataExtrac().profileId;
     return this.http.get<MeliAccount[]>(`${this.URI_MELI_BUSINESS}/by-profile/${this.profileId}`)
-    .pipe(
-      map( (resp: any) => {
-        this.meliAccounts = resp;
-        return this.meliAccounts;
-      })
-    );
+      .pipe(
+        map((resp: any) => {
+          this.meliAccounts = resp;
+          return this.meliAccounts;
+        })
+      );
   }
 
-  public updateAccount(account: MeliAccount): Observable<MeliAccount>{
+  public updateAccount(account: MeliAccount): Observable<MeliAccount> {
     return this.http.put<MeliAccount>(`${this.URI_MELI_BUSINESS}/update/${account.id}`, account);
   }
 
@@ -56,7 +57,7 @@ export class MeliAccountService {
     return this.http.delete(`${this.URI_MELI_BUSINESS}/${id}`);
   }
 
-  public authorizeAccount(id: number, code: any): Observable<any>{
+  public authorizeAccount(id: number, code: any): Observable<any> {
     return this.http.get<any>(`${this.URI_MELI_API}/${id}/${code}`);
   }
 
@@ -65,11 +66,20 @@ export class MeliAccountService {
     return this.http.get<any>(`${this.URI_MELI_API}/synchronize-account/${id}`);
   }
 
-  public getUrlMeli(): string{
+
+  getAccountsEnabledOrDisabledFlexByAdmin(): Observable<MeliSellerAccountFlexDto[]> {
+    return this.http.get<MeliSellerAccountFlexDto[]>(`${this.URI_MELI_BUSINESS}/enabled-disabled-flex-by-admin`);
+  }
+
+  updateAccountsEnabledOrDisabledFlexByAdmin(accountId: number, enableFlex: boolean): Observable<MeliSellerAccountFlexDto> {
+    return this.http.put<MeliSellerAccountFlexDto>(`${this.URI_MELI_BUSINESS}/enabled-disabled-flex-by-admin/${accountId}?enableFlex=${enableFlex ? 1 : 0}`, {});
+  }
+
+  public getUrlMeli(): string {
     return environment.URI_MELI;
   }
 
-  saveAccountStorage(id: number): void{
+  saveAccountStorage(id: number): void {
     localStorage.removeItem('reference');
     localStorage.setItem('reference', JSON.stringify(id));
   }
@@ -84,26 +94,15 @@ export class MeliAccountService {
 
 
 
-  getAccountReference(): string{
+  getAccountReference(): string {
     return localStorage.getItem('reference');
   }
 
   private mask(value: number): string {
     const firts = Math.random();
     const second = Math.random();
-    return  firts + ' ' + (value * firts) / second + ' ' + second;
+    return firts + ' ' + (value * firts) / second + ' ' + second;
   }
 
 
-
-   // getAccountStorageReference(): number {
-  //   const reference = localStorage.getItem('reference').split(' ');
-  //   if(reference){
-  //     return Math.floor((+reference[1] * +reference[2]) / +reference[0]);
-  //   } else{
-  //     console.log('Reference to account lost', reference);
-  //     return null;
-  //   }
-
-  // }
 }
