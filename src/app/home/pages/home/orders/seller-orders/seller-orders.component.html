@@ -124,7 +124,7 @@
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
-            <th>#</th>
+            <th class="text-right">ID</th>
             <th>Estado</th>
             <th>Cliente</th>
             <th>Fecha creación</th>
@@ -137,9 +137,8 @@
 
         <tbody>
           <tr *ngFor="let item of orderPage.content; let i = index ">
-            <td class="text-right">{{ orderByDesc(i, orderPage.content.length )}}</td>
+            <td class="text-right"> {{ item.id }} </td>
             <td>
-
               <div *ngIf="item.status === 'cancelled'" style="padding: 0.25rem 1.25rem;" class="alert alert-danger mb-0"
                 role="alert">
                 <i class="far fa-times-circle"></i> Cancelada
@@ -155,7 +154,7 @@
             <td><label class="w10">{{ item.buyer.firstName }}</label></td>
             <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
             <td>
-              <div class="dropdown no-arrow">
+              <div class="dropdown no-arrow pointer">
                 <strong>Total:</strong> {{ getTotal(item) }}
                 <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
@@ -231,10 +230,11 @@
 
           <div class="form-group">
             <select (change)="selectChangeHandler($event.target.value)" class="form-control">
-              <option value="5">5</option>
-              <option value="10">10</option>
               <option value="15">15</option>
-              <option value="20">20</option>
+              <option value="30">30</option>
+              <option value="50">50</option>
+              <option value="75">75</option>
+              <option value="100">100</option>
             </select>
           </div>
 

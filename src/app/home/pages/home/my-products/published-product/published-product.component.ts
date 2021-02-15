@@ -25,6 +25,7 @@ export class PublishedProductComponent implements OnInit {
   disable = true;
 
   public loading = true;
+  public msgLoading = 'Cargando publicaciones...';
   public loadPaginator = false;
   public loadingClear = false;
   public loadingSearch = false;
@@ -59,6 +60,12 @@ export class PublishedProductComponent implements OnInit {
   ngOnInit(): void {
     this.getAccountMeli();
     this.productsSelected = [];
+    this.setMsgLoading('Cargando publicaciones...', true);
+  }
+
+  setMsgLoading(msg: string, show: boolean): void {
+    this.msgLoading = msg;
+    this.loading = show ? true : false;
   }
 
   selectChangeHandler(size): void {
@@ -72,7 +79,9 @@ export class PublishedProductComponent implements OnInit {
   }
 
   loadProductsPaginator(onLoading: boolean): void {
-    this.loading = onLoading;
+    this.emptySearch = false;
+    this.errorProducts = false;
+    this.setMsgLoading('Cargando publicaciones...', onLoading);
     console.log('page', this.page)
     this.productsMeliPublishedService.
       getProductsPublished(this.page - 1, this.size, this.skuSearch, this.idMeliSearch, this.meliAccountSearch === '' ? -1 : +this.meliAccountSearch,
@@ -94,7 +103,7 @@ export class PublishedProductComponent implements OnInit {
 
         this.pagePublised = resp;
         this.productsMeliPublished = this.pagePublised.content;
-        this.loading = false;
+        this.setMsgLoading('Cargando publicaciones...', false);
         this.loadingClear = false;
         this.loadPaginator = false;
 
@@ -121,7 +130,7 @@ export class PublishedProductComponent implements OnInit {
         this.loadingClear = false;
         this.loadPaginator = false;
         this.emptySearch = false;
-        this.loading = false;
+        this.setMsgLoading('Cargando publicaciones...', false);
       });
 
   }
@@ -229,7 +238,7 @@ export class PublishedProductComponent implements OnInit {
   }*/
 
   navegateToEdit(product: ProductMeliPublished) {
-    this.router.navigate(['edit-products-published', product.id]);
+    this.router.navigate(['/home/edit-products-published', product.id]);
   }
 
   cipherContent(content: string) {
@@ -256,8 +265,7 @@ export class PublishedProductComponent implements OnInit {
 
     }).then((result) => {
       if (result.isConfirmed) {
-
-        this.loading = true;
+        this.setMsgLoading('Actualizando publicación...', true);
         this.productsMeliPublishedService.changeStatusPublication(product.accountMeli, status, product.idPublicationMeli)
           .subscribe((resp: any) => {
 
@@ -346,7 +354,7 @@ export class PublishedProductComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
 
-          this.loading = true;
+          this.setMsgLoading('Actualizando publicaciones...', true);
           this.productsMeliPublishedService.changeStatusMultiplePublications(this.productsSelected, status)
             .subscribe((resp: any) => {
               let withError = false;
@@ -424,7 +432,7 @@ export class PublishedProductComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
 
-          this.loading = true;
+          this.setMsgLoading('Republicando publicaciones...', true);
           this.productsMeliPublishedService.republishMultiplePublication(this.productsSelected)
             .subscribe((resp: any) => {
               let withError = false;
@@ -465,7 +473,7 @@ export class PublishedProductComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.loading = true;
+        this.setMsgLoading('Eliminando publicación...', true);
         if(product.status === StatesOfMeli.FAIL || product.status === StatesOfMeli.UNDER_REVIEW){
           this.productsMeliPublishedService.deletePublicationFailed(product.id)
           .subscribe((resp: any) => {
@@ -517,6 +525,100 @@ export class PublishedProductComponent implements OnInit {
     })
   }
 
+  //Pendiente -- no terminado
+  deleteSetPublication(deleteAll: boolean): void {
+    let confirmText = "";
+    if(!deleteAll)
+      confirmText = "¿Estás seguro de eliminar los productos seleccionados?";
+    else
+      confirmText = "¿Estás seguro de eliminar todos los productos de la cuenta actual?";
+
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: confirmText,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.setMsgLoading('Eliminando publicaciones...', true);
+        let idProductList: number[] = [];
+        if(!deleteAll) {
+          this.productsSelected.forEach(f => idProductList.push(f.id));
+        }
+        this.productsMeliPublishedService.deleteSetPublication(this.meliAccountsList[0].id, idProductList).then((resp: any) => {
+            if(resp.DONE) {
+              Swal.fire({
+                position: 'top-end',
+                title: 'Publicaciones eliminadas!!!',
+                text: resp.DONE,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 5000
+              });
+              this.productsSelected = [];
+              this.loadProductsPaginator(true);
+            }
+            else if(resp.PARTIAL) {
+              Swal.fire({
+                position: 'top-end',
+                title: 'Parcialmente eliminadas!!!',
+                text: resp.PARTIAL,
+                icon: 'warning',
+                showConfirmButton: false,
+                timer: 5000
+              });
+              this.productsSelected = [];
+              this.loadProductsPaginator(true);
+            }
+            else {
+              Swal.fire({
+                position: 'top-end',
+                title: 'Publicaciones no eliminadas!!!',
+                text: resp.BAD,
+                icon: 'error',
+                showConfirmButton: false,
+                timer: 5000
+              });
+              this.setMsgLoading('Cargando publicaciones...', false);
+            }
+        }, (error: any) => {
+          console.log(error);
+          if(error.status === 504) {
+            Swal.fire({
+              position: 'top-end',
+              title: 'Información!!!',
+              text: "Las publicaciones están siendo eliminadas. Este proceso puede demorar unos minutos. Actualice la vista en unos minutos.",
+              icon: 'info',
+              showConfirmButton: false,
+              timer: 7000
+            });
+            this.productsSelected = [];
+            this.loadProductsPaginator(false)
+            setTimeout(() => {
+              this.loadProductsPaginator(false)
+             }, 40000);
+          }else{
+            Swal.fire({
+              position: 'top-end',
+              title: 'Publicaciones no eliminadas!!!',
+              text: "Error al realizar acción. Contacte con el administrador",
+              icon: 'error',
+              showConfirmButton: false,
+              timer: 5000
+            });
+            this.loadProductsPaginator(true)
+          }
+
+        });
+      }
+    });
+  }
+
   republishPublication(product: ProductMeliPublished): void {
 
     Swal.fire({
@@ -542,7 +644,7 @@ export class PublishedProductComponent implements OnInit {
             timer: 5000
           })
         }else{
-          this.loading = true;
+          this.setMsgLoading('Republicando publicación...', true);
           this.productsMeliPublishedService.republishPublication(product.accountMeli, product.idPublicationMeli)
             .subscribe((resp: any) => {
 
@@ -563,7 +665,7 @@ export class PublishedProductComponent implements OnInit {
   }
 
   synchronizePublication(){
-    this.loading = true;
+    this.setMsgLoading('Sincronizando publicaciones...', true);
     let publicationList: number[] = [];
     this.productsSelected.forEach(p => {
       publicationList.push(p.id);
@@ -633,7 +735,7 @@ export class PublishedProductComponent implements OnInit {
       title: `Publicación ${title} satisfactoriamente`,
       showConfirmButton: true,
       timer: 2000
-    }).finally(() => this.loading = false);
+    }).finally(() => this.setMsgLoading('Cargando publicaciones...', false));
   }
 
   notificationErrorChangeStatus(error?: any): void {
@@ -644,7 +746,7 @@ export class PublishedProductComponent implements OnInit {
     if (error.error_meli !== undefined) {
       title = `${title}, mercadolibre no procesó el cambio`;
     }
-    this.loading = false
+    this.setMsgLoading('Cargando publicaciones...', false);
     Swal.fire({
       position: 'top-end',
       icon: 'error',
@@ -659,8 +761,7 @@ export class PublishedProductComponent implements OnInit {
     if (error.error_meli !== undefined ) {
       title = `${title}, mercadolibre no procesó el cambio`;
     }
-
-    this.loading = false
+    this.setMsgLoading('Cargando publicaciones...', false);
     Swal.fire({
       position: 'top-end',
       icon: 'error',

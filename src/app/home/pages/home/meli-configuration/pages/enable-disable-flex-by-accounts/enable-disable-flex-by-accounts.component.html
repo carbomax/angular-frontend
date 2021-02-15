@@ -1,0 +1,65 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h6 class="m-0 font-weight-bold text-primary">Administrar cuentas de mercadolibre</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Cuenta</th>
+                  <th>Nombre del seller</th>
+                  <th class="text-center">Flex</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let account of accountsFlex | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
+                  <td> {{ account.accountName }} </td>
+                  <td> {{ account.profileName }} </td>
+                  <td class="text-center">
+                    <div class="custom-control custom-checkbox small">
+                      <input type="checkbox" [(ngModel)]="account.enabledFlex" (click)="updateAccountsEnabledOrDisabledFlexByAdmin(account)"
+                        class="custom-control-input" [id]="'check' + account.id">
+                      <label class="custom-control-label" [for]="'check' + account.id"></label>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="container" *ngIf="accountsFlex.length > 0">
+              <div class="row justify-content-around">
+                <ngb-pagination [collectionSize]="accountsFlex.length" [boundaryLinks]="true" [pageSize]="pageSize"
+                  [(page)]="page">
+                </ngb-pagination>
+
+
+                <div class="form-group">
+                  <select (click) = "selectChangeHandler($event.target.value)" class="form-control">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+           <div class="container">
+            <div class="row justify-content-center">
+
+              <div *ngIf="accountsFlex.length <= 0" class="alert alert-info col-8 text-center" role="alert">
+                <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay cuentas para mostrar
+              </div>
+        
+            </div>
+           </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <app-global-loading [globalLoading]="loading" globalLoadingDescription="Cargando cuentas">
+  </app-global-loading>

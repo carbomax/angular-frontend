@@ -4,6 +4,8 @@ import { OrderPage } from '../../../../../models/meli-orders/orders-page.model';
 import { NgbCalendar, NgbDate, NgbDateParserFormatter, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { FormControl } from '@angular/forms';
 import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
+import { AuthService } from '../../../../../core/services/auth.service';
+import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 
 
 
@@ -21,7 +23,7 @@ export class SellerOrdersComponent implements OnInit {
   public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   errorDateFrom = false;
   errorDateTo = false;
@@ -43,7 +45,8 @@ export class SellerOrdersComponent implements OnInit {
 
   constructor(public meliOrderService: MeliOrdersService,
               private calendar: NgbCalendar,
-              public formatter: NgbDateParserFormatter) {
+              public formatter: NgbDateParserFormatter,
+              private dateTimeService: DateTimeMomentService) {
 
   }
 
@@ -70,8 +73,8 @@ export class SellerOrdersComponent implements OnInit {
     return totalAmount + amountTaxes + baseCost;
 
   }
-  orderByDesc(i, size): number{
-    return size - i;
+  orderByDesc(i, orderPage: OrderPage): number{
+    return orderPage.totalElements - i;
   }
 
   searchOrders(): void {
@@ -129,7 +132,7 @@ export class SellerOrdersComponent implements OnInit {
 
   loadOrders(): void {
     this.buildDateFilter();
-    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo, []).subscribe((resp: OrderPage) => {
+    this.meliOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch,'', this.dateFrom, this.dateTo, []).subscribe((resp: OrderPage) => {
       console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
@@ -151,15 +154,13 @@ export class SellerOrdersComponent implements OnInit {
   private buildDateFilter(): void {
 
     if (this.dateFromControl.value !== null) {
-      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
     } else { this.dateFrom = 0 }
 
     if (this.dateToControl.value !== null) {
-
-      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
     } else { this.dateTo = 99999999 }
 
   }
-
 
 }

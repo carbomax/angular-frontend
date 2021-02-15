@@ -1,3 +1,4 @@
+
 import { Routes, RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { HomeComponent } from './pages/home/home.component';
@@ -21,14 +22,17 @@ import { MeliAccountsComponent } from './pages/home/meli-accounts/meli-accounts.
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
+import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+
   {
-    path: '', component: HomeComponent, data: {title: 'Inicio'},
+    path: '', component: HomeComponent,
     children: [
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Tablero de control' }},
       { path: 'store', component: ProductsStoreComponent, canActivate: [AuthGuard] , data: {title: 'Productos-Almacén'}},
       { path: 'marketplaces', component: ChooseMarketplacesComponent, canActivate: [AuthGuard] ,  data: {title: 'Marketplaces'}},
       { path: 'publish-myproducts', component: PublishMyproductsComponent, canActivate: [AuthGuard],  data: {title: 'Mis productos'} },
@@ -44,9 +48,13 @@ const routes: Routes = [
       { path: 'meli-accounts', component: MeliAccountsComponent, canActivate: [AuthGuard], data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Cuentas Mercado Libre' } },
       { path: 'seller-orders', component: SellerOrdersComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.SELLER], title: 'Órdenes' }},
       { path: 'operations', component: OperationsComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Operaciones' }},
-      { path: 'historial-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Histórico-Operaciones' }},
+      { path: 'historical-operations', component: HistorialOperationComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR], title: 'Histórico-Operaciones' }},
       { path: 'dashboard-admin', component: DashboardAdminComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.ADMIN], title: 'Tablero de control' }},
-      { path: '', redirectTo: 'home', pathMatch: 'full' }
+      { path: 'dashboard-seller', component: DashboardSellerComponent, canActivate: [AuthGuard] , data: { roles: [RoleEnum.SELLER], title: 'Tablero de control' }},
+      { path: 'configuration', 
+         loadChildren: () => import('./pages/home/meli-configuration/meli-configuration.module').then(m => m.MeliConfigurationModule)
+       },
+      { path: '**', redirectTo: 'dashboard' }
     ]
   }
 

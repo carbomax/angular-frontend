@@ -33,11 +33,18 @@ import { PublishedProductComponent } from './pages/home/my-products/published-pr
 import { SellerOrdersComponent } from './pages/home/orders/seller-orders/seller-orders.component';
 import { MeliCategoryPathComponent } from './pages/home/meli/meli-category-path/meli-category-path.component';
 import { EditProductsPublishedComponent } from './pages/home/my-products/edit-products-published/edit-products-published.component';
-import { GlobalLoadingComponent } from './components/global-loading/global-loading.component';
 import { OperationsComponent } from './pages/home/operations/operations.component';
 import { AttributeRequiredComponent } from './components/modals/attribute-required/attribute-required.component';
 import { HistorialOperationComponent } from './pages/home/historial-operation/historial-operation.component';
-import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-admin.component';
+import { ChartLineOrdersComponent } from './pages/home/charts/chart-line-orders/chart-line-orders.component';
+import { DashboardComponent } from './pages/home/dashboard/dashboard.component';
+import { DashboardAdminComponent } from './pages/home/dashboard/dashboard-admin/dashboard-admin.component';
+import { DashboardSellerComponent } from './pages/home/dashboard/dashboard-seller/dashboard-seller.component';
+import { TotalSalesComponent } from './pages/home/dashboard/components/total-sales/total-sales.component';
+import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku/better-sku.component';
+import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
+import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
+import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
 
 
 
@@ -66,11 +73,19 @@ import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-
     SellerOrdersComponent,
     MeliCategoryPathComponent,
     EditProductsPublishedComponent,
-    GlobalLoadingComponent,
     OperationsComponent,
     AttributeRequiredComponent,
     HistorialOperationComponent,
-    DashboardAdminComponent],
+    DashboardAdminComponent,
+    ChartLineOrdersComponent,
+    DashboardAdminComponent,
+    DashboardComponent,
+    DashboardSellerComponent,
+    TotalSalesComponent,
+    BetterSkuComponent,
+    StockVsTotalComponent,
+    ActivePublicationsComponent,
+    ChartLineOrdersSellersComponent],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -90,7 +105,10 @@ import { DashboardAdminComponent } from './pages/home/dashboard-admin/dashboard-
     ListMarginsComponent,
     SellerOrdersComponent,
     MeliCategoryPathComponent,
-    EditProductsPublishedComponent],
+    EditProductsPublishedComponent,
+    DashboardAdminComponent,
+    DashboardComponent,
+    TotalSalesComponent],
   imports: [
     SharedModule,
     HomeRoutingModule,

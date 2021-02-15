@@ -10,5 +10,6 @@ export class ProductStore {
   images: any[];
   categories: CategoryProductStoraje[];
   family: FamilyProductStorage;
+  existInMeliStore: boolean;
   selected?: boolean;
 }

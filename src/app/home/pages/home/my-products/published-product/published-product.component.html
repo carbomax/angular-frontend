@@ -12,16 +12,17 @@
 
         <div class="row p-3">
           <div class="col-md-6">
-            <div class="form-group">
-              <label for="idSku">SKU:</label>
-              <input type="text" class="form-control" name="skuSearch" id="idSku" [(ngModel)]="skuSearch" placeholder="Buscar por SKU...">
-            </div>
-
+            
             <div class="form-group">
               <label for="idTitle">Título:</label>
               <input type="text" class="form-control" name="titleSearch" [(ngModel)]="titleSearch" id="idTitle"
                 placeholder="Buscar por título...">
             </div>
+
+            <div class="form-group">
+              <label for="idSku">SKU:</label>
+              <input type="text" class="form-control" name="skuSearch" id="idSku" [(ngModel)]="skuSearch" placeholder="Buscar por SKU...">
+            </div>            
           </div>
 
           <div class="col-md-6">
@@ -106,9 +107,29 @@
               Pausar Seleccionados</a>
             <a class="dropdown-item pointer" href="javascript:void(0)" (click)= "changeStatusMultiplePublications(5)"><i class="fas fa-stop text-secondary m-2"></i>
               Finalizar Seleccionados</a>
+              <a class="dropdown-item pointer" href="javascript:void(0)" (click)="deleteSetPublication(false)"><i class="fas fa-trash text-danger m-2"></i>
+                Eliminar Seleccionados</a>
           </div>
+
         </div>
       </div>
+<!--
+      <div class="dropdown no-arrow">
+        <a class="dropdown-toggle btn btn-danger" href="javascript:void(0);" role="button" id="dropdownMenuDelete"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-trash"></i>
+        Eliminar
+        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+        aria-labelledby="dropdownMenuDelete" style="width: auto;">
+        <a class="dropdown-item pointer" href="javascript:void(0);" (click)="deleteSetPublication(true)"><i class="fas fa-trash text-danger m-2"></i>
+          Eliminar todos</a>
+        <a class="dropdown-item pointer" *ngIf="!disable" href="javascript:void(0);" (click)="deleteSetPublication(false)"><i class="fas fa-trash text-danger m-2"></i>
+          Eliminar seleccionados</a>
+      </div>
+    </div>
+  -->
     </div>
   </div>
 
@@ -299,5 +320,5 @@
 </div>
 
 
-<app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando publicaciones...'">
+<app-global-loading [globalLoading]="loading" [globalLoadingDescription]="msgLoading">
 </app-global-loading>

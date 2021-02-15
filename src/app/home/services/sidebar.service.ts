@@ -35,7 +35,7 @@ export class SidebarService {
       submenu: [
         { title: 'Órdenes', url: '/home/seller-orders' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]},
         { title: 'Operaciones', url: '/home/operations' , roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR]},
-        { title: 'Histórico-Operaciones', url: '/home/historial-operations' , roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR]}
+        { title: 'Histórico-Operaciones', url: '/home/historical-operations' , roles: [RoleEnum.ADMIN, RoleEnum.OPERATOR]}
       ],
     },
     {
@@ -48,8 +48,8 @@ export class SidebarService {
         { title: 'Vendedores', url: '/home/sellers' , roles: [RoleEnum.ADMIN]},
         { title: 'Márgenes', url: '/home/margins', roles: [RoleEnum.ADMIN, RoleEnum.SELLER] },
         { title: 'Marketplaces', url: '/home/list-marketplaces' , roles: [RoleEnum.ADMIN]},
-        { title: 'Cuentas Mercado Libre', url: '/home/meli-accounts' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]}
-
+        { title: 'Cuentas Mercado Libre', url: '/home/meli-accounts' , roles: [RoleEnum.ADMIN, RoleEnum.SELLER]},
+        { title: 'Configuración del sistema', url: '/home/configuration' , roles: [RoleEnum.ADMIN]}
       ]
     }
   ];

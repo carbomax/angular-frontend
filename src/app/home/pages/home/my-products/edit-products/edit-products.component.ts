@@ -13,6 +13,7 @@ import { Margin } from 'src/app/models/margin';
 import { MeliAccount } from 'src/app/models/meli.account';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
+import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
 
 @Component({
   selector: 'app-edit-products',
@@ -60,7 +61,7 @@ export class EditProductsComponent implements OnInit {
   responsePredictor: ResponseCategoryPredictor;
   withoutPredictor: boolean = false;
 
-  lastCategorySelected: string = '-1';
+  lastCategorySelected = new MeliME2Category('-1');
   home: boolean = false;
   pathList: string[];
 
@@ -273,7 +274,7 @@ export class EditProductsComponent implements OnInit {
           position: 'top-end',
           icon: 'error',
           title: `Error`,
-          text: 'Su imagen excede el tamaño máximo de 2MB (Mega Byte), lea la ayuda para mas información',
+          text: 'Su imagen excede el tamaño máximo permitido, lea la ayuda para mas información',
           showConfirmButton: false,
           timer: 5000
         });
@@ -413,7 +414,7 @@ export class EditProductsComponent implements OnInit {
   closeModalPublish(){
     this.clearAll();
     //this.initialMeliAccounts.forEach(element => { this.meliAccountsList.push(element);});
-    this.router.navigate(['/publish-myproducts']);
+    this.router.navigate(['/home/publish-myproducts']);
   }
 
   publishProducts(){
@@ -443,7 +444,7 @@ export class EditProductsComponent implements OnInit {
 
   callPublishProductsService(){
     // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
     this.clearAll();
 
     Swal.fire({
@@ -455,7 +456,7 @@ export class EditProductsComponent implements OnInit {
       timer: 5000
     })
     .then((result) => {
-      this.router.navigate(['/publish-myproducts']);
+      this.router.navigate(['/home/publish-myproducts']);
     });
   }
 
@@ -465,8 +466,20 @@ export class EditProductsComponent implements OnInit {
     this.home = false;
   }
 
-  getCategorySelected(idCategory: string){
-    this.lastCategorySelected = idCategory;
+  getCategorySelected(category: MeliME2Category){
+    this.lastCategorySelected = category;
+    if(this.lastCategorySelected.idLastCategory !== '-1'){
+      if(this.lastCategorySelected.isME2 === false ){
+        Swal.fire({
+          title: 'IMPORTANTE!!!',
+          text: 'La categoría seleccionada no permite Mercado Envío como único modo. Seleccione otra categoría que sea mercado enviable.',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }
+    }
   }
 
   setHome(){

@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-
-import { NgxBootstrapSliderModule } from 'ngx-bootstrap-slider';
-import { Ng5SliderModule } from 'ng5-slider';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Pagination
@@ -15,16 +12,16 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 // Charts
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-
+import { GlobalLoadingComponent } from '../home/components/global-loading/global-loading.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    GlobalLoadingComponent
+  ],
   imports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,
@@ -33,13 +30,12 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
   exports: [
     CommonModule,
     FormsModule,
-    NgxBootstrapSliderModule,
-    Ng5SliderModule,
     NgxPaginationModule,
     NgbModule,
     NgSelectModule,
     ReactiveFormsModule,
-    NgxChartsModule
+    NgxChartsModule,
+    GlobalLoadingComponent
   ]
 })
 export class SharedModule { }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivationEnd, Router } from '@angular/router';
+import { ActivationEnd, Router, UrlSegment } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 
@@ -12,6 +12,8 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   public title: string;
   public titleSub$: Subscription;
+  public urlSeg$: Subscription;
+  public url: string;
 
   constructor(private router: Router) {
    this.titleSub$ = this.loadTitleBreadcrumbs()
@@ -19,6 +21,10 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
                             this.title = title;
                             document.title = `Pepeganga-${this.title}`;
                           });
+    this.urlSeg$ = this.loadURLBreadcrumbs().subscribe(url => {
+      this.url = url[0].path;
+    })
+
   }
 
   ngOnInit(): void {
@@ -26,6 +32,7 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.titleSub$.unsubscribe();
+    this.urlSeg$.unsubscribe();
   }
 
   loadTitleBreadcrumbs() {
@@ -35,5 +42,15 @@ export class BreadcrumbsComponent implements OnInit, OnDestroy {
       map((event: ActivationEnd) => event.snapshot.data)
     );
   }
+
+  loadURLBreadcrumbs() {
+    return  this.router.events.pipe(
+      filter( event => event instanceof ActivationEnd),
+      filter((event: ActivationEnd) => event.snapshot.firstChild === null),
+      map((event: ActivationEnd) => event.snapshot.url)
+    );
+  }
+
+
 
 }

@@ -1,0 +1,93 @@
+<!-- Area Chart -->
+<div class="card shadow">
+  <!-- <div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary">
+      <i class="fas fa-shopping-cart"></i> Ventas
+    </h6>
+  </div> -->
+  <div class="card-body">
+    <div class="row">
+      <div class="col">
+        <div class="row d-flex flex-row-reverse">
+          <div class="col-xl-3 col-md-3">
+            <div class="form-group">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [formControl]="dateToControl"
+                  [class.is-invalid]="dateToControl.invalid"
+                  placeholder="Fecha hasta: yyyy-mm-dd"
+                  readonly
+                  [minDate]="dateFromControl.value"
+                  name="dateTo"
+                  ngbDatepicker
+                  (dateSelect)="onDateToSelection($event)"
+                  #dateTo="ngbDatepicker"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="dateTo.toggle()"
+                    type="button"
+                  >
+                    <i class="fas fa-calendar-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="col-xl-3 col-md-3">
+            <div class="form-group">
+              <div class="input-group">
+                <input
+                  class="form-control"
+                  [formControl]="dateFromControl"
+                  [class.is-invalid]="dateFromControl.invalid"
+                  placeholder="Fecha desde: yyyy-mm-dd"
+                  readonly
+                  name="dp"
+                  (dateSelect)="onDateFromSelection($event)"
+                  ngbDatepicker
+                  #dateFrom="ngbDatepicker"
+                  [maxDate]="dateToControl.value"
+                />
+                <div class="input-group-append">
+                  <button
+                    class="btn btn-outline-secondary calendar"
+                    (click)="dateFrom.toggle()"
+                    type="button"
+                  >
+                    <i class="fas fa-calendar-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center" *ngIf="ordersLength <= 0">
+
+      <div class="alert alert-info col-10 text-center" role="alert">
+        <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay datos que mostrar!
+      </div>
+
+    </div>
+    <div class="chart-line" *ngIf="ordersLength > 0">
+      <ngx-charts-line-chart
+        [scheme]="colorScheme"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxis]="xAxis"
+        [yAxis]="yAxis"
+        [timeline]="timeline"
+        [results]="multi"
+        (select)="onSelect($event)"
+        (activate)="onActivate($event)"
+        (deactivate)="onDeactivate($event)"
+      >
+      </ngx-charts-line-chart>
+    </div>
+  </div>
+</div>

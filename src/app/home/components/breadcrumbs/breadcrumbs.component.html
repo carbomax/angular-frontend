@@ -1,5 +1,8 @@
   <!-- Page Heading -->
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
+    <a *ngIf="url === 'publish-myproducts'" routerLink="/home/published-products" class="nav-link active"><i class="fas fa-share"></i> Ir a Productos Publicados </a>
+    <a *ngIf="url === 'published-products'" routerLink="/home/publish-myproducts" class="nav-link active"><i class="fas fa-reply"></i> Ir a Mis productos </a>
+
     <a *ngIf="false" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50 m-1"></i>Exportar</a>
   </div>

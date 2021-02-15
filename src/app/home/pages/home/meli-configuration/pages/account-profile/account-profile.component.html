@@ -1,0 +1,240 @@
+<div class="row mt-3">
+  <div class="col-md-12">
+    <div class="card mb-4">
+      <div class="card-header py-3">
+        <div
+          class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+          <a href="#collapseCardProfiles" class="d-block card-header py-3" data-toggle="collapse" role="button"
+            aria-expanded="true" aria-controls="collapseCardProfiles">
+            <h6 class="m-0 font-weight-bold text-primary">Perfiles de publicación cuentas mercadolibre</h6>
+          </a>
+          <button type="button" class="btn btn-primary btn-sm btn-user" data-toggle="modal"
+            data-target="#profilesModal">
+            <i class="fas fa-plus-circle"></i> Crear perfil
+          </button>
+        </div>
+      </div>
+
+      <div class="collapse show" id="collapseCardProfiles">
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Flex</th>
+                  <th>Tipo de publicación</th>
+                  <th>Categorías no permitidas</th>
+                  <th class="text-center">Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr>
+                  <td>{{ 'Solo FLEX' }}</td>
+                  <td>{{ true }}</td>
+                  <td>{{ 'Oro Premium'}}</td>
+                  <td>{{ 'Ver categorias' }}</td>
+                  <td>{{ 'Editar, Eliminar' }}</td>
+
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="container">
+              <div class="row justify-content-around">
+
+
+
+                <div class="form-group">
+                  <select class="form-control">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                  </select>
+                </div>
+
+                <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
+                  <span class="align-middle">Mostrando {{0}} a {{0}} de {{25}} registros </span>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div *ngIf="false" class="row justify-content-center">
+
+            <div class="alert alert-info col-8 text-center" role="alert">
+              <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay usuarios para mostrar
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-md-6">
+
+
+    <div class="card mb-4">
+      <div class="card-header py-3">
+        <div
+          class="d-flex flex-md-row flex-sm-column align-items-md-center justify-content-md-between align-items-sm-center justify-content-sm-center">
+
+          <a href="#collapseCardProfilesWithAccounts" class="d-block card-header py-3" data-toggle="collapse"
+            role="button" aria-expanded="true" aria-controls="collapseCardProfilesWithAccounts">
+            <h6 class="m-0 font-weight-bold text-primary">Asociar perfiles con cuentas de mercadolibre</h6>
+
+          </a>
+        </div>
+      </div>
+
+      <div class="collapse show" id="collapseCardProfilesWithAccounts">
+        <div class="row justify-content-center">
+          <div class="col-md-5 py-3">
+
+            <div class="card">
+
+              <div class="card-header py-3 bg-primary">
+                <h6 class="m-0 font-weight-bold text-white">Listado de sellers</h6>
+              </div>
+
+              <div class="list-group">
+
+                <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
+                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at
+                  eros</button>
+                <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
+                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+                <button type="button" class="list-group-item list-group-item-action" disabled>Vestibulum at
+                  eros</button>
+
+              </div>
+
+
+
+            </div>
+
+          </div>
+          <div class="col-md-1 d-flex align-items-center justify-content-center">
+            <div class="d-flex flex-column">
+              <button class="btn btn-outline-primary d-block mb-1"> <i class="fas fa-angle-double-right"></i> </button>
+              <button class="btn btn-outline-primary d-block"><i class="fas fa-angle-double-left"></i></button>
+            </div>
+          </div>
+          <div class="col-md-5 py-3">
+            <div class="card">
+
+              <div class="card-header py-3 bg-primary">
+                <h6 class="m-0 font-weight-bold text-white">Perfil x</h6>
+              </div>
+
+              <div class="list-group">
+
+                <button type="button" class="list-group-item list-group-item-action">Dapibus ac facilisis in</button>
+                <button type="button" class="list-group-item list-group-item-action">Morbi leo risus</button>
+                <button type="button" class="list-group-item list-group-item-action">Porta ac consectetur ac</button>
+
+              </div>
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+
+<div class="modal fade mt-5" id="profilesModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 *ngIf="true" class="modal-title" id="createModalLabel">{{'Crear perfil'}}</h5>
+        <h5 *ngIf="false" class="modal-title" id="updateModalLabel">{{'Actualizar perfil'}}</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form ngNativeValidate #f="ngForm">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <input type="text" class="form-control" id="inputName" placeholder="Nombre"
+                  aria-describedby="Nombre del perfil" name="profileName" required>
+              </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    name="flex"
+                    id="customSwitch1"
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="customSwitch1"
+                    *ngIf="true"
+                    >Flex habilitado</label
+                  >
+                  <label
+                    class="custom-control-label"
+                    for="customSwitch1"
+                    *ngIf="false"
+                    >Deshabilitado</label
+                  >
+              </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <ng-select [items]="typePublications" name="selectedtypePublications" bindLabel="description"
+                  placeholder="Seleccione tipo de publicación" appendTo="body" multiple="false" required
+                  [(ngModel)]="selectedtypePublications">
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+              <div class="form-group">
+                <ng-select [items]="categories" name="selectedCategories" bindLabel="name"
+                  placeholder="Seleccione categorías a no publicar" appendTo="body" multiple="true"
+                  [(ngModel)]="selectedCategories">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+
+          <button class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid">Registrar</button>
+          <button *ngIf="false" class="btn btn-primary" data-dismiss="modal" [disabled]="!f.form.valid">Actualizar</button>
+
+          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>

@@ -25,15 +25,8 @@
                 placeholder="Buscar por SKU...">
             </div>
 
-
           </div>
           <div class="col-md-6">
-
-            <div class="form-group mb-md-0">
-              <label for="idPriceSearch">Precio:</label>
-              <ng5-slider class="custom-ng5-slider" id="idPriceSearch" [(value)]="minValue" [(highValue)]="maxValue"
-                [options]="options"></ng5-slider>
-            </div>
 
             <div class="row">
               <div class="col-md-6">
@@ -59,6 +52,22 @@
                 </div>
               </div>
             </div>
+
+            <div class="form-group mb-md-0">
+              <div class="row" style="margin-bottom: 1rem">
+                <div class="col-sm-3">
+                  <label for="idMinPriceSearch">Precio mín:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000"
+                    [(ngModel)]="minValue" name="idMinPriceSearch" id="idMinPriceSearch">
+                </div>
+                <div class="col-sm-3">
+                  <label for="idMaxPriceSearch">Precio máx:</label>
+                  <input class="form-control text-box single-line" type="number" step="5" min="0" max="100000"
+                    [(ngModel)]="maxValue" name="idMaxPriceSearch" id="idMaxPriceSearch">
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="row">
@@ -104,7 +113,6 @@
 
   </div>
 
-
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
@@ -112,8 +120,8 @@
           <tr>
             <th>
               <div class="custom-control custom-checkbox ">
-                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading" (click)="selectAllProducts()"
-                  class="custom-control-input" id="customCheck">
+                <input type="checkbox" #checkAllP ([ngModel])="checkAll" [disabled]="loading"
+                  (click)="selectAllProducts()" class="custom-control-input" id="customCheck">
                 <label class="custom-control-label" for="customCheck"></label>
               </div>
             </th>
@@ -124,11 +132,59 @@
             <th>Categoría</th>
             <th>Precio</th>
             <th class="text-right">Cantidad</th>
+            <th class="d-flex justify-content-between">
+
+              <div>Ubicación</div>
+
+              <div class="dropdown no-arrow pointer">
+
+                <span class="dropdown-toggle " href="#" role="button"
+                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+                <i class="fas fa-filter"></i>
+              </span>
+               
+              <div class="dropdown-menu dropdown-menu-right animated--fade-in" 
+                  aria-labelledby="dropdownMenuLink">
+                
+                 <form [formGroup] = "dropDownForm">
+
+                  <div class="row px-1">
+                    <div class="col-12 mb-2">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck1" 
+                        formControlName="notExistInMarketplaceCheckboxSearch">
+                        <label class="form-check-label" for="gridCheck1">
+                          Sin almacén
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="col-12" >
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="gridCheck2" 
+                        formControlName="existInMeliMarketplaceCheckboxSearch">
+                        <label class="form-check-label" for="gridCheck2">
+                         Meli marketplace
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                 </form>                   
+                 
+                </div>
+              </div>
+
+
+            </th>
           </tr>
         </thead>
 
         <tbody>
-          <tr *ngFor="let product of pageProducts.itemsGrid">
+          <tr *ngFor="let product of pageProducts.itemsGrid 
+          |filterProductsStorage
+           :dropDownFormByFiel('notExistInMarketplaceCheckboxSearch')
+           :dropDownFormByFiel('existInMeliMarketplaceCheckboxSearch')">
             <td>
               <div class="custom-control custom-checkbox small">
                 <input type="checkbox" [ngModel]="product.selected" (change)="selectProduct(product)"
@@ -137,11 +193,10 @@
               </div>
             </td>
             <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage"
-                alt="Imagen">
+              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage" alt="Imagen">
             </td>
             <td>
-              <p [ngbTooltip]="product.name" >
+              <p [ngbTooltip]="product.name">
                 {{ product.name|slice:0:45}}
               </p>
             </td>
@@ -170,6 +225,17 @@
             </td>
             <td>UYU {{ product.priceUYU}} / $ {{product.priceUSD}}</td>
             <td class="text-right">{{ product.currentStock}} </td>
+            <td>
+              <div class="card-container">
+
+                <a *ngIf="product.existInMeliStore" [ngbTooltip]="toolTipMeli" class="circle-link"
+                  routerLink="/home/publish-myproducts" rel="noopener">
+                  <img src="assets/img/mercadolibre.svg" width="22.013" height="23.653" alt="">
+                </a>
+
+              </div>
+
+            </td>
           </tr>
 
         </tbody>
@@ -245,4 +311,5 @@
 </div>
 
 <app-global-loading [globalLoading]="loading" [globalLoadingDescription]="'Cargando productos...'"></app-global-loading>
-<app-global-loading [globalLoading]="loadingStoringModal" [globalLoadingDescription]="'Almacenando productos...'" ></app-global-loading>
+<app-global-loading [globalLoading]="loadingStoringModal" [globalLoadingDescription]="'Almacenando productos...'">
+</app-global-loading>

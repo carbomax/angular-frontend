@@ -5,6 +5,7 @@ import { MeliOrders, Carrier } from '../../../../models/meli-orders/meli-orders.
 import Swal from 'sweetalert2';
 import { MeliOrdersOperationService } from '../../../services/meli-orders.-operation.service';
 import { FormControl } from '@angular/forms';
+import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 
 @Component({
   selector: 'app-operations',
@@ -19,7 +20,7 @@ export class OperationsComponent implements OnInit {
   public dateToControl: FormControl = new FormControl(null);
   orderPage = new OrderPage();
   page = 1;
-  size = 5;
+  size = 15;
 
   hoveredDate: NgbDate | null = null;
 
@@ -50,7 +51,9 @@ export class OperationsComponent implements OnInit {
   styleTag = '';
   styleOperatorBssStyle = `background-color: #36b9cc; color: white`;
 
-  constructor(public meliOperationOrderService: MeliOrdersOperationService,
+  constructor(
+    public meliOperationOrderService: MeliOrdersOperationService,
+    private dateTimeService: DateTimeMomentService,
     private calendar: NgbCalendar,
     public formatter: NgbDateParserFormatter) { }
 
@@ -61,7 +64,6 @@ export class OperationsComponent implements OnInit {
 
 
   searchOrders(): void {
-
     this.loadingSearch = true;
     this.orderStatus = [];
     this.orderStatusSearch !== '' ? this.orderStatus.push(this.orderStatusSearch) : this.orderStatus = [];
@@ -111,7 +113,10 @@ export class OperationsComponent implements OnInit {
 
   loadOrders(): void {
     this.buildDateFilter();
-    this.meliOperationOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus, this.clientNameSearch, this.dateFrom, this.dateTo, this.operatorBusinesStatus).subscribe((resp: OrderPage) => {
+    console.log('date FROM', this.dateFrom);
+    console.log('date TO', this.dateTo);
+    
+    this.meliOperationOrderService.getAllOrdersByProfile(this.page - 1, this.size, this.orderStatus,'', this.clientNameSearch, this.dateFrom, this.dateTo, this.operatorBusinesStatus).subscribe((resp: OrderPage) => {
       console.log(resp)
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
@@ -295,14 +300,17 @@ export class OperationsComponent implements OnInit {
   private buildDateFilter(): void {
 
     if (this.dateFromControl.value !== null) {
-      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateFromControl.value.month}${this.dateFromControl.value.day}`;
+      this.dateFrom = +`${this.dateFromControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateFromControl.value.day)}`;
     } else { this.dateFrom = 0 }
 
     if (this.dateToControl.value !== null) {
-
-      this.dateTo = +`${this.dateToControl.value.year}${this.dateToControl.value.month}${this.dateToControl.value.day}`;
+      this.dateTo = +`${this.dateToControl.value.year}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.month)}${this.dateTimeService.helperZeroBeforeMonthOrDay(this.dateToControl.value.day)}`;
     } else { this.dateTo = 99999999 }
 
+  }
+
+  helperZeroBeforeMonthOrDay(dayOrMonth: number): string{
+    return (dayOrMonth / 10) >= 1 ? `${dayOrMonth}` : `0${dayOrMonth}`;
   }
 
   numberOnly(event): boolean {

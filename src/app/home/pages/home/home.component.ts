@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../../core/services/auth.service';
 
 
 
@@ -10,7 +12,9 @@ import { Component, OnInit } from '@angular/core';
 export class HomeComponent implements OnInit {
 
   year = new Date().getFullYear();
-  constructor() { }
+  constructor() {
+
+   }
 
   ngOnInit(): void {
 

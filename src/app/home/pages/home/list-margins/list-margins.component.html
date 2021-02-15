@@ -122,7 +122,8 @@
 
               <div class="col md-4">
                 <div class="form-group">
-                  <ng-select class="mt-md-3" [items]="marketplaces" name="selectedMarketplaces" bindLabel="name"
+                  <label for="inputMarketplaces">Marketplaces:</label>
+                  <ng-select id="inputMarketplaces"  [items]="marketplaces" name="selectedMarketplaces" bindLabel="name"
                     placeholder="Seleccione marketplace"  [multiple]="false"  appendTo="body" required
                     [(ngModel)]="selectedMarketplaces">
                   </ng-select>

@@ -26,7 +26,7 @@ export class MeliOrdersService {
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
-  public getAllOrdersByProfile(page: number, size: number, statusFilter: string[], nameClient: string, dateFrom, dateTo,
+  public getAllOrdersByProfile(page: number, size: number, statusFilter: string[], nameClient: string, nameSeller: string, dateFrom, dateTo,
     operatorBusinesStatus: string[]): Observable<OrderPage> {
     this.profileId = this.authService.authenticationDataExtrac().profileId;
     if (statusFilter.length <= 0) {
@@ -43,7 +43,7 @@ export class MeliOrdersService {
     }
 
 
-    const url = `${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&&statusFilter=${statusFilter}&nameClient=${nameClient}&dateFrom=${dateFrom}&dateTo=${dateTo}&operatorBusinessStatus=${operatorBusinesStatus}`
+    const url = `${this.URI_MELI_BUSINESS}/by-all-profile-accounts/${this.profileId}?page=${page}&size=${size}&statusFilter=${statusFilter}&nameClient=${nameClient}&nameSeller=${nameSeller}&dateFrom=${dateFrom}&dateTo=${dateTo}&operatorBusinessStatus=${operatorBusinesStatus}`
     console.log(url)
     return this.http.get<OrderPage>(url);
   }

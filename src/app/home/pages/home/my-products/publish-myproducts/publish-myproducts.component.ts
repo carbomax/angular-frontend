@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-import { Options, LabelType } from 'ng5-slider';
 
 import { PageProductMeliStorage } from 'src/app/models/page.myproduct.custom.model';
 import { AccountMarginModel } from 'src/app/models/relatioship-account-margin.model';
@@ -24,6 +23,7 @@ import { States } from 'src/app/enums/states.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { elementAt } from 'rxjs/operators';
+import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
 
 
 @Component({
@@ -78,22 +78,6 @@ export class PublishMyproductsComponent implements OnInit {
   size: number = 15;
   checkAll = false;
 
-  // Range price filter
-  options: Options = {
-    floor: 0,
-    ceil: this.maxValue,
-    translate: (value: number, label: LabelType): string => {
-      switch (label) {
-        case LabelType.Low:
-          return '<b>Mínimo:</b> ' + value;
-        case LabelType.High:
-          return '<b>Máximo:</b> ' + value;
-        default:
-          return '' + value;
-      }
-    }
-  };
-
   //Variables from Add Common Data Modal
   message: string;
   fileList: any[];
@@ -114,7 +98,8 @@ export class PublishMyproductsComponent implements OnInit {
   marginsList: Margin[];
   margin: number = -1;
   meliAccount: number = -1;
-  lastCategorySelected: string = '-1';
+  lastCategorySelected = new MeliME2Category('-1');
+  isME2
   warrantyType: number = -1;
   warrantyTime: number = 0;
   warranty: boolean = false;
@@ -137,7 +122,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.loadPaginator = true;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.currentPage = +page - 1, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemCustomGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         let countSelected = 0;
@@ -185,7 +170,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.profileId = this.authService.authenticationDataExtrac().profileId;
       this.loading = true;
       this.errorProducts = false;
-      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+      this.productStoreUserService.getPageMyCustomProducts(this.profileId, 0, this.size, this.skuSearch, this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -267,7 +252,7 @@ export class PublishMyproductsComponent implements OnInit {
       this.productsSelected = [];
       this.productStoreUserService.
         getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+          this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
         .subscribe(pageItemCustomGrid => {
           this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
           this.totalPages = +this.pageProductsMeli.totalPages;
@@ -302,7 +287,7 @@ export class PublishMyproductsComponent implements OnInit {
     this.maxValue = 20000;
     this.productStoreUserService.
       getPageMyCustomProducts(this.profileId, this.selectedPage = 0, this.size, this.skuSearch,
-        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue, this.maxValue)
+        this.nameSeach, this.typeStateSearch === '' ? -1 : +this.typeStateSearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProductsMeli = this.productStoreUserService.pageProductsMeli;
         this.totalPages = +this.pageProductsMeli.totalPages;
@@ -690,8 +675,21 @@ export class PublishMyproductsComponent implements OnInit {
     this.home = false;
   }
 
-  getCategorySelected(idCategory: string) {
-    this.lastCategorySelected = idCategory;
+  getCategorySelected(category: MeliME2Category) {
+    this.lastCategorySelected = category;
+    if(this.lastCategorySelected.idLastCategory !== '-1'){
+      if(this.lastCategorySelected.isME2 === false ){
+        Swal.fire({
+          title: 'IMPORTANTE!!!',
+          text: 'La categoría seleccionada no permite Mercado Envío como único modo. Seleccione otra categoría que sea mercado enviable.',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        })
+      }
+    }
+
     //Pendiente para cuando se seleccione los atributos
    /* if(this.lastCategorySelected !== '-1'){
       this.attributeRequiredList = [];
@@ -840,7 +838,7 @@ export class PublishMyproductsComponent implements OnInit {
 
   callPublishProductsService(){
     // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
+    this.meliPublicationsService.createPublicationList(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.productsSelected);
       for( var i = 0; i < this.pageProductsMeli.itemsMeliGrid.length; i++) {
         if ( this.pageProductsMeli.itemsMeliGrid[i].selected === true) {
           this.pageProductsMeli.itemsMeliGrid.splice(i, 1);
