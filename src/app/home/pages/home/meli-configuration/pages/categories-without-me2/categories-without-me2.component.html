@@ -1,0 +1,57 @@
+
+<div id="accordion" style="height: 20rem; overflow-y: scroll;">
+  <!-- Categorias principales -->
+  <div *ngIf="!subcategory">
+    <div class="card"  *ngFor="let category of meliCategoryList" >
+      <div class="card-header" id="heading" style="padding: 0.30rem 1.25rem;">
+        <h5 class="mb-0">
+          <button class="btn btn-sm btn-link" data-toggle="collapse" (click)="getSubCategories(category.id)" attr.data-target="#collapse{{category.id}}"  aria-expanded="false" attr.aria-controls="collapse{{category.id}}">
+            {{category.name}}
+          </button>
+        </h5>
+      </div>
+
+      <div id="collapse{{category.id}}" class="collapse" aria-labelledby="heading" data-parent="#accordion">
+        <div class="card-body">
+          <table class="table table-hover">
+            <tbody>
+              <tr>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sub Categorias -->
+  <div *ngIf="subcategory && meliCategory !== null">
+    <div class="card" *ngFor="let pathcategory of meliCategory.path_from_root; let i = index">
+      <div class="card-header" id="heading" style="padding: 0.20rem 1.25rem;">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" *ngIf="i === meliCategory.path_from_root.length - 1" attr.data-target="#collapse{{pathcategory.id}}"  aria-expanded="false" attr.aria-controls="collapse{{pathcategory.id}}">
+            {{pathcategory.name}}
+          </button>
+          <button class="btn btn-link" data-toggle="collapse" *ngIf="i !== meliCategory.path_from_root.length - 1" (click)="getSubCategories(pathcategory.id)" attr.data-target="#collapse{{pathcategory.id}}"  aria-expanded="false" attr.aria-controls="collapse{{pathcategory.id}}">
+            {{pathcategory.name}}
+          </button>
+        </h5>
+      </div>
+
+      <!-- Muestra las subcategorias de la subcategoria actual -->
+      <div id="collapse{{pathcategory.id}}" class="collapse show" aria-labelledby="heading" data-parent="#accordion" *ngIf="i === meliCategory.path_from_root.length - 1 && meliCategory.children_categories.length !== 0">
+        <div class="card-body">
+          <table class="table table-hover">
+            <tbody>
+              <tr *ngFor="let pathcategory of meliCategory.children_categories">
+                <td style="padding: 0.45rem;" (click)="getSubCategories(pathcategory.id)">{{pathcategory.name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

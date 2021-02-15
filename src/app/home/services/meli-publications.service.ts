@@ -23,6 +23,7 @@ import { ProductMeliPublished } from 'src/app/models/meli-publication/product-me
 import { AttributesRequiredModel } from 'src/app/models/meli-publication/meli-attributes-required.model';
 import { SystemConfigModel } from 'src/app/models/system-configuration/system-config.model';
 import { MeliPathRoot } from 'src/app/models/meli-publication/meli-path-from-root.model';
+import { MeliCategoryME2 } from '../pages/home/meli-configuration/models/meli-category-me2.model';
 
 
 
@@ -76,99 +77,27 @@ export class MeliPublicationsService {
     }));
   }
 
-  getCategoriesNotME2(): MeliPathRoot[] {
-    let mpr_list: MeliPathRoot[] = [];
-    let mpr = new MeliPathRoot();
-    //Estáticos por ahora
-    mpr.id = 'MLU436389'  //"Sillas, Sillones y Banquetas"
-    mpr_list.push(mpr);
+  getAllowedListCategoriesME2(): Observable<MeliCategoryME2[]> {
+    const params = `${this.URI_MELI_BUSINESS}/categories-me2`;
+    return this.http.get<MeliCategoryME2[]>(params);
+  }
 
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU74919'   //"Mesas de Comedor y Cocina"
-    mpr_list.push(mpr);
+  saveAllowedListCategoriesME2(categoriesList: MeliCategoryME2[]): Observable<MeliCategoryME2[]> {
+    const params = `${this.URI_MELI_BUSINESS}/save-categories-me2`;
+    let catList: MeliCategoryME2[] = [];
 
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU442653'   //"Mesas Ratonas"
-    mpr_list.push(mpr);
+    return this.http.post<MeliCategoryME2[]>(params, categoriesList)
+      .pipe(map((resp: any) => {
+        resp.forEach(element => {
+          catList.push(new MeliCategoryME2(element.id, element.name, element.path_from_root));
+        });
+        return catList;
+      }));
+  }
 
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU77731'   //"Mesas de Jardín"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU454695'   //"Mesadas de Cocina"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1403'   //"Alimentos y Bebidas"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1512'   //"Agro"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1071'   //"Animales y Mascotas
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU172015'   //"Piscinas De Fibra"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU172014'   //"Piscinas Inflables"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU172016'   //"Otras Piscinas"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU9886'   //"Bicicletas"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU2531'   //"Climatización"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1580'   //"Cocion"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU442523'   //"Dispensadores y Purificadores"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1578'   //"Lavado"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1576'   //"Refrigeración"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1899'   //"Otros Electrodomesticos"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1002'   //"Televisores"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1743'   //"Autos, Motos y Otros"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU1459'   //"Inmuebles"
-    mpr_list.push(mpr);
-
-    mpr = new MeliPathRoot();
-    mpr.id = 'MLU6151'   //"Vehículos Montables para Niños"
-    mpr_list.push(mpr);
-
-    return mpr_list;
-
+  deleteCategoryFromAllowedList(category: MeliCategoryME2): Observable<boolean> {
+    const params = `${this.URI_MELI_BUSINESS}/delete-category-me2`;
+    return this.http.post<boolean>(params, category);
   }
 
   getCategoryByPredictorNO(titleProduct: string): Observable<MeliPredictorCategory[]>{
