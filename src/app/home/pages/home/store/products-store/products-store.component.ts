@@ -243,7 +243,7 @@ export class ProductsStoreComponent implements OnInit {
     this.empySearch = false;
     this.loadingClear = false;
     this.productStoreService.
-      getPageProducts(this.selectedPage = 0, this.size, this.skuSearch,
+      getPageProducts(this.currentPage - 1, this.size, this.skuSearch,
         this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
       .subscribe(pageItemGrid => {
         this.pageProducts = this.productStoreService.pageProducts;
