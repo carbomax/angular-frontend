@@ -161,7 +161,7 @@ export class MeliPublicationsService {
           imagesList.push(new ItemPictures(image.photos));
         });
 
-        let shipping: Shipping = new Shipping("me2", false, false, []);
+        let shipping: Shipping = new Shipping("me2", false, false, [], ["self_service_out"]);
 
         let saleTerms: SaleTerms[] = [];
         warrantyType = +warrantyType;
@@ -229,7 +229,7 @@ export class MeliPublicationsService {
           imagesList.push(new ItemPictures(image.photos));
         });
 
-        let shipping: Shipping = new Shipping("me2", false, false, []);
+        let shipping: Shipping = new Shipping("me2", false, false, [], ["self_service_out"]);
 
         let saleTerms: SaleTerms[] = [];
         warrantyType = +warrantyType;
