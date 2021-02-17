@@ -139,7 +139,6 @@ export class MeliPublicationsService {
     /*Obtiene estos valores de la configuracion del sistema*/
     let scData = this.getSystemConfig();
     let listingType = (await scData).publication_config.publication_type;
-    let flex = (await scData).publication_config.flex === 'yes' ? 1 : 0;
 
     relationshipList.forEach(relation => {
       itemCustomList = [];
@@ -161,7 +160,8 @@ export class MeliPublicationsService {
           imagesList.push(new ItemPictures(image.photos));
         });
 
-        let shipping: Shipping = new Shipping("me2", false, false, [], ["self_service_out"]);
+        let flex = relation.flex ? "self_service_in" : "self_service_out";
+        let shipping: Shipping = new Shipping("me2", false, false, [], [flex]);
 
         let saleTerms: SaleTerms[] = [];
         warrantyType = +warrantyType;
@@ -182,7 +182,7 @@ export class MeliPublicationsService {
         attributes.push(new Attributes("SELLER_SKU", "SKU", element.sku));
         if(attributesRequired.length !== 0){
           attributesRequired.forEach( f => { attributes.push(new Attributes( f.id, null, "N/A"));});
-      }
+        }
         let tittle = element.name.length > 60 ? element.name.substring(0,60) : element.name;
         let item = new ItemMeliRequest(tittle, idCategory, priceFinal, "UYU", element.currentStock.toString(), "buy_it_now", "new",
         listingType, element.description, imagesList, attributes, null, shipping, warranty ? saleTerms : null, ["immediate_payment"]);
@@ -191,7 +191,7 @@ export class MeliPublicationsService {
 
       })
 
-      const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}&flex=${flex}`;
+      const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
       this.http.post<any>(params, itemCustomList).subscribe(result =>{});
     });
   }, error => {});
@@ -207,7 +207,6 @@ export class MeliPublicationsService {
         /*Obtiene estos valores de la configuracion del sistema*/
         let scData = this.getSystemConfig();
         let listingType = (await scData).publication_config.publication_type;
-        let flex = (await scData).publication_config.flex === 'yes' ? 1 : 0;
 
         relationshipList.forEach(relation => {
           itemCustomList = [];
@@ -229,7 +228,8 @@ export class MeliPublicationsService {
           imagesList.push(new ItemPictures(image.photos));
         });
 
-        let shipping: Shipping = new Shipping("me2", false, false, [], ["self_service_out"]);
+        let flex = relation.flex ? "self_service_in" : "self_service_out";
+        let shipping: Shipping = new Shipping("me2", false, false, [], [flex]);
 
         let saleTerms: SaleTerms[] = [];
         warrantyType = +warrantyType;
@@ -258,7 +258,7 @@ export class MeliPublicationsService {
           productSelected.price_costUSD, productSelected.price));
 
 
-        const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}&flex=${flex}`;
+        const params = `${this.URI_MELI_BUSINESS}/publications-flow/${relation.idAccount}?idMargin=${relation.idMargin}`;
         this.http.post<any>(params, itemCustomList).subscribe(result =>{});
       });
     }, error => {});
