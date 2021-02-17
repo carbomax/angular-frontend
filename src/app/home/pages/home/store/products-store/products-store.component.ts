@@ -236,6 +236,31 @@ export class ProductsStoreComponent implements OnInit {
         this.empySearch = true;
       });
   }
+
+
+  reloadProducts(): void {
+    this.loading = true;
+    this.empySearch = false;
+    this.loadingClear = false;
+    this.productStoreService.
+      getPageProducts(this.currentPage - 1, this.size, this.skuSearch,
+        this.nameSeach, this.typeCategorySearch === '' ? -1 : +this.typeCategorySearch, this.typeFamilySearch === '' ? -1 : +this.typeFamilySearch, this.minValue === null ? 0 : this.minValue, this.maxValue === null ? 0 : this.maxValue)
+      .subscribe(pageItemGrid => {
+        this.pageProducts = this.productStoreService.pageProducts;
+        this.loading = false;
+        this.errorProducts = false;
+        if (this.pageProducts.itemsGrid.length === 0) {
+          this.empySearch = true;
+          this.pageProducts.itemsGrid = null;
+        }
+      }, (error: any) => {
+        console.log('Error', error);
+        this.loading = false;
+        this.errorProducts = false;
+        this.empySearch = true;
+      });
+  }
+
   // Clear search form
   clearSearch(f: NgForm): void {
 
@@ -289,6 +314,8 @@ export class ProductsStoreComponent implements OnInit {
                 title: `Sus productos han sido almacenados correctamente`,
                 showConfirmButton: false,
                 timer: 5000
+              }).then(result => {
+               this.reloadProducts();
               });
             }
             else if (this.selectedProductR.codeResult === ActionResult.PARTIAL) {
