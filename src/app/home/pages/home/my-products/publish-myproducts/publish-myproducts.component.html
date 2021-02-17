@@ -340,7 +340,7 @@
                           <td>{{relationship.accountName}}</td>
                           <td class="text-center">{{relationship.nameMargin}}</td>
                           <td class="text-center">
-                            <div class="custom-control custom-checkbox small">
+                            <div class="custom-control custom-checkbox small"> <!--(change)="meliEnabledFlex(relationship)"-->
                               <input type="checkbox" [(ngModel)]="relationship.flex" [disabled]="!relationship.showOptionFlexbyAdmin"
                                 class="custom-control-input" [id]="'check' + relationship.idAccount">
                               <label class="custom-control-label" [for]="'check' + relationship.idAccount"></label>
