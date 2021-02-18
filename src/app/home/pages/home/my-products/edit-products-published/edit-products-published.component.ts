@@ -404,6 +404,7 @@ export class EditProductsPublishedComponent implements OnInit {
       }else{
         accountMargin.accountName = account.businessName;
         accountMargin.idAccount = account.id;
+        accountMargin.showOptionFlexbyAdmin = account.enabledFlexByAdmin === 1 ? true : false; // verifica permiso de opcion flex disponible
 
         if(this.margin !== -1){
           var margin = this.marginsList.find(element => element.id == this.margin);
