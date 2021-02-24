@@ -769,7 +769,6 @@ export class PublishMyproductsComponent implements OnInit {
     }
   }
 
-  //Le desabilité la llamada hasta ver que sucede en el backend con la query
   meliEnabledFlex(relationship: AccountMarginModel) {
 
     if(relationship.flex) {
@@ -789,11 +788,12 @@ export class PublishMyproductsComponent implements OnInit {
         Swal.fire({
           icon: 'warning',
           title: `IMPORTANTE!!!`,
-          text: `No se ha podido comprobar en Mercado Libre si le permite esta opción. Intente mas tarde.`,
+          text: `No se ha podido comprobar en Mercado Libre si le permite esta opción. Por el momento no puede publicar con flex. Intente mas tarde.`,
           showCancelButton: false,
           confirmButtonColor: '#3085d6',
           confirmButtonText: 'Entendido!'
         });
+        this.accountMarginsList.forEach( f => { if(f.idAccount === relationship.idAccount) f.flex = false });
       } )
     }
   }

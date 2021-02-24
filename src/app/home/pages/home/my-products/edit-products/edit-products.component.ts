@@ -353,6 +353,35 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
+  meliEnabledFlex(relationship: AccountMarginModel) {
+
+    if(relationship.flex) {
+      this.meliAccountService.isEnabledFlexToMeliAccount(relationship.idAccount).subscribe(result => {
+        if(result === false) {
+          Swal.fire({
+            title: 'IMPORTANTE!!!',
+            text: 'Su cuenta de Mercado Libre no le permite envios flex.',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Entendido!'
+          })
+          this.accountMarginsList.forEach( f => { if(f.idAccount === relationship.idAccount) f.flex = false });
+        }
+      }, error => {
+        Swal.fire({
+          icon: 'warning',
+          title: `IMPORTANTE!!!`,
+          text: `No se ha podido comprobar en Mercado Libre si le permite esta opción. Por el momento no puede publicar con flex. Intente mas tarde.`,
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        });
+        this.accountMarginsList.forEach( f => { if(f.idAccount === relationship.idAccount) f.flex = false });
+      } )
+    }
+  }
+
   getAccountMeli(){
     this.meliAccountsList = [];
     this.initialMeliAccounts = [];
