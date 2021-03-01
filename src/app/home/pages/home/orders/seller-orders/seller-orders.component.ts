@@ -153,17 +153,17 @@ export class SellerOrdersComponent implements OnInit {
   }
 
   processPurchases(order: MeliOrders): void {
-    this.meliOrderService.processPurchases(order.id).subscribe((resp: string) => {
+    this.meliOrderService.processPurchases(order.id).subscribe(resp => {
       this.loadOrders();
       Swal.fire({
         position: 'top-end',
         icon: 'success',
         title: `Orden ${order.orderId} enviado correctamente`,
         showConfirmButton: false,
-        timer: 2000
+        timer: 5000
       })
     },
-    (error: any) => {
+    error => {
       //Tratando el obj error, podria mostrar el mensaje o causa del error
       this.loadOrders();
       Swal.fire({
@@ -171,7 +171,7 @@ export class SellerOrdersComponent implements OnInit {
         icon: 'error',
         title: `Envío de Orden ${order.orderId} al ERP fallido`,
         showConfirmButton: false,
-        timer: 2000
+        timer: 5000
       })
     })
   }
