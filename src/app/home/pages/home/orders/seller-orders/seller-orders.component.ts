@@ -32,6 +32,9 @@ export class SellerOrdersComponent implements OnInit {
   dateFrom = 0;
   dateTo = 99999999;
 
+  //To ERP  status
+  inProcess: boolean = false;
+
 
   // Search
   loading = false;
@@ -54,6 +57,7 @@ export class SellerOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.loading = true;
     this.loadOrders();
+    this.inProcess = false;
   }
 
 
@@ -153,7 +157,9 @@ export class SellerOrdersComponent implements OnInit {
   }
 
   processPurchases(order: MeliOrders): void {
+    this.inProcess = true;
     this.meliOrderService.processPurchases(order.id).subscribe(resp => {
+      this.inProcess = false;
       this.loadOrders();
       Swal.fire({
         position: 'top-end',
@@ -165,6 +171,7 @@ export class SellerOrdersComponent implements OnInit {
     },
     error => {
       //Tratando el obj error, podria mostrar el mensaje o causa del error
+      this.inProcess = false;
       this.loadOrders();
       Swal.fire({
         position: 'top-end',

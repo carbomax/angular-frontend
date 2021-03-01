@@ -212,13 +212,12 @@
 
             <!-- Estado del env'io al ERP-->
             <td>
-              <!--
-              <div *ngIf="true"
+
+              <div *ngIf="inProcess"
                 class="d-order d-flex alert alert-sm alert-dismissible  mb-0"
                 role="alert" ngbTooltip="La orden está siendo enviada.">
                 <i class="far fa-clock mt-1 mr-1"></i><span>En proceso</span>
               </div>
--->
 
               <div *ngIf="item.sentToErp === 0 && (item.countFails === 1 || item.countFails === 2)"
                 class="d-order d-flex alert alert-sm alert-warning  mb-0" role="alert"
