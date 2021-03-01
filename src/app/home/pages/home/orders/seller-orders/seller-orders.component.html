@@ -131,6 +131,7 @@
             <th>Monto</th>
             <th>Factura</th>
             <th>Salida del almacén</th>
+            <th>Enviado a ERP</th>
             <!-- <th>Acciones</th> -->
           </tr>
         </thead>
@@ -205,6 +206,53 @@
                 class="d-flex flex-nowrap flex-row alert alert-sm alert-success  mb-0" role="alert"
                 ngbTooltip="El producto fue entregado al carrier">
                 <i class="far fa-check-circle  mt-1 mr-1"></i><span>Entregada</span>
+              </div>
+
+            </td>
+
+            <!-- Estado del env'io al ERP-->
+            <td>
+              <!--
+              <div *ngIf="true"
+                class="d-order d-flex alert alert-sm alert-dismissible  mb-0"
+                role="alert" ngbTooltip="La orden está siendo enviada.">
+                <i class="far fa-clock mt-1 mr-1"></i><span>En proceso</span>
+              </div>
+-->
+
+              <div *ngIf="item.sentToErp === 0 && (item.countFails === 1 || item.countFails === 2)"
+                class="d-order d-flex alert alert-sm alert-warning  mb-0" role="alert"
+                ngbTooltip="Falló al intentar enviar la orden">
+                <i class="fas fa-exclamation-triangle mt-1 mr-1"></i><span>Fallado</span>
+              </div>
+
+              <div *ngIf="item.sentToErp === 2"
+                class="d-order d-flex alert alert-sm alert-danger  mb-0" role="alert"
+                ngbTooltip="Falló al enviar la orden. La orden no fue recibida por el ERP correctamente. Agotados los 3 intentos automáticos del sistema">
+                <i class="fas fa-exclamation-circle mt-1 mr-1"></i>
+                <span class="dropdown-toggle" href="#" role="button"
+                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Agotado</span>
+
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                     <button class="btn btn-outline-primary"> <i class="fas fa-redo-alt m-1"></i> Reintentar </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div *ngIf="item.sentToErp === 1"
+                class="d-order d-flex alert alert-sm alert-success  mb-0" role="alert"
+                ngbTooltip="La orden fue enviada al ERP correctamente">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Enviado</span>
+              </div>
+
+              <div *ngIf="item.sentToErp === 0 && item.countFails === 0 "
+                class="d-order d-flex alert alert-sm alert-dismissible  mb-0" role="alert"
+                ngbTooltip="La orden está pendiente de ser enviada al ERP">
+                <i class="far fa-check-circle mt-1 mr-1"></i><span>Pendiente</span>
               </div>
 
             </td>

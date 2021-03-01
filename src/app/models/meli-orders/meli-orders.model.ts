@@ -22,6 +22,8 @@ export class MeliOrders {
   public carrier?: Carrier;
   public currencyIdTaxes?: string;
   public shipment?: OrderShipment;
+  public sentToErp?: number;
+  public countFails?: number;
 
 }
 

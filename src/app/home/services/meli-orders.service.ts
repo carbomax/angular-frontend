@@ -20,6 +20,7 @@ export class MeliOrdersService {
 
   URI_MELI_BUSINESS = `${environment.URI_ROOT}/meli/api/orders`;
   URI_MELI_API = `${environment.URI_ROOT}/meli/api/auth`;
+  URI_CONSUMING_ORDERS = `${environment.URI_ROOT}/api/purchase`;
   profileId: number;
 
 
@@ -48,7 +49,6 @@ export class MeliOrdersService {
     return this.http.get<OrderPage>(url);
   }
 
-
   updateCarrier(orderId: number, carrierId: number): Observable<boolean> {
     return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-carrier/${orderId}/${carrierId}`,{});
   }
@@ -61,10 +61,12 @@ export class MeliOrdersService {
     return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-description/${orderId}?description=${description}`,{});
   }
 
-
   updateObservation(orderId: number, observation: string): Observable<boolean> {
     return this.http.put<boolean>(`${this.URI_MELI_BUSINESS}/update-observation/${orderId}?observation=${observation}`,{});
   }
 
+  public processPurchases(orderId: number): Observable<string> {
+    return this.http.get<string>(`${this.URI_CONSUMING_ORDERS}/process/${orderId}`);
+  }
 
 }

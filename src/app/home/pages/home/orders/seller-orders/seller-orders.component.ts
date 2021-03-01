@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model';
 import { AuthService } from '../../../../../core/services/auth.service';
 import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
+import Swal from 'sweetalert2';
 
 
 
@@ -149,6 +150,30 @@ export class SellerOrdersComponent implements OnInit {
       this.emptySearch = false;
       this.loading = false;
     });
+  }
+
+  processPurchases(order: MeliOrders): void {
+    this.meliOrderService.processPurchases(order.id).subscribe((resp: string) => {
+      this.loadOrders();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Orden ${order.orderId} enviado correctamente`,
+        showConfirmButton: false,
+        timer: 2000
+      })
+    },
+    (error: any) => {
+      //Tratando el obj error, podria mostrar el mensaje o causa del error
+      this.loadOrders();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Envío de Orden ${order.orderId} al ERP fallido`,
+        showConfirmButton: false,
+        timer: 2000
+      })
+    })
   }
 
   private buildDateFilter(): void {
