@@ -598,7 +598,7 @@ export class EditProductsPublishedComponent implements OnInit {
       timer: 5000
     })
     .then((result) => {
-      this.router.navigate(['/published-products']);
+      this.router.navigate(['/home/published-products']);
     });
 
       let editableProduct =  new EditableProductModel();

@@ -7,6 +7,7 @@ import { MeliOrders } from '../../../../../models/meli-orders/meli-orders.model'
 import { AuthService } from '../../../../../core/services/auth.service';
 import { DateTimeMomentService } from 'src/app/core/services/date-time-moment.service';
 import Swal from 'sweetalert2';
+import { RoleEnum } from 'src/app/enums/role.enum';
 
 
 
@@ -33,8 +34,8 @@ export class SellerOrdersComponent implements OnInit {
   dateTo = 99999999;
 
   //To ERP  status
-  inProcess: boolean = false;
-
+  itemSent: number;
+  itemProcess: number;
 
   // Search
   loading = false;
@@ -50,16 +51,21 @@ export class SellerOrdersComponent implements OnInit {
   constructor(public meliOrderService: MeliOrdersService,
               private calendar: NgbCalendar,
               public formatter: NgbDateParserFormatter,
-              private dateTimeService: DateTimeMomentService) {
+              private dateTimeService: DateTimeMomentService,
+              private authService: AuthService) {
 
   }
 
   ngOnInit(): void {
     this.loading = true;
     this.loadOrders();
-    this.inProcess = false;
+    this.itemSent = -1;
+    this.itemProcess = -1;
   }
 
+  public isAdmin(): boolean {
+    return this.authService.authenticationDataExtrac()?.roles.includes(RoleEnum.ADMIN);
+  }
 
   getTotal(item: MeliOrders): number{
 
@@ -142,6 +148,7 @@ export class SellerOrdersComponent implements OnInit {
       if (this.loadingSearch && resp.totalElements === 0) {
         this.emptySearch = true;
       } else { this.emptySearch = false; }
+      this.itemSent = -1;
       this.loading = false;
       this.orderPage = resp;
       this.loadingClear = false;
@@ -157,9 +164,10 @@ export class SellerOrdersComponent implements OnInit {
   }
 
   processPurchases(order: MeliOrders): void {
-    this.inProcess = true;
+    this.itemProcess = order.id;
     this.meliOrderService.processPurchases(order.id).subscribe(resp => {
-      this.inProcess = false;
+      this.itemSent = order.id;
+      this.itemProcess = -1;
       this.loadOrders();
       Swal.fire({
         position: 'top-end',
@@ -171,7 +179,7 @@ export class SellerOrdersComponent implements OnInit {
     },
     error => {
       //Tratando el obj error, podria mostrar el mensaje o causa del error
-      this.inProcess = false;
+      this.itemProcess = -1;
       this.loadOrders();
       Swal.fire({
         position: 'top-end',

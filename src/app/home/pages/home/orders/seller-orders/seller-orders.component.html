@@ -131,7 +131,7 @@
             <th>Monto</th>
             <th>Factura</th>
             <th>Salida del almacén</th>
-            <th>Enviado a ERP</th>
+            <th *ngIf="isAdmin()">Enviado a ERP</th>
             <!-- <th>Acciones</th> -->
           </tr>
         </thead>
@@ -210,10 +210,10 @@
 
             </td>
 
-            <!-- Estado del env'io al ERP-->
-            <td>
+            <!-- Estado del envío al ERP-->
+            <td *ngIf="isAdmin()">
 
-              <div *ngIf="inProcess"
+              <div *ngIf="itemProcess === item.id"
                 class="d-order d-flex alert alert-sm alert-dismissible  mb-0"
                 role="alert" ngbTooltip="La orden está siendo enviada.">
                 <i class="far fa-clock mt-1 mr-1"></i><span>En proceso</span>
@@ -225,7 +225,7 @@
                 <i class="fas fa-exclamation-triangle mt-1 mr-1"></i><span>Fallado</span>
               </div>
 
-              <div *ngIf="item.sentToErp === 2"
+              <div *ngIf="item.sentToErp === 2 && itemProcess !== item.id && itemSent !== item.id"
                 class="d-order d-flex alert alert-sm alert-danger  mb-0" role="alert"
                 ngbTooltip="Falló al enviar la orden. La orden no fue recibida por el ERP correctamente. Agotados los 3 intentos automáticos del sistema">
                 <i class="fas fa-exclamation-circle mt-1 mr-1"></i>
@@ -242,7 +242,7 @@
                 </div>
               </div>
 
-              <div *ngIf="item.sentToErp === 1"
+              <div *ngIf="item.sentToErp === 1 || itemSent === item.id"
                 class="d-order d-flex alert alert-sm alert-success  mb-0" role="alert"
                 ngbTooltip="La orden fue enviada al ERP correctamente">
                 <i class="far fa-check-circle  mt-1 mr-1"></i><span>Enviado</span>
