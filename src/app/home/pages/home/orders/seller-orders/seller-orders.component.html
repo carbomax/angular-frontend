@@ -152,7 +152,7 @@
 
             </td>
 
-            <td><label class="w10">{{ item.buyer.firstName }}</label></td>
+            <td><label class="w10">{{ item?.buyer?.firstName }}</label></td>
             <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
             <td>
               <div class="dropdown no-arrow pointer">
@@ -271,11 +271,11 @@
       <div class="container" *ngIf="orderPage.totalElements > 0">
         <div class="row justify-content-around">
           <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="orderPage.totalElements"
-            [boundaryLinks]="true" [pageSize]="size" [(page)]="page">
+            [boundaryLinks]="true" [maxSize]="3" [pageSize]="size" [(page)]="page">
           </ngb-pagination>
 
 
-          <div class="form-group">
+           <div class="form-group">
             <select (change)="selectChangeHandler($event.target.value)" class="form-control">
               <option value="15">15</option>
               <option value="30">30</option>
