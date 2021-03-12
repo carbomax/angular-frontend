@@ -50,7 +50,10 @@ export  class ProductMeliPublished {
 
   public specialPaused: number;
 
+  public flex: number;
+
   public selected? = false;
+
 }
 
 

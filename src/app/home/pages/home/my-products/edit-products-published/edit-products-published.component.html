@@ -278,7 +278,7 @@
                           <a class="" href="javascript:void(0);" aria-haspopup="true" aria-expanded="false" (click)="activeAllCategory()">
                             <div class="row">
                               <div class="col-md-1"><i class="fas fa-hand-point-right"></i></div>
-                              <div class="col-md-8"><p>Elegir otra categoria</p></div>
+                              <div class="col-md-8"><p>Elegir otra categoría</p></div>
                             </div>
                           </a>
                         </div>
@@ -358,6 +358,7 @@
                               <tr>
                                 <th scope="col">Cuenta</th>
                                 <th scope="col" class="text-center">Margen de ganancia</th>
+                                <th scope="col" class="text-center">Flex</th>
                                 <th scope="col" class="text-right" *ngIf="activeConfig">Eliminar</th>
                               </tr>
                             </thead>
@@ -365,6 +366,13 @@
                               <tr *ngFor="let relationship of accountMarginsList">
                                 <td>{{relationship.accountName}}</td>
                                 <td class="text-center">{{relationship.nameMargin}}</td>
+                                <td class="text-center">
+                                  <div class="custom-control custom-checkbox small">
+                                    <input type="checkbox" [(ngModel)]="relationship.flex" [disabled]="!relationship.showOptionFlexbyAdmin || productMeliPublished.status !== 'fail' "
+                                      class="custom-control-input" [id]="'check' + relationship.idAccount" (change)="meliEnabledFlex(relationship)">
+                                    <label class="custom-control-label" [for]="'check' + relationship.idAccount"></label>
+                                  </div>
+                                </td>
                                 <td class="text-right" *ngIf="activeConfig">
                                   <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModalRelationShip" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>
                                 </td>

@@ -131,6 +131,7 @@
             <th>Monto</th>
             <th>Factura</th>
             <th>Salida del almacén</th>
+            <th *ngIf="isAdmin()">Enviado a ERP</th>
             <!-- <th>Acciones</th> -->
           </tr>
         </thead>
@@ -151,7 +152,7 @@
 
             </td>
 
-            <td><label class="w10">{{ item.buyer.firstName }}</label></td>
+            <td><label class="w10">{{ item?.buyer?.firstName }}</label></td>
             <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
             <td>
               <div class="dropdown no-arrow pointer">
@@ -209,6 +210,52 @@
 
             </td>
 
+            <!-- Estado del envío al ERP-->
+            <td *ngIf="isAdmin()">
+
+              <div *ngIf="itemProcess === item.id"
+                class="d-order d-flex alert alert-sm alert-dismissible  mb-0"
+                role="alert" ngbTooltip="La orden está siendo enviada.">
+                <i class="far fa-clock mt-1 mr-1"></i><span>En proceso</span>
+              </div>
+
+              <div *ngIf="item.sentToErp === 0 && (item.countFails === 1 || item.countFails === 2)"
+                class="d-order d-flex alert alert-sm alert-warning  mb-0" role="alert"
+                ngbTooltip="Falló al intentar enviar la orden">
+                <i class="fas fa-exclamation-triangle mt-1 mr-1"></i><span>Fallado</span>
+              </div>
+
+              <div *ngIf="item.sentToErp === 2 && itemProcess !== item.id && itemSent !== item.id"
+                class="d-order d-flex alert alert-sm alert-danger  mb-0" role="alert"
+                ngbTooltip="Falló al enviar la orden. La orden no fue recibida por el ERP correctamente. Agotados los 3 intentos automáticos del sistema">
+                <i class="fas fa-exclamation-circle mt-1 mr-1"></i>
+                <span class="dropdown-toggle" href="#" role="button"
+                id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Agotado</span>
+
+                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                  aria-labelledby="dropdownMenuLink">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
+                     <button class="btn btn-outline-primary" (click)="processPurchases(item)"> <i class="fas fa-redo-alt m-1"></i> Reintentar </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div *ngIf="item.sentToErp === 1 || itemSent === item.id"
+                class="d-order d-flex alert alert-sm alert-success  mb-0" role="alert"
+                ngbTooltip="La orden fue enviada al ERP correctamente">
+                <i class="far fa-check-circle  mt-1 mr-1"></i><span>Enviado</span>
+              </div>
+
+              <div *ngIf="item.sentToErp === 0 && item.countFails === 0 "
+                class="d-order d-flex alert alert-sm alert-dismissible  mb-0" role="alert"
+                ngbTooltip="La orden está pendiente de ser enviada al ERP">
+                <i class="far fa-check-circle mt-1 mr-1"></i><span>Pendiente</span>
+              </div>
+
+            </td>
+
             <!-- <td class="text-center">
               <button ngbTooltip="Ver detalles" class="btn btn-outline-primary">
                 <i class="far fa-eye"></i>
@@ -224,11 +271,11 @@
       <div class="container" *ngIf="orderPage.totalElements > 0">
         <div class="row justify-content-around">
           <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="orderPage.totalElements"
-            [boundaryLinks]="true" [pageSize]="size" [(page)]="page">
+            [boundaryLinks]="true" [maxSize]="3" [pageSize]="size" [(page)]="page">
           </ngb-pagination>
 
 
-          <div class="form-group">
+           <div class="form-group">
             <select (change)="selectChangeHandler($event.target.value)" class="form-control">
               <option value="15">15</option>
               <option value="30">30</option>

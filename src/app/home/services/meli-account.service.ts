@@ -92,10 +92,12 @@ export class MeliAccountService {
     return +localStorage.getItem('reference').trim();
   }
 
-
-
   getAccountReference(): string {
     return localStorage.getItem('reference');
+  }
+
+  isEnabledFlexToMeliAccount(idAccount: number): Observable<boolean> {
+    return this.http.get<boolean>(`${this.URI_MELI_BUSINESS}/account-flex/${idAccount}`);
   }
 
   private mask(value: number): string {

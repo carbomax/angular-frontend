@@ -24,6 +24,7 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { AccountMeliStates } from 'src/app/enums/account-meli-states.enum';
 import { elementAt } from 'rxjs/operators';
 import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
+import { error } from 'protractor';
 
 
 @Component({
@@ -746,6 +747,8 @@ export class PublishMyproductsComponent implements OnInit {
       }else{
         accountMargin.accountName = account.businessName;
         accountMargin.idAccount = account.id;
+        accountMargin.showOptionFlexbyAdmin = account.enabledFlexByAdmin === 1 ? true : false; // verifica permiso de opcion flex disponible
+        accountMargin.flex = false; // valor de flex en las publicaciones
 
         if (this.margin !== -1) {
           var margin = this.marginsList.find(element => element.id == this.margin);
@@ -763,6 +766,35 @@ export class PublishMyproductsComponent implements OnInit {
         this.closeModalMargin();
       }
 
+    }
+  }
+
+  meliEnabledFlex(relationship: AccountMarginModel) {
+
+    if(relationship.flex) {
+      this.meliAccountService.isEnabledFlexToMeliAccount(relationship.idAccount).subscribe(result => {
+        if(result === false) {
+          Swal.fire({
+            title: 'IMPORTANTE!!!',
+            text: 'Su cuenta de Mercado Libre no le permite envios flex.',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'Entendido!'
+          })
+          this.accountMarginsList.forEach( f => { if(f.idAccount === relationship.idAccount) f.flex = false });
+        }
+      }, error => {
+        Swal.fire({
+          icon: 'warning',
+          title: `IMPORTANTE!!!`,
+          text: `No se ha podido comprobar en Mercado Libre si le permite esta opción. Por el momento no puede publicar con flex. Intente mas tarde.`,
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          confirmButtonText: 'Entendido!'
+        });
+        this.accountMarginsList.forEach( f => { if(f.idAccount === relationship.idAccount) f.flex = false });
+      } )
     }
   }
 

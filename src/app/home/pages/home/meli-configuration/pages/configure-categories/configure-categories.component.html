@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-12 col-md-12">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h6 class="m-0 font-weight-bold text-primary">Administrar categorías mercado enviables</h6>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <!-- Accordion -->
+            <div class="col-md-6 col-sm-12">
+              <nav aria-label="breadcrumb" id="CategoryName">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="javascript:void(0);" (click)="setHome()">Inicio</a></li>
+                  <li class="breadcrumb-item active" aria-current="page" *ngFor="let path of pathList">{{path}}</li>
+                </ol>
+              </nav>
+              <app-categories-without-me2 [home]='home' (pathOut)='getPath($event)' (categorySelected)='getCategorySelected($event)'></app-categories-without-me2>
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <a class="" href="javascript:void(0);" aria-haspopup="true" aria-expanded="false" >
+                      <div class="row">
+                        <button type="button" class="btn btn-primary add-category" (click)="saveCategoryToAllowedList(lastCategorySelected)" [disabled]="(lastCategorySelected.idCategory === '-1' ? true : false)
+                            || (lastCategorySelected.isME2 === true ? true : false)"><i class="fas fa-hand-point-right"></i> Adicionar </button>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="col-md-6 col-sm-12">
+              <div class="card shadow-sm">
+                <div class="card-header">
+                  <h6 class="m-0 font-weight-bold text-primary">Lista de Categorías Permitidas</h6>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-hover" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>Categoría</th>
+                          <th class="text-center">Eliminar</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr ngbTooltip="{{category.path_from_root}}" *ngFor="let category of categoriesAllowedList | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize ">
+                          <td placement="bottom" > {{ category.name }} </td>
+                          <td class="text-center">
+                            <a class="pointer" href="javascript:void(0);" (click)="deleteCategoryFromAllowedList(category)"><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <div class="container" *ngIf="categoriesAllowedList.length > 0">
+                      <div class="row justify-content-around">
+                        <ngb-pagination [collectionSize]="categoriesAllowedList.length" [boundaryLinks]="true" [pageSize]="pageSize"
+                          [(page)]="page">
+                        </ngb-pagination>
+
+
+                        <div class="form-group">
+                          <select (click) = "selectChangeHandler($event.target.value)" class="form-control">
+                            <option value="5">5</option>
+                            <option value="10">10</option>
+                            <option value="15">15</option>
+                            <option value="20">20</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  <div class="container">
+                    <div class="row justify-content-center">
+
+                      <div *ngIf="categoriesAllowedList.length <= 0" class="alert alert-info col-8 text-center" role="alert">
+                        <strong><i class="fas fa-info-circle" aria-hidden="true"></i></strong> No hay categorías para mostrar
+                      </div>
+
+                    </div>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

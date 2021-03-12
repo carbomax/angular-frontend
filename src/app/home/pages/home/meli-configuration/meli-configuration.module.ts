@@ -5,6 +5,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { SystemConfigurationComponent } from './pages/system-configuration/system-configuration.component';
 import { MeliConfigurationRoutingModule } from './meli-configuration.routing.module';
 import { EnableDisableFlexByAccountsComponent } from './pages/enable-disable-flex-by-accounts/enable-disable-flex-by-accounts.component';
+import { ConfigureCategoriesComponent } from './pages/configure-categories/configure-categories.component';
+import { CategoriesWithoutMe2Component } from './pages/categories-without-me2/categories-without-me2.component';
 
 
 
@@ -12,12 +14,16 @@ import { EnableDisableFlexByAccountsComponent } from './pages/enable-disable-fle
   declarations: [
     AccountProfileComponent,
     SystemConfigurationComponent,
-    EnableDisableFlexByAccountsComponent
-  ],  
+    EnableDisableFlexByAccountsComponent,
+    ConfigureCategoriesComponent,
+    CategoriesWithoutMe2Component
+  ],
 
   exports: [
     AccountProfileComponent,
-    SystemConfigurationComponent
+    SystemConfigurationComponent,
+    ConfigureCategoriesComponent,
+    CategoriesWithoutMe2Component
   ],
 
   imports: [
@@ -25,6 +31,6 @@ import { EnableDisableFlexByAccountsComponent } from './pages/enable-disable-fle
     MeliConfigurationRoutingModule,
     SharedModule
   ]
-  
+
 })
 export class MeliConfigurationModule { }

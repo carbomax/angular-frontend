@@ -12,7 +12,7 @@
 
         <div class="row p-3">
           <div class="col-md-6">
-            
+
             <div class="form-group">
               <label for="idTitle">Título:</label>
               <input type="text" class="form-control" name="titleSearch" [(ngModel)]="titleSearch" id="idTitle"
@@ -22,7 +22,7 @@
             <div class="form-group">
               <label for="idSku">SKU:</label>
               <input type="text" class="form-control" name="skuSearch" id="idSku" [(ngModel)]="skuSearch" placeholder="Buscar por SKU...">
-            </div>            
+            </div>
           </div>
 
           <div class="col-md-6">
@@ -151,6 +151,7 @@
             <th>Meli Id</th>
             <th>SKU</th>
             <th>Estado</th>
+            <th>Flex</th>
             <th>Precio</th>
             <th>Cantidad</th>
             <th>Cuenta de Meli</th>
@@ -223,6 +224,20 @@
                 <i class="fas fa-minus-circle mt-1 mr-1"></i> <span>requerido de pago</span>
               </div>
 
+              </td>
+              <td>
+                <div *ngIf="product.flex === 0" class="d-flex flex-wrap"
+                  role="alert" ngbTooltip="Flex inactivo">
+                  <span class="badge badge-secondary m-1">no flex</span>
+                </div>
+                <div *ngIf="product.flex === 1" class="d-flex flex-wrap" role="alert"
+                  ngbTooltip="Flex activo">
+                  <span class="badge badge-success m-1">flex</span>
+                </div>
+                <div *ngIf="product.flex === 2 || product.flex === null" class="d-flex flex-wrap"
+                  role="alert" ngbTooltip="Sin confirmar la información en mercado libre. ">
+                  <span class="badge badge-warning m-1"> sin confirmar</span>
+                </div>
               </td>
               <td>UYU <strong>{{product.pricePublication }}</strong></td>
               <td class="text-right"> {{ product.currentStock }} </td>

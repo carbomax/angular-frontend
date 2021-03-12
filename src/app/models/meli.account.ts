@@ -20,4 +20,5 @@ export class MeliAccount {
   siteId?: string;
   marketplaceId?: number;
   me2?: number;
+  enabledFlexByAdmin?: number;
 }

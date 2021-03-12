@@ -331,6 +331,7 @@
                         <tr>
                           <th scope="col">Cuenta</th>
                           <th scope="col" class="text-center">Margen de ganancia</th>
+                          <th scope="col" class="text-center">Flex</th>
                           <th scope="col" class="text-right">Eliminar</th>
                         </tr>
                       </thead>
@@ -338,6 +339,13 @@
                         <tr *ngFor="let relationship of accountMarginsList">
                           <td>{{relationship.accountName}}</td>
                           <td class="text-center">{{relationship.nameMargin}}</td>
+                          <td class="text-center">
+                            <div class="custom-control custom-checkbox small">
+                              <input type="checkbox" [(ngModel)]="relationship.flex" [disabled]="!relationship.showOptionFlexbyAdmin"
+                                class="custom-control-input" [id]="'check' + relationship.idAccount" (change)="meliEnabledFlex(relationship)">
+                              <label class="custom-control-label" [for]="'check' + relationship.idAccount"></label>
+                            </div>
+                          </td>
                           <td class="text-right">
                             <a class="pointer" href="javascript:void(0);" data-toggle="modal" data-target="#confirmationModal" (click)="previewDelete(relationship)" ><i class="fas fa-trash m-2 text-danger delete-icon"></i></a>
                           </td>

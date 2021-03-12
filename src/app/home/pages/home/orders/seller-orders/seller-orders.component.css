@@ -21,3 +21,8 @@
 .custom-day.faded {
   background-color: rgba(2, 117, 216, 0.5);
 }
+
+.d-order {
+  /*width: min-content !important;*/
+  padding: 0.25rem 1.25rem !important;
+}
