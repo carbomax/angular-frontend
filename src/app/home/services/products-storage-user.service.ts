@@ -12,6 +12,7 @@ import { Image } from 'src/app/models/image.model';
 import { ProductCustom } from '../../models/myproducts.custom.model'
 
 import { AuthService } from 'src/app/core/services/auth.service'
+import { CommonInfoRequest } from 'src/app/models/upload-images/common-info-request.model';
 
 
 @Injectable({
@@ -83,11 +84,13 @@ export class ProductsStorageUserService {
     return this.http.put<EditableProductModel>(params, product);
   }
 
+  /**Metodo de Posible sustitucion por el metodo del servicio upload-images.services **/
   uploadImage(formData: FormData): Observable<any>{
     const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     return this.http.post<any>(params, formData);
   }
 
+/**Metodo de Posible sustitucion por el metodo del servicio upload-images.services **/
   async uploadImageSyn(fileList: any[], productsList: ProductCustom[]): Promise<any>{
     const params = `${this.URI}${this.URI_UPLOAD_ACTIONS}/file/upload-file?uri=${this.URI}`;
     let resultList: any[] = [];
@@ -136,6 +139,15 @@ export class ProductsStorageUserService {
 
     const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data/${encodeProfile}?description=${description}&skuList=${skuList}`;
     return this.http.put<any>(params, imageListToSend);
+  }
+
+  //nuevo metodo
+  updateCommonInfo2(idProfile: number, description: string, commonInfoList: CommonInfoRequest[]): Observable<any>{
+    let string_profile = idProfile.toString();
+    let encodeProfile = btoa(string_profile);
+
+    const params = `${this.URI}${this.URI_PRODUCTS_ACTIONS}/store-common-data2/${encodeProfile}?description=${description}`;
+    return this.http.put<any>(params, commonInfoList);
   }
 
   getFullProductsById(idProductsList: number[]): Observable<any>{
