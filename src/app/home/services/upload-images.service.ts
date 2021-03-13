@@ -49,7 +49,7 @@ export class UploadImagesService {
     return commonInfoList;
   }
 
-  uploadImage(formData: FormData): Observable<any>{
+  uploadImage(formData: FormData): Observable<string>{
     const params = `${this.URI}${this.URI_UPLOAD_IMAGES}/upload-file-to-legacy`;
     return this.http.post(params, formData, {responseType: 'text'});
   }

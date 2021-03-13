@@ -2,15 +2,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Pipe({
-  name: 'uploadImage'
+  name: 'uploadEditImage'
 })
-export class UploadImagePipe implements PipeTransform {
+export class UploadEditImagePipe implements PipeTransform {
 
-  transform(images: any[]): string {
-    if (images.length > 0) {
-      let value = images[0].photos;
+  transform(value: string): string {
       console.log('value: ', value);
-
       if(value) {
         if(value.trim().startsWith('http://') || value.trim().startsWith('https://')){
           return value;
@@ -18,7 +15,6 @@ export class UploadImagePipe implements PipeTransform {
           return environment.URI_UPLOAD_BUCKET + value.trim();
         }
       }
-    }
 
     return 'assets/img/no_image.png';
   }

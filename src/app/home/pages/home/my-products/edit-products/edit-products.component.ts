@@ -364,11 +364,11 @@ export class EditProductsComponent implements OnInit {
 
     this.uploadImageService.uploadImage(formData)
       .subscribe(resp => {
-        if(resp.success === true) {
+        if(resp !== '') {
         let image_added = new Image();
         image_added.order = this.orderImage;
         image_added.title = this.titleImage;
-        image_added.photos = resp.reason;
+        image_added.photos = resp;
         this.editableProduct.images.push(image_added);
         this.myfile.nativeElement.value = "";
         this.clearImage();

@@ -157,7 +157,7 @@
               <tr *ngFor="let image of editableProduct.images">
                 <th scope="row">
                   <img alt="imagen ilustrativa"
-                    src="{{image.photos}}" *ngIf="!edit || id !== image.id"
+                    src="{{image.photos |uploadEditImage}}" *ngIf="!edit || id !== image.id"
                     width="55">
                   <input class="form-control text-box single-line" type="text" name="urlP" [(ngModel)]="urlP" *ngIf="edit && id === image.id">
                 </th>

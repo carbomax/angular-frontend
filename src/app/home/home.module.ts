@@ -47,6 +47,7 @@ import { ActivePublicationsComponent } from './pages/home/dashboard/components/a
 import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
 import { UploadImagePipe } from './pipes/upload-image.pipe';
 import { TablePaginatorInfoComponent } from './components/table-paginator-info/table-paginator-info.component';
+import { UploadEditImagePipe } from './pipes/upload-edit-image.pipe';
 
 
 
@@ -89,7 +90,8 @@ import { TablePaginatorInfoComponent } from './components/table-paginator-info/t
     ActivePublicationsComponent,
     ChartLineOrdersSellersComponent,
     UploadImagePipe,
-    TablePaginatorInfoComponent],
+    TablePaginatorInfoComponent,
+    UploadEditImagePipe],
 
   exports: [HomeComponent,
     SidebardComponent,
@@ -106,6 +108,7 @@ import { TablePaginatorInfoComponent } from './components/table-paginator-info/t
     NotImageProfilePipe,
     EditProductsComponent,
     NotImagePipe,
+    UploadEditImagePipe,
     ListMarginsComponent,
     SellerOrdersComponent,
     MeliCategoryPathComponent,
