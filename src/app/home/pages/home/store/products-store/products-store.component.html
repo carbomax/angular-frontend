@@ -227,10 +227,6 @@
 
     </div>
 
-    <!-- <div  class="d-flex justify-content-center">
-      <i *ngIf="loading" class="fas fa-spin fa-spinner fa-2x "></i>
-    </div> -->
-
     <div class="row justify-content-around" *ngIf="pageProducts?.itemsGrid">
       <ngb-pagination (pageChange)="loadProductsPaginator($event)" [collectionSize]="pageProducts.totalElements"
         [(page)]="currentPage" [maxSize]="3" [pageSize]="size" [boundaryLinks]="true"></ngb-pagination>
@@ -245,11 +241,8 @@
         </select>
       </div>
 
-      <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-        <span class="align-middle">Mostrando {{currentPage}} a {{size}} de {{pageProducts.totalElements}} registros
-        </span>
-
-      </div>
+       <!--Table Paginator Info-->
+       <app-table-paginator-info [total] = "pageProducts?.totalElements" ></app-table-paginator-info>
 
     </div>
 

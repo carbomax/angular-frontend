@@ -106,10 +106,9 @@
             </select>
           </div>
 
-          <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-            <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{meliAccounts.length}} registros</span>
-
-          </div>
+         <!--Table Paginator Info-->
+         <app-table-paginator-info [total] = "meliAccounts?.length" ></app-table-paginator-info>
+         
         </div>
       </div>
 

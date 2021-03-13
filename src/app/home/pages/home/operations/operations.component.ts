@@ -107,7 +107,7 @@ export class OperationsComponent implements OnInit {
 
   loadProductsPaginator(page): void {
     this.loading = true;
-    this.page = page;
+    this.page = +page;
     this.loadOrders();
   }
 
