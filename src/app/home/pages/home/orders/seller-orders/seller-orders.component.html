@@ -156,7 +156,7 @@
             <td>{{ item.dateCreated |date:'dd-MM-yyyy'}}</td>
             <td>
               <div class="dropdown no-arrow pointer">
-                <strong>Total:</strong> {{ getTotal(item) }}
+                <strong>Total:</strong> {{ getTotal(item) | number:'1.0-2'}}
                 <span class="dropdown-toggle badge badge-pill badge-primary" href="#" role="button"
                   id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
                     class="fas fa-eye" ngbTooltip="Ver más detalles"></i>
@@ -165,17 +165,17 @@
                   aria-labelledby="dropdownMenuLink">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Venta:</span> <strong>{{ item.totalAmount }}</strong>
+                      <span>Venta:</span> <strong>{{ item.totalAmount | number:'1.0-2'}}</strong>
                     </li>
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
-                      <span>Impuestos:</span> <strong>{{ item.amountTaxes }}</strong>
+                      <span>Impuestos:</span> <strong>{{ item.amountTaxes | number:'1.0-2'}}</strong>
                     </li>
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
                       <span>Envío:</span> <strong>{{ item.shipment? item.shipment.baseCost : 0 }}</strong>
                     </li>
                     <li class="list-group-item dropdown-item d-flex justify-content-between align-items-center">
                       <strong>Total:</strong>
-                      <strong>{{ getTotal(item) }}</strong>
+                      <strong>{{ getTotal(item) | number:'1.0-2'}}</strong>
                     </li>
                   </ul>
                 </div>
@@ -285,10 +285,9 @@
             </select>
           </div>
 
-          <div class="dataTables_info py-2 " id="dataTable_info" role="status" aria-live="polite">
-            <span class="align-middle">Mostrando {{page}} a {{size}} de {{orderPage.totalElements}} registros</span>
+          <!--Table Paginator Info-->
+          <app-table-paginator-info [total] = "orderPage?.totalElements" ></app-table-paginator-info>
 
-          </div>
         </div>
 
       </div>

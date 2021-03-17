@@ -74,11 +74,11 @@
             </div>
           </div>
 
-          <div class="col-md-5 col-sm-12">
-            <div class="dataTables_info py-2 ml-auto" id="dataTable_info" role="status" aria-live="polite">
-              <span class="align-middle">Mostrando {{page}} a {{pageSize}} de {{margins.length}} registros
-                </span>
-            </div>
+          <div class="col-md-5 col-sm-12">          
+
+            <!--Table Paginator Info-->
+           <app-table-paginator-info [total] = "margins?.length" ></app-table-paginator-info>
+
           </div>
         </div>
 
