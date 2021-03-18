@@ -54,8 +54,9 @@ export class UploadImagesService {
     return this.http.post(params, formData, {responseType: 'text'});
   }
 
-  deleteImages(imageToDelete: string[]): Observable<boolean>{
-    const params = `${this.URI}${this.URI_UPLOAD_IMAGES}/file-delete?pathFiles=${imageToDelete}`;
+  deleteImages(imageToDelete: string[]): Observable<boolean> {
+    let imagesFiltered = imageToDelete.filter(ima => (!ima.startsWith('http://') && !ima.startsWith('https://') ))
+    const params = `${this.URI}${this.URI_UPLOAD_IMAGES}/delete-files-list-from-upload-bucket?pathFiles=${imagesFiltered}`;
     return this.http.delete<boolean>(params);
   }
 

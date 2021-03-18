@@ -19,6 +19,7 @@ import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
 import { EditableProductModel } from 'src/app/models/editable.product.model';
 import { MeliME2Category } from 'src/app/models/meli-publication/meli-me2-category';
+import { UploadImagesService } from 'src/app/home/services/upload-images.service';
 
 
 @Component({
@@ -87,7 +88,8 @@ export class EditProductsPublishedComponent implements OnInit {
 
 
   constructor(private _router: ActivatedRoute, private router: Router, public productsStorageUserService: ProductsStorageUserService, public meliAccountService: MeliAccountService,
-    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService ) { }
+    public marginService: MarginService,public meliPublicationsService: MeliPublicationsService, public productsMeliPublishedService: ProductsMeliPublishedService,
+    public uploadImageService: UploadImagesService ) { }
 
   ngOnInit(): void {
     this.account_margin = new AccountMarginModel();
@@ -195,6 +197,46 @@ export class EditProductsPublishedComponent implements OnInit {
       //Elimino las imagenes fisicamente del servidor
       if(this.imagesDeletedList.length !== 0){
       this.productsStorageUserService.deleteImages(this.imagesDeletedList).subscribe();
+      this.imagesDeletedList = [];
+    }
+
+    },(error: any) => {
+      this.loadingModal = false;
+      this.close();
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Error`,
+        text: `Error al actualizar. Sincronice sus productos.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      this.imagesDeletedList = [];
+      this.productsDeletedList = [];
+    });
+
+  };
+
+  //nuevo metodo
+  saveForm2(){
+    this.loadingModal = true;
+    this.productsMeliPublishedService.updateProductsPublished(this.productMeliPublished, this.productsDeletedList).subscribe(item => {
+      this.productsDeletedList = [];
+      this.loadingModal = false;
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: `Actualizado`,
+        text: `Sus cambios han sido actualizados correctamente.`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+
+      this.productMeliPublished = item;
+
+      //Elimino las imagenes fisicamente del servidor
+      if(this.imagesDeletedList.length !== 0){
+      this.uploadImageService.deleteImages(this.imagesDeletedList).subscribe();
       this.imagesDeletedList = [];
     }
 
@@ -360,6 +402,80 @@ export class EditProductsPublishedComponent implements OnInit {
 
       });
   }
+
+  //nuevo metodo
+  addedImage2() {
+    if (!this.file) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Debe seleccionar un archivo`,
+        showConfirmButton: false,
+        timer: 5000
+      });
+      return;
+    }
+    if (this.file.type.match(/image\/*/) == null) {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'error',
+        title: `Solo imagenes`,
+        text: 'El archivo no es una imagen',
+        showConfirmButton: false,
+        timer: 5000
+      });
+      return;
+    }
+    const formData: FormData = new FormData();
+    let filename = this.file.name.replace(/ /g, "");
+    formData.append('multipartFile', this.file, filename.trim());
+
+    this.uploadImageService.uploadImage(formData)
+      .subscribe(resp => {
+        if(resp !== '') {
+        let image_added = new Image();
+        image_added.order = this.orderImage;
+        image_added.title = this.titleImage;
+        image_added.photos = resp;
+        this.productMeliPublished.images.push(image_added);
+
+        this.clearImage();
+        this.close();
+      }
+      },(error: any) => {
+        if(error.status >= 200 && error.status <= 299)
+        {
+          let image_added = new Image();
+          image_added.order = this.orderImage;
+          image_added.title = this.titleImage;
+          image_added.photos = error.error.text;
+          this.productMeliPublished.images.push(image_added);
+        }
+        else if(error.error.message.includes('Maximum upload size exceeded')){
+        Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: `Error`,
+          text: 'Su imagen excede el tamaño máximo de configurado, Contacte con el administrador para mayor información',
+          showConfirmButton: false,
+          timer: 5000
+        });
+        }else{
+          Swal.fire({
+            position: 'top-end',
+            icon: 'error',
+            title: `Error`,
+            text: 'Error almacenando la imagen. Contacte con el administrador',
+            showConfirmButton: false,
+            timer: 5000
+          });
+        }
+        this.clearImage();
+        this.close();
+
+      });
+  }
+
   clearImage(){
     this.orderImage = null;
     this.titleImage = "";

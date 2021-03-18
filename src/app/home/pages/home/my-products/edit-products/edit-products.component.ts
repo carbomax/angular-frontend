@@ -150,6 +150,7 @@ export class EditProductsComponent implements OnInit {
 
   };
 
+  //nuevo metodo
   saveForm2(){
     this.loadingModal = true;
     this.productsStorageUserService.updateCustomProduct(this.editableProduct, this.productsDeletedList).subscribe(item => {
@@ -167,7 +168,7 @@ export class EditProductsComponent implements OnInit {
       });
 
       //Elimino las imagenes fisicamente del servidor
-      if(this.imagesDeletedList.length !== 0){
+      if(this.imagesDeletedList.length !== 0) {
       this.uploadImageService.deleteImages(this.imagesDeletedList).subscribe();
       this.imagesDeletedList = [];
     }

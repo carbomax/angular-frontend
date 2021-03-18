@@ -79,21 +79,21 @@
                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                       Mercado Libre
                     </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">     
-                      
-                      <a class="dropdown-item" href="#">                    
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                      <a class="dropdown-item" href="#">
                         <div class="custom-control custom-checkbox">
                           <input type="checkbox" class="custom-control-input" id="customCheck1" name="notExistInMeli" [(ngModel)]="notExistInMeli">
                           <label class="custom-control-label" for="customCheck1"> Sin ubicación</label>
-                        </div>                   
+                        </div>
                       </a>
 
-                      <a class="dropdown-item" href="#">                       
+                      <a class="dropdown-item" href="#">
                           <div class="custom-control custom-checkbox">
                             <input type="checkbox" class="custom-control-input" id="customCheck2" name="existInMeli" [(ngModel)]="existInMeli">
                             <label class="custom-control-label" for="customCheck2"> En marketplace</label>
-                          </div>                                       
-                      </a>                      
+                          </div>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -177,7 +177,7 @@
               </div>
             </td>
             <td>
-              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |notImage" alt="Imagen">
+              <img class="img-fluid rounded" width="50px" height="50px" [src]="product.images |uploadImage" alt="Imagen">
             </td>
             <td>
               <p [ngbTooltip]="product.name">

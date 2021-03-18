@@ -158,7 +158,7 @@
                 <tr *ngFor="let image of productMeliPublished.images">
                   <th scope="row">
                     <img alt="imagen ilustrativa"
-                      src="{{image.photos}}" *ngIf="!edit || id !== image.id"
+                      src="{{image.photos |uploadEditImage}}" *ngIf="!edit || id !== image.id"
                       width="55">
                     <input class="form-control text-box single-line" type="text" name="urlP" [(ngModel)]="urlP" *ngIf="edit && id === image.id">
                   </th>
@@ -193,7 +193,7 @@
               <div class="form-group row mb-2">
                 <div class="col-md-10"></div>
                 <div class="col-md-2">
-                  <button type="button" class="btn btn-primary" (click)="saveForm()">Guardar</button>
+                  <button type="button" class="btn btn-primary" (click)="saveForm2()">Guardar</button>
                   <a class="btn btn-secondary" routerLink="/home/published-products" data-toggle="collapse"
                    style="margin-left: 2%;">Cerrar
                   </a>
@@ -492,7 +492,7 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" (click)="addedImage()">Agregar</button>
+          <button type="button" class="btn btn-primary" (click)="addedImage2()">Agregar</button>
           <button type="button" #closeModal class="btn btn-secondary" data-dismiss="modal" (click)="clearImage()">Cancelar</button>
         </div>
       </div>
