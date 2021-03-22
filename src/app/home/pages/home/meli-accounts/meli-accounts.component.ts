@@ -82,7 +82,6 @@ export class MeliAccountsComponent implements OnInit {
 
   public authorizeAccount(accountReference, code): void {
     this.meliAccountService.authorizeAccount(accountReference, code).subscribe((respAuthorize: any) => {
-      console.log(respAuthorize);
       this.loadingSynchronization = true;
       console.log('Cuenta autorizada')
       if (!this.errorAuthorization(respAuthorize)) {
@@ -121,7 +120,6 @@ export class MeliAccountsComponent implements OnInit {
 
   synchronizeAccount(id): void {
     this.meliAccountService.synchronizeAccount(id).subscribe(resp => {
-      console.log(resp)
 
       if (!this.errorSynchronization(resp)) {
         console.log('Cuenta vinculada')
@@ -227,7 +225,6 @@ export class MeliAccountsComponent implements OnInit {
       })
     } else {
 
-      console.log(this.selectedMeliAccount)
       this.meliAccountService.updateAccount(this.selectedMeliAccount).subscribe(resp => {
 
         this.selectedMeliAccount = resp;
@@ -274,7 +271,6 @@ export class MeliAccountsComponent implements OnInit {
         this.loading = true;
         console.log('delete')
         this.meliAccountService.deleteAccount(account.id).subscribe((resp: any) => {
-          console.log(resp)
           if(resp){
            if(resp.status === 226)
            Swal.fire({
@@ -336,7 +332,6 @@ export class MeliAccountsComponent implements OnInit {
     this.loading = true;
     this.meliAccountService.getAccounts().subscribe((accounts: MeliAccount[]) => {
       this.meliAccounts = accounts;
-      console.log(this.meliAccounts);
       this.loading = false;
     }, error => {
       this.loading = false;
