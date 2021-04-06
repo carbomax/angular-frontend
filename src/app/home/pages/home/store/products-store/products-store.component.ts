@@ -405,9 +405,12 @@ export class ProductsStoreComponent implements OnInit {
                   position: 'top-end',
                   icon: 'success',
                   title: `Productos almacenados`,
-                  text: `Los productos se almacenaron correctamente excepto ${exists_products} que ya se encontraban en su almacen`,
-                  showConfirmButton: false,
-                  timer: 5000,
+                  text: `Los productos se almacenaron correctamente excepto ${exists_products} que ya se encontraban en su almacen o no tienen imágenes disponibles`,
+                  showCancelButton: false,
+                  showConfirmButton: true,
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Entendido!',
+
                 });
               } else {
                 this.selectedProductR.existingProducts.forEach((element) => {
@@ -426,9 +429,11 @@ export class ProductsStoreComponent implements OnInit {
                   position: 'top-end',
                   icon: 'warning',
                   title: `Productos no almacenados`,
-                  text: `Todos los productos seleccionados ya se encontraban en su almacen`,
-                  showConfirmButton: false,
-                  timer: 5000,
+                  text: `Los productos seleccionados ya se encuentran en su almacen o no tienen imágenes disponibles`,
+                  showCancelButton: false,
+                  showConfirmButton: true,
+                  confirmButtonColor: '#3085d6',
+                  confirmButtonText: 'Entendido!',
                 });
               }
             });
@@ -459,7 +464,7 @@ export class ProductsStoreComponent implements OnInit {
 
   buildUbicationMeliFilter(): number {
     console.log('pasando por el nuevo filter');
-    
+
     if (
       (this.notExistInMeli && this.existInMeli) ||
       (!this.notExistInMeli && !this.existInMeli)

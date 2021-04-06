@@ -45,7 +45,8 @@ import { BetterSkuComponent } from './pages/home/dashboard/components/better-sku
 import { StockVsTotalComponent } from './pages/home/dashboard/components/stock-vs-total/stock-vs-total.component';
 import { ActivePublicationsComponent } from './pages/home/dashboard/components/active-publications/active-publications.component';
 import { ChartLineOrdersSellersComponent } from './pages/home/charts/chart-line-orders-sellers/chart-line-orders-sellers.component';
-import { UploadImagePipe } from './pipes/upload-image.pipe';
+import { UploadImageFromUploadBucketPipe } from './pipes/upload-image-from-upload.pipe';
+import { UploadImageFromStoreBucketPipe } from './pipes/upload-image-from-store.pipe';
 import { TablePaginatorInfoComponent } from './components/table-paginator-info/table-paginator-info.component';
 import { UploadEditImagePipe } from './pipes/upload-edit-image.pipe';
 
@@ -89,7 +90,8 @@ import { UploadEditImagePipe } from './pipes/upload-edit-image.pipe';
     StockVsTotalComponent,
     ActivePublicationsComponent,
     ChartLineOrdersSellersComponent,
-    UploadImagePipe,
+    UploadImageFromUploadBucketPipe,
+    UploadImageFromStoreBucketPipe,
     TablePaginatorInfoComponent,
     UploadEditImagePipe],
 

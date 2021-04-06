@@ -2,9 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 @Pipe({
-  name: 'uploadImage'
+  name: 'upImageFromUploadBucket'
 })
-export class UploadImagePipe implements PipeTransform {
+export class UploadImageFromUploadBucketPipe implements PipeTransform {
 
   transform(images: any[]): string {
     if (images.length > 0) {
