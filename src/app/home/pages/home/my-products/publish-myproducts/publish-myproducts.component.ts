@@ -604,6 +604,11 @@ export class PublishMyproductsComponent implements OnInit {
           this.loadingModalDelete = true;
           this.productStoreUserService.deleteProductsFromStore(this.productsSelected).subscribe(resp => {
       if (resp === true) {
+         //Eliminar imagenes físicas del servidor AWS
+         let imaList:string[] = [];
+         this.productsSelected.forEach(p => p.images.forEach( i => imaList.push(i.photos)));
+         this.uploadImageService.deleteImages(imaList).subscribe();
+
         this.loadingModalDelete = false;
         this.productsSelected = [];
         this.loadProductsPaginator(this.currentPage);
@@ -668,6 +673,11 @@ export class PublishMyproductsComponent implements OnInit {
         this.loadingDeleteProduct = true;
         this.productStoreUserService.deleteProductFromStore(product).subscribe(resp => {
       if (resp === true) {
+        //Eliminar imagenes físicas del servidor AWS
+        let imaList:string[] = [];
+        product.images.forEach( i => imaList.push(i.photos));
+        this.uploadImageService.deleteImages(imaList).subscribe();
+
         this.loadingDeleteProduct = false;
         //this.loadingModalDelete = false;
         this.loadProductsPaginator(this.currentPage);

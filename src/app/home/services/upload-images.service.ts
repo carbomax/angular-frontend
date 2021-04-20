@@ -54,6 +54,18 @@ export class UploadImagesService {
     return this.http.post(params, formData, {responseType: 'text'});
   }
 
+  deleteImage(image: string): Observable<boolean> {
+    if (!image.startsWith('http://') && !image.startsWith('https://') )
+    {
+      const params = `${this.URI}${this.URI_UPLOAD_IMAGES}/delete-file-from-upload-bucket?pathFile=${image}`;
+      return this.http.delete<boolean>(params);
+    }
+    else{
+      return new Observable<boolean>();
+    }
+
+  }
+
   deleteImages(imageToDelete: string[]): Observable<boolean> {
     let imagesFiltered = imageToDelete.filter(ima => (!ima.startsWith('http://') && !ima.startsWith('https://') ))
     const params = `${this.URI}${this.URI_UPLOAD_IMAGES}/delete-files-list-from-upload-bucket?pathFiles=${imagesFiltered}`;
