@@ -11,6 +11,7 @@ import { ChangeStatusPublicationType } from '../../../../../enums/change-status-
 import { StatesOfMeli } from 'src/app/enums/states-of-meli.enum';
 import { MarketplaceType } from 'src/app/enums/marketplacetype.enum';
 import Swal from 'sweetalert2';
+import { SendInfoToComponentService } from 'src/app/home/services/sendInfo-to-component.service';
 
 @Component({
   selector: 'app-published-product',
@@ -53,7 +54,7 @@ export class PublishedProductComponent implements OnInit {
   loadingModal = false;
   productsMeliPublished: ProductMeliPublished[] = [];
   pagePublised = new PageProductMeliPublished();
-  constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService, public meliAccountService: MeliAccountService) {
+  constructor(private router: Router, public productsMeliPublishedService: ProductsMeliPublishedService, public meliAccountService: MeliAccountService, public sendInfoToComponentService: SendInfoToComponentService) {
     this.loadProductsPaginator(true);
   }
 
@@ -125,6 +126,10 @@ export class PublishedProductComponent implements OnInit {
           this.checkAll = false;
           this.checkAllP.nativeElement.checked = 0;
         }
+
+        /** Send products published list to breascrumbs component **/
+        this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
+
       }, (error: any) => {
         this.errorProducts = true;
         this.loadingClear = false;
@@ -198,6 +203,9 @@ export class PublishedProductComponent implements OnInit {
     } else {
       this.disable = false;
     }
+
+     /** Send products published list to breascrumbs component **/
+     this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
   }
 
   selectProduct(product: ProductMeliPublished): void {
@@ -220,6 +228,9 @@ export class PublishedProductComponent implements OnInit {
     } else {
       this.disable = false;
     }
+
+    /** Send products published list to breascrumbs component **/
+    this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
   }
 
   deselectCheckedProducts(){

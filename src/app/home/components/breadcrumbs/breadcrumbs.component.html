@@ -2,7 +2,23 @@
   <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">{{ title }}</h1>
     <a *ngIf="url === 'publish-myproducts'" routerLink="/home/published-products" class="nav-link active"><i class="fas fa-share"></i> Ir a Productos Publicados </a>
-    <a *ngIf="url === 'published-products'" routerLink="/home/publish-myproducts" class="nav-link active"><i class="fas fa-reply"></i> Ir a Mis productos </a>
+    <a *ngIf="url === 'published-products'" routerLink="/home/publish-myproducts" class="nav-link active nav-published-products"><i class="fas fa-reply"></i> Ir a Mis productos </a>
+    <a *ngIf="false" href="" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50 m-1"></i>Exportar</a>
+    <div *ngIf="url === 'published-products'">
+      <a class="dropdown-toggle d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" href="javascript:void(0);" (click)="comboChanged()" role="button" id="dropdownMenuLink"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-download fa-sm text-white-50 m-1"></i>
+        Exportar
+        <i class="fas fa-ellipsis-v fa-sm fa-fw"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in btn-block"
+        aria-labelledby="dropdownMenuLink">
+        <a *ngIf="selected" class="dropdown-item pointer" (click)="exportData(1)" href="javascript:void(0);" ><i class="fas fa-download fa-sm color-export m-1"></i>
+          Exportar Seleccionados</a>
+        <a class="dropdown-item pointer" (click)="exportData(0)" href="javascript:void(0);" ><i class="fas fa-download fa-sm color-export m-1"></i>
+          Exportar Todos</a>
+      </div>
 
-    <a *ngIf="false" href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50 m-1"></i>Exportar</a>
   </div>
+  </div>
+

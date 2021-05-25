@@ -1,0 +1,18 @@
+.nav-published-products {
+  margin-left: auto !important;
+}
+
+.dropdown-menu{
+  width: auto !important;
+}
+
+.dropdown-item{
+  color: #202384 !important;
+}
+
+.dropdown-item:hover{
+  background-color: #0e41db54;
+}
+.color-export {
+  color: rgb(17 8 152 / 57%) !important;
+}
