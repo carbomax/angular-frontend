@@ -128,7 +128,8 @@ export class PublishedProductComponent implements OnInit {
         }
 
         /** Send products published list to breascrumbs component **/
-        this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
+        this.sendInfoToComponentService.setInfoOfProductPublishedSelectedView(this.productsSelected);
+        this.sendInfoToComponentService.setCountOfProductPublishedView(this.productsMeliPublished.length);
 
       }, (error: any) => {
         this.errorProducts = true;
@@ -205,7 +206,7 @@ export class PublishedProductComponent implements OnInit {
     }
 
      /** Send products published list to breascrumbs component **/
-     this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
+     this.sendInfoToComponentService.setInfoOfProductPublishedSelectedView(this.productsSelected);
   }
 
   selectProduct(product: ProductMeliPublished): void {
@@ -230,7 +231,8 @@ export class PublishedProductComponent implements OnInit {
     }
 
     /** Send products published list to breascrumbs component **/
-    this.sendInfoToComponentService.setInfoOfProductPublishedView(this.productsSelected);
+    this.sendInfoToComponentService.setInfoOfProductPublishedSelectedView(this.productsSelected);
+
   }
 
   deselectCheckedProducts(){

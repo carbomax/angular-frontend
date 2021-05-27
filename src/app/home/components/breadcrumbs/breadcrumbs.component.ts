@@ -25,6 +25,7 @@ export class BreadcrumbsComponent implements OnDestroy {
   public downloading: boolean;
 
   public selected: boolean = false;
+  public all: boolean = false;
 
   constructor(
     private router: Router,
@@ -46,18 +47,8 @@ export class BreadcrumbsComponent implements OnDestroy {
   }
 
   comboChanged(): void {
-    this.productsSelectedList = [];
-    this.productsSelectedList =
-      this.sendInfoToComponentService.productPublishedList;
-
-    if (
-      this.productsSelectedList != null &&
-      this.productsSelectedList.length > 0
-    ) {
-      this.selected = true;
-    } else {
-      this.selected = false;
-    }
+    this.enableExportSelected();
+    this.enableExportAll();
   }
 
   exportData(value: number): void {
@@ -115,4 +106,24 @@ export class BreadcrumbsComponent implements OnDestroy {
       map((event: ActivationEnd) => event.snapshot.url)
     );
   }
+
+  enableExportAll() : void {
+    this.all = this.sendInfoToComponentService.countElementsOfList > 0 ? true : false;
+  }
+
+  enableExportSelected() : void {
+    this.productsSelectedList = [];
+    this.productsSelectedList =
+      this.sendInfoToComponentService.productPublishedSelectedList;
+
+    if (
+      this.productsSelectedList != null &&
+      this.productsSelectedList.length > 0
+    ) {
+      this.selected = true;
+    } else {
+      this.selected = false;
+    }
+  }
+
 }

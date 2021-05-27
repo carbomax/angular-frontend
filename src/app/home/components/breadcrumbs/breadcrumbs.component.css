@@ -16,3 +16,7 @@
 .color-export {
   color: rgb(17 8 152 / 57%) !important;
 }
+
+.dropdown-toggle::after {
+  content: unset !important;
+}

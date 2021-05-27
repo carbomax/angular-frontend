@@ -6,13 +6,18 @@ import { ProductMeliPublished } from 'src/app/models/meli-publication/product-me
 })
 export class SendInfoToComponentService {
 
-  productPublishedList: ProductMeliPublished[] = [];
+  productPublishedSelectedList: ProductMeliPublished[] = [];
+  countElementsOfList: number;
 
 constructor() { }
 
 /** Methods to send info to breadcrumbs component **/
-setInfoOfProductPublishedView(productsSelected: ProductMeliPublished[]): void {
-  this.productPublishedList = productsSelected;
+setInfoOfProductPublishedSelectedView(productsSelected: ProductMeliPublished[]): void {
+  this.productPublishedSelectedList = productsSelected;
+}
+
+setCountOfProductPublishedView(count: number): void {
+  this.countElementsOfList = count;
 }
 
 }
