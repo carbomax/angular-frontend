@@ -13,7 +13,7 @@ import { map } from 'rxjs/operators';
 })
 export class DataExportService {
 
-  URI_MELI_REPORS = `${environment.URI_ROOT}/meli/api/reports`;
+  URI_DOWNLOAD_REPORS = `${environment.URI_ROOT}/upload/api/reports/export-publications`;
   profileId: number
 
 constructor(private http: HttpClient, private authService: AuthService) { }
@@ -22,11 +22,11 @@ exportProductsPublished(productsSelectedList: ProductMeliPublished[]) {
 
   if(productsSelectedList.length > 0) {
     const ids =  productsSelectedList.map( p => p?.id);
-    return this.http.post(`${this.URI_MELI_REPORS}/download-publications?profileId=${this.profileId = 0}`, ids, { responseType: 'blob'});
+    return this.http.post(`${this.URI_DOWNLOAD_REPORS}?profileId=${this.profileId = 0}`, ids, { responseType: 'blob'});
   }
   else {
     this.profileId = this.authService.authenticationDataExtrac().profileId;
-    return this.http.post(`${this.URI_MELI_REPORS}/download-publications?profileId=${this.profileId}`, [], { responseType: 'blob'});
+    return this.http.post(`${this.URI_DOWNLOAD_REPORS}?profileId=${this.profileId}`, [], { responseType: 'blob'});
 
   }
 
