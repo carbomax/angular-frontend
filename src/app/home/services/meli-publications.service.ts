@@ -197,7 +197,7 @@ export class MeliPublicationsService {
   }, error => {});
   }
 
-  createPublicationByEditableProduct(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productSelected: EditableProductModel, reloadConfig: boolean): void{
+  createPublicationByEditableProduct(relationshipList: AccountMarginModel[], idCategory: string, warrantyType: number, warrantyTime: number, warranty: boolean, productSelected: EditableProductModel): void{
 
     let itemCustomList: ItemCustomModel[] = [];
 
@@ -212,15 +212,15 @@ export class MeliPublicationsService {
           itemCustomList = [];
           let priceFinal = 0;
 
-        if(relation.idMargin === -1 || !reloadConfig ){// Para el republicar // Quitar validacion "!reloadConfig" despues de arreglar todo como va
-          priceFinal = Math.round(productSelected.price);
+        if(relation.idMargin === -1 ){
+          priceFinal = Math.round(productSelected.price_costUYU);
         }
         else if(relation.typeMargin === 1/*fijo*/){
-          priceFinal = Math.round(productSelected.price + relation.valueMargin);
+          priceFinal = Math.round(productSelected.price_costUYU + relation.valueMargin);
         }
         else{
           /*Por Ciento*/
-          priceFinal = Math.round((productSelected.price * (relation.valueMargin/100)) + productSelected.price);
+          priceFinal = Math.round((productSelected.price_costUYU * (relation.valueMargin/100)) + productSelected.price_costUYU);
         }
 
         let imagesList: ItemPictures[] = [];
@@ -271,15 +271,21 @@ export class MeliPublicationsService {
       let priceFinal = 0;
       relationshipList.forEach(relation => {
 
-            if(relation.idMargin === -1 || !reloadConfig){ // no fue reconfigurado
+            if(!reloadConfig){ // no fue reconfigurado
               priceFinal = Math.round(+productPublished.pricePublication);
             }
-            else if(relation.typeMargin === 1/*fijo*/){
-              priceFinal = Math.round((+productPublished.pricePublication) + relation.valueMargin);
-            }
             else{
-              /*Por Ciento*/
-              priceFinal = Math.round((+productPublished.pricePublication * (relation.valueMargin/100)) + (+productPublished.pricePublication));
+              if(relation.idMargin === -1){
+                priceFinal = Math.round(+productPublished.priceCostUYU);
+              }
+              else if(relation.typeMargin === 1/*fijo*/){
+                priceFinal = Math.round((+productPublished.priceCostUYU) + relation.valueMargin);
+              }
+              else{
+                /*Por Ciento*/
+                priceFinal = Math.round((+productPublished.priceCostUYU * (relation.valueMargin/100)) + (+productPublished.priceCostUYU));
+              }
+              productPublished.margin = relation.idMargin;
             }
             productPublished.pricePublication = priceFinal.toString();
 

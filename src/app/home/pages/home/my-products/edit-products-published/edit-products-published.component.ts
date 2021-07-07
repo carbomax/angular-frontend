@@ -50,10 +50,11 @@ export class EditProductsPublishedComponent implements OnInit {
 
   loadedAccountMeli: boolean = false;
   loadedMarginMeli: boolean = false;
-  reloadConfig: boolean = false; // si e habilitó la reconfiguracion
+  reloadConfig: boolean = false; // si habilitó la reconfiguracion
   activeConfig: boolean = false;
   init: boolean = true;
   hideCard: boolean = false;
+  formSaved: boolean = false;
 
   edit = false;
   message: string;
@@ -70,6 +71,7 @@ export class EditProductsPublishedComponent implements OnInit {
 
   /**Seccion para la vista Publicar */
   meliAccountsList: MeliAccount[];
+  meliAccountSelected: MeliAccount;
   accountMarginsList: AccountMarginModel[];
   initialMeliAccounts: MeliAccount[];
   account_margin: AccountMarginModel;
@@ -578,7 +580,7 @@ export class EditProductsPublishedComponent implements OnInit {
         Swal.fire({
           title: 'Importante',
           icon: 'info',
-          text: 'La configuración actual se perderá al habilitar esta opción. ¿Deseas continuar?',
+          text: 'El margen asociado y el precio de publicación actual se perderán al habilitar esta opción. ¿Deseas continuar?',
           showCloseButton: true,
           showCancelButton: true,
           focusConfirm: false,
@@ -605,6 +607,13 @@ export class EditProductsPublishedComponent implements OnInit {
 
   }
 
+  reloadView(){
+    let currentUrl = this.router.url;
+    this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigate([currentUrl]);
+    });
+  }
+
   getAccountMeli(){
     this.meliAccountsList = [];
     this.initialMeliAccounts = [];
@@ -624,13 +633,17 @@ export class EditProductsPublishedComponent implements OnInit {
     })
   }
 
+  compareAccountById(o1, o2) {
+    return o1.id === o2.id
+  }
+
   deleteRelationAccountMargin(){
     if(this.account_margin != null){
       let account = this.initialMeliAccounts.find(element => element.id == this.account_margin.idAccount);
-      let position = this.initialMeliAccounts.indexOf(account);
-      this.meliAccountsList.splice(position, 0, account);
-      let position2 = this.accountMarginsList.indexOf(this.account_margin);
-      this.accountMarginsList.splice(position2, 1);
+      this.meliAccountsList = [account]; // Solo muestra la cuenta de ML con la cual fue publicado el producto
+      this.meliAccountSelected = account;// Para que la cuenta aparezca fija y no tener que volver a seleccionar
+      let position = this.accountMarginsList.indexOf(this.account_margin);
+      this.accountMarginsList.splice(position, 1);
     }
   }
 
@@ -662,7 +675,7 @@ export class EditProductsPublishedComponent implements OnInit {
   clearSome(){
     this.account_margin = null;
     this.margin = -1;
-    this.meliAccount = -1;
+    //this.meliAccount = -1;
   }
 
   clearAll(){
@@ -730,7 +743,7 @@ export class EditProductsPublishedComponent implements OnInit {
       editableProduct.states = 1;
 
   // llamada al servicio Publicar
-   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, editableProduct, this.reloadConfig);
+   this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, editableProduct);
    this.clearAll();
   }
 
@@ -750,10 +763,12 @@ export class EditProductsPublishedComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.callUpdateProductPublishService();
+          this.formSaved = true;
         }
       })
     }else{
       this.callUpdateProductPublishService();
+      this.formSaved = true;
     }
 
   }

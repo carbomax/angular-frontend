@@ -591,7 +591,7 @@ export class EditProductsComponent implements OnInit {
 
   callPublishProductsService(){
     // llamada al servicio Publicar
-    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct,/*por el replublicar*/ true);
+    this.meliPublicationsService.createPublicationByEditableProduct(this.accountMarginsList, this.lastCategorySelected.idLastCategory, this.warrantyType, this.warrantyTime, this.warranty, this.editableProduct);
     this.clearAll();
 
     Swal.fire({
